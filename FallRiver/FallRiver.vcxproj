@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CFFA8C68-64EF-4F85-A959-F46E05147302}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>FallRiver</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimInfo.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="BaseCharacter.cpp" />
+    <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="Boss1.cpp" />
+    <ClCompile Include="Boss2.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Bush.cpp" />
+    <ClCompile Include="CGame.cpp" />
+    <ClCompile Include="ChasingAI.cpp" />
+    <ClCompile Include="Closet.cpp" />
+    <ClCompile Include="CompanionAI.cpp" />
+    <ClCompile Include="CreateBullet.cpp" />
+    <ClCompile Include="CreateEnemyC.cpp" />
+    <ClCompile Include="CreateEnemyS.cpp" />
+    <ClCompile Include="CreateNPC.cpp" />
+    <ClCompile Include="CreatePickUp.cpp" />
+    <ClCompile Include="CreditsMenuState.cpp" />
+    <ClCompile Include="CutScene.cpp" />
+    <ClCompile Include="DefeatMenuState.cpp" />
+    <ClCompile Include="DestroyBullet.cpp" />
+    <ClCompile Include="DestroyEnemyC.cpp" />
+    <ClCompile Include="DestroyEnemyS.cpp" />
+    <ClCompile Include="DestroyNPC.cpp" />
+    <ClCompile Include="DestroyPickUp.cpp" />
+    <ClCompile Include="DirectInput.cpp" />
+    <ClCompile Include="Emitter.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventSystem.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Frame.cpp" />
+    <ClCompile Include="GamePlayState.cpp" />
+    <ClCompile Include="HighScoresMenuState.cpp" />
+    <ClCompile Include="HowToPlayMenuState.cpp" />
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LoadMenuState.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="MessageSystem.cpp" />
+    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="OptionsMenuState.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="Particle_Manager.cpp" />
+    <ClCompile Include="PauseMenuState.cpp" />
+    <ClCompile Include="PickUp.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Quests.cpp" />
+    <ClCompile Include="ShootingAi.cpp" />
+    <ClCompile Include="sound.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="ViewManager.cpp" />
+    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WinMain.cpp" />
+    <ClCompile Include="WinMenuState.cpp" />
+    <ClCompile Include="XMLManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimInfo.h" />
+    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="BaseCharacter.h" />
+    <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="Boss1.h" />
+    <ClInclude Include="Boss2.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Bush.h" />
+    <ClInclude Include="CGame.h" />
+    <ClInclude Include="ChasingAI.h" />
+    <ClInclude Include="Closet.h" />
+    <ClInclude Include="CompanionAI.h" />
+    <ClInclude Include="CreateBullet.h" />
+    <ClInclude Include="CreateEnemyC.h" />
+    <ClInclude Include="CreateEnemyS.h" />
+    <ClInclude Include="CreateNPC.h" />
+    <ClInclude Include="CreatePickUp.h" />
+    <ClInclude Include="CreditsMenuState.h" />
+    <ClInclude Include="CutScene.h" />
+    <ClInclude Include="DefeatMenuState.h" />
+    <ClInclude Include="DestroyBullet.h" />
+    <ClInclude Include="DestroyEnemyC.h" />
+    <ClInclude Include="DestroyEnemyS.h" />
+    <ClInclude Include="DestroyNPC.h" />
+    <ClInclude Include="DestroyPickUp.h" />
+    <ClInclude Include="DirectInput.h" />
+    <ClInclude Include="Emitter.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventSystem.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Frame.h" />
+    <ClInclude Include="GamePlayState.h" />
+    <ClInclude Include="HighScoresMenuState.h" />
+    <ClInclude Include="HowToPlayMenuState.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="IListener.h" />
+    <ClInclude Include="IMenuState.h" />
+    <ClInclude Include="IMessage.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="LoadMenuState.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MessageSystem.h" />
+    <ClInclude Include="NPC.h" />
+    <ClInclude Include="ObjectFactory.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="OptionsMenuState.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="Particle_Manager.h" />
+    <ClInclude Include="PauseMenuState.h" />
+    <ClInclude Include="PickUp.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Quests.h" />
+    <ClInclude Include="ShootingAi.h" />
+    <ClInclude Include="sound.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="ViewManager.h" />
+    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WinMenuState.h" />
+    <ClInclude Include="XMLManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
