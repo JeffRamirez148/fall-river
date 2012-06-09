@@ -1,49 +1,46 @@
-#include <Windows.h>
 #include <list>
 #include <map>
+using std::multimap;
+using std::pair;
+using std::list;
+
 using namespace std;
+
+#include "Event.h"
+#include "IListener.h"
 
 #ifndef __EventSystem_h__
 #define __EventSystem_h__
 
-// #include "Event.h"
-// #include "IListener.h"
-
-class Event;
-class IListener;
-
 class EventSystem
 {
 private:
-	multimap<int, IListener*> m_mCDatabase;
-	list<Event*> m_lCurrEvent;
+	multimap<EVENTID, IListener*>	m_mCDatabase;
+	list<Event>						m_lCurrEvent;
 
-	EventSystem();
+	EventSystem() {/* Do Nothing */}
+	~EventSystem() { /* Do Nothing */}
+	EventSystem(const EventSystem&);
+	EventSystem& operator=(const EventSystem&);
 
-	~EventSystem();
+	bool AlreadyRegistered(EVENTID eventid, IListener* pClient);
 
-	EventSystem(EventSystem& aEventsys);
-
-	EventSystem& operator=(EventSystem& aEventsys);
-
-	bool AlreadyRegistered(int aEventid, IListener* aPClient);
-
-	void DispatchEvent(Event* aEvent);
+	void DispatchEvent(Event* pEvent);
 
 public: 
 	static EventSystem* GetInstance();
 
-	void RegisterClient(int aEventid, IListener* aClient);
+	void RegisterClient(EVENTID eventID, IListener* pClient);
 
-	void UnregisterClient(int aEventid, IListener* aClient);
+	void UnregisterClient(EVENTID eventID, IListener* pClient);
 
-	void UnregisterAllClients(IListener* aClient);
+	void UnregisterAllClients(IListener* pClient);
 
-	bool HasEventTriggered(int aEventid);
+	bool HasEventTriggered(EVENTID eventID);
 
-	void SendEvent(int aEventid, void* aData);
+	void SendEvent(EVENTID eventID, void* pData);
 
-	void SendUniqueEvent(int aEventid, void* aData);
+	void SendUniqueEvent(EVENTID eventID, void* pData);
 
 	void ProcessEvents();
 

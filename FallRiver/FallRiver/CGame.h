@@ -48,12 +48,23 @@ public:
 
 	void ShutDown();
 
-	// State Machine
+	////////////////////////////
+	// State Machine		  //
+	////////////////////////////
+	
+	// Add a state unto the stack of states
 	void ChangeState( IMenuState* pNewState );
-	void RevertState( void );
+
+	// Get the Current State
 	IMenuState* GetState( void );
+
+	// Get the Previous State if there is one
 	IMenuState* GetPreviousState( void );
+
+	// Pop the current state off the top
 	void RemoveState( void );
+
+	///////////////////////////////
 
 	void	SetWindowed(bool _is)			{ m_bIsWindowed = _is; }
 

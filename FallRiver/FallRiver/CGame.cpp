@@ -116,9 +116,11 @@ void CGame::ChangeState(IMenuState* pNewState)
 		m_pPrevState = nullptr;
 	}
 
+	// Set the Previous State to what Current State is now
 	if(m_pCurrState != nullptr )
 		m_pPrevState = m_pCurrState;
-
+	
+	// Add the new State
 	m_vStates.push_back(pNewState);
 
 	// Assign the current state
@@ -129,33 +131,31 @@ void CGame::ChangeState(IMenuState* pNewState)
 		m_pCurrState->Enter();
 }
 
-void CGame::RevertState( void )
-{
-	if( m_pCurrState != nullptr )
-		m_pCurrState->Exit();
-
-	m_vStates.pop_back();
-
-	m_pCurrState = m_pPrevState;
-}
-
+///////////////////////////
+// Get the current State //
 IMenuState* CGame::GetState( void )				{return m_pCurrState;}
+
+//////////////////////////////
+// Get the previous State	//
 IMenuState* CGame::GetPreviousState( void )		{return m_pPrevState; }
 
 void CGame::RemoveState( void )
 {
+	// Checking. Just in case
 	if( m_pCurrState != nullptr )
 		m_pCurrState->Exit();
 
+	// Take off the top state
 	m_vStates.pop_back();
 
+	// Null the previous state
 	m_pPrevState = nullptr;
 
 	if( m_vStates.size() > 0 )
 	{
+		// Make the Current state equal to the back of the states
+		// Would set to previous state but not previous could not exist.
 		m_pCurrState = m_vStates.back();
-		if( m_vStates.size() == 1 )
-			m_pPrevState = nullptr;
 	}
 	else
 		m_pCurrState = nullptr;

@@ -1,5 +1,3 @@
-#include <Windows.h>
-using namespace std;
 
 #ifndef __MainMenuState_h__
 #define __MainMenuState_h__
@@ -17,10 +15,15 @@ private:
 	ViewManager* view;
 	DirectInput* m_pDI;
 	AudioManager* audio;
-	int y;
+	int		m_nCursPosY;
 	float sfxVolume;
 	float musicVolume;
 	float fTime;
+
+	MainMenuState();
+	~MainMenuState();
+	MainMenuState(const MainMenuState&);
+	MainMenuState& operator=(const MainMenuState&);
 
 public: 
 

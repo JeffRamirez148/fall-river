@@ -145,7 +145,7 @@ BOOL RegisterWindowClass(HINSTANCE hInstance)
 	winClassEx.lpszMenuName		= NULL; 
 	winClassEx.lpszClassName	= g_szWINDOW_CLASS_NAME;
 
-	//_CrtDumpMemoryLeaks();
+	_CrtDumpMemoryLeaks();
 
 	//	Register the window class
 	return RegisterClassEx(&winClassEx);

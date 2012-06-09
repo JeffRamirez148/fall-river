@@ -1,13 +1,10 @@
-#include <Windows.h>
-#include <vector>
-using namespace std;
-
 #include "GamePlayState.h"
 #include "ViewManager.h"
 #include "AudioManager.h"
 #include "ObjectManager.h"
 #include "OptionsMenuState.h"
 #include "Level.h"
+#include "CGame.h"
 #include "DirectInput.h"
 #include "Enemy.h"
 #include "Player.h"
@@ -18,6 +15,9 @@ using namespace std;
 
 void GamePlayState::Enter()
 {
+	m_pDI = DirectInput::GetInstance();
+
+
 }
 
 void GamePlayState::Exit() 
@@ -26,6 +26,9 @@ void GamePlayState::Exit()
 
 bool GamePlayState::Input() 
 {
+	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+		CGame::GetInstance()->RemoveState();
+
 	return true;
 }
 

@@ -1,5 +1,3 @@
-#include <Windows.h>
-using namespace std;
 
 #ifndef __IMenuState_h__
 #define __IMenuState_h__

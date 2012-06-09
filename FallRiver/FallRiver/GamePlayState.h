@@ -1,4 +1,3 @@
-#include <Windows.h>
 #include <vector>
 using namespace std;
 
@@ -25,14 +24,19 @@ class XMLManager;
 class GamePlayState : public IMenuState
 {
 private: 
+	// Wrapper Memebers
 	Level* level;
 	ViewManager* view;
-	DirectInput* nput;
-	AudioManager audio;
+	DirectInput* m_pDI;
+	AudioManager* audio;
+
+	// Data Members
 	float fTime;
-	Player* player;
-	vector<Enemy*> enemies;
-	vector<NPC*> npcs;
+
+	// Characters In the world
+	Player*			player;
+	vector<Enemy*>	enemies;
+	vector<NPC*>	npcs;
 
 public:
 	void Enter();
