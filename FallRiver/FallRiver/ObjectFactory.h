@@ -1,49 +1,99 @@
-#include <Windows.h>
-
 #ifndef __ObjectFactory_h__
 #define __ObjectFactory_h__
 
-class Light;
-class Level;
-class Terrain;
-class ShootingAi;
-class ChasingAI;
-class CompanionAI;
-class Boss1;
-class Player;
-class BaseCharacter;
-class BaseObject;
-class Bullet;
-class NPC;
-class Boss2;
-class ObjectFactory;
+#include <map>
+using std::map;
 
-class ObjectFactory
+template <typename ClassIDType, typename BaseClassType>
+
+class CObjectFactory
 {
-	public: 
-	ShootingAi* CreateShooting();
+private:
+	//			Function pointer declaration.
+	typedef BaseClassType* (*ObjectCreator)(void);
 
-	ChasingAI* CreateChasing();
+	//			Database of function Pointer to create my objects
+	map<ClassIDType, ObjectCreator> m_ObjectCreators;
 
-	Boss1* CreateBoss1();
+	//		Singleton Instance.
+	static CObjectFactory<ClassIDType, BaseClassType> sm_Instance;
 
-	Boss2* CreateBoss2();
+	CObjectFactory(void) {}
+	CObjectFactory(const CObjectFactory&);
+	CObjectFactory& operator=(const CObjectFactory&);
+	~CObjectFactory(void) {}
 
-	NPC* CreateNPC();
+	//	Private function to Create an object.
+	template<typename DerivedClassType>
+	static BaseClassType* ConstructObject(void)
+	{
+		return new DerivedClassType;
+	}
 
-	Terrain* CreateTerrain();
+public: 
+	//	GetInstance
+	static CObjectFactory<ClassIDType, BaseClassType>* GetInstance(void)
+	{
+		return &sm_Instance;
+	}
 
-	Level* CreateLevel();
+	//	Build the map data of function pointers
+	template<typename DerivedClassType>
+	bool RegisterClassType(ClassIDType id)
+	{
+		//	Create the database definition
+		std::pair<ClassIDType, ObjectCreator> objTypeDef;
 
-	BaseObject* CreateBaseObject();
+		objTypeDef.first	=	id;
+		objTypeDef.second	=	ConstructObject<DerivedClassType>;
 
-	BaseCharacter* CreateBaseCharacter();
+		//	Add this information into my database.
+		m_ObjectCreators.insert(objTypeDef);
 
-	CompanionAI* CreateCompanion();
+		//	Success.
+		return true;
+	}
 
-	Bullet* CreateBullet();
+	//	Remove information from our database
+	bool UnregisterClassType(ClassIDType id)
+	{
+		//	Find the given key inside of the database (map).
+		map<ClassIDType, ObjectCreator>::iterator iter = m_ObjectCreators.find(id);
 
-	Light* CreateLight();
-};
+		//	Error check to make sure we found it.
+		if (iter == m_ObjectCreators.end())
+			return false;
+
+		//	Remove the database information.
+		m_ObjectCreators.erase(iter);
+
+		//	Success.
+		return true;
+	}
+
+	//	Creates an object of the given id.
+	BaseClassType* CreateObject(ClassIDType id)
+	{
+		map<ClassIDType, ObjectCreator>::iterator iter = m_ObjectCreators.find(id);
+
+		//	Error check to make sure we found it
+		if (iter == m_ObjectCreators.end())
+			return NULL;
+
+		//	Create the class type and return it.
+		return (*iter).second();
+	}
+
+	void ShutdownObjectFactory(void)
+	{
+		//	Clear the database.
+		m_ObjectCreators.clear();
+	}
+}; 
+
+//	Declare static member instance at global scope
+template<typename ClassIDType, typename BaseClassType>
+CObjectFactory<ClassIDType, BaseClassType> 
+CObjectFactory<ClassIDType, BaseClassType>::sm_Instance;
 
 #endif

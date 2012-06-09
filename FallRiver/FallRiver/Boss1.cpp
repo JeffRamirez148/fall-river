@@ -5,7 +5,7 @@
 #include "BaseCharacter.h"
 #include "Enemy.h"
 
-bool Boss1::CheckCollision(BaseCharacter* pBase) {
+bool Boss1::CheckCollision(BaseObject* pBase) {
 	return true;
 }
 

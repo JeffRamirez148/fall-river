@@ -6,31 +6,93 @@ using namespace std;
 #include "GamePlayState.h"
 #include "BaseObject.h"
 
-void ObjectManager::Enter() 
+// Instantiate the staic data member
+ObjectManager* ObjectManager::s_Instance = nullptr;
+
+
+ObjectManager* ObjectManager::GetInstance( void )
+{
+	if( s_Instance == nullptr )
+		s_Instance = new ObjectManager;
+
+	return s_Instance;
+}
+
+void ObjectManager::DeleteInstance( void )
+{
+	delete s_Instance;
+	s_Instance = nullptr;
+}
+
+ObjectManager::ObjectManager(void)
 {
 }
 
-void ObjectManager::Exit() 
+
+ObjectManager::~ObjectManager(void)
 {
 }
 
-bool ObjectManager::Input() 
+void ObjectManager::AddObject( BaseObject* ptr )
 {
-	return true;
+	if( ptr == nullptr )
+		return;
+
+	m_Objects.push_back(ptr);
+
+	ptr->AddRef();
 }
 
-void ObjectManager::Update(float fElapsedTime) 
+void ObjectManager::RemoveObject( BaseObject* ptr )
 {
+	if(ptr == nullptr)
+		return;
+
+	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
+	{
+		if( (*iter) == ptr)
+		{
+			ptr->Release();
+
+			iter = m_Objects.erase(iter);
+			break;
+		}
+	}
 }
 
-void ObjectManager::Render() 
+void ObjectManager::RemoveAllObjects( void )
 {
+	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
+		(*iter)->Release();
+
+	m_Objects.clear();
 }
 
-ObjectManager* ObjectManager::GetInstance() 
+void ObjectManager::UpdateAllObjects( float fElapsedTime )
 {
-	static ObjectManager s_Instance;
-
-	return &s_Instance;
+	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
+		(*iter)->Update(fElapsedTime);
 }
 
+void ObjectManager::RenderAllObjects( void )
+{
+	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
+		(*iter)->Render();
+}
+
+void ObjectManager::CheckCollisions( void )
+{
+	for( OListIterator iter1 = m_Objects.begin(); iter1 != m_Objects.end(); ++iter1)
+	{
+		for( OListIterator iter2 = m_Objects.begin(); iter2 != m_Objects.end(); ++iter2)
+		{
+			if((*iter1)->GetObjectType() == (*iter2)->GetObjectType() && (*iter1)->GetObjectType() != OBJ_CHARACTER)
+				break;
+
+			if((*iter1)->CheckCollision((*iter2)))
+			{
+				break;
+			}
+		}
+	}
+}

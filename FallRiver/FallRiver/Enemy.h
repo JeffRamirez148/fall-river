@@ -1,5 +1,4 @@
 #include <Windows.h>
-using namespace std;
 
 #ifndef __Enemy_h__
 #define __Enemy_h__
@@ -15,15 +14,15 @@ class Event;
 
 class Enemy: public BaseCharacter
 {
-	protected: 
-		int m_nFrameX;
-		int m_nFrameY;
+protected: 
+	int m_nFrameX;
+	int m_nFrameY;
 
-	private: 
-		Player* m_pTarget;
+private: 
+	Player* m_pTarget;
 
-	public: 
-	virtual void HandleEvent(Event* aPEvent);
+public: 
+	virtual void HandleEvent(Event* pEvent);
 
 	virtual void Update(float fElapsedTime);
 
@@ -31,7 +30,8 @@ class Enemy: public BaseCharacter
 
 	virtual void MoveTo(int x, int y);
 
-	virtual bool CheckCollision(BaseCharacter* pBase);
+	virtual bool CheckCollision(BaseObject* pBase);
+	virtual RECT GetRect();
 };
 
 #endif

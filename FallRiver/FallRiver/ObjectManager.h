@@ -1,22 +1,24 @@
-#include <Windows.h>
-#include <vector>
-using namespace std;
-
 #ifndef __ObjectManager_h__
 #define __ObjectManager_h__
 
-// #include "GamePlayState.h"
-// #include "BaseObject.h"
-
-class GamePlayState;
 class BaseObject;
-class ObjectManager;
+#include <vector>
+using namespace std;
 
 class ObjectManager
 {
-	private: 
-		vector<BaseObject*> _objects;
-	float _fTime;
+private: 
+	static ObjectManager * s_Instance;
+
+	ObjectManager(void);
+	virtual ~ObjectManager(void);
+	ObjectManager(const ObjectManager&);
+	ObjectManager& operator=(const ObjectManager&);
+
+	typedef std::vector< BaseObject* >	ObjectList;
+	typedef ObjectList::iterator	OListIterator;
+
+	ObjectList m_Objects;
 
 public: 
 	void Enter();
@@ -25,11 +27,18 @@ public:
 
 	bool Input();
 
-	void Update(float fElapsedTime);
+	void AddObject( BaseObject* ptr );
+	void RemoveObject( BaseObject* ptr );
+	void RemoveAllObjects( void );
 
-	void Render();
+	void UpdateAllObjects(float fElapsedTime);
+
+	void RenderAllObjects();
+
+	void CheckCollisions();
 
 	static ObjectManager* GetInstance();
+	static void DeleteInstance( void );
 };
 
 #endif
