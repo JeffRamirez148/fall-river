@@ -24,7 +24,7 @@ private:
 	float fAttractTime;
 	AudioManager* audio;
 public: 
-	CreditsMenuState* GetInstance();
+	static CreditsMenuState* GetInstance();
 
 	void Enter();
 

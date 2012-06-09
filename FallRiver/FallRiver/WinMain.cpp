@@ -145,7 +145,7 @@ BOOL RegisterWindowClass(HINSTANCE hInstance)
 	winClassEx.lpszMenuName		= NULL; 
 	winClassEx.lpszClassName	= g_szWINDOW_CLASS_NAME;
 
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 
 	//	Register the window class
 	return RegisterClassEx(&winClassEx);
@@ -165,7 +165,7 @@ HWND MakeWindow(HINSTANCE hInstance)
 	else
 	{
 		dwWindowStyleFlags |= WS_POPUP;
-		ShowCursor(FALSE);	// Stop showing the mouse cursor
+		ShowCursor(TRUE);	// Stop showing the mouse cursor
 	}
 
 	// Setup the desired client area size

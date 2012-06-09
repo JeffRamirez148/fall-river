@@ -23,8 +23,9 @@ void LoadMenuState::Exit()
 {
 }
 
-void LoadMenuState::Input() 
+bool LoadMenuState::Input() 
 {
+	return true;
 }
 
 void LoadMenuState::Update(float fElapsedTime) 

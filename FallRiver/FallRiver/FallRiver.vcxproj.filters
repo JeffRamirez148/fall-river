@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{4e010d3e-b174-4a58-9451-631f14e313d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp">
@@ -69,13 +72,7 @@
     <ClCompile Include="CreatePickUp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CreditsMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CutScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DefeatMenuState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DestroyBullet.cpp">
@@ -114,15 +111,6 @@
     <ClCompile Include="Frame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GamePlayState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HighScoresMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HowToPlayMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -130,12 +118,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenuState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MessageSystem.cpp">
@@ -150,16 +132,10 @@
     <ClCompile Include="ObjectManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OptionsMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Particle_Manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseMenuState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PickUp.cpp">
@@ -192,11 +168,38 @@
     <ClCompile Include="WinMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WinMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="XMLManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditsMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="DefeatMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="HowToPlayMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScoresMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadMenuState.cpp">
+      <Filter>States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,13 +257,7 @@
     <ClInclude Include="CreatePickUp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CreditsMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CutScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DefeatMenuState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DestroyBullet.h">
@@ -299,22 +296,10 @@
     <ClInclude Include="Frame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GamePlayState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HighScoresMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HowToPlayMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IMenuState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IMessage.h">
@@ -324,12 +309,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Message.h">
@@ -347,16 +326,10 @@
     <ClInclude Include="ObjectManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OptionsMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Particle_Manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenuState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PickUp.h">
@@ -386,11 +359,41 @@
     <ClInclude Include="Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WinMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="XMLManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="WinMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="HowToPlayMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoresMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditsMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="DefeatMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="IMenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsMenuState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

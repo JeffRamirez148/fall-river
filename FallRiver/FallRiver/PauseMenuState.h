@@ -26,7 +26,7 @@ private:
 
 public:
 	
-	PauseMenuState* GetInstance();
+	static PauseMenuState* GetInstance();
 	void Enter();
 	void Exit();
 	bool Input();

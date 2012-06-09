@@ -33,7 +33,7 @@ public:
 	bool Input();
 	void Update(float aFElapsedTime);
 	void Render();
-	WinMenuState* GetInstance();
+	static WinMenuState* GetInstance();
 };
 
 #endif

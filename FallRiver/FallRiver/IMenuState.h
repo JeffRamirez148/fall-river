@@ -11,16 +11,16 @@ class IMenuState;
 
 class IMenuState
 {
-	public: 
-		void Enter();
+public: 
 
-	void Exit();
+	virtual ~IMenuState() {/* Do Nothing */ }
+	
+	virtual void Enter() = 0;
+	virtual void Exit() = 0;
 
-	bool Input();
-
-	void Update(float fElapsedTime);
-
-	void Render();
+	virtual bool Input() = 0;
+	virtual void Update(float fElapsedTime) = 0;
+	virtual void Render() = 0;
 };
 
 #endif

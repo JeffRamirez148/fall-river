@@ -22,8 +22,9 @@ void HowToPlayMenuState::Exit()
 {
 }
 
-void HowToPlayMenuState::Input() 
+bool HowToPlayMenuState::Input() 
 {
+	return true;
 }
 
 void HowToPlayMenuState::Update(float fElapsedTime) 

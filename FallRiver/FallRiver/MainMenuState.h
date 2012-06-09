@@ -4,24 +4,18 @@ using namespace std;
 #ifndef __MainMenuState_h__
 #define __MainMenuState_h__
 
-// #include "ViewManager.h"
-// #include "AudioManager.h"
-// #include "IDirectInputDevice.h"
-// #include "XMLManager.h"
 #include "IMenuState.h"
 
 class ViewManager;
 class AudioManager;
 class DirectInput;
 class XMLManager;
-// class IMenuState;
-class MainMenuState;
 
 class MainMenuState: public IMenuState
 {
 private: 
 	ViewManager* view;
-	DirectInput* input;
+	DirectInput* m_pDI;
 	AudioManager* audio;
 	int y;
 	float sfxVolume;
@@ -40,7 +34,7 @@ public:
 
 	void Render();
 
-	MainMenuState* GetInstance();
+	static MainMenuState* GetInstance();
 };
 
 #endif

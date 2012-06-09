@@ -24,7 +24,7 @@ private:
 	int y;
 	AudioManager* audio;
 public:
-	DefeatMenuState* GetInstance();
+	static DefeatMenuState* GetInstance();
 
 	void Enter();
 

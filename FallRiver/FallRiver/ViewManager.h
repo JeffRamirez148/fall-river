@@ -46,7 +46,7 @@ private:
 	vector<Font*> fonts;
 
 public: 
-	ViewManager* GetInstance();
+	static ViewManager* GetInstance();
 	int RegisterTexture(char* aFilePath);
 	int RegisterAnimation(char* aFilePath);
 	int RegisterFont(char* aFilePath);

@@ -50,7 +50,6 @@ private:
 		bool bIsExclusive;
 	};
 
-private: 
 	DirectInput();
 
 	~DirectInput(void);
@@ -63,9 +62,9 @@ private:
 
 	bool InitKeyboard(HWND aHWnd, bool bIsExclusive);
 
+public:
 	static DirectInput* GetInstance();
 
-public: 
 	bool InitDirectInput(HWND hWnd, HINSTANCE hInstance, unsigned int unInitDevices, unsigned int aUnExclusiveDevices);
 
 	void ShutdownDirectInput();
@@ -141,7 +140,7 @@ public:
 	int JoystickGetLStickYAmount(int nJoyNum);
 
 	float JoystickGetLStickXNormalized(int nJoyNum);
-																
+
 	float JoystickGetLStickYNormalized(int nJoyNum);
 
 	bool JoystickGetRStickDirDown(int nDir, int nJoyNum);			

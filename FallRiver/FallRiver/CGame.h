@@ -1,49 +1,65 @@
 #include <Windows.h>
+#include <vector>
+using namespace std;
 
 #ifndef __CGame_h__
 #define __CGame_h__
 
-// #include "DirectInput.h"
-// #include "IMenuState.h"
-// #include "WinMain.h"
 
 class DirectInput;
 class IMenuState;
-class WinMain;
 class CGame;
-class IGameState;
+class IMenuState;
 
 class CGame
 {
-private: 
-	DirectInput* _m_pDI;
+private:
+	// Wrapper Members
+	DirectInput* m_pDI;
+
+	// Game States
+	IMenuState*			m_pCurrState;
+	IMenuState*			m_pPrevState;
+	vector<IMenuState*> m_vStates;
+	
+	// Window Attributes
 	int m_nScreenWidth;
 	int m_nScreenHeight;
 	bool m_bIsWindowed;
 	DWORD m_dwCurrTime;
-	IMenuState* curMenuState;
 
-	CGame();
-public: 
+	CGame(void);
+	~CGame(void);
+	CGame(const CGame& ref);
+	CGame& operator=(const CGame& ref);
+
+	// Running
 	bool Input();
-
 	void Update();
-
 	void Render();
+
+public: 
 
 	static CGame* GetInstance();
 
-	void Initialize(HWND HWnd, HINSTANCE hInstance, int nScreenWidth, int nScreenHeight, bool bIsWindowed);
+	void Initialize(HWND hWnd, HINSTANCE hInstance, int nScreenWidth, int nScreenHeight, bool bIsWindowed);
 
 	bool Main();
 
 	void ShutDown();
 
-	void ChangeState(IGameState* pNewState);
+	// State Machine
+	void ChangeState( IMenuState* pNewState );
+	void RevertState( void );
+	IMenuState* GetState( void );
+	IMenuState* GetPreviousState( void );
+	void RemoveState( void );
 
-	void SetWindowed(bool Is);
+	void	SetWindowed(bool _is)			{ m_bIsWindowed = _is; }
 
-	bool IsWindowed();
+	int		GetScreenWidth( void ) const	{	return m_nScreenWidth;	}
+	int		GetScreenHeight( void ) const	{	return m_nScreenHeight;	}
+	bool	IsWindowed( void ) const		{	return m_bIsWindowed;	}
 };
 
 #endif

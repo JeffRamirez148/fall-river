@@ -28,13 +28,13 @@ private:
 
 public:
 
-	LoadMenuState* GetInstance();
+	static LoadMenuState* GetInstance();
 
 	void Enter();
 
 	void Exit();
 
-	void Input();
+	bool Input();
 
 	void Update(float fElapsedTime);
 

@@ -189,11 +189,11 @@ bool DirectInput::InitKeyboard(HWND hWnd, bool bIsExclusive)
 	if (m_pKeyboard)
 	{
 		DIERRBOX(hWnd, _T("Keyboard has already been initialized"))
-		return false;
+			return false;
 	}
 
 	m_pKeyboard = new DIKeyboard(m_lpDIObject, hWnd, bIsExclusive);
-	
+
 	if (m_pKeyboard == NULL)
 		return false;
 
@@ -250,11 +250,11 @@ bool DirectInput::InitMouse(HWND hWnd, bool bIsExclusive)
 	if (m_pMouse)
 	{
 		DIERRBOX(hWnd, _T("Mouse has already been initialized"))
-		return false;
+			return false;
 	}
 
 	m_pMouse = new DIMouse(m_lpDIObject, hWnd, bIsExclusive);
-	
+
 	if (m_pMouse == NULL)
 		return false;
 
@@ -313,7 +313,7 @@ bool DirectInput::InitJoysticks(HWND hWnd, bool bIsExclusive)
 	if (m_vpJoysticks.size() > 0)
 	{
 		DIERRBOX(hWnd, _T("Joysticks have already been initialized"))
-		return false;
+			return false;
 	}
 
 	//	Remember the info in a struct to pass along
@@ -625,44 +625,44 @@ DIMouse::DIMouse(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 	if (FAILED( m_lpDevice->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph) ))
 		DIERRBOX(hWnd, _T("Could not Set the Properties for Buffered Input for Mouse."))
 
-	//	Acquire the Mouse.
-	if (FAILED( m_lpDevice->Acquire() ))
-	{
-		DIERRBOX(hWnd, _T("Failed to acquire Mouse."))
-	}	
+		//	Acquire the Mouse.
+		if (FAILED( m_lpDevice->Acquire() ))
+		{
+			DIERRBOX(hWnd, _T("Failed to acquire Mouse."))
+		}	
 
-	// DIDC_ATTACHED 
-	// DIDC_FORCEFEEDBACK
-	// DIDC_POLLEDDATAFORMAT VS DIDC_POLLEDDEVICE 
-	// dwAxes 
-	// dwButtons 
-	// dwPOVs 
-	DIDEVCAPS  didCaps;
+		// DIDC_ATTACHED 
+		// DIDC_FORCEFEEDBACK
+		// DIDC_POLLEDDATAFORMAT VS DIDC_POLLEDDEVICE 
+		// dwAxes 
+		// dwButtons 
+		// dwPOVs 
+		DIDEVCAPS  didCaps;
 
-	// clear out struct
-	memset(&didCaps, 0, sizeof(didCaps));
-	didCaps.dwSize = sizeof(didCaps); 
+		// clear out struct
+		memset(&didCaps, 0, sizeof(didCaps));
+		didCaps.dwSize = sizeof(didCaps); 
 
-	//if (SUCCEEDED( m_lpDevice->GetCapabilities(&didCaps) ))
-	m_lpDevice->GetCapabilities(&didCaps);
-	{
-		if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
-			int y = 4;
-		if (didCaps.dwFlags & DIDC_POLLEDDEVICE)
-			int y = 5;
-	}
+		//if (SUCCEEDED( m_lpDevice->GetCapabilities(&didCaps) ))
+		m_lpDevice->GetCapabilities(&didCaps);
+		{
+			if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
+				int y = 4;
+			if (didCaps.dwFlags & DIDC_POLLEDDEVICE)
+				int y = 5;
+		}
 
-	// will be zero if it failed because the struct was cleared out
-	m_nNumButtons = didCaps.dwButtons;
+		// will be zero if it failed because the struct was cleared out
+		m_nNumButtons = didCaps.dwButtons;
 
-	//	clear out current state
-	memset(&m_diMouseState, 0, sizeof(m_diMouseState));
-	//	clear prev state
-	memset(&m_diPrevMouseState, 0, sizeof(m_diPrevMouseState));
+		//	clear out current state
+		memset(&m_diMouseState, 0, sizeof(m_diMouseState));
+		//	clear prev state
+		memset(&m_diPrevMouseState, 0, sizeof(m_diPrevMouseState));
 
-	//	Set psuedo position of mouse
-	SetPosX( 0 );
-	SetPosY( 0 );
+		//	Set psuedo position of mouse
+		SetPosX( 0 );
+		SetPosY( 0 );
 }
 
 bool DIMouse::ReadDevice(void)
@@ -921,7 +921,7 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 		//	Setup the RotationX-Axis Dead Zone.
 		deadZone.diph.dwObj		   = DIJOFS_RX;
 		m_lpDevice->SetProperty(DIPROP_DEADZONE, &deadZone.diph);
-		
+
 		//	Setup the RotationY-Axis Dead Zone.
 		deadZone.diph.dwObj		   = DIJOFS_RY;
 		m_lpDevice->SetProperty(DIPROP_DEADZONE, &deadZone.diph);
@@ -1001,7 +1001,7 @@ bool DIJoystick::ReadDevice(void)
 		//	Success.
 		//return true;
 	}
-	
+
 	//	Attempt to read the joystick state...
 	if (FAILED( m_lpDevice->GetDeviceState(sizeof(m_diJoyState), (LPVOID)&m_diJoyState) ))
 		return false;
@@ -1061,7 +1061,7 @@ bool DIJoystick::TranslatePOV(int nDir, DWORD dwPOVDir)
 {
 	// means neutral
 	bool bIsPOVCentered = (LOWORD(dwPOVDir) == 0xFFFF);
-	
+
 	if (bIsPOVCentered)
 		return false;
 
@@ -1069,25 +1069,25 @@ bool DIJoystick::TranslatePOV(int nDir, DWORD dwPOVDir)
 
 	switch(nDir)
 	{
-		case DIR_UP: // could be up/left, up, or up/right.
+	case DIR_UP: // could be up/left, up, or up/right.
 		{
 			return (nPOV > POV_LEFT || nPOV < POV_RIGHT);
 		}
 		break;
 
-		case DIR_DOWN: // could be dwn/left, dwn, or dwn/right.
+	case DIR_DOWN: // could be dwn/left, dwn, or dwn/right.
 		{
 			return (nPOV > POV_RIGHT && nPOV < POV_LEFT);
 		}
 		break;
 
-		case DIR_LEFT: // could be up/left, left, or dwn/left.
+	case DIR_LEFT: // could be up/left, left, or dwn/left.
 		{
 			return (/*dwPOVDir > POV_UP && */nPOV > POV_DOWN);
 		}
 		break;
 
-		case DIR_RIGHT: // could be up/right, right, or dwn/right.
+	case DIR_RIGHT: // could be up/right, right, or dwn/right.
 		{
 			return (nPOV > POV_UP && nPOV < POV_DOWN);
 		}
@@ -1161,28 +1161,28 @@ bool DIJoystick::GetLStickDirDown(int nDir)
 	//	Check for the Direction.
 	switch(nDir)
 	{
-		case DIR_LEFT:
+	case DIR_LEFT:
 		{
 			if (m_diJoyState.lX < 0) 
 				return true;
 		}		
 		break;
 
-		case DIR_RIGHT:
+	case DIR_RIGHT:
 		{
 			if (m_diJoyState.lX > 0) 
 				return true;
 		}	
 		break;
 
-		case DIR_UP:
+	case DIR_UP:
 		{
 			if (m_diJoyState.lY < 0) 
 				return true;
 		}
 		break;
 
-		case DIR_DOWN:
+	case DIR_DOWN:
 		{
 			if (m_diJoyState.lY > 0) 
 				return true;
@@ -1203,28 +1203,28 @@ bool DIJoystick::GetLStickDirPressed(int nDir)
 	//	Check for the Direction.
 	switch(nDir)
 	{
-		case DIR_LEFT:
+	case DIR_LEFT:
 		{
 			if (m_diJoyState.lX < -JOYSTICK_THRESHOLD && !(m_diPrevJoyState.lX < -JOYSTICK_THRESHOLD)) 
 				return true;
 		}		
 		break;
 
-		case DIR_RIGHT:
+	case DIR_RIGHT:
 		{
 			if (m_diJoyState.lX > JOYSTICK_THRESHOLD && !(m_diPrevJoyState.lX > JOYSTICK_THRESHOLD)) 
 				return true;
 		}	
 		break;
 
-		case DIR_UP:
+	case DIR_UP:
 		{
 			if (m_diJoyState.lY < -JOYSTICK_THRESHOLD && !(m_diPrevJoyState.lY < -JOYSTICK_THRESHOLD)) 
 				return true;
 		}
 		break;
 
-		case DIR_DOWN:
+	case DIR_DOWN:
 		{
 			if (m_diJoyState.lY > JOYSTICK_THRESHOLD && !(m_diPrevJoyState.lY > JOYSTICK_THRESHOLD)) 
 				return true;
@@ -1272,28 +1272,28 @@ bool DIJoystick::GetRStickDirDown(int nDir)
 
 	switch(nDir)
 	{
-		case DIR_LEFT:
+	case DIR_LEFT:
 		{
 			if ( TranslateRStickX(m_diJoyState) < 0 ) 
 				return true;
 		}		
 		break;
 
-		case DIR_RIGHT:
+	case DIR_RIGHT:
 		{
 			if ( TranslateRStickX(m_diJoyState) > 0 ) 
 				return true;
 		}	
 		break;
 
-		case DIR_UP:
+	case DIR_UP:
 		{
 			if ( TranslateRStickY(m_diJoyState) < 0 ) 
 				return true;
 		}
 		break;
 
-		case DIR_DOWN:
+	case DIR_DOWN:
 		{
 			if ( TranslateRStickY(m_diJoyState) > 0 ) 
 				return true;
@@ -1314,28 +1314,28 @@ bool DIJoystick::GetRStickDirPressed(int nDir)
 	//	Check for the Direction.
 	switch(nDir)
 	{
-		case DIR_LEFT:
+	case DIR_LEFT:
 		{
 			if ( TranslateRStickX(m_diJoyState) < -JOYSTICK_THRESHOLD && !(TranslateRStickX(m_diPrevJoyState) < -JOYSTICK_THRESHOLD) ) 
 				return true;
 		}		
 		break;
 
-		case DIR_RIGHT:
+	case DIR_RIGHT:
 		{
 			if ( TranslateRStickX(m_diJoyState) > JOYSTICK_THRESHOLD && !(TranslateRStickX(m_diPrevJoyState) > JOYSTICK_THRESHOLD) ) 
 				return true;
 		}	
 		break;
 
-		case DIR_UP:
+	case DIR_UP:
 		{
 			if ( TranslateRStickY(m_diJoyState) < -JOYSTICK_THRESHOLD && !(TranslateRStickY(m_diPrevJoyState) < -JOYSTICK_THRESHOLD) ) 
 				return true;
 		}
 		break;
 
-		case DIR_DOWN:
+	case DIR_DOWN:
 		{
 			if ( TranslateRStickY(m_diJoyState) > JOYSTICK_THRESHOLD && !(TranslateRStickY(m_diPrevJoyState) > JOYSTICK_THRESHOLD) ) 
 				return true;

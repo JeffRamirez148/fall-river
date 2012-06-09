@@ -20,13 +20,13 @@ private:
 	float fTime;
 
 public: 
-	HowToPlayMenuState* GetInstance();
+	static HowToPlayMenuState* GetInstance();
 
 	void Enter(void);
 
 	void Exit(void);
 
-	void Input(void);
+	bool Input(void);
 
 	void Update(float fElapsedTime);
 

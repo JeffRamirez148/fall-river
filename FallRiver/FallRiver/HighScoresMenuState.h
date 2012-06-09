@@ -23,7 +23,7 @@ private:
 	AudioManager* audio;
 
 public: 
-	HighScoresMenuState* GetInstance();
+	static HighScoresMenuState* GetInstance();
 
 	void Enter();
 

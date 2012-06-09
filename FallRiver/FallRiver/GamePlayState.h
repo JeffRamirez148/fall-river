@@ -6,7 +6,7 @@ using namespace std;
 #define __GamePlayState_h__
 
 #include "AudioManager.h"
-
+#include "IMenuState.h"
 
 class ViewManager;
 class AudioManager;
@@ -21,9 +21,8 @@ class Particle_Manager;
 class HUD;
 class NPC;
 class XMLManager;
-class GamePlayState;
 
-class GamePlayState
+class GamePlayState : public IMenuState
 {
 private: 
 	Level* level;
@@ -46,7 +45,7 @@ public:
 
 	void Render();
 
-	GamePlayState* GetInstance();
+	static GamePlayState* GetInstance();
 };
 
 #endif

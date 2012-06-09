@@ -29,7 +29,7 @@ public:
 
 	void Render();
 
-	ObjectManager* GetInstance();
+	static ObjectManager* GetInstance();
 };
 
 #endif

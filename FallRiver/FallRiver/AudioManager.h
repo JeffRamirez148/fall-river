@@ -46,7 +46,7 @@ private:
 	bool _musicMute;
 
 public:
-	AudioManager* GetInstance();
+	static AudioManager* GetInstance();
 
 	int RegisterSound(char* filePath);
 
