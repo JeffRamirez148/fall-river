@@ -1,22 +1,17 @@
-#include <Windows.h>
-
 #ifndef __DestroyEnemyC_h__
 #define __DestroyEnemyC_h__
 
 #include "Message.h"
 
-// class Message;
-class ChasingAi;
+class ChasingAI;
 
 class DestroyEnemyC: public Message
 {
 private: 
-	ChasingAi* m_pEnemy;
-
+	ChasingAI* m_pEnemy;
 public:
-	DestroyEnemyC();
-
-	~DestroyEnemyC();
+	DestroyEnemyC(ChasingAI* aEnemyC);
+	virtual ~DestroyEnemyC();
 };
 
 #endif

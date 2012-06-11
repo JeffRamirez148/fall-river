@@ -3,7 +3,6 @@
 #ifndef __IMessage_h__
 #define __IMessage_h__
 
-// #include "MessageSystem.h"
 typedef		int		MSGID;
 
 class IMessage

@@ -1,10 +1,13 @@
 #include "DestroyEnemyC.h"
-#include "Message.h"
+#include "ChasingAi.h"
 
-DestroyEnemyC::DestroyEnemyC() : Message(MSG_1)
+DestroyEnemyC::DestroyEnemyC(ChasingAI* aEnemyC) : Message(MSG_DESTROY_ENEMYC)
 {
+	m_pEnemy = aEnemyC;
+	m_pEnemy->AddRef();
 }
 
 DestroyEnemyC::~DestroyEnemyC() 
 {
+	m_pEnemy->Release();
 }

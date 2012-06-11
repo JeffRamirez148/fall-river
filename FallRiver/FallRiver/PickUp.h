@@ -7,9 +7,9 @@
 
 class Level;
 class DestroyPickUp;
-class PickUp;
+#include "BaseObject.h"
 
-class PickUp
+class PickUp : public BaseObject
 {
 	
 };
