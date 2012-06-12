@@ -6,22 +6,20 @@ using namespace std;
 
 #include "AudioManager.h"
 #include "IMenuState.h"
+#include "BaseObject.h"
+#include "ObjectFactory.h"
 
 class ViewManager;
 class AudioManager;
 class ObjectManager;
-#include "ObjectFactory.h"
 class OptionsMenuState;
 class Level;
 class DirectInput;
 class Enemy;
 class Player;
-class Particle_Manager;
 class HUD;
 class NPC;
-class XMLManager;
 class IMessage;
-#include "BaseObject.h"
 
 typedef CObjectFactory< std::wstring, BaseObject> Factory;
 
@@ -43,6 +41,12 @@ private:
 	Player*			player;
 	vector<Enemy*>	enemies;
 	vector<NPC*>	npcs;
+
+	// Private Constructors
+	GamePlayState()		{ }
+	~GamePlayState()	{ }
+	GamePlayState(const GamePlayState&);
+	GamePlayState& operator=(const GamePlayState&);
 
 public:
 	void Enter();

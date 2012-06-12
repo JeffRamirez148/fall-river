@@ -1,5 +1,15 @@
 #include "BaseCharacter.h"
 
+BaseCharacter::BaseCharacter()
+{
+
+}
+
+BaseCharacter::~BaseCharacter()
+{
+
+}
+
 void BaseCharacter::AddRef()
 {
 	// Increase the reference counter

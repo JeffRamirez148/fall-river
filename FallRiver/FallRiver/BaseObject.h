@@ -32,7 +32,7 @@ public:
 	virtual void Render() = 0;
 
 	virtual bool CheckCollision(BaseObject* pBase) = 0;
-	virtual RECT GetRect();
+	virtual RECT GetRect() = 0;
 
 	int GetPosX()	{return m_nPosX;}
 	int GetPosY()	{return m_nPosY;}

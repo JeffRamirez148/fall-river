@@ -8,7 +8,6 @@
 #include "DirectInput.h"
 #include "Enemy.h"
 #include "Player.h"
-//#include "MessageSystem.h"
 #include "Particle_Manager.h"
 #include "HUD.h"
 #include "XMLManager.h"
@@ -33,6 +32,9 @@ void GamePlayState::Enter()
 
 void GamePlayState::Exit() 
 {
+	m_pDI = nullptr;
+	m_pOF = nullptr;
+	m_pOM = nullptr;
 }
 
 bool GamePlayState::Input() 
@@ -45,6 +47,7 @@ bool GamePlayState::Input()
 
 void GamePlayState::Update(float fElapsedTime) 
 {
+	m_pOM->UpdateAllObjects(fElapsedTime);
 }
 
 void GamePlayState::Render() 

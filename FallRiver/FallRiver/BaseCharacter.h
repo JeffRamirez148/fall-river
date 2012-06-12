@@ -18,6 +18,8 @@ private:
 	int				m_nHealth;
 
 public:
+	BaseCharacter();
+	virtual ~BaseCharacter();
 
 	virtual void AddRef();
 

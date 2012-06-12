@@ -1,21 +1,22 @@
-#include <Windows.h>
-using namespace std;
-
 #ifndef __Bush_h__
 #define __Bush_h__
 
 #include "BaseObject.h"
 
-// class BaseObject;
-class Bush;
 
 class Bush: public BaseObject
 {
+public:
+	Bush();
+	virtual ~Bush() { }
 
-	public: 
 	virtual void Update(float fElapsedTime);
 
 	virtual void Render();
+
+	RECT GetRect();
+
+	bool CheckCollision(BaseObject* pBase);
 };
 
 #endif

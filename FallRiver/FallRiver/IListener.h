@@ -6,8 +6,8 @@ class Event;
 class IListener
 {
 public: 
-	IListener();
-	virtual ~IListener();
+	IListener() {}
+	virtual ~IListener() {}
 	virtual void HandleEvent(Event* aPEvent) = 0;
 };
 
