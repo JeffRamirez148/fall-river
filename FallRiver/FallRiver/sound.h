@@ -12,10 +12,8 @@
 
 class AudioManager;
 
-class sound
+struct sound
 {
-
-private:
 	FMOD::Sound* noise;
 	int id;
 	bool looping;
@@ -26,7 +24,6 @@ private:
 	float humidity;
 	float temperature;
 	float molecularWeight;
-
 };
 
 #endif

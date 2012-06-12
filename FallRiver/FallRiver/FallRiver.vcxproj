@@ -126,7 +126,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quests.cpp" />
     <ClCompile Include="ShootingAi.cpp" />
-    <ClCompile Include="sound.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ViewManager.cpp" />
