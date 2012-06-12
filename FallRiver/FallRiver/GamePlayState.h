@@ -10,16 +10,20 @@ using namespace std;
 class ViewManager;
 class AudioManager;
 class ObjectManager;
+#include "ObjectFactory.h"
 class OptionsMenuState;
 class Level;
 class DirectInput;
 class Enemy;
 class Player;
-class MessageSystem;
 class Particle_Manager;
 class HUD;
 class NPC;
 class XMLManager;
+class IMessage;
+#include "BaseObject.h"
+
+typedef CObjectFactory< std::wstring, BaseObject> Factory;
 
 class GamePlayState : public IMenuState
 {
@@ -29,6 +33,8 @@ private:
 	ViewManager* view;
 	DirectInput* m_pDI;
 	AudioManager* audio;
+	Factory* m_pOF;
+	ObjectManager* m_pOM;
 
 	// Data Members
 	float fTime;
@@ -50,6 +56,8 @@ public:
 	void Render();
 
 	static GamePlayState* GetInstance();
+
+	static void MessageProc(IMessage* pMsg);
 };
 
 #endif

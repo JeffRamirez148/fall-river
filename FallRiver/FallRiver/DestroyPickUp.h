@@ -11,6 +11,7 @@ private:
 	PickUp* _m_pPickup;
 public: 
 	DestroyPickUp(PickUp* aPickUp);
+	PickUp* GetPickUp(void) {return _m_pPickup; }
 	virtual ~DestroyPickUp();
 };
 

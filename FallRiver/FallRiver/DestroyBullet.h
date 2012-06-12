@@ -12,6 +12,7 @@ private:
 
 public: 
 	DestroyBullet(Bullet* pBullet);
+	Bullet* GetBullet(void) { return m_pBullet; }
 	virtual ~DestroyBullet();
 };
 

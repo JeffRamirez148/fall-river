@@ -11,6 +11,7 @@ private:
 	ChasingAI* m_pEnemy;
 public:
 	DestroyEnemyC(ChasingAI* aEnemyC);
+	ChasingAI* GetEnemyC(void) { return m_pEnemy; }
 	virtual ~DestroyEnemyC();
 };
 

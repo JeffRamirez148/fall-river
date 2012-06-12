@@ -12,7 +12,7 @@ private:
 
 public: 
 	DestroyEnemyS(ShootingAi* aEnemyS);
-
+	ShootingAi* GetEnemyS(void) { return _m_pEnemy; }
 	virtual ~DestroyEnemyS();
 };
 

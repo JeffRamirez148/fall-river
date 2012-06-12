@@ -10,6 +10,7 @@ private:
 	NPC* _m_pNPC;
 public:
 	DestroyNPC(NPC* aNPC);
+	NPC* GetNPC(void) {return _m_pNPC; }
 	virtual ~DestroyNPC();
 };
 
