@@ -14,7 +14,7 @@ class Frame
 {
 private:
 	float duration;
-	float anchor[2];
+	POINT anchor;
 	RECT sourceRect;
 	RECT activeRect;
 	RECT colRect;

@@ -12,8 +12,7 @@ class Frame;
 
 class Animation
 {
-	private: 
-
+public:
 	vector<Frame*> frames;
 	string _name;
 	int animationID;
