@@ -1,17 +1,10 @@
-#include <Windows.h>
-
 #ifndef __Boss2_h__
 #define __Boss2_h__
 
-// #include "ObjectFactory.h"
-// #include "BaseCharacter.h"
 #include "Enemy.h"
+#include "IListener.h"
 
-// class BaseCharacter;
-// class Enemy;
-class Event;
-
-class Boss2: public Enemy
+class Boss2: public Enemy, public IListener
 {
 public: 
 	virtual void Update(float aTime);
@@ -20,7 +13,7 @@ public:
 
 	void HandleEvent(Event* Event);
 
-	virtual bool CheckCollision(BaseCharacter* pBase);
+	virtual bool CheckCollision(BaseObject* pBase);
 };
 
 #endif

@@ -5,9 +5,29 @@
 #include "BaseCharacter.h"
 #include "Enemy.h"
 
-bool Boss1::CheckCollision(BaseCharacter* pBase) {
+void Boss1::Update(float fElapsedTime)
+{
+
+}
+
+void Boss1::Render()
+{
+
+}
+
+bool Boss1::CheckCollision(BaseObject* pBase)
+{
+	if( BaseCharacter::CheckCollision(pBase) == false )
+		return false;
+
 	return true;
 }
+
+void Boss1::HandleEvent(Event* pEvent)
+{
+
+}
+
 
 
 

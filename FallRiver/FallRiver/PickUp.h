@@ -1,17 +1,21 @@
-
 #ifndef __PickUp_h__
 #define __PickUp_h__
 
-// #include "Level.h"
-// #include "DestroyPickUp.h"
+#include "BaseObject.h"
 
-class Level;
-class DestroyPickUp;
-class PickUp;
-
-class PickUp
+class PickUp : public BaseObject
 {
-	
+public:
+	PickUp();
+	virtual ~PickUp();
+
+	virtual void Update(float fElapsedTime);
+
+	virtual void Render();
+
+	RECT GetRect();
+
+	bool CheckCollision(BaseObject* pBase);
 };
 
 #endif

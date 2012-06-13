@@ -9,11 +9,6 @@ using namespace std;
 
 #include <tchar.h>
 
-//	MessageBox for Errors that occur within DirectInput.
-#ifndef DIERRBOX
-#define DIERRBOX(hWnd, errorText)	{ MessageBox(hWnd, errorText, _T("DirectInput Error"), MB_OK | MB_ICONEXCLAMATION); }
-#endif
-
 DirectInput DirectInput::m_Instance;
 
 DirectInput::DirectInput(void)
@@ -64,7 +59,6 @@ bool DirectInput::InitDirectInput(HWND hWnd, HINSTANCE hInstance, unsigned int u
 			return false;
 	}
 
-	//	Return success.
 	return true;
 }
 
@@ -185,12 +179,9 @@ void DirectInput::UnacquireAll(void)
 
 bool DirectInput::InitKeyboard(HWND hWnd, bool bIsExclusive)
 {
-	//	Make sure we aren't trying to do this a second time.
+	//	Make sure we dont do this more than once
 	if (m_pKeyboard)
-	{
-		DIERRBOX(hWnd, _T("Keyboard has already been initialized"))
-			return false;
-	}
+		return false;
 
 	m_pKeyboard = new DIKeyboard(m_lpDIObject, hWnd, bIsExclusive);
 
@@ -249,7 +240,6 @@ bool DirectInput::InitMouse(HWND hWnd, bool bIsExclusive)
 {
 	if (m_pMouse)
 	{
-		DIERRBOX(hWnd, _T("Mouse has already been initialized"))
 			return false;
 	}
 
@@ -312,7 +302,6 @@ bool DirectInput::InitJoysticks(HWND hWnd, bool bIsExclusive)
 	//	Dont do this more than once.
 	if (m_vpJoysticks.size() > 0)
 	{
-		DIERRBOX(hWnd, _T("Joysticks have already been initialized"))
 			return false;
 	}
 
@@ -410,13 +399,11 @@ DIKeyboard::DIKeyboard(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 	//	Create the Keyboard Device.
 	if (FAILED( pDI->CreateDevice(GUID_SysKeyboard, &m_lpDevice, NULL) ))
 	{
-		DIERRBOX(hWnd, _T("Failed to create Keyboard device."))
 	}
 
 	//	Set the Data Format for the Keyboard.
 	if (FAILED( m_lpDevice->SetDataFormat(&c_dfDIKeyboard) ))
 	{
-		DIERRBOX(hWnd, _T("Failed to set data format on Keyboard."))
 	}
 
 	//	Set the Cooperative level for the keyboard.
@@ -429,7 +416,6 @@ DIKeyboard::DIKeyboard(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 
 	if (FAILED( m_lpDevice->SetCooperativeLevel(hWnd, dwFlags) ))
 	{
-		DIERRBOX(hWnd, _T("Failed to set cooperative level on Keyboard."))
 	}
 
 	//	Set up the device to use buffered input
@@ -447,12 +433,11 @@ DIKeyboard::DIKeyboard(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 
 	//	Set the buffer size on the device.
 	if (FAILED( m_lpDevice->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph) ))
-		DIERRBOX(hWnd, _T("Could not Set the Properties for Buffered Input for Keyboard."))
-
+	{
+	}
 		//	Acquire the Keyboard.
 		if (FAILED( m_lpDevice->Acquire() ))
 		{
-			DIERRBOX(hWnd, _T("Failed to acquire Keyboard."))
 		}	
 
 		ClearKeys();
@@ -586,13 +571,11 @@ DIMouse::DIMouse(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 	//	Create the Mouse Device.
 	if (FAILED( pDI->CreateDevice(GUID_SysMouse, &m_lpDevice, NULL) ))
 	{
-		DIERRBOX(hWnd, _T("Failed to create Mouse device."))
 	}
 
 	//	Set the Data Format for the Mouse.
 	if (FAILED( m_lpDevice->SetDataFormat(&c_dfDIMouse2) ))
 	{
-		DIERRBOX(hWnd, _T("Failed to set data format on Mouse."))
 	}
 
 	//	Set the Cooperative level for the mouse.
@@ -605,7 +588,6 @@ DIMouse::DIMouse(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 
 	if (FAILED( m_lpDevice->SetCooperativeLevel(hWnd, dwFlags) ))
 	{
-		DIERRBOX(hWnd, _T("Failed to set cooperative level on Mouse."))
 	}
 
 	//	Set up the device to use buffered input
@@ -623,27 +605,20 @@ DIMouse::DIMouse(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 
 	//	Set the buffer size on the device.
 	if (FAILED( m_lpDevice->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph) ))
-		DIERRBOX(hWnd, _T("Could not Set the Properties for Buffered Input for Mouse."))
+	{
+	}
 
 		//	Acquire the Mouse.
 		if (FAILED( m_lpDevice->Acquire() ))
 		{
-			DIERRBOX(hWnd, _T("Failed to acquire Mouse."))
 		}	
 
-		// DIDC_ATTACHED 
-		// DIDC_FORCEFEEDBACK
-		// DIDC_POLLEDDATAFORMAT VS DIDC_POLLEDDEVICE 
-		// dwAxes 
-		// dwButtons 
-		// dwPOVs 
 		DIDEVCAPS  didCaps;
 
 		// clear out struct
 		memset(&didCaps, 0, sizeof(didCaps));
 		didCaps.dwSize = sizeof(didCaps); 
 
-		//if (SUCCEEDED( m_lpDevice->GetCapabilities(&didCaps) ))
 		m_lpDevice->GetCapabilities(&didCaps);
 		{
 			if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
@@ -789,21 +764,15 @@ const float ONE_OVER_RANGE = 1.0f / (float)JOYSTICK_AXIS_RANGE;
 
 DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lpdidi, bool bIsExclusive)
 {
-	//	For error reporting
-	TCHAR szErrorBuffer[256];
 
 	//	Create the Joystick Device.
 	if (FAILED( pDI->CreateDevice(lpdidi->guidInstance, &m_lpDevice, NULL) ))
 	{
-		_stprintf_s(szErrorBuffer, _countof(szErrorBuffer), _T("Failed to create Joystick device: %s"), m_szJoyName);
-		DIERRBOX(hWnd, szErrorBuffer)
 	}
 
 	//	Set the Data Format for the Joystick.
 	if (FAILED( m_lpDevice->SetDataFormat(&c_dfDIJoystick2) ))
 	{
-		_stprintf_s(szErrorBuffer, _countof(szErrorBuffer), _T("Failed to set data format on Joystick: %s"), m_szJoyName);
-		DIERRBOX(hWnd, szErrorBuffer)
 	}
 
 	DIDEVCAPS  didCaps;
@@ -812,7 +781,6 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 	memset(&didCaps, 0, sizeof(didCaps));
 	didCaps.dwSize = sizeof(didCaps); 
 
-	//if (SUCCEEDED( m_lpDevice->GetCapabilities(&didCaps) ))
 	m_lpDevice->GetCapabilities(&didCaps);
 	{
 		if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
@@ -840,8 +808,6 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 
 	if (FAILED( m_lpDevice->SetCooperativeLevel(hWnd, dwFlags) ))
 	{
-		_stprintf_s(szErrorBuffer, _countof(szErrorBuffer), _T("Failed to set cooperative level on Joystick: %s"), m_szJoyName);
-		DIERRBOX(hWnd, szErrorBuffer)
 	}
 
 	//	Set the Properties for the Joystick Axes:
@@ -914,9 +880,6 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 	}
 	else
 	{
-		//	Setup the Z-Axis Dead Zone.
-		//deadZone.diph.dwObj		   = DIJOFS_Z;
-		//m_lpDevice->SetProperty(DIPROP_DEADZONE, &deadZone.diph);
 
 		//	Setup the RotationX-Axis Dead Zone.
 		deadZone.diph.dwObj		   = DIJOFS_RX;
@@ -943,15 +906,13 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 	//	Set the buffer size on the device.
 	if (FAILED( m_lpDevice->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph) ))
 	{
-		_stprintf_s(szErrorBuffer, _countof(szErrorBuffer), _T("Could not Set the Properties for Buffered Input for Joystick: %s"), m_szJoyName);
-		DIERRBOX(hWnd, szErrorBuffer)
+		
 	}
 
 	//	Acquire the Joystick.
 	if (FAILED( m_lpDevice->Acquire() ))
 	{
-		_stprintf_s(szErrorBuffer, _countof(szErrorBuffer), _T("Failed to acquire Joystick: %s"), m_szJoyName);
-		DIERRBOX(hWnd, szErrorBuffer)
+		
 	}
 
 	//	clear out struct
@@ -963,7 +924,7 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 
 bool DIJoystick::ReadDevice(void)
 {
-	//	Make sure the joystick device was made.
+	//	Just in case
 	if (!m_lpDevice)
 		return false;
 
@@ -998,15 +959,12 @@ bool DIJoystick::ReadDevice(void)
 		if (hr == DIERR_INPUTLOST)
 			hr = m_lpDevice->Acquire();
 
-		//	Success.
-		//return true;
 	}
 
 	//	Attempt to read the joystick state...
 	if (FAILED( m_lpDevice->GetDeviceState(sizeof(m_diJoyState), (LPVOID)&m_diJoyState) ))
 		return false;
 
-	//	Success.
 	return true;
 }
 
@@ -1032,7 +990,6 @@ bool DIJoystick::ReadBufferedDevice(void)
 			return false;
 	}
 
-	//	Success.
 	return true;
 }
 
@@ -1099,7 +1056,7 @@ bool DIJoystick::TranslatePOV(int nDir, DWORD dwPOVDir)
 
 LONG DIJoystick::TranslateRStickX(DIJOYSTATE2& diJoyState)
 {
-	//	Make sure the device is valid.
+	//	Just in case
 	if (!m_lpDevice)
 		return 0;
 
@@ -1116,7 +1073,7 @@ LONG DIJoystick::TranslateRStickX(DIJOYSTATE2& diJoyState)
 
 LONG DIJoystick::TranslateRStickY(DIJOYSTATE2& diJoyState)
 {
-	//	Make sure the device is valid.
+	// Just in case
 	if (!m_lpDevice)
 		return 0;
 
@@ -1154,7 +1111,7 @@ bool DIJoystick::DPadReleased(int nDir)
 
 bool DIJoystick::GetLStickDirDown(int nDir)
 {
-	//	Make sure the device is valid.
+	//	Just in case
 	if (!m_lpDevice)
 		return false;
 
@@ -1190,13 +1147,13 @@ bool DIJoystick::GetLStickDirDown(int nDir)
 		break;
 	};
 
-	//	The direction wasn't pressed.
+	//	If nothing was pressed
 	return false;
 }
 
 bool DIJoystick::GetLStickDirPressed(int nDir)
 {
-	//	Make sure the device is valid.
+	//	Just in case
 	if (!m_lpDevice)
 		return false;
 
@@ -1232,13 +1189,13 @@ bool DIJoystick::GetLStickDirPressed(int nDir)
 		break;
 	};
 
-	//	The direction wasn't pressed.
+	//	If nothing was pressed
 	return false;
 }
 
 int DIJoystick::GetLStickXAmount(void)
 {
-	//	Make sure the device is valid.
+	//	Just in case
 	if (!m_lpDevice)
 		return 0;
 
@@ -1247,7 +1204,7 @@ int DIJoystick::GetLStickXAmount(void)
 
 int DIJoystick::GetLStickYAmount(void)
 {
-	//	Make sure the device is valid.
+	// Just in case
 	if (!m_lpDevice)
 		return 0;
 
@@ -1256,20 +1213,21 @@ int DIJoystick::GetLStickYAmount(void)
 
 float DIJoystick::GetLStickXNormalized()
 {
-	return (float)GetLStickXAmount() * ONE_OVER_RANGE;			// same as dividing by JOYSTICK_AXIS_RANGE (but twice as fast!)
+	return (float)GetLStickXAmount() * ONE_OVER_RANGE;
 }
 
 float DIJoystick::GetLStickYNormalized()
 {
-	return (float)GetLStickYAmount() * ONE_OVER_RANGE;			// same as dividing by JOYSTICK_AXIS_RANGE (but twice as fast!)
+	return (float)GetLStickYAmount() * ONE_OVER_RANGE;
 }
 
 bool DIJoystick::GetRStickDirDown(int nDir)
 {
-	//	Make sure the device is valid.
+	//	Just in case
 	if (!m_lpDevice)
 		return false;
 
+	// Check Direction
 	switch(nDir)
 	{
 	case DIR_LEFT:
@@ -1301,13 +1259,13 @@ bool DIJoystick::GetRStickDirDown(int nDir)
 		break;
 	};
 
-	//	The direction wasn't pressed.
+	//	If nothing was pressed
 	return false;
 }
 
 bool DIJoystick::GetRStickDirPressed(int nDir)
 {
-	//	Make sure the device is valid.
+	//	Just in case
 	if (!m_lpDevice)
 		return false;
 
@@ -1343,13 +1301,13 @@ bool DIJoystick::GetRStickDirPressed(int nDir)
 		break;
 	};
 
-	//	The direction wasn't pressed.
+	// If nothing was pressed
 	return false;
 }
 
 int DIJoystick::GetRStickXAmount(void)
 {
-	//	Make sure the device is valid.
+	//	Just in case
 	if (!m_lpDevice)
 		return 0;
 
@@ -1358,7 +1316,7 @@ int DIJoystick::GetRStickXAmount(void)
 
 int DIJoystick::GetRStickYAmount(void)
 {
-	//	Make sure the device is valid.
+	// Just in case
 	if (!m_lpDevice)
 		return 0;
 
@@ -1367,12 +1325,12 @@ int DIJoystick::GetRStickYAmount(void)
 
 float DIJoystick::GetRStickXNormalized()
 {
-	return (float)GetRStickXAmount() * ONE_OVER_RANGE;			// same as dividing by JOYSTICK_AXIS_RANGE (but twice as fast!)
+	return (float)GetRStickXAmount() * ONE_OVER_RANGE;
 }
 
 float DIJoystick::GetRStickYNormalized()
 {
-	return (float)GetRStickYAmount() * ONE_OVER_RANGE;			// same as dividing by JOYSTICK_AXIS_RANGE (but twice as fast!)
+	return (float)GetRStickYAmount() * ONE_OVER_RANGE;
 }
 
 int DIJoystick::GetLTriggerAmount(void)
@@ -1386,17 +1344,17 @@ int DIJoystick::GetRTriggerAmount(void)
 {
 	if (!m_bIsXbox360Pad) return 0;
 
-	return -m_diJoyState.lZ; // - to take into account that it is actually 0 to -JOYSTICK_AXIS_RANGE
+	return -m_diJoyState.lZ;
 }
 
 float DIJoystick::GetLTriggerNormalized(void)
 {
-	return GetRTriggerAmount() * ONE_OVER_RANGE;	// same as dividing by JOYSTICK_AXIS_RANGE (but twice as fast!)
+	return GetRTriggerAmount() * ONE_OVER_RANGE;
 }
 
 float DIJoystick::GetRTriggerNormalized(void)
 {
-	return GetRTriggerAmount() * ONE_OVER_RANGE;	// same as dividing by JOYSTICK_AXIS_RANGE (but twice as fast!)
+	return GetRTriggerAmount() * ONE_OVER_RANGE;
 }
 
 int	DIJoystick::CheckBufferedButtons(void)

@@ -80,7 +80,6 @@
     <ClCompile Include="AnimInfo.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
-    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss1.cpp" />
     <ClCompile Include="Boss2.cpp" />
     <ClCompile Include="Bullet.cpp" />
@@ -118,7 +117,6 @@
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageSystem.cpp" />
     <ClCompile Include="NPC.cpp" />
-    <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="OptionsMenuState.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -128,7 +126,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quests.cpp" />
     <ClCompile Include="ShootingAi.cpp" />
-    <ClCompile Include="sound.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ViewManager.cpp" />

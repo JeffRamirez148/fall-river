@@ -1,35 +1,30 @@
-#include <Windows.h>
-#include <vector>
-using namespace std;
-
 #ifndef __Emitter_h__
 #define __Emitter_h__
+#include <vector>
+using namespace std;
+#include <D3DX9.h>
+#pragma comment(lib, "D3DX9.lib")
 
-// #include "Particle_Manager.h"
-// #include "Particle.h"
-
-class Particle_Manager;
 class Particle;
-class Emitter;
 
 class Emitter
 {
-	private: 
-		vector<Particle*> _m_vparticles;
+	vector<Particle*> _m_vparticles;
 	float spawnRate;
 	bool loopin;
 	RECT rect;
 	int maxParticles;
-	//D3DVec2 endVel;
+	D3DXVECTOR3 endVel;
 	float endScale;
 	int endColor;
-	//D3DVec2 startVel;
+	D3DXVECTOR3 startVel;
 	float startScale;
 	int startColor;
 	int blendMode;
-	//D3DVec2 pos;
+	float spawnTimer;
+	D3DXVECTOR3 pos;
 
-	public: 
+public: 
 	void Update(float fElapsedTime);
 
 	void Render();

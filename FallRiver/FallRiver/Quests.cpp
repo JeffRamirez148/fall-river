@@ -5,7 +5,7 @@ using namespace std;
 #include "NPC.h"
 #include "Player.h"
 
-void Quests::StartQuest(char* aCName, int aNType, NPC* aPOwner)
+void Quests::SetQuest(char* aCName, int aNType, NPC* aPOwner)
 {
 	
 }

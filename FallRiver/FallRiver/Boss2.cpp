@@ -15,8 +15,11 @@ void Boss2::Render()
 	
 }
 
-bool Boss2::CheckCollision(BaseCharacter* pBase) 
+bool Boss2::CheckCollision(BaseObject* pBase) 
 {
+	if( BaseCharacter::CheckCollision(pBase) == false)
+		return false;
+
 	return true;
 }
 

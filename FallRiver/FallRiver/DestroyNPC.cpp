@@ -1,14 +1,14 @@
-#include <Windows.h>
-
 #include "DestroyNPC.h"
 #include "NPC.h"
-#include "Message.h"
 
-DestroyNPC::DestroyNPC() : Message(MSG_1)
+DestroyNPC::DestroyNPC(NPC* aNPC) : Message(MSG_DESTROY_NPC)
 {
+	_m_pNPC = aNPC;
+	_m_pNPC->AddRef();
 }
 
 DestroyNPC::~DestroyNPC() 
 {
+	_m_pNPC->Release();
 }
 

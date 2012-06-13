@@ -1,5 +1,3 @@
-#include <Windows.h>
-using namespace std;
 
 #include "Enemy.h"
 #include "Player.h"
@@ -22,8 +20,14 @@ void Enemy::MoveTo(int c, int y)
 {
 }
 
-bool Enemy::CheckCollision(BaseCharacter* pBase) 
+bool Enemy::CheckCollision(BaseObject* pBase) 
 {
 	return false;
 }
 
+RECT Enemy::GetRect()
+{
+	RECT cRect = {GetPosX(), GetPosY(), GetPosX()+GetWidth(), GetPosY()+GetHeight()};
+
+	return cRect;
+}

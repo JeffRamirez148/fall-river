@@ -1,12 +1,12 @@
-
 #include "DestroyEnemyS.h"
 #include "ShootingAi.h"
-#include "Message.h"
-
-DestroyEnemyS::DestroyEnemyS() : Message(MSG_1)
+DestroyEnemyS::DestroyEnemyS(ShootingAi* aEnemyS) : Message(MSG_DESTROY_ENEMYS)
 {
+	_m_pEnemy = aEnemyS;
+	_m_pEnemy->AddRef();
 }
 
 DestroyEnemyS::~DestroyEnemyS() 
 {
+	_m_pEnemy->Release();
 }

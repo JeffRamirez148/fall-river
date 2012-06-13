@@ -1,37 +1,45 @@
-#include <Windows.h>
-
 #ifndef __BaseCharacter_h__
 #define __BaseCharacter_h__
 
-// #include "ObjectFactory.h"
-// #include "CreateBullet.h"
 #include "BaseObject.h"
+#include <Windows.h>
 
-class ObjectFactory;
-class CreateBullet;
-// class BaseObject;
-class BaseCharacter;
+enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY };
 
 class BaseCharacter: public BaseObject
 {
-private: 
-	int _m_nType;
-	unsigned int _m_unRefCount;
-	int _m_nHealth;
+protected: 
+	int				m_nCharacterType;
+	int				m_nVelX;
+	int				m_nVelY;
 
-public: 
-	ObjectFactory* _unnamed_ObjectFactory_;
-	CreateBullet* _unnamed_CreateBullet_;
+private:
+	unsigned int	m_unRefCount;
+	int				m_nHealth;
 
-	virtual void Update(float fElapsedTime) = 0;
+public:
+	BaseCharacter();
+	virtual ~BaseCharacter();
 
-	virtual void Render() = 0;
+	virtual void AddRef();
 
-	virtual bool CheckCollision(BaseCharacter* pBase) = 0;
+	virtual void Release();
 
-	void addRef();
+	virtual void Update(float fElapsedTime);
 
-	void release();
+	virtual void Render();
+
+	virtual bool CheckCollision(BaseObject* pBase);
+	virtual RECT GetRect();
+
+	int GetHealth() {return m_nHealth;}
+	int GetVelX() {return m_nVelX;}
+	int GetVelY() {return m_nVelY;}
+	int GetCharacterType() {return m_nCharacterType;}
+
+	void SetHealth(int health) {m_nHealth = health;}
+	void SetVelX(int x) {m_nVelX = x;}
+	void SetVelY(int y) {m_nVelY = y;}
 };
 
 #endif
