@@ -350,3 +350,14 @@ void ViewManager::Clear(unsigned char ucRed, unsigned char ucGreen, unsigned cha
 {
 	m_lpDirect3DDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(ucRed, ucGreen, ucBlue), 1.0f, 0);
 }
+
+void ViewManager::DrawRect(RECT rRt, unsigned char ucRed, unsigned char ucGreen, unsigned char ucBlue)
+{
+	D3DRECT d3dRect;
+	d3dRect.x1 = rRt.left;
+	d3dRect.y1 = rRt.top;
+	d3dRect.x2 = rRt.right;
+	d3dRect.y2 = rRt.bottom;
+
+	m_lpDirect3DDevice->Clear(1, &d3dRect, D3DCLEAR_TARGET, D3DCOLOR_XRGB(ucRed, ucGreen, ucBlue), 1.0f, 0);
+}
