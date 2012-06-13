@@ -75,7 +75,12 @@ public:
 	}
 	void setSoundPos(int aSoundID, FMOD_VECTOR aPosition) { _sfxSound[aSoundID]->pos = aPosition; }
 	void setSoundVel(int aSoundID, FMOD_VECTOR aVelocity) { _sfxSound[aSoundID]->vel = aVelocity; }
-	bool isSoundPlaying(int aSoundID) {return _sfxSound[aSoundID]->isPlaying;}
+	bool isSoundPlaying(int aSoundID)
+	{
+		bool tmpBool;
+		_sfxSound[aSoundID]->channel->isPlaying(&tmpBool);
+		return tmpBool;
+	}
 	float getSoundVolume(string aVoid_37) {return _sfxVolume; }
 	bool getSoundLoop(int aSoundID) {return _sfxSound[aSoundID]->looping; }
 	FMOD_VECTOR getSoundPos(int aSoundID) {return _sfxSound[aSoundID]->pos;}
@@ -96,7 +101,12 @@ public:
 	}
 	void setMusicPos(int aSoundID, FMOD_VECTOR aPosition) { _musicSound[aSoundID]->pos = aPosition; }
 	void setMusicVel(int aSoundID, FMOD_VECTOR aVelocity) { _musicSound[aSoundID]->vel = aVelocity; }
-	bool isMusicPlaying(int aSoundID) { return _musicSound[aSoundID]->isPlaying; }
+	bool isMusicPlaying(int aSoundID)
+	{
+		bool tmpBool;
+		_musicSound[aSoundID]->channel->isPlaying(&tmpBool);
+		return tmpBool;
+	}
 	float getMusicVolume(void) {return _musicVolume; }
 	FMOD_VECTOR GetMusicPos(int aSoundID) { return _musicSound[aSoundID]->pos; }
 	FMOD_VECTOR GetMusicVel(int aSoundID) { return _musicSound[aSoundID]->vel; }

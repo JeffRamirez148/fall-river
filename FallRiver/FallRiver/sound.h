@@ -17,7 +17,6 @@ struct sound
 	FMOD::Sound* noise;
 	int id;
 	bool looping;
-	bool isPlaying;
 	FMOD::Channel* channel;
 	FMOD_VECTOR pos;
 	FMOD_VECTOR vel;
