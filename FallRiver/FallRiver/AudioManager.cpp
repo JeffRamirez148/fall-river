@@ -51,6 +51,10 @@ AudioManager::AudioManager(void)
 
 AudioManager::~AudioManager(void)
 {
+	for( unsigned int i = 0; i < _sfxSound.size(); ++i)
+		_sfxSound[i]->noise->release();
+	for( unsigned int i = 0; i < _musicSound.size(); ++i)
+		_musicSound[i]->noise->release();
 	_result = _sys->release();
 }
 

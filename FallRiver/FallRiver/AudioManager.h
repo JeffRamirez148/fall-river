@@ -10,19 +10,7 @@ using namespace std;
 #ifndef __AudioManager_h__
 #define __AudioManager_h__
 
-
-class GamePlayState;
-class HighScoresMenuState;
-class WinMenuState;
-class DefeatMenuState;
-class CreditsMenuState;
-class LoadMenuState;
-class PauseMenuState;
-class MainMenuState;
-class HowToPlayMenuState;
-class CutScene;
 #include "sound.h"
-class AudioManager;
 
 class AudioManager
 {
@@ -81,7 +69,7 @@ public:
 		_sfxSound[aSoundID]->channel->isPlaying(&tmpBool);
 		return tmpBool;
 	}
-	float getSoundVolume(string aVoid_37) {return _sfxVolume; }
+	float getSoundVolume(void) {return _sfxVolume; }
 	bool getSoundLoop(int aSoundID) {return _sfxSound[aSoundID]->looping; }
 	FMOD_VECTOR getSoundPos(int aSoundID) {return _sfxSound[aSoundID]->pos;}
 	FMOD_VECTOR getSoundVel(int aSoundID) {return _sfxSound[aSoundID]->vel;}
