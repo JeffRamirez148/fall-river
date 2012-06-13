@@ -7,6 +7,7 @@
 #include "CGame.h"
 #include "DirectInput.h"
 #include "Enemy.h"
+#include "EventSystem.h"
 #include "Player.h"
 #include "Particle_Manager.h"
 #include "HUD.h"
@@ -23,11 +24,19 @@
 #include "DestroyNPC.h"
 #include "DestroyPickUp.h"
 
+GamePlayState* GamePlayState::GetInstance() 
+{
+	static GamePlayState s_Instance;
+
+	return &s_Instance;
+}
+
 void GamePlayState::Enter()
 {
 	m_pDI = DirectInput::GetInstance();
 	m_pOF = Factory::GetInstance();
 	m_pOM = ObjectManager::GetInstance();
+	m_pES = EventSystem::GetInstance();
 }
 
 void GamePlayState::Exit() 
@@ -48,17 +57,12 @@ bool GamePlayState::Input()
 void GamePlayState::Update(float fElapsedTime) 
 {
 	m_pOM->UpdateAllObjects(fElapsedTime);
+	m_pES->ProcessEvents();
 }
 
 void GamePlayState::Render() 
 {
-}
-
-GamePlayState* GamePlayState::GetInstance() 
-{
-	static GamePlayState s_Instance;
-
-	return &s_Instance;
+	m_pOM->RenderAllObjects();
 }
 
 void GamePlayState::MessageProc(IMessage* pMsg)

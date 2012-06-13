@@ -5,8 +5,8 @@ using namespace std;
 #pragma once
 
 //	The version of DirectInput to use.
-#ifndef DIRECTInput_VERSION
-#define DIRECTInput_VERSION 0X800
+#ifndef DIRECTINPUT_VERSION
+#define DIRECTINPUT_VERSION 0X800
 #endif
 #include <dInput.h>
 
@@ -18,21 +18,18 @@ using namespace std;
 #include <vector>
 using std::vector;
 
-//#include "SGD_Util.h"	//	for utility macros
-
 //	Forward declarations:
 class DIKeyboard;
 class DIMouse;
 class DIJoystick;
 
-//	Enumerations:
-//		Devices:
+//	Input Devices:
 enum DeviceFlags { DI_KEYBOARD = 1, DI_MOUSE = 2, DI_JOYSTICKS = 4 };
 
-//		Directions
+//	Directions
 enum Directions { DIR_LEFT = 0, DIR_RIGHT = 1, DIR_UP = 2, DIR_DOWN = 3, DIR_MAX };
 
-//		Mouse buttons
+//	Mouse buttons
 enum MouseButtons { MOUSE_LEFT = 0, MOUSE_RIGHT = 1, MOUSE_MIDDLE = 2, MOUSE_MAX };
 
 class DirectInput
@@ -56,11 +53,11 @@ private:
 
 	DirectInput(DirectInput& ref);
 
-	bool InitMouse(HWND aHWnd, bool bIsExclusive);
+	bool InitMouse(HWND hWnd, bool bIsExclusive);
 
-	bool InitJoysticks(HWND aHWnd, bool bIsExclusive);
+	bool InitJoysticks(HWND hWnd, bool bIsExclusive);
 
-	bool InitKeyboard(HWND aHWnd, bool bIsExclusive);
+	bool InitKeyboard(HWND hWnd, bool bIsExclusive);
 
 public:
 	static DirectInput* GetInstance();
@@ -183,26 +180,26 @@ public:
 	virtual bool Acquire(void) = 0;
 	virtual bool Unacquire(void) = 0;
 
-}; 	//	end class ISGD_DirectInputDevice
+};
 
 class IInputDevice : IFRDirectInputDevice
 {
 protected:
-	LPDIRECTINPUTDEVICE8	m_lpDevice;					//	DirectInput Device pointer.
+	LPDIRECTINPUTDEVICE8	m_lpDevice;
 
 	//	For DirectX Buffered input:
-	DIDEVICEOBJECTDATA		m_didod[10];	//	Receives buffered data for the device.
-	DWORD					m_dwBufferElements;			//	Number of element in the buffer for the device.
+	DIDEVICEOBJECTDATA		m_didod[10];
+	DWORD					m_dwBufferElements;
 
 	//	Utility function to clear buffered data.
 	void ClearBufferedData(void)
 	{
-		memset(&m_didod, 0, sizeof(m_didod));	//	clear out device object data.
-		m_dwBufferElements = 10;	//	set buffer elements to the size of the array.
+		memset(&m_didod, 0, sizeof(m_didod));
+		m_dwBufferElements = 10;
 	}
 
 public:
-	//	Constructor.
+	//	Constructor and Destructor
 	IInputDevice(void)
 	{
 		m_lpDevice = NULL;
@@ -210,7 +207,6 @@ public:
 		ClearBufferedData();
 	}
 
-	//	Destructor.
 	virtual ~IInputDevice(void)
 	{
 		if (m_lpDevice)
@@ -232,18 +228,15 @@ public:
 		//	Attempt to read the device...
 		if (FAILED( m_lpDevice->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), m_didod, &m_dwBufferElements, 0) ))
 		{
-			//	If we couldn't, try to re-acquire the device.
 			if (FAILED( m_lpDevice->Acquire() ))
-				return false; //	Could not re-acquire the Device.
+				return false;
 
 			ClearBufferedData();
 
-			//	Now try reading it
 			if (FAILED( m_lpDevice->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), m_didod, &m_dwBufferElements, 0) ))
 				return false;
 		}
 
-		//	Success
 		return true;
 	}
 
@@ -253,7 +246,7 @@ public:
 	//	returns true if the device was able to be unacquired.
 	virtual bool Unacquire(void)	{ return (m_lpDevice) ? SUCCEEDED( m_lpDevice->Unacquire() ) : false; }
 
-}; 	//	end class CSGD_DirectInputDevice
+};
 
 
 class DIKeyboard: public IInputDevice
@@ -359,7 +352,7 @@ private:
 	bool m_bIsXbox360Pad;
 	bool m_bIsZAxisY;
 
-	// POV constants
+	// Point Of View constants
 	enum POV_dirs
 	{ 
 		POV_NEUTRAL		=  -1,
@@ -441,7 +434,7 @@ public:
 
 	float GetRTriggerNormalized(void);
 
-	int GetNumButtons(void)	const			{ return m_nNumButtons; }
+	int GetNumButtons(void)	const	{ return m_nNumButtons; }
 
 	int CheckBufferedButtons();
 

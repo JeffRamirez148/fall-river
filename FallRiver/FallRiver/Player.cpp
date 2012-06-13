@@ -1,7 +1,3 @@
-#include <Windows.h>
-#include <vector>
-using namespace std;
-
 #include "Player.h"
 #include "Quests.h"
 #include "GamePlayState.h"
@@ -9,7 +5,6 @@ using namespace std;
 #include "ObjectFactory.h"
 #include "Weapon.h"
 #include "Light.h"
-#include "BaseCharacter.h"
 
 Player::Player()
 {
@@ -34,7 +29,8 @@ void Player::Render()
 
 bool Player::CheckCollision(BaseCharacter* pBase) 
 {
-	return true;
+	// TODO:: Change this accordingly
+	return BaseCharacter::CheckCollision(pBase);
 }
 
 // Check if the player is still alive

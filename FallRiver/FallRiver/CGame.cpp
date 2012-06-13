@@ -35,7 +35,7 @@ bool CGame::Input()
 		return false;
 
 
-
+	// Refresh Devices
 	m_pDI->ReadDevices();
 
 	return m_pCurrState->Input();

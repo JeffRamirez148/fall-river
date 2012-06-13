@@ -15,7 +15,7 @@ private:
 
 public: 
 	Bullet();
-	virtual ~Bullet() { };
+	virtual ~Bullet();
 
 	void Update(float fElapsedTime);
 

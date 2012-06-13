@@ -9,11 +9,8 @@ using namespace std;
 
 class Quests;
 class GamePlayState;
-class Enemy;
-class ObjectFactory;
 class Weapon;
 class Light;
-class Player;
 
 class Player: public BaseCharacter
 {

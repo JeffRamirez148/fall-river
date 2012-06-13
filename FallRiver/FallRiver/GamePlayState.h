@@ -4,7 +4,6 @@ using namespace std;
 #ifndef __GamePlayState_h__
 #define __GamePlayState_h__
 
-#include "AudioManager.h"
 #include "IMenuState.h"
 #include "BaseObject.h"
 #include "ObjectFactory.h"
@@ -13,6 +12,7 @@ class ViewManager;
 class AudioManager;
 class ObjectManager;
 class OptionsMenuState;
+class EventSystem;
 class Level;
 class DirectInput;
 class Enemy;
@@ -27,12 +27,13 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	Level* level;
-	ViewManager* view;
-	DirectInput* m_pDI;
-	AudioManager* audio;
-	Factory* m_pOF;
-	ObjectManager* m_pOM;
+	Level*			level;
+	ViewManager*	view;
+	DirectInput*	m_pDI;
+	AudioManager*	audio;
+	Factory*		m_pOF;
+	ObjectManager*	m_pOM;
+	EventSystem*	m_pES;
 
 	// Data Members
 	float fTime;

@@ -1,19 +1,16 @@
-#include <Windows.h>
-using namespace std;
-
 #include "Weapon.h"
-#include "Player.h"
-#include "CompanionAI.h"
-#include "BaseObject.h"
 
-
-
-void Weapon::Update(float aTime)
+Weapon::Weapon()
 {
-	
+
 }
 
-void Weapon::Input() 
+Weapon::~Weapon()
+{
+
+}
+
+void Weapon::Update(float fElapsedTime)
 {
 	
 }

@@ -8,7 +8,7 @@ class Bush: public BaseObject
 {
 public:
 	Bush();
-	virtual ~Bush() { }
+	virtual ~Bush();
 
 	virtual void Update(float fElapsedTime);
 

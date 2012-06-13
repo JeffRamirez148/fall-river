@@ -1,13 +1,9 @@
-#include <Windows.h>
-
 #ifndef __BaseObject_h__
 #define __BaseObject_h__
 
-class ObjectManager;
-class ObjectFactory;
-class BaseObject;
+#include <Windows.h>
 
-enum OBJECTS { OBJ_BUSH = 0, OBJ_CLOSET, OBJ_BULLET, OBJ_CHARACTER };
+enum OBJECTS { OBJ_BUSH = 0, OBJ_CLOSET, OBJ_BULLET, OBJ_CHARACTER, OBJ_PICKUP, OBJ_LIGHT };
 
 class BaseObject
 {

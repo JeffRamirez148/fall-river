@@ -14,7 +14,7 @@ class NPC;
 class NPC: public BaseCharacter
 {
 private: 
-	char* m_cText;
+	char* m_cName;
 
 public:
 	void Update(float fElapsedTime);
