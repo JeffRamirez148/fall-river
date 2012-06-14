@@ -29,15 +29,12 @@ float* XMLManager::ParseSound(string aFile)
 	return 0;
 }
 
-<<<<<<< HEAD
 void ParseAnim(char* aFile, Animation& anim)
 {
 
 }
-=======
+
 Emitter* XMLManager::ParseEmitter(string aFile)
 {
 	return NULL;
 }
-
->>>>>>> 4834037b554bbbd2afc2e6f78cc2faf1ce119c2f
