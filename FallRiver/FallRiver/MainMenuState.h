@@ -12,7 +12,7 @@ class XMLManager;
 class MainMenuState: public IMenuState
 {
 private: 
-	ViewManager* view;
+	ViewManager* m_pVM;
 	DirectInput* m_pDI;
 	AudioManager* audio;
 	int		m_nCursPosY;

@@ -27,6 +27,7 @@ private:
 	int m_nScore;
 	char* m_cName;
 	bool m_bIsAlive;
+	bool m_bIsHidden;
 	int m_nLives;
 	vector<Quests*> m_vpActiveQuests;
 
@@ -38,6 +39,10 @@ public:
 	void Render();
 	bool CheckCollision(BaseCharacter* pBase);
 	bool CheckLifes();
+
+	// If the Player is in a bush or closet
+	bool CheckHidden() {return m_bIsHidden;}
+	
 	void AddQuest(Quests* pQuest);
 	void AddWeapon(Weapon* pWeapon);
 	void AddLight(Light* pLight);

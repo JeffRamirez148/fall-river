@@ -10,12 +10,14 @@ class DirectInput;
 class IMenuState;
 class CGame;
 class IMenuState;
+class ViewManager;
 
 class CGame
 {
 private:
 	// Wrapper Members
 	DirectInput* m_pDI;
+	ViewManager* m_pVM;
 
 	// Game States
 	IMenuState*			m_pCurrState;

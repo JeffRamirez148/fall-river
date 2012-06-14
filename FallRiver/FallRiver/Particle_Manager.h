@@ -6,20 +6,20 @@ using namespace std;
 #ifndef __Particle_Manager_h__
 #define __Particle_Manager_h__
 
-// #include "GamePlayState.h"
-// #include "Emitter.h"
-
-class GamePlayState;
 class Emitter;
-class Particle_Manager;
-
 class Particle_Manager
 {
-	private:
-	map<string, Emitter> loaded;
+private:
+	vector<Emitter*> loaded;
 	vector<Emitter*> active;
-	public: 
-	
+	Particle_Manager() { };
+	~Particle_Manager() { };
+public: 
+	int LoadEmitter(char * filepath);
+	int ActivateEmitter(int id);
+	void Render();
+	void Update(float fElapsedTime);
+	static Particle_Manager* GetInstance(void);
 };
 
 #endif

@@ -1,12 +1,6 @@
-#include <Windows.h>
-using namespace std;
-
 #ifndef __OptionsMenuState_h__
 #define __OptionsMenuState_h__
 
-// #include "ViewManager.h"
-// #include "GamePlayState.h"
-// #include "XMLManager.h"
 #include "IMenuState.h"
 
 class ViewManager;
@@ -18,17 +12,21 @@ class OptionsMenuState;
 class OptionsMenuState: public IMenuState
 {
 private:
-	ViewManager* view;
-	DirectInput* input;
+	ViewManager* m_pVM;
+	DirectInput* m_pDI;
 	float fTime;
-	int y;
+	int m_nCursPosY;
 	float sfxVolume;
 	float musicVolume;
 	int resolution[2];
 
+	OptionsMenuState();
+	~OptionsMenuState();
+	OptionsMenuState(const OptionsMenuState&);
+	OptionsMenuState& operator=(const OptionsMenuState&);
+
 public: 
 
-	XMLManager* _xMLManager;
 	static OptionsMenuState* GetInstance();
 	void Enter();
 	void Exit();

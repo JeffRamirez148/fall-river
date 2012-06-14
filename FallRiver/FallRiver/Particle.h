@@ -9,9 +9,6 @@ class Particle
 {
 
 private: 
-	int m_nFrameX;
-	int m_nFrameY;
-	DWORD m_dwDelay;
 	D3DXVECTOR3 vel;
 	float lifeSpan;
 	D3DXVECTOR3 pos;
@@ -19,6 +16,7 @@ private:
 	int imageID;
 	float scale;
 	int mode;
+	D3DXVECTOR3 dir;
 
 public: 
 	void Render();
@@ -29,10 +27,8 @@ public:
 	void SetImageID(int newID) { imageID = newID; }
 	void SetPos( D3DXVECTOR3 newPos) { pos = newPos; }
 	void SetVel( D3DXVECTOR3 newVel) { vel = newVel; }
+	void SetDir( D3DXVECTOR3 newDir) { dir = newDir; }
 	void SetLifeSpan(float newLifeSpan) { lifeSpan = newLifeSpan;}
-	void SetDelay(DWORD newDelay) { m_dwDelay = newDelay; }
-	void SetFrameX(int newFrame) { m_nFrameX = newFrame;}
-	void SetFrameY(int newFrame) { m_nFrameY = newFrame;}
 
 	int	GetColor(void) {return color;}
 	float GetScale(void) {return scale;}
@@ -40,10 +36,8 @@ public:
 	int	GetImageID(void) { return imageID; }
 	D3DXVECTOR3 GetPos(void) { return pos; }
 	D3DXVECTOR3 GetVel(void) { return vel; }
+	D3DXVECTOR3 GetDir(void) { return dir; }
 	float GetLifeSpan(void) { return lifeSpan;}
-	DWORD GetDelay(void) { return m_dwDelay; }
-	int	GetFrameX(void) { return m_nFrameX;}
-	int	GetFrameY(void) { return m_nFrameY;}
 };
 
 #endif

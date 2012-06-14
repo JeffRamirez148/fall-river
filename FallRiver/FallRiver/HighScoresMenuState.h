@@ -5,22 +5,28 @@ using namespace std;
 #ifndef __HighScoresMenuState_h__
 #define __HighScoresMenuState_h__
 
+#include "IMenuState.h"
+
 class ViewManager;
 class AudioManager;
 class DirectInput;
 class HighScoresMenuState;
 
-class HighScoresMenuState
+class HighScoresMenuState : public IMenuState
 {
 private: 
-	ViewManager* view;
-	DirectInput* input;
+	ViewManager* m_pVM;
+	DirectInput* m_pDI;
 	float fTime;
-	int y;
 	bool end;
 	int scores[10];
 	string player[10];
 	AudioManager* audio;
+
+	HighScoresMenuState();
+	~HighScoresMenuState();
+	HighScoresMenuState(const HighScoresMenuState&);
+	HighScoresMenuState& operator=(const HighScoresMenuState&);
 
 public: 
 	static HighScoresMenuState* GetInstance();

@@ -3,6 +3,7 @@
 #include "AudioManager.h"
 #include "ObjectManager.h"
 #include "OptionsMenuState.h"
+#include "PauseMenuState.h"
 #include "Level.h"
 #include "CGame.h"
 #include "DirectInput.h"
@@ -49,7 +50,7 @@ void GamePlayState::Exit()
 bool GamePlayState::Input() 
 {
 	if( m_pDI->KeyPressed(DIK_ESCAPE) )
-		CGame::GetInstance()->RemoveState();
+		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
 
 	return true;
 }

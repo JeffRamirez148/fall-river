@@ -347,6 +347,36 @@ void ViewManager::DrawLine(int nX1, int nY1, int nX2, int nY2, unsigned char ucR
 	m_lpLine->Draw(verts, 2, D3DCOLOR_XRGB(ucRed, ucGreen, ucBlue));
 }
 
+
+void ViewManager::DrawUnfilledRect(RECT test, unsigned char ucRed, unsigned char ucGreen, unsigned char ucBlue)
+{
+	D3DXVECTOR2 verts[5];
+
+	verts[0].x = (float)test.left;
+
+	verts[0].y = (float)test.top;
+
+	verts[1].x = (float)test.right;
+
+	verts[1].y = (float)test.top;
+
+	verts[2].x = (float)test.right;
+
+	verts[2].y = (float)test.bottom;
+
+	verts[3].x = (float)test.left;
+
+	verts[3].y = (float)test.bottom;
+
+	verts[4].x = (float)test.left;
+
+	verts[4].y = (float)test.top;
+
+
+	m_lpLine->Draw(verts, 5, D3DCOLOR_XRGB(ucRed, ucGreen, ucBlue));
+}
+
+
 void ViewManager::DrawText(char *lpzText, int nX, int nY, unsigned char ucRed, unsigned char ucGreen, unsigned char ucBlue)
 {
 	// Pointer to the Back Buffer.

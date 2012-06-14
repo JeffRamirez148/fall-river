@@ -2,10 +2,11 @@
 #define __BaseObject_h__
 
 #include <Windows.h>
+#include "IObjects.h"
 
 enum OBJECTS { OBJ_BUSH = 0, OBJ_CLOSET, OBJ_BULLET, OBJ_CHARACTER, OBJ_PICKUP, OBJ_LIGHT };
 
-class BaseObject
+class BaseObject : public IObjects
 {
 private: 
 	int m_nPosX;
@@ -13,22 +14,23 @@ private:
 	int m_nHeight;
 	int m_nWidth;
 	int m_nImageID;
+	unsigned int	m_unRefCount;
 
 protected:
 	int m_nObjectType;
 
 public: 
 
-	virtual void AddRef() = 0;
+	virtual void AddRef();
 
-	virtual void Release() = 0;
+	virtual void Release();
 
-	virtual void Update(float fElapsedTime) = 0;
+	virtual void Update(float fElapsedTime);
 
-	virtual void Render() = 0;
+	virtual void Render();
 
-	virtual bool CheckCollision(BaseObject* pBase) = 0;
-	virtual RECT GetRect() = 0;
+	virtual bool CheckCollision(IObjects* pBase);
+	virtual RECT GetRect();
 
 	int GetPosX()	{return m_nPosX;}
 	int GetPosY()	{return m_nPosY;}

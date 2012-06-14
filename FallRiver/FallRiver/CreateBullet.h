@@ -3,11 +3,18 @@
 
 #include "Message.h"
 
+class Weapon;
+
 class CreateBullet: public Message
 {
 public:
-	CreateBullet();
-	virtual ~CreateBullet();
+	CreateBullet(Weapon* pWeapon);
+	virtual ~CreateBullet(void);
+
+	void SetWeapon( Weapon* pWeapon )	{ m_pWeapon = pWeapon; }
+	Weapon* GetWeapon( void )		{ return m_pWeapon; }
+private:
+	Weapon*	m_pWeapon;
 };
 
 #endif
