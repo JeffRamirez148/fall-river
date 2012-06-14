@@ -15,10 +15,12 @@ class Emitter
 	RECT rect;
 	int maxParticles;
 	D3DXVECTOR3 endVel;
-	float endScale;
+	float endScaleX;
+	float endScaleY;
 	int endColor;
 	D3DXVECTOR3 startVel;
-	float startScale;
+	float startScaleX;
+	float startScaleY;
 	int startColor;
 	int blendMode;
 	float spawnTimer;
@@ -26,12 +28,14 @@ class Emitter
 	float lifeSpan;
 	float lifeTime;
 	float age;
+	float endRot;
+	float startRot;
 
 public: 
 	Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
-			 D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScale, 
-			 float newEndScale, int newBlendMode, int newImageID, float newParticleLifeSpan,
-			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer);
+			D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScaleX, float newStartScaleY,
+			 float newEndScaleX, float newEndScaleY, int newBlendMode, int newImageID, float newParticleLifeSpan,
+			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer, float newStartRot, float newEndRot);
 	void Update(float fElapsedTime);
 	void Render();
 

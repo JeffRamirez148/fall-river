@@ -14,30 +14,37 @@ private:
 	D3DXVECTOR3 pos;
 	int color;
 	int imageID;
-	float scale;
+	float scaleX;
+	float scaleY;
+	float rot;
 	int mode;
 	D3DXVECTOR3 dir;
 
 public: 
+	Particle();
 	void Render();
 
 	void SetColor(int newColor) {color = newColor;}
-	void SetScale(float newScale) {scale = newScale;}
+	void SetScaleX(float newScale) {scaleX = newScale;}
+	void SetScaleY(float newScale) {scaleY = newScale;}
 	void SetMode(int newMode) { mode = newMode;}
 	void SetImageID(int newID) { imageID = newID; }
 	void SetPos( D3DXVECTOR3 newPos) { pos = newPos; }
 	void SetVel( D3DXVECTOR3 newVel) { vel = newVel; }
 	void SetDir( D3DXVECTOR3 newDir) { dir = newDir; }
 	void SetLifeSpan(float newLifeSpan) { lifeSpan = newLifeSpan;}
+	void SetRotation(float newRot) { rot = newRot;}
 
 	int	GetColor(void) {return color;}
-	float GetScale(void) {return scale;}
+	float GetScaleX(void) {return scaleX;}
+	float GetScaleY(void) {return scaleY;}
 	int	GetMode(void) { return mode;}
 	int	GetImageID(void) { return imageID; }
 	D3DXVECTOR3 GetPos(void) { return pos; }
 	D3DXVECTOR3 GetVel(void) { return vel; }
 	D3DXVECTOR3 GetDir(void) { return dir; }
 	float GetLifeSpan(void) { return lifeSpan;}
+	float GetRotation(void) { return rot;}
 };
 
 #endif

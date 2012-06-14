@@ -15,15 +15,15 @@ void Emitter::Update(float fElapsedTime)
 		tmpParticle->SetLifeSpan(lifeSpan);
 		tmpParticle->SetMode(blendMode);
 		D3DXVECTOR3 tmpPos;
-		tmpPos.x = (rand() % int(rect.right)) + rect.left;
-		tmpPos.y = (rand() % int(rect.bottom)) + rect.top;
-		tmpPos.z = 0;
+		tmpPos.x = float((rand() % int(rect.right)) + rect.left);
+		tmpPos.y = float((rand() % int(rect.bottom)) + rect.top);
+		tmpPos.z = 0.0f;
 		tmpParticle->SetPos(tmpPos);
 		tmpParticle->SetVel(startVel);
 		D3DXVECTOR3 tmpDir;
-		tmpDir.x = (rand() % 3) + 1;
-		tmpDir.y = (rand() % 3) + 1;
-		tmpDir.z = 0;
+		tmpDir.x = float((rand() % 3) + 1);
+		tmpDir.y = float((rand() % 3) + 1);
+		tmpDir.z = 0.0f;
 		tmpParticle->SetDir(tmpDir);
 		_m_vparticles.push_back(tmpParticle);
 	}
@@ -95,20 +95,35 @@ void Emitter::Update(float fElapsedTime)
 			_m_vparticles[i]->SetColor(tmpColor);
 
 			// Update Scale
-			float tmpScale = _m_vparticles[i]->GetScale();
-			if(startScale > endScale)
+			float tmpScaleX = _m_vparticles[i]->GetScaleX();
+			float tmpScaleY = _m_vparticles[i]->GetScaleY();
+			if(startScaleX > endScaleX)
 			{
-				tmpScale -= fElapsedTime;
-				if(tmpScale < endScale)
-					tmpScale = endScale;
+				tmpScaleX -= fElapsedTime;
+				if(tmpScaleX < endScaleX)
+					tmpScaleX = endScaleX;
 			}
 			else
 			{
-				tmpScale += fElapsedTime;
-				if(tmpScale > endScale)
-					tmpScale = endScale;
+				tmpScaleX += fElapsedTime;
+				if(tmpScaleX > endScaleX)
+					tmpScaleX = endScaleX;
 			}
-			_m_vparticles[i]->SetScale(tmpScale);
+			_m_vparticles[i]->SetScaleX(tmpScaleX);
+
+			if(startScaleY > endScaleY)
+			{
+				tmpScaleX -= fElapsedTime;
+				if(tmpScaleY < endScaleY)
+					tmpScaleY = endScaleY;
+			}
+			else
+			{
+				tmpScaleY += fElapsedTime;
+				if(tmpScaleY > endScaleY)
+					tmpScaleY = endScaleY;
+			}
+			_m_vparticles[i]->SetScaleY(tmpScaleY);
 
 			// Update Pos
 			D3DXVECTOR3 tmpPos = _m_vparticles[i]->GetPos();
@@ -116,6 +131,21 @@ void Emitter::Update(float fElapsedTime)
 			D3DXVECTOR3 tmpDir = _m_vparticles[i]->GetDir();
 			tmpPos += tmpVel + tmpDir;
 			_m_vparticles[i]->SetPos(tmpPos);
+
+			float tmpRot = _m_vparticles[i]->GetRotation();
+			// Update Rotation
+			if(startRot > endRot)
+			{
+				tmpRot -= fElapsedTime;
+				if(tmpRot < endRot)
+					tmpRot = endRot;
+			}
+			else
+			{
+				tmpRot += fElapsedTime;
+				if(tmpRot > endRot)
+					tmpRot = endRot;
+			}
 		}
 	}
 }
@@ -129,19 +159,23 @@ void Emitter::Render()
 }
 
 Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
-			D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScale, 
-			 float newEndScale, int newBlendMode, int newImageID, float newParticleLifeSpan,
-			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer)
+			D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScaleX, float newStartScaleY,
+			 float newEndScaleX, float newEndScaleY, int newBlendMode, int newImageID, float newParticleLifeSpan,
+			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer, float newStartRot, float newEndRot)
 {
 	spawnRate = newSpawnRate;
 	loopin = newLooping;
 	rect = newRect;
 	maxParticles = newMaxParticles;
 	endVel = newEndVec;
-	endScale = newEndScale;
+	endScaleX = newEndScaleX;
+	endScaleY = newEndScaleY;
+
 	endColor = newEndColor;
 	startVel = newStartVec;
-	startScale = newStartScale;
+	startScaleX = newStartScaleX;
+	startScaleY = newStartScaleY;
+
 	startColor = newStartColor;
 	blendMode = newBlendMode;
 	spawnTimer = newSpawnTimer;
@@ -149,4 +183,6 @@ Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxPa
 	lifeSpan = newParticleLifeSpan;
 	lifeTime = newEmitterLifeTime;
 	age = 0;
+	endRot = newEndRot;
+	startRot = newStartRot;
 }
