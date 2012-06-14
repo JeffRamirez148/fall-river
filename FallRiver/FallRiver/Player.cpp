@@ -9,7 +9,8 @@
 Player::Player()
 {
 	m_nCharacterType = CHA_PLAYER;
-	SetImageID(-1);
+	m_bIsAlive = true;
+	m_bIsHidden = false;
 }
 
 Player::~Player()

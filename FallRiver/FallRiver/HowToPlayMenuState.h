@@ -9,15 +9,18 @@ using namespace std;
 class ViewManager;
 class AudioManager;
 class DirectInput;
-// class IMenuState;
-class HowToPlayMenuState;
 
 class HowToPlayMenuState: public IMenuState
 {
 private: 
-	ViewManager* view;
-	DirectInput* input;
+	ViewManager* m_pVM;
+	DirectInput* m_pDI;
 	float fTime;
+
+	HowToPlayMenuState();
+	~HowToPlayMenuState();
+	HowToPlayMenuState(const HowToPlayMenuState&);
+	HowToPlayMenuState& operator=(const HowToPlayMenuState&);
 
 public: 
 	static HowToPlayMenuState* GetInstance();

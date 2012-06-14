@@ -201,6 +201,9 @@
     <ClCompile Include="NPC.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Base Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -394,6 +397,9 @@
     </ClInclude>
     <ClInclude Include="NPC.h">
       <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="IObjects.h">
+      <Filter>Base Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

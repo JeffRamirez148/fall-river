@@ -18,11 +18,16 @@ class DirectInput;
 class PauseMenuState: public IMenuState
 {
 private:
-	ViewManager* view;
-	DirectInput* input;
+	ViewManager* m_pVM;
+	DirectInput* m_pDI;
 	float fTime;
-	int y;
+	int m_nCursPosY;
 	AudioManager* audio;
+
+	PauseMenuState();
+	~PauseMenuState();
+	PauseMenuState(const PauseMenuState&);
+	PauseMenuState& operator=(const PauseMenuState&);
 
 public:
 	

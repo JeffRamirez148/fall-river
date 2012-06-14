@@ -1,11 +1,19 @@
-#include <Windows.h>
-using namespace std;
-
 #include "CreditsMenuState.h"
 #include "ViewManager.h"
 #include "AudioManager.h"
 #include "DirectInput.h"
-#include "IMenuState.h"
+#include "CGame.h"
+
+CreditsMenuState::CreditsMenuState()
+{
+	m_pDI = nullptr;
+	m_pVM = nullptr;
+}
+
+CreditsMenuState::~CreditsMenuState()
+{
+
+}
 
 CreditsMenuState* CreditsMenuState::GetInstance()
 {
@@ -16,6 +24,8 @@ CreditsMenuState* CreditsMenuState::GetInstance()
 
 void CreditsMenuState::Enter() 
 {
+	m_pDI = DirectInput::GetInstance();
+	m_pVM = ViewManager::GetInstance();
 }
 
 void CreditsMenuState::Exit() 
@@ -24,6 +34,9 @@ void CreditsMenuState::Exit()
 
 bool CreditsMenuState::Input() 
 {
+	if(m_pDI->KeyPressed(DIK_ESCAPE) )
+		CGame::GetInstance()->RemoveState();
+
 	return true;
 }
 

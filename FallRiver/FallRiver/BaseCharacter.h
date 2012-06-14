@@ -14,22 +14,17 @@ protected:
 	int				m_nVelY;
 
 private:
-	unsigned int	m_unRefCount;
 	int				m_nHealth;
 
 public:
 	BaseCharacter();
 	virtual ~BaseCharacter();
 
-	virtual void AddRef();
-
-	virtual void Release();
-
 	virtual void Update(float fElapsedTime);
 
 	virtual void Render();
 
-	virtual bool CheckCollision(BaseObject* pBase);
+	virtual bool CheckCollision(IObjects* pBase);
 	virtual RECT GetRect();
 
 	int GetHealth() {return m_nHealth;}

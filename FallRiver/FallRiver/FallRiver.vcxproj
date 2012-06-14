@@ -80,6 +80,7 @@
     <ClCompile Include="AnimInfo.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
+    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss1.cpp" />
     <ClCompile Include="Boss2.cpp" />
     <ClCompile Include="Bullet.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="IListener.h" />
     <ClInclude Include="IMenuState.h" />
     <ClInclude Include="IMessage.h" />
+    <ClInclude Include="IObjects.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LoadMenuState.h" />

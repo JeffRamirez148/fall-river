@@ -10,20 +10,6 @@ BaseCharacter::~BaseCharacter()
 
 }
 
-void BaseCharacter::AddRef()
-{
-	// Increase the reference counter
-	++m_unRefCount;
-}
-
-void BaseCharacter::Release()
-{
-	--m_unRefCount;
-
-	if( m_unRefCount == 0 )
-		delete this;
-}
-
 void BaseCharacter::Update(float fElapsedTime)
 {
 	// Modify the token's position by its velocity
@@ -36,9 +22,9 @@ void BaseCharacter::Render()
 
 }
 
-bool BaseCharacter::CheckCollision(BaseObject* pBase)
+bool BaseCharacter::CheckCollision(IObjects* pBase)
 {
-	return true;
+	return BaseObject::CheckCollision(pBase);
 }
 
 RECT BaseCharacter::GetRect()

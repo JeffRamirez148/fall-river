@@ -2,8 +2,8 @@
 
 #include "CGame.h"
 #include "DirectInput.h"
+#include "ViewManager.h"
 #include "MainMenuState.h"
-#include "GamePlayState.h"
 
 CGame* CGame::GetInstance()
 {
@@ -15,6 +15,7 @@ CGame* CGame::GetInstance()
 CGame::CGame() 
 {
 	m_pDI = nullptr;
+	m_pVM = nullptr;
 
 	m_nScreenWidth	= 0;
 	m_nScreenHeight	= 0;
@@ -53,10 +54,27 @@ void CGame::Update()
 
 void CGame::Render() 
 {
-	if(m_pPrevState == MainMenuState::GetInstance() || m_pPrevState == GamePlayState::GetInstance() )
-		m_pPrevState->Render();
+	// Clear the background
+	m_pVM->Clear(0, 0, 0);
+
+	// Start D3D rendering
+	m_pVM->DeviceBegin();
+	m_pVM->SpriteBegin();
+
+
+
+	// Redirect to the current state
+
 
 	m_pCurrState->Render();
+
+
+	// End the D3D rendering (draw to buffer)
+	m_pVM->SpriteEnd();
+	m_pVM->DeviceEnd();
+
+	// Render the buffer to the screen
+	m_pVM->Present();
 }
 
 void CGame::Initialize(HWND hWnd, HINSTANCE hInstance, int nScreenWidth, int nScreenHeight, bool bIsWindowed)
@@ -68,8 +86,10 @@ void CGame::Initialize(HWND hWnd, HINSTANCE hInstance, int nScreenWidth, int nSc
 
 	// Access the Wrappers
 	m_pDI	= DirectInput::GetInstance();
+	m_pVM	= ViewManager::GetInstance();
 
 	m_pDI->InitDirectInput( hWnd, hInstance, DI_KEYBOARD | DI_MOUSE | DI_JOYSTICKS, NULL );
+	m_pVM->InitViewManager( hWnd, nScreenWidth, nScreenHeight, bIsWindowed, false );
 
 
 	// Start the game in the gamplay state
