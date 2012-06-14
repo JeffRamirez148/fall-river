@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<levels_list>
+    <level_info>resource/graphics/test.png</level_info>
+    <level_info x="0" y="0" height="64" width="1024">Wall</level_info>
+    <level_info x="0" y="0" height="512" width="64">Wall</level_info>
+    <level_info x="0" y="448" height="64" width="1024">Wall</level_info>
+    <level_info x="960" y="0" height="512" width="64">Wall</level_info>
+    <level_info x="200" y="200" height="64" width="64">Powerup</level_info>
+</levels_list>

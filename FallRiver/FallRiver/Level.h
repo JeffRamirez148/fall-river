@@ -9,27 +9,40 @@ using namespace std;
 // #include "GamePlayState.h"
 // #include "PickUp.h"
 
-class Terrain;
-class GamePlayState;
-class PickUp;
-class Level;
+//class Terrain;
+//class GamePlayState;
+//class PickUp;
+//class Level;
+
+struct leveldata
+{
+	RECT m_rCollision;
+	char m_cType[ 32 ];
+};
+
+
 
 class Level
 {
 private:
-	vector<Terrain*> _m_pTerrrain;
-	vector<PickUp*> _m_vPickUps;
+	vector<leveldata> m_vCollisions;
+	int m_nBackgroundID;
+	TCHAR buffer[100];
 
 public: 
 	Level();
 
 	~Level();
 
-	void Update(float time);
+	//void Update(float time);
+	bool LoadLevel( const char* szFilename );
 
 	void Render();
+	static Level* GetInstance();
 
-	void Input();
+	void CheckCollision();
+	int GetBGID() { return m_nBackgroundID; }
+	void SetBGID(int x ) { m_nBackgroundID = x; }
 };
 
 #endif

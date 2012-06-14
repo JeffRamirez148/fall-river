@@ -54,6 +54,9 @@ void GamePlayState::Enter()
 	m_pOF = Factory::GetInstance();
 	m_pOM = ObjectManager::GetInstance();
 	m_pES = EventSystem::GetInstance();
+	m_clevel = Level::GetInstance();
+	m_clevel->LoadLevel("level.xml");
+
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
@@ -139,7 +142,9 @@ void GamePlayState::Update(float fElapsedTime)
 
 void GamePlayState::Render() 
 {
+	m_clevel->Render();
 	m_pOM->RenderAllObjects();
+	//m_clevel->Render();
 }
 
 void GamePlayState::MessageProc(IMessage* pMsg)

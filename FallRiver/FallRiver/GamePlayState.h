@@ -27,7 +27,7 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	Level*			m_clevel;
+	Level*		m_clevel;
 	ViewManager*	m_pVM;
 	DirectInput*	m_pDI;
 	AudioManager*	audio;
