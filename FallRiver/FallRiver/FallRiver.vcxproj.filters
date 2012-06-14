@@ -201,22 +201,8 @@
     <ClCompile Include="NPC.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="tinystr.cpp">
-      <Filter>Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxmlparser.cpp">
-      <Filter>Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml.cpp">
-      <Filter>Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxmlerror.cpp">
-      <Filter>Wrappers</Filter>
-=======
     <ClCompile Include="BaseObject.cpp">
       <Filter>Base Classes</Filter>
->>>>>>> 4834037b554bbbd2afc2e6f78cc2faf1ce119c2f
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -412,16 +398,8 @@
     <ClInclude Include="NPC.h">
       <Filter>Characters</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="tinystr.h">
-      <Filter>Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml.h">
-      <Filter>Wrappers</Filter>
-=======
     <ClInclude Include="IObjects.h">
       <Filter>Base Classes</Filter>
->>>>>>> 4834037b554bbbd2afc2e6f78cc2faf1ce119c2f
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

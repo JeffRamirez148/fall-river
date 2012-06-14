@@ -22,6 +22,9 @@ private:
 	Player* m_pTarget;
 
 public: 
+	Enemy();
+	~Enemy();
+
 	virtual void HandleEvent(Event* pEvent);
 
 	virtual void Update(float fElapsedTime);

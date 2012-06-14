@@ -27,8 +27,8 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	Level*			level;
-	ViewManager*	view;
+	Level*			m_clevel;
+	ViewManager*	m_pVM;
 	DirectInput*	m_pDI;
 	AudioManager*	audio;
 	Factory*		m_pOF;
@@ -39,17 +39,36 @@ private:
 	float fTime;
 
 	// Characters In the world
-	Player*			player;
-	vector<Enemy*>	enemies;
-	vector<NPC*>	npcs;
+	Player*			m_cPlayer;
+	vector<Enemy*>	m_cEnemies;
+	vector<NPC*>	m_cNpcs;
+
+	// For Everyone else on the screen
+	bool m_bCanMoveLeft;
+	bool m_bCanMoveRight;
+	bool m_bCanMoveUp;
+	bool m_bCanMoveDown;
 
 	// Private Constructors
-	GamePlayState()		{ }
+	GamePlayState();
 	~GamePlayState()	{ }
 	GamePlayState(const GamePlayState&);
 	GamePlayState& operator=(const GamePlayState&);
 
 public:
+
+	// Check if the Player can move
+	bool CanMoveLeft()	{return m_bCanMoveLeft; }
+	bool CanMoveRight() {return m_bCanMoveLeft; }
+	bool CanMoveUp()	{return m_bCanMoveLeft; }
+	bool CanMoveDown()	{return m_bCanMoveLeft; }
+
+	// Set if the player can move
+	void SetCanMoveLeft(bool left)	{m_bCanMoveLeft; }
+	void SetCanMoveRight(bool right){m_bCanMoveLeft; }
+	void SetCanMoveUp(bool up)		{m_bCanMoveLeft; }
+	void SetCanMoveDown(bool down)	{m_bCanMoveLeft; }
+
 	void Enter();
 
 	void Exit();

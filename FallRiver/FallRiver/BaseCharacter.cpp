@@ -13,8 +13,8 @@ BaseCharacter::~BaseCharacter()
 void BaseCharacter::Update(float fElapsedTime)
 {
 	// Modify the token's position by its velocity
-	SetPosX(int(m_nVelX * fElapsedTime));
-	SetPosY(int(m_nVelY * fElapsedTime));
+	SetPosX(GetPosX()+m_nVelX * fElapsedTime);
+	SetPosY(GetPosY()+m_nVelY * fElapsedTime);
 }
 
 void BaseCharacter::Render()

@@ -1,13 +1,21 @@
-#include <Windows.h>
-
 #include "Boss1.h"
 #include "ObjectFactory.h"
 #include "BaseCharacter.h"
 #include "Enemy.h"
 
-void Boss1::Update(float fElapsedTime)
+Boss1::Boss1()
 {
 
+}
+
+Boss1::~Boss1()
+{
+
+}
+
+void Boss1::Update(float fElapsedTime)
+{
+	Enemy::Update(fElapsedTime);
 }
 
 void Boss1::Render()

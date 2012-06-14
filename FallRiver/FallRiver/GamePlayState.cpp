@@ -25,6 +25,21 @@
 #include "DestroyNPC.h"
 #include "DestroyPickUp.h"
 
+GamePlayState::GamePlayState()
+{
+	m_pVM = nullptr;
+	m_pDI = nullptr;
+	audio = nullptr;
+	m_pOF = nullptr;
+	m_pOM = nullptr;
+	m_pES = nullptr;
+
+	m_bCanMoveLeft	= true;
+	m_bCanMoveRight	= true;
+	m_bCanMoveUp	= true;
+	m_bCanMoveDown	= true;
+}
+
 GamePlayState* GamePlayState::GetInstance() 
 {
 	static GamePlayState s_Instance;
@@ -35,16 +50,77 @@ GamePlayState* GamePlayState::GetInstance()
 void GamePlayState::Enter()
 {
 	m_pDI = DirectInput::GetInstance();
+	m_pVM = ViewManager::GetInstance();
 	m_pOF = Factory::GetInstance();
 	m_pOM = ObjectManager::GetInstance();
 	m_pES = EventSystem::GetInstance();
+
+	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
+	m_pOF->RegisterClassType< Player		>( _T("Player") );
+	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
+	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
+	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
+	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
+	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
+
+	m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
+	Player* pPlayer = dynamic_cast<Player*>(m_cPlayer);
+	pPlayer->SetHeight(32);
+	pPlayer->SetWidth(32);
+	pPlayer->SetImageID(-1);
+	pPlayer->SetPosX(int(CGame::GetInstance()->GetScreenWidth()*0.45));
+	pPlayer->SetPosY(int(CGame::GetInstance()->GetScreenHeight()*0.4));
+
+	for(int i = 0; i < 1; i++)
+	{
+		m_cEnemies.push_back(nullptr);
+		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+		ShootingAi* pEnemy = dynamic_cast<ShootingAi*>(m_cEnemies[i]);
+		pEnemy->SetHeight(32);
+		pEnemy->SetWidth(32);
+		pEnemy->SetImageID(-1);
+		pEnemy->SetPosX(200);
+		pEnemy->SetPosY(100);
+		m_pOM->AddObject(pEnemy);
+	}
+
+	for(int i = 0; i < 1; i++)
+	{
+		m_cEnemies.push_back(nullptr);
+		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
+		ChasingAI* pEnemy = dynamic_cast<ChasingAI*>(m_cEnemies[i]);
+		pEnemy->SetHeight(32);
+		pEnemy->SetWidth(32);
+		pEnemy->SetImageID(-1);
+		pEnemy->SetPosX(200);
+		pEnemy->SetPosY(200);
+		m_pOM->AddObject(pEnemy);
+	}
+
+	for(int i = 0; i < 1; i++)
+	{
+		m_cNpcs.push_back(nullptr);
+		m_cNpcs[i] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+		NPC* pNpc = dynamic_cast<NPC*>(m_cNpcs[i]);
+		pNpc->SetHeight(32);
+		pNpc->SetWidth(32);
+		pNpc->SetImageID(-1);
+		pNpc->SetPosX(400);
+		pNpc->SetPosY(100);
+		m_pOM->AddObject(pNpc);
+	}
+
+	m_pOM->AddObject(pPlayer);
 }
 
 void GamePlayState::Exit() 
 {
+	m_pVM = nullptr;
 	m_pDI = nullptr;
+	audio = nullptr;
 	m_pOF = nullptr;
 	m_pOM = nullptr;
+	m_pES = nullptr;
 }
 
 bool GamePlayState::Input() 

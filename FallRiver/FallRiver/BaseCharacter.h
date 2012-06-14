@@ -4,7 +4,7 @@
 #include "BaseObject.h"
 #include <Windows.h>
 
-enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY };
+enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY, CHA_NPC };
 
 class BaseCharacter: public BaseObject
 {

@@ -6,17 +6,15 @@ using namespace std;
 
 #include "BaseCharacter.h"
 
-class ObjectFactory;
-class DestroyNPC;
-// class BaseCharacter;
-class NPC;
-
 class NPC: public BaseCharacter
 {
 private: 
 	char* m_cName;
 
 public:
+	NPC();
+	~NPC();
+
 	void Update(float fElapsedTime);
 
 	void Render();

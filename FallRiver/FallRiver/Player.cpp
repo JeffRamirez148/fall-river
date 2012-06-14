@@ -2,7 +2,7 @@
 #include "Quests.h"
 #include "GamePlayState.h"
 #include "Enemy.h"
-#include "ObjectFactory.h"
+#include "ViewManager.h"
 #include "Weapon.h"
 #include "Light.h"
 
@@ -25,7 +25,9 @@ void Player::Update(float aFElapsedTime)
 
 void Player::Render()
 {
-	
+	ViewManager* pVM = ViewManager::GetInstance();
+
+	pVM->DrawRect(GetRect(), 0, 0, 255);
 }
 
 bool Player::CheckCollision(BaseCharacter* pBase) 

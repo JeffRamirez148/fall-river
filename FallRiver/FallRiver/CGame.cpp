@@ -4,6 +4,7 @@
 #include "DirectInput.h"
 #include "ViewManager.h"
 #include "MainMenuState.h"
+#include "GamePlayState.h"
 
 CGame* CGame::GetInstance()
 {
@@ -64,7 +65,8 @@ void CGame::Render()
 
 
 	// Redirect to the current state
-
+	if( m_pPrevState == GamePlayState::GetInstance() )
+		m_pPrevState->Render();
 
 	m_pCurrState->Render();
 
