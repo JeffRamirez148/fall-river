@@ -201,6 +201,18 @@
     <ClCompile Include="NPC.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
+    <ClCompile Include="tinystr.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlparser.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlerror.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -394,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="NPC.h">
       <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="tinystr.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml.h">
+      <Filter>Wrappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

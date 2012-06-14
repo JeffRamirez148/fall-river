@@ -31,6 +31,20 @@ class Texture;
 class Font;
 class Animation;
 class AnimInfo;
+class GamePlayState;
+class GamePlayState;
+class HighScoresMenuState;
+class WinMenuState;
+class DefeatMenuState;
+class CreditsMenuState;
+class LoadMenuState;
+class PauseMenuState;
+class MainMenuState;
+class HowToPlayMenuState;
+class HUD;
+class CutScene;
+
+
 
 class ViewManager
 {
@@ -57,6 +71,16 @@ public:
 	//Initializing the manager
 	bool InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight, bool bIsWindowed, bool bVsync);
 
+	//Accessors
+	LPDIRECT3D9					 GetDirect3DObject(void)	{ return m_lpDirect3DObject; }
+	LPDIRECT3DDEVICE9			 GetDirect3DDevice(void)	{ return m_lpDirect3DDevice; }
+	LPD3DXSPRITE				 GetSprite(void)			{ return m_lpSprite;		 }
+	LPD3DXLINE					 GetLine(void)				{ return m_lpLine;			 }
+	const D3DPRESENT_PARAMETERS* GetPresentParams(void)		{ return &m_PresentParams;	 }
+
+	//Mutators
+	void ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed);
+
 	//All of these work exactly the same as from SGD
 	void Clear(unsigned char ucRed = 0, unsigned char ucGreen = 0, unsigned char ucBlue = 0);
 	bool DeviceBegin(void);
@@ -68,7 +92,7 @@ public:
 	void Present(void);
 	void DrawLine(int nX1, int nY1, int nX2, int nY2, unsigned char ucRed = 255, unsigned char ucGreen = 255, unsigned char ucBlue = 255);
 	void DrawText(char *lpzText, int nX, int nY, unsigned char ucRed = 255, unsigned char ucGreen = 255, unsigned char ucBlue = 255);
-	void DrawRect(RECT rRt, unsigned char ucRed, unsigned char ucGreen, unsigned char ucBlue);
+	void DrawRect(RECT rRt, unsigned char ucRed, unsigned char ucGreen, unsigned char ucBlue, unsigned char uAlpha = 255);
 
 	//Loading assets
 	int RegisterTexture(char* aFilePath);
@@ -76,7 +100,7 @@ public:
 	int RegisterShader(char* aFilePath);
 
 	//For Drawing Animations
-	bool DrawAnimation(int nAnimID, AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, float fRotCenterX = 0, 
+	bool DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, float fRotCenterX = 0, 
 								float fRotCenterY = 0, float fRotation = 0, D3DCOLOR color = 0xFFFFFFFF);
  
 	//For Drawing Fonts
@@ -87,7 +111,8 @@ public:
 	bool DrawStaticTexture(int nTextureID, int nPosX, int nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, RECT* sourceRect = nullptr, 
 							float fRotCenterX = 0, float fRotCenterY = 0, float fRotation = 0, D3DCOLOR color = 0xFFFFFFFF);
 
-
+	//
+	void ShutdownDirect3D(void);
 
 };
 

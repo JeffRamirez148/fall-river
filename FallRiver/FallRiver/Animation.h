@@ -5,17 +5,14 @@ using namespace std;
 #ifndef __Animation_h__
 #define __Animation_h__
 
-// #include "ViewManager.h"
-// #include "Frame.h"
-
-class Frame;
+#include "Frame.h"
 
 class Animation
 {
 public:
-	vector<Frame*> frames;
+	vector<Frame> frames;
 	string _name;
-	int animationID;
+	int nTextureID;
 	bool looping;
 };
 

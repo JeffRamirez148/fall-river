@@ -22,6 +22,10 @@ class GamePlayState;
 class LoadMenuState;
 class XMLManager;
 class Level;
+class Animation;
+
+#include "tinystr.h"
+#include "tinyxml.h"
 
 class XMLManager
 {
@@ -29,7 +33,7 @@ class XMLManager
 public: 
 	Level* Parse(string aFile);
 	float* ParseSound(string aFile);
-
+	void ParseAnim(char* aFile, Animation& anim);
 };
 
 #endif

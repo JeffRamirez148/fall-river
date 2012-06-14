@@ -10,6 +10,7 @@ using namespace std;
 #include "OptionsMenuState.h"
 #include "GamePlayState.h"
 #include "LoadMenuState.h"
+#include "ViewManager.h"
 #include "Level.h"
 
 Level* XMLManager::Parse(string aFile) 
@@ -22,3 +23,7 @@ float* XMLManager::ParseSound(string aFile)
 	return 0;
 }
 
+void ParseAnim(char* aFile, Animation& anim)
+{
+
+}

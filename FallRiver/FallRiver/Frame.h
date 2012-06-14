@@ -12,7 +12,7 @@ class Frame;
 
 class Frame
 {
-private:
+public:
 	float duration;
 	POINT anchor;
 	RECT sourceRect;

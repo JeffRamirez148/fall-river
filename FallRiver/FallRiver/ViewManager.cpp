@@ -9,6 +9,19 @@ using namespace std;
 #include "Font.h"
 #include "Animation.h"
 #include "AnimInfo.h"
+#include "GamePlayState.h"
+#include "HighScoresMenuState.h"
+#include "WinMenuState.h"
+#include "DefeatMenuState.h"
+#include "CreditsMenuState.h"
+#include "LoadMenuState.h"
+#include "PauseMenuState.h"
+#include "MainMenuState.h"
+#include "HowToPlayMenuState.h"
+#include "HUD.h"
+#include "CutScene.h"
+#include "XMLManager.h"
+#include "Frame.h"
 
 #ifndef SAFE_RELEASE
 	#define SAFE_RELEASE(p)			if (p) { p->Release(); p = NULL; }
@@ -116,18 +129,26 @@ int ViewManager::RegisterTexture(char* aFilePath)
 
 int ViewManager::RegisterAnimation(char* aFilePath) 
 {
+	//Need a load animation function from XML Manager to do this;
 	return -1;
 }
 
 int ViewManager::RegisterShader(char* aFilePath)
 {
+	
 	return -1;
 }
 
 //For Drawing Animations
-bool ViewManager::DrawAnimation(int nAnimID, AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
+bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
 							float fRotCenterY, float fRotation, D3DCOLOR color)
 {
+	assert(aAnimInfo->curAnimation > -1 && aAnimInfo->curAnimation < (int)fonts.size() && "Anim ID is out of range");
+
+	assert(animations[aAnimInfo->curAnimation].nTextureID <  (int)textures.size() && "Texture ID is out of range");
+
+	DrawStaticTexture(animations[aAnimInfo->curAnimation].nTextureID, nPosX, nPosY, fScaleX, fScaleY, 
+		&(animations[aAnimInfo->curAnimation].frames[aAnimInfo->curFrame].sourceRect), fRotCenterX, fRotCenterY, fRotation, color);
 	return true;
 }
 
@@ -137,6 +158,8 @@ bool ViewManager::DrawFont(int nFontID, char* cString, int nPosX, int nPosY, flo
 							float fRotCenterY, float fRotation, D3DCOLOR color)
 {
 		assert(nFontID > -1 && nFontID < (int)fonts.size() && "Font ID is out of range");
+
+		assert(fonts[nFontID].nTextureID <  (int)textures.size() && "Texture ID is out of range");
 
 		int nX = nPosX;
 		int nColStart = nX;
@@ -351,7 +374,7 @@ void ViewManager::Clear(unsigned char ucRed, unsigned char ucGreen, unsigned cha
 	m_lpDirect3DDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(ucRed, ucGreen, ucBlue), 1.0f, 0);
 }
 
-void ViewManager::DrawRect(RECT rRt, unsigned char ucRed, unsigned char ucGreen, unsigned char ucBlue)
+void ViewManager::DrawRect(RECT rRt, unsigned char ucRed, unsigned char ucGreen, unsigned char ucBlue, unsigned char uAlpha)
 {
 	D3DRECT d3dRect;
 	d3dRect.x1 = rRt.left;
@@ -359,5 +382,92 @@ void ViewManager::DrawRect(RECT rRt, unsigned char ucRed, unsigned char ucGreen,
 	d3dRect.x2 = rRt.right;
 	d3dRect.y2 = rRt.bottom;
 
-	m_lpDirect3DDevice->Clear(1, &d3dRect, D3DCLEAR_TARGET, D3DCOLOR_XRGB(ucRed, ucGreen, ucBlue), 1.0f, 0);
+	m_lpDirect3DDevice->Clear(1, &d3dRect, D3DCLEAR_TARGET, D3DCOLOR_ARGB(uAlpha, ucRed, ucGreen, ucBlue), 1.0f, 0);
+}
+
+void ViewManager::ShutdownDirect3D(void)
+{
+	SAFE_RELEASE(m_lpFont);
+	SAFE_RELEASE(m_lpLine);
+	SAFE_RELEASE(m_lpSprite);
+	SAFE_RELEASE(m_lpDirect3DDevice);
+	SAFE_RELEASE(m_lpDirect3DObject);
+
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		textures[i].ref = 0;
+
+		SAFE_RELEASE(textures[i].texture);
+		textures[i].filename[0] = '\0';
+	}
+
+	textures.clear();
+}
+
+void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
+{
+	// Set the new Presentation Parameters.
+	m_PresentParams.BackBufferFormat	= (bWindowed) ? D3DFMT_UNKNOWN : D3DFMT_R5G6B5;
+	m_PresentParams.Windowed			= bWindowed;
+	m_PresentParams.BackBufferWidth		= nWidth;
+	m_PresentParams.BackBufferHeight	= nHeight;
+
+	// Reset the device.
+	m_lpLine->OnLostDevice();
+	m_lpSprite->OnLostDevice();
+	m_lpDirect3DDevice->Reset(&m_PresentParams);
+	m_lpSprite->OnResetDevice();
+	m_lpLine->OnResetDevice();
+
+	// Setup window style flags
+	DWORD dwWindowStyleFlags = WS_VISIBLE;
+
+	HWND top;
+	if (bWindowed)
+	{
+		dwWindowStyleFlags |= WS_OVERLAPPEDWINDOW;
+		ShowCursor(TRUE); // show the mouse cursor
+		top = HWND_NOTOPMOST;
+	}
+	else
+	{
+		dwWindowStyleFlags |= WS_POPUP;
+		ShowCursor(FALSE); // hide the mouse cursor
+		top = HWND_TOP;
+	}
+
+	SetWindowLong(m_hWnd, GWL_STYLE, dwWindowStyleFlags);
+
+	//	Set the window to the middle of the screen.
+	if (bWindowed)
+	{
+		// Setup the desired client area size
+		RECT rWindow;
+		rWindow.left	= 0;
+		rWindow.top		= 0;
+		rWindow.right	= nWidth;
+		rWindow.bottom	= nHeight;
+
+		// Get the dimensions of a window that will have a client rect that
+		// will really be the resolution we're looking for.
+		AdjustWindowRectEx(&rWindow, 
+							dwWindowStyleFlags,
+							FALSE, 
+							WS_EX_APPWINDOW);
+		
+		// Calculate the width/height of that window's dimensions
+		int windowWidth		= rWindow.right - rWindow.left;
+		int windowHeight	= rWindow.bottom - rWindow.top;
+
+		SetWindowPos(m_hWnd, top,	(GetSystemMetrics(SM_CXSCREEN)>>1) - (windowWidth>>1),
+										(GetSystemMetrics(SM_CYSCREEN)>>1) - (windowHeight>>1),
+										windowWidth, windowHeight, SWP_SHOWWINDOW);
+	}
+	else
+	{
+
+		// Let windows know the window has changed.
+		SetWindowPos(m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
+
+	}
 }

@@ -5,7 +5,7 @@
 
 class AnimInfo
 {
-private: 
+public: 
 	int curFrame;
 	float fTime;
 	int curAnimation;
