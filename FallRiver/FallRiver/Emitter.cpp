@@ -10,16 +10,21 @@ void Emitter::Update(float fElapsedTime)
 		spawnTimer = 0;
 		Particle* tmpParticle = new Particle;
 		tmpParticle->SetColor( startColor );
-		// Never used?
-		//tmpParticle->SetDelay( );
-		//tmpParticle->SetFrameX( );
-		//tmpParticle->SetFrameY( );
 		// Members to be loaded in and set
-		//tmpParticle->SetImageID( );
-		//tmpParticle->SetLifeSpan( );
-		//tmpParticle->SetMode( );
-		//tmpParticle->SetPos( );
-		//tmpParticle->SetVel( );
+		tmpParticle->SetImageID(imageID);
+		tmpParticle->SetLifeSpan(lifeSpan);
+		tmpParticle->SetMode(blendMode);
+		D3DXVECTOR3 tmpPos;
+		tmpPos.x = (rand() % int(rect.right)) + rect.left;
+		tmpPos.y = (rand() % int(rect.bottom)) + rect.top;
+		tmpPos.z = 0;
+		tmpParticle->SetPos(tmpPos);
+		tmpParticle->SetVel(startVel);
+		D3DXVECTOR3 tmpDir;
+		tmpDir.x = (rand() % 3) + 1;
+		tmpDir.y = (rand() % 3) + 1;
+		tmpDir.z = 0;
+		tmpParticle->SetDir(tmpDir);
 		_m_vparticles.push_back(tmpParticle);
 	}
 
@@ -108,7 +113,9 @@ void Emitter::Update(float fElapsedTime)
 			// Update Pos
 			D3DXVECTOR3 tmpPos = _m_vparticles[i]->GetPos();
 			D3DXVECTOR3 tmpVel = _m_vparticles[i]->GetVel();
-			tmpPos += tmpVel;
+			D3DXVECTOR3 tmpDir = _m_vparticles[i]->GetDir();
+			tmpPos += tmpVel + tmpDir;
+			_m_vparticles[i]->SetPos(tmpPos);
 		}
 	}
 }
@@ -121,3 +128,25 @@ void Emitter::Render()
 	}
 }
 
+Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
+			D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScale, 
+			 float newEndScale, int newBlendMode, int newImageID, float newParticleLifeSpan,
+			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer)
+{
+	spawnRate = newSpawnRate;
+	loopin = newLooping;
+	rect = newRect;
+	maxParticles = newMaxParticles;
+	endVel = newEndVec;
+	endScale = newEndScale;
+	endColor = newEndColor;
+	startVel = newStartVec;
+	startScale = newStartScale;
+	startColor = newStartColor;
+	blendMode = newBlendMode;
+	spawnTimer = newSpawnTimer;
+	imageID = newImageID;
+	lifeSpan = newParticleLifeSpan;
+	lifeTime = newEmitterLifeTime;
+	age = 0;
+}

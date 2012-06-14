@@ -22,12 +22,24 @@ class Emitter
 	int startColor;
 	int blendMode;
 	float spawnTimer;
-	D3DXVECTOR3 pos;
+	int imageID;
+	float lifeSpan;
+	float lifeTime;
+	float age;
 
 public: 
+	Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
+			 D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScale, 
+			 float newEndScale, int newBlendMode, int newImageID, float newParticleLifeSpan,
+			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer);
 	void Update(float fElapsedTime);
-
 	void Render();
+
+	float GetAge(void) { return age; }
+	bool GetLooping(void) { return loopin;}
+	float GetLifeTime(void) { return lifeTime; }
+
+	void SetAge(float newAge) { age = newAge; }
 };
 
 #endif

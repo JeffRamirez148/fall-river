@@ -11,6 +11,12 @@ using namespace std;
 #include "GamePlayState.h"
 #include "LoadMenuState.h"
 #include "Level.h"
+#include "Emitter.h"
+XMLManager* XMLManager::GetInstance(void)
+{
+	static XMLManager s_Instance;
+	return &s_Instance;
+}
 
 Level* XMLManager::Parse(string aFile) 
 {
@@ -20,5 +26,10 @@ Level* XMLManager::Parse(string aFile)
 float* XMLManager::ParseSound(string aFile) 
 {
 	return 0;
+}
+
+Emitter* XMLManager::ParseEmitter(string aFile)
+{
+	return NULL;
 }
 
