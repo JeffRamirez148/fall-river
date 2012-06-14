@@ -125,9 +125,49 @@ void Emitter::Update(float fElapsedTime)
 			}
 			_m_vparticles[i]->SetScaleY(tmpScaleY);
 
+			// Update Vel
+			D3DXVECTOR3 tmpVel = _m_vparticles[i]->GetVel();
+			if(startVel.x > endVel.x)
+			{
+				tmpVel.x -= fElapsedTime;
+				if(tmpVel.x < endVel.x)
+					tmpVel.x = endVel.x;
+			}
+			else
+			{
+				tmpVel.x += fElapsedTime;
+				if(tmpVel.x > endVel.x)
+					tmpVel.x = endVel.x;
+			}
+
+			if(startVel.y > endVel.y)
+			{
+				tmpVel.y -= fElapsedTime;
+				if(tmpVel.y < endVel.y)
+					tmpVel.y = endVel.y;
+			}
+			else
+			{
+				tmpVel.y += fElapsedTime;
+				if(tmpVel.y > endVel.y)
+					tmpVel.y = endVel.y;
+			}
+
+			if(startVel.z > endVel.z)
+			{
+				tmpVel.z -= fElapsedTime;
+				if(tmpVel.z < endVel.z)
+					tmpVel.z = endVel.z;
+			}
+			else
+			{
+				tmpVel.z += fElapsedTime;
+				if(tmpVel.z > endVel.z)
+					tmpVel.z = endVel.z;
+			}
+			_m_vparticles[i]->SetVel(tmpVel);
 			// Update Pos
 			D3DXVECTOR3 tmpPos = _m_vparticles[i]->GetPos();
-			D3DXVECTOR3 tmpVel = _m_vparticles[i]->GetVel();
 			D3DXVECTOR3 tmpDir = _m_vparticles[i]->GetDir();
 			tmpPos += tmpVel + tmpDir;
 			_m_vparticles[i]->SetPos(tmpPos);
