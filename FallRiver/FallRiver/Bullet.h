@@ -9,10 +9,6 @@ class Bullet: public BaseObject, public IListener
 private: 
 	int soundID;
 
-	// Speed
-	int m_nSpeedX;
-	int m_nSpeedY;
-
 public: 
 	Bullet();
 	virtual ~Bullet();
@@ -24,8 +20,6 @@ public:
 	RECT GetRect();
 
 	bool CheckCollision(BaseObject* pBase);
-
-	void SetSpeed(int x, int y) {m_nSpeedX = x, m_nSpeedY = y;}
 
 	void HandleEvent (Event* cEvent);
 };

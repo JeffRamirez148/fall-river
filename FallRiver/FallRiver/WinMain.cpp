@@ -213,7 +213,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//	if in release mode set the exception filter to write out a dump file
 #ifndef _DEBUG
-	SetUnhandledExceptionFilter(Handler);
+	//SetUnhandledExceptionFilter(Handler);
 #endif
 
 	// Don't let more than one instance of the application exist

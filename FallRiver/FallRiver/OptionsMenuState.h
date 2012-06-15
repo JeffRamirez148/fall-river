@@ -20,10 +20,7 @@ private:
 	int m_nCursPosY;
 	float sfxVolume;
 	float musicVolume;
-	int resolution[2];
-	bool changingres;
 	bool m_bIsWindowed;
-	int	possRes[4];
 
 	OptionsMenuState();
 	~OptionsMenuState();

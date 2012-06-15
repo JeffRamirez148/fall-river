@@ -12,12 +12,6 @@ OptionsMenuState::OptionsMenuState()
 	musicVolume = 1.0f;
 	sfxVolume = 1.0f;
 	m_bIsWindowed = false;
-	changingres = false;
-
-	possRes[0] = 640;
-	possRes[1] = 480;
-	possRes[2] = 1280;
-	possRes[3] = 1204;
 }
 
 OptionsMenuState::~OptionsMenuState()
@@ -38,8 +32,6 @@ void OptionsMenuState::Enter()
 	m_pVM = ViewManager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 
-	resolution[0] = CGame::GetInstance()->GetScreenWidth();
-	resolution[1] = CGame::GetInstance()->GetScreenHeight();
 	m_bIsWindowed = CGame::GetInstance()->IsWindowed();
 
 	m_pAM->setMusicVolume(1.0f);
@@ -51,13 +43,12 @@ void OptionsMenuState::Exit()
 	m_pVM = nullptr;
 	m_pDI = nullptr;
 	m_pAM = nullptr;
-	changingres = false;
 	m_nCursPosY = 200;
 }
 
 bool OptionsMenuState::Input()
 {
-	if( m_pDI->KeyPressed(DIK_DOWN) && !changingres )
+	if( m_pDI->KeyPressed(DIK_DOWN) )
 	{
 		m_nCursPosY += 25;
 		if(m_nCursPosY == 275)
@@ -65,7 +56,7 @@ bool OptionsMenuState::Input()
 		if( m_nCursPosY > 300 )
 			m_nCursPosY = 200;
 	}
-	else if( m_pDI->KeyPressed(DIK_UP) && !changingres )
+	else if( m_pDI->KeyPressed(DIK_UP) )
 	{
 		m_nCursPosY -= 25;
 		if(m_nCursPosY == 275)
@@ -74,31 +65,13 @@ bool OptionsMenuState::Input()
 			m_nCursPosY = 300;
 	}
 
-	if( changingres )
-	{
-		if(m_pDI->KeyPressed(DIK_RIGHT))
-		{
-			if(resolution[0] == possRes[2] )
-			{
-				resolution[0] = possRes[0];
-				resolution[1] = possRes[1];
-			}
-			else
-			{
-				resolution[0] = possRes[2];
-				resolution[1] = possRes[3];
-			}
-		}
-	}
 
 	if( m_pDI->KeyPressed(DIK_RETURN) )
 	{
-		if( m_nCursPosY == 250 && !changingres )
-			changingres = true;
-		else if( m_nCursPosY == 250 && changingres )
+		if( m_nCursPosY == 250 )
 		{
-			m_pVM->ChangeDisplayParam(resolution[0], resolution[1], m_bIsWindowed);
-			changingres = false;
+			m_bIsWindowed = !m_bIsWindowed;
+			m_pVM->ChangeDisplayParam(CGame::GetInstance()->GetScreenWidth(), CGame::GetInstance()->GetScreenHeight(), m_bIsWindowed);
 		}
 		else if( m_nCursPosY == 300 )
 			CGame::GetInstance()->RemoveState();
@@ -152,13 +125,15 @@ void OptionsMenuState::Render()
 	m_pVM->DrawTextW("Music Volume", 300, 225, 255, 255, 0);
 	m_pVM->DrawTextW(buff, 450, 225, 255, 255, 255);
 
-	m_pVM->DrawTextW("Set Screen Resolution", 300, 250, 255, 255, 0);
+	m_pVM->DrawTextW("Full Screen", 300, 250, 255, 255, 0);
 
-	itoa(resolution[0], buff, 10);
-	m_pVM->DrawTextW(buff, 450, 250, 255, 255, 255);
-	m_pVM->DrawTextW(" x ", 480, 250, 255, 255, 255);
-	itoa(resolution[1], buff, 10);
-	m_pVM->DrawTextW(buff, 500, 250, 255, 255, 255);
+	RECT check = { 400, 250, 410, 260 };
+
+	if( !m_bIsWindowed )
+		m_pVM->DrawRect(check, 0, 200, 255);
+	else
+		m_pVM->DrawUnfilledRect(check, 0, 200, 255);
+	
 
 	m_pVM->DrawTextW("Exit", 300, 300, 255, 255, 0);
 }

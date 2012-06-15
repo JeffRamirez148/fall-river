@@ -20,17 +20,21 @@ void Bullet::Update(float fElapsedTime)
 	DirectInput* pDI = DirectInput::GetInstance();
 
 	if(pDI->KeyDown(DIK_RIGHT) )
-		SetPosX(GetPosX()+30*(int)fElapsedTime);
+		SetVelX(-100);
 	else if(pDI->KeyDown(DIK_LEFT) )
-		SetPosX(GetPosX()-30*(int)fElapsedTime);
-	
-	if(pDI->KeyDown(DIK_UP) )
-		SetPosX(GetPosY()+30*(int)fElapsedTime);
-	else if(pDI->KeyDown(DIK_DOWN) )
-		SetPosY(GetPosY()-30*(int)fElapsedTime);
+		SetVelX(100);
+	else
+		SetVelX(0);
 
-	SetPosX(GetPosX()+int(m_nSpeedX * fElapsedTime) );
-	SetPosY(GetPosY()+int(m_nSpeedY * fElapsedTime) );
+	if(pDI->KeyDown(DIK_UP) )
+		SetVelY(100);
+	else if(pDI->KeyDown(DIK_DOWN) )
+		SetVelY(-100);
+	else
+		SetVelY(0);
+
+	m_nPosX += m_nVelX * fElapsedTime;
+	m_nPosY += m_nVelY * fElapsedTime;
 }
 
 void Bullet::Render() 
