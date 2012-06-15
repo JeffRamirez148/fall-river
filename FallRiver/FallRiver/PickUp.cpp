@@ -17,14 +17,18 @@ void PickUp::Update(float fElapsedTime)
 	DirectInput* pDI = DirectInput::GetInstance();
 
 	if(pDI->KeyDown(DIK_RIGHT) )
-		SetPosX(GetPosX()+30*(int)fElapsedTime);
+		SetVelX(-100);
 	else if(pDI->KeyDown(DIK_LEFT) )
-		SetPosX(GetPosX()-30*(int)fElapsedTime);
+		SetVelX(100);
+	else
+		SetVelX(0);
 	
 	if(pDI->KeyDown(DIK_UP) )
-		SetPosX(GetPosY()+30*(int)fElapsedTime);
+		SetVelY(100);
 	else if(pDI->KeyDown(DIK_DOWN) )
-		SetPosY(GetPosY()-30*(int)fElapsedTime);
+		SetVelY(-100);
+	else
+		SetVelY(0);
 }
 
 void PickUp::Render() 

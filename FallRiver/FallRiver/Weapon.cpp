@@ -2,6 +2,7 @@
 #include "DirectInput.h"
 #include "CreateBullet.h"
 #include "MessageSystem.h"
+#include "ViewManager.h"
 
 Weapon::Weapon()
 {
@@ -30,15 +31,18 @@ bool Weapon::Init(WEAPONTYPE wType, int nAmmo, int nDamage, float currRotation )
 	{
 	case WPN_PISTOL:
 		m_fFireRate = 0.5f;
-		m_fFiringRange = 10.0f;
+		m_fFiringRange = 128.0f;
 		m_nClip = 10;
 		break;
 	case WPN_SHOTGUN:
 		m_fFireRate = 1.0f;
-		m_fFiringRange = 10.0f;
-		m_nClip = 3;
+		m_fFiringRange = 64.0f;
+		m_nClip = 5;
 		break;
 	case WPN_RIFLE:
+		m_fFireRate = 1.0f;
+		m_fFiringRange = 288.0f;
+		m_nClip = 8;
 		break;
 	case WPN_MACHETE:
 		m_bMelee = true;
@@ -62,7 +66,9 @@ void Weapon::Update(float fElapsedTime)
 
 void Weapon::Render() 
 {
-	
+	ViewManager* pVM = ViewManager::GetInstance();
+
+	pVM->DrawRect(GetRect(), 0, 200, 210 );
 }
 
 RECT Weapon::GetRect()

@@ -22,12 +22,12 @@ void NPC::Update(float fElapsedTime)
 	if( pDI->KeyDown(DIK_RIGHT) )
 		SetVelX(-100);
 	else if( pDI->KeyDown(DIK_LEFT) )
-		SetVelX(150);
+		SetVelX(100);
 	else
 		SetVelX(0);
 
 	if( pDI->KeyDown(DIK_UP) )
-		SetVelY(150);
+		SetVelY(100);
 	else if( pDI->KeyDown(DIK_DOWN) )
 		SetVelY(-100);
 	else

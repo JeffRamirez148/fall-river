@@ -13,7 +13,8 @@ class AudioManager;
 class ObjectManager;
 class OptionsMenuState;
 class EventSystem;
-class Level;
+#include "Level.h"
+class Weapon;
 class DirectInput;
 class Enemy;
 class Player;
@@ -27,10 +28,10 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	Level*		m_clevel;
+	Level			m_clevel;
 	ViewManager*	m_pVM;
 	DirectInput*	m_pDI;
-	AudioManager*	audio;
+	AudioManager*	m_pAM;
 	Factory*		m_pOF;
 	ObjectManager*	m_pOM;
 	EventSystem*	m_pES;
@@ -42,6 +43,7 @@ private:
 	Player*			m_cPlayer;
 	vector<Enemy*>	m_cEnemies;
 	vector<NPC*>	m_cNpcs;
+	Weapon*			m_cWeapon;
 
 	// For Everyone else on the screen
 	bool m_bCanMoveLeft;

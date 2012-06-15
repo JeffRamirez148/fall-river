@@ -14,7 +14,7 @@ public:
 
 	void Render();
 
-	bool CheckCollision(BaseCharacter* pBase);
+	bool CheckCollision(BaseObject* pBase);
 
 	void HandleEvent(Event* pEvent);
 };

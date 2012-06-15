@@ -5,6 +5,7 @@
 
 class ViewManager;
 class GamePlayState;
+class AudioManager;
 class XMLManager;
 class DirectInput;
 class OptionsMenuState;
@@ -14,11 +15,15 @@ class OptionsMenuState: public IMenuState
 private:
 	ViewManager* m_pVM;
 	DirectInput* m_pDI;
+	AudioManager* m_pAM;
 	float fTime;
 	int m_nCursPosY;
 	float sfxVolume;
 	float musicVolume;
 	int resolution[2];
+	bool changingres;
+	bool m_bIsWindowed;
+	int	possRes[4];
 
 	OptionsMenuState();
 	~OptionsMenuState();

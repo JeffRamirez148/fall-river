@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include "EventSystem.h"
 #include "Player.h"
+#include "Weapon.h"
 #include "Particle_Manager.h"
 #include "HUD.h"
 #include "XMLManager.h"
@@ -29,10 +30,12 @@ GamePlayState::GamePlayState()
 {
 	m_pVM = nullptr;
 	m_pDI = nullptr;
-	audio = nullptr;
+	m_pAM = nullptr;
 	m_pOF = nullptr;
 	m_pOM = nullptr;
 	m_pES = nullptr;
+
+	m_cWeapon = nullptr;
 
 	m_bCanMoveLeft	= true;
 	m_bCanMoveRight	= true;
@@ -54,31 +57,23 @@ void GamePlayState::Enter()
 	m_pOF = Factory::GetInstance();
 	m_pOM = ObjectManager::GetInstance();
 	m_pES = EventSystem::GetInstance();
-	m_clevel = Level::GetInstance();
-	m_clevel->LoadLevel("level.xml");
-
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
+	m_pOF->RegisterClassType< Weapon		>( _T("Weapon") );
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 
-	m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
-	Player* pPlayer = dynamic_cast<Player*>(m_cPlayer);
-	pPlayer->SetHeight(32);
-	pPlayer->SetWidth(32);
-	pPlayer->SetImageID(-1);
-	pPlayer->SetPosX(int(CGame::GetInstance()->GetScreenWidth()*0.45));
-	pPlayer->SetPosY(int(CGame::GetInstance()->GetScreenHeight()*0.4));
+	m_clevel.LoadLevel("level.xml");
 
 	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
-		ShootingAi* pEnemy = dynamic_cast<ShootingAi*>(m_cEnemies[i]);
+		ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[i]);
 		pEnemy->SetHeight(32);
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
@@ -91,7 +86,7 @@ void GamePlayState::Enter()
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
-		ChasingAI* pEnemy = dynamic_cast<ChasingAI*>(m_cEnemies[i]);
+		ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
 		pEnemy->SetHeight(32);
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
@@ -104,7 +99,7 @@ void GamePlayState::Enter()
 	{
 		m_cNpcs.push_back(nullptr);
 		m_cNpcs[i] = (NPC*)m_pOF->CreateObject( _T("NPC") );
-		NPC* pNpc = dynamic_cast<NPC*>(m_cNpcs[i]);
+		NPC* pNpc =(NPC*)(m_cNpcs[i]);
 		pNpc->SetHeight(32);
 		pNpc->SetWidth(32);
 		pNpc->SetImageID(-1);
@@ -113,14 +108,32 @@ void GamePlayState::Enter()
 		m_pOM->AddObject(pNpc);
 	}
 
+	m_cWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon") );
+	Weapon* pWeapon = (Weapon*)m_cWeapon;
+	pWeapon->SetHeight(10);
+	pWeapon->SetWidth(20);
+	pWeapon->SetImageID(-1);
+	pWeapon->SetPosX(int(CGame::GetInstance()->GetScreenWidth()*0.4));
+	pWeapon->SetPosY(int(CGame::GetInstance()->GetScreenHeight()*0.4));
+
+
+	m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
+	Player* pPlayer = (Player*)(m_cPlayer);
+	pPlayer->SetHeight(32);
+	pPlayer->SetWidth(32);
+	pPlayer->SetImageID(-1);
+	pPlayer->SetPosX(int(CGame::GetInstance()->GetScreenWidth()*0.45));
+	pPlayer->SetPosY(int(CGame::GetInstance()->GetScreenHeight()*0.4));
+
 	m_pOM->AddObject(pPlayer);
+	m_pOM->AddObject(pWeapon);
 }
 
 void GamePlayState::Exit() 
 {
 	m_pVM = nullptr;
 	m_pDI = nullptr;
-	audio = nullptr;
+	m_pAM = nullptr;
 	m_pOF = nullptr;
 	m_pOM = nullptr;
 	m_pES = nullptr;
@@ -136,15 +149,17 @@ bool GamePlayState::Input()
 
 void GamePlayState::Update(float fElapsedTime) 
 {
+	m_clevel.Update(fElapsedTime);
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pES->ProcessEvents();
 }
 
 void GamePlayState::Render() 
 {
-	m_clevel->Render();
+	m_pVM->GetSprite()->Flush();
+	m_clevel.Render();
+
 	m_pOM->RenderAllObjects();
-	//m_clevel->Render();
 }
 
 void GamePlayState::MessageProc(IMessage* pMsg)

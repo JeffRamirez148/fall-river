@@ -3,15 +3,15 @@
 using namespace std;
 
 #include "Level.h"
-//#include "Terrain.h"
-//#include "GamePlayState.h"
-//#include "PickUp.h"
+#include "DirectInput.h"
 #include "tinyxml.h"
 #include "ViewManager.h"
 
 Level::Level() 
 {
 	m_nBackgroundID = -1;
+	m_nPosX = 0;
+	m_nPosY = 0;
 }
 
 Level* Level::GetInstance() 
@@ -24,9 +24,53 @@ Level::~Level()
 {
 }
 
+void Level::Update(float fElapsedTime)
+{
+	DirectInput* pDI = DirectInput::GetInstance();
+
+	if(pDI->KeyDown(DIK_RIGHT) )
+	{
+		m_nPosX -= 100 * fElapsedTime;
+		for(int i = 0; i < m_vCollisions.size(); i++)
+		{
+			m_vCollisions[i].m_rCollision.right -= long(125.0f * fElapsedTime);
+			m_vCollisions[i].m_rCollision.left	-= long(125.0f * fElapsedTime);
+		}
+	}
+	else if(pDI->KeyDown(DIK_LEFT) )
+	{
+		m_nPosX += 100 * fElapsedTime;
+		for(int i = 0; i < m_vCollisions.size(); i++)
+		{
+			m_vCollisions[i].m_rCollision.right += long(125.0f * fElapsedTime);
+			m_vCollisions[i].m_rCollision.left	+= long(125.0f * fElapsedTime);
+		}
+	}
+
+	if(pDI->KeyDown(DIK_UP) )
+	{
+		m_nPosY += 100 * fElapsedTime;
+		for(int i = 0; i < m_vCollisions.size(); i++)
+		{
+			m_vCollisions[i].m_rCollision.top += long(125.0 * fElapsedTime);
+			m_vCollisions[i].m_rCollision.bottom	+= long(125.0 * fElapsedTime);
+		}
+	}
+	else if(pDI->KeyDown(DIK_DOWN) )
+	{
+		m_nPosY -= 100 * fElapsedTime;
+		for(int i = 0; i < m_vCollisions.size(); i++)
+		{
+			m_vCollisions[i].m_rCollision.top -= long(125.0f * fElapsedTime);
+			m_vCollisions[i].m_rCollision.bottom -= long(125.0f * fElapsedTime);
+		}
+	}
+
+}
 
 void Level::Render() 
 {
+
 	ViewManager* pView = ViewManager::GetInstance();
 	//CSGD_TextureManager* pTM = CSGD_TextureManager::GetInstance();
 
@@ -41,7 +85,7 @@ void Level::Render()
 
 	
 	//m_nBackgroundID = pTM->LoadTexture(_T("resource/graphics/test.png"));
-	pView->DrawStaticTexture(m_nBackgroundID,0, 0 );
+	pView->DrawStaticTexture(m_nBackgroundID, m_nPosX, m_nPosY );
 
 	////<level_info x="0" y="0" height="64" width="1024">Wall</level_info>
  //   //<level_info x="0" y="0" height="512" width="64">Wall</level_info>

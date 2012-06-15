@@ -9,14 +9,16 @@ enum OBJECTS { OBJ_BUSH = 0, OBJ_CLOSET, OBJ_BULLET, OBJ_CHARACTER, OBJ_PICKUP, 
 class BaseObject : public IObjects
 {
 private: 
-	int m_nPosX;
-	int m_nPosY;
 	int m_nHeight;
 	int m_nWidth;
 	int m_nImageID;
 	unsigned int	m_unRefCount;
 
 protected:
+	float m_nPosX;
+	float m_nPosY;
+	float	m_nVelX;
+	float	m_nVelY;
 	int m_nObjectType;
 
 public: 
@@ -32,15 +34,19 @@ public:
 	virtual bool CheckCollision(IObjects* pBase);
 	virtual RECT GetRect();
 
-	int GetPosX()	{return m_nPosX;}
-	int GetPosY()	{return m_nPosY;}
+	float GetPosX()	{return m_nPosX;}
+	float GetPosY()	{return m_nPosY;}
+	float GetVelX() {return m_nVelX;}
+	float GetVelY() {return m_nVelY;}
 	int GetHeight() {return m_nHeight;}
 	int GetWidth()	{return m_nWidth;}
 	int GetImageID(){return m_nImageID;}
 	int GetObjectType() {return m_nObjectType;}
 
-	void SetPosX(int x)	{m_nPosX = x;}
-	void SetPosY(int y) {m_nPosY = y;}
+	void SetPosX(float x)	{m_nPosX = x;}
+	void SetPosY(float y) {m_nPosY = y;}
+	void SetVelX(float x) {m_nVelX = x;}
+	void SetVelY(float y) {m_nVelY = y;}
 	void SetHeight(int height) {m_nHeight = height;}
 	void SetWidth(int width)   {m_nWidth = width;}
 	void SetImageID(int id)	   {m_nImageID = id;}

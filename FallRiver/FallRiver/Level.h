@@ -27,6 +27,8 @@ class Level
 private:
 	vector<leveldata> m_vCollisions;
 	int m_nBackgroundID;
+	float m_nPosX;
+	float m_nPosY;
 	TCHAR buffer[100];
 
 public: 
@@ -37,6 +39,7 @@ public:
 	//void Update(float time);
 	bool LoadLevel( const char* szFilename );
 
+	void Update(float fElapsed);
 	void Render();
 	static Level* GetInstance();
 
