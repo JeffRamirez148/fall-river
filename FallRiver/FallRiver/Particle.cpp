@@ -14,21 +14,34 @@ color = 0;
 imageID = -1;
 scaleX = 1;
 scaleY = 1;
-mode = 0;
 dir.x = 0;
 dir.y = 0;
 dir.z = 0;
 rot = 0;
+t = 0;
 }
 
 void Particle::Render() 
 {
 	// View Manager Calls
 	ViewManager* view = ViewManager::GetInstance();
+	DWORD tmpD;
+	DWORD tmpS;
+	view->GetDirect3DDevice()->GetRenderState( D3DRS_DESTBLEND, &tmpD);
+	view->GetDirect3DDevice()->GetRenderState( D3DRS_SRCBLEND, &tmpS);
+	DWORD tmp = DWORD(modeD);
+	view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmp);
+	tmp = DWORD(modeS);
+	view->GetDirect3DDevice()->SetRenderState(D3DRS_SRCBLEND, tmp);
+
+	view->GetSprite()->Flush();
 	if(imageID != -1)
 	{
 		view->DrawStaticTexture(imageID, int(pos.x), int(pos.y), scaleX, scaleY, nullptr, 
 							0.0f, 0.0f, rot, color);
 	}
+	view->GetSprite()->Flush();
+	view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmpD);
+	view->GetDirect3DDevice()->SetRenderState(D3DRS_SRCBLEND, tmpS);
 }
 

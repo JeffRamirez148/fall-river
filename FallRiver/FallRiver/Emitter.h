@@ -22,7 +22,8 @@ class Emitter
 	float startScaleX;
 	float startScaleY;
 	int startColor;
-	int blendMode;
+	int blendModeS;
+	int blendModeD;
 	float spawnTimer;
 	int imageID;
 	float lifeSpan;
@@ -34,8 +35,8 @@ class Emitter
 public: 
 	Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
 			D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScaleX, float newStartScaleY,
-			 float newEndScaleX, float newEndScaleY, int newBlendMode, int newImageID, float newParticleLifeSpan,
-			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer, float newStartRot, float newEndRot);
+			 float newEndScaleX, float newEndScaleY, int newBlendModeS, int newBlendModeD, int newImageID, float newParticleLifeSpan,
+			 float newEmitterLifeTime, int newStartColor, int newEndColor,  float newStartRot, float newEndRot);
 	void Update(float fElapsedTime);
 	void Render();
 

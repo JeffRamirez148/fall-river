@@ -1,8 +1,10 @@
 #include "Emitter.h"
 #include "Particle_Manager.h"
 #include "Particle.h"
+#include "ViewManager.h"
 void Emitter::Update(float fElapsedTime) 
 {
+
 	// Spawn particle?
 	spawnTimer += fElapsedTime;
 	if(spawnTimer >= spawnRate)
@@ -13,16 +15,18 @@ void Emitter::Update(float fElapsedTime)
 		// Members to be loaded in and set
 		tmpParticle->SetImageID(imageID);
 		tmpParticle->SetLifeSpan(lifeSpan);
-		tmpParticle->SetMode(blendMode);
+		tmpParticle->SetModeS(blendModeS);
+		tmpParticle->SetModeD(blendModeD);
+
 		D3DXVECTOR3 tmpPos;
-		tmpPos.x = float((rand() % int(rect.right)) + rect.left);
-		tmpPos.y = float((rand() % int(rect.bottom)) + rect.top);
+		tmpPos.x = float((rand() % int(rect.right - rect.left)) + rect.left);
+		tmpPos.y = float((rand() % int(rect.bottom - rect.top)) + rect.top);
 		tmpPos.z = 0.0f;
 		tmpParticle->SetPos(tmpPos);
 		tmpParticle->SetVel(startVel);
 		D3DXVECTOR3 tmpDir;
-		tmpDir.x = float((rand() % 3) + 1);
-		tmpDir.y = float((rand() % 3) + 1);
+		tmpDir.x = float(((rand() % 3) - 1) >> 1);
+		tmpDir.y = float(((rand() % 3) - 1) >> 1);
 		tmpDir.z = 0.0f;
 		tmpParticle->SetDir(tmpDir);
 		_m_vparticles.push_back(tmpParticle);
@@ -31,6 +35,8 @@ void Emitter::Update(float fElapsedTime)
 	bool keepGoing;
 	for( unsigned int i = 0; i < _m_vparticles.size(); ++i)
 	{
+		float t = _m_vparticles[i]->GetTime();
+		t += fElapsedTime;
 		keepGoing = true;
 		// Update Existance
 		_m_vparticles[i]->SetLifeSpan((_m_vparticles[i]->GetLifeSpan()) - fElapsedTime);
@@ -56,42 +62,62 @@ void Emitter::Update(float fElapsedTime)
 			int endR = (endColor << 8) >> 24;
 			int endG = (endColor << 16) >> 24;
 			int endB = (endColor << 24) >> 24;
-			if(startColor > endColor)
+			// Update Alpha
+			if(startColor >> 24 > endColor >> 24)
 			{
-				tmpA -= (int)fElapsedTime;
-				tmpR -= (int)fElapsedTime;
-				tmpG -= (int)fElapsedTime;
-				tmpB -= (int)fElapsedTime;
+				tmpA -= 1;
 				if(tmpA < endA)
 					tmpA = endA;
-				if(tmpR < endR)
-					tmpR = endR;
-				if(tmpG < endG)
-					tmpG = endG;
-				if(tmpB < endB)
-					tmpB = endB;
-				tmpColor = (tmpA << 24) + (tmpR << 16) + (tmpG << 8) + tmpB;
-				if(tmpColor < endColor)
-					tmpColor = endColor;
 			}
 			else
 			{
-				tmpA += (int)fElapsedTime;
-				tmpR += (int)fElapsedTime;
-				tmpG += (int)fElapsedTime;
-				tmpB += (int)fElapsedTime;
+				tmpA += 1;
 				if(tmpA > endA)
 					tmpA = endA;
+			}
+			// Update Red
+			if((startColor << 8) >> 24 > (endColor << 8) >> 24)
+			{
+				tmpR -= 1;
+				if(tmpR < endR)
+					tmpR = endR;
+			}
+			else
+			{
+				tmpR += 1;
 				if(tmpR > endR)
 					tmpR = endR;
+			}
+
+			// Update Green
+			if((startColor << 16) >> 24 > (endColor << 16) >> 24)
+			{
+				tmpG -= 1;
+				if(tmpG < endG)
+					tmpG = endG;
+			}
+			else
+			{
+				tmpG += 1;
 				if(tmpG > endG)
 					tmpG = endG;
+			}
+
+			// Update Blue
+			if((startColor << 24) >> 24 > (endColor << 24) >> 24)
+			{
+				tmpB -= 1;
+				if(tmpB < endB)
+					tmpB = endB;
+			}
+			else
+			{
+				tmpB += 1;
 				if(tmpB > endB)
 					tmpB = endB;
-				tmpColor = (tmpA << 24) + (tmpR << 16) + (tmpG << 8) + tmpB;
-				if(tmpColor > endColor)
-					tmpColor = endColor;
 			}
+			
+			tmpColor = (tmpA << 24) + (tmpR << 16) + (tmpG << 8) + tmpB;
 			_m_vparticles[i]->SetColor(tmpColor);
 
 			// Update Scale
@@ -126,6 +152,8 @@ void Emitter::Update(float fElapsedTime)
 			_m_vparticles[i]->SetScaleY(tmpScaleY);
 
 			// Update Vel
+			if(t > .0001f)
+			{
 			D3DXVECTOR3 tmpVel = _m_vparticles[i]->GetVel();
 			if(startVel.x > endVel.x)
 			{
@@ -167,10 +195,13 @@ void Emitter::Update(float fElapsedTime)
 			}
 			_m_vparticles[i]->SetVel(tmpVel);
 			// Update Pos
+
 			D3DXVECTOR3 tmpPos = _m_vparticles[i]->GetPos();
 			D3DXVECTOR3 tmpDir = _m_vparticles[i]->GetDir();
 			tmpPos += tmpVel + tmpDir;
 			_m_vparticles[i]->SetPos(tmpPos);
+			t = 0;
+			}
 
 			float tmpRot = _m_vparticles[i]->GetRotation();
 			// Update Rotation
@@ -192,6 +223,8 @@ void Emitter::Update(float fElapsedTime)
 
 void Emitter::Render() 
 {
+	ViewManager* view = ViewManager::GetInstance();
+	view->DrawUnfilledRect( this->rect, 255, 255, 255 );
 	for( unsigned int i = 0; i < _m_vparticles.size(); ++i)
 	{
 		_m_vparticles[i]->Render();
@@ -200,8 +233,8 @@ void Emitter::Render()
 
 Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
 			D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScaleX, float newStartScaleY,
-			 float newEndScaleX, float newEndScaleY, int newBlendMode, int newImageID, float newParticleLifeSpan,
-			 float newEmitterLifeTime, int newStartColor, int newEndColor, float newSpawnTimer, float newStartRot, float newEndRot)
+			 float newEndScaleX, float newEndScaleY, int newBlendModeS, int newBlendModeD, int newImageID, float newParticleLifeSpan,
+			 float newEmitterLifeTime, int newStartColor, int newEndColor,  float newStartRot, float newEndRot)
 {
 	spawnRate = newSpawnRate;
 	loopin = newLooping;
@@ -217,12 +250,14 @@ Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxPa
 	startScaleY = newStartScaleY;
 
 	startColor = newStartColor;
-	blendMode = newBlendMode;
-	spawnTimer = newSpawnTimer;
+	blendModeS = newBlendModeS;
+	blendModeD = newBlendModeD;
+
 	imageID = newImageID;
 	lifeSpan = newParticleLifeSpan;
 	lifeTime = newEmitterLifeTime;
 	age = 0;
 	endRot = newEndRot;
 	startRot = newStartRot;
+	spawnTimer = 0.0f;
 }

@@ -5,6 +5,7 @@
 #include "ViewManager.h"
 #include "MainMenuState.h"
 #include "GamePlayState.h"
+#include "AudioManager.h"
 
 CGame* CGame::GetInstance()
 {
@@ -51,6 +52,7 @@ void CGame::Update()
 
 	// Redirect to the current state
 	m_pCurrState->Update(ElapsedTime);
+	AudioManager::GetInstance()->Update(ElapsedTime);
 }
 
 void CGame::Render() 

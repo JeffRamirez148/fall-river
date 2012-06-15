@@ -18,8 +18,8 @@ int Particle_Manager::LoadEmitter(char * filepath)
 
 int Particle_Manager::ActivateEmitter(int id)
 {
-	loaded[id];
-	active.push_back(loaded[id]);
+	loaded[id - 1];
+	active.push_back(loaded[id - 1]);
 	return active.size();
 }
 

@@ -36,6 +36,9 @@ void OptionsMenuState::Enter()
 
 	m_pAM->setMusicVolume(1.0f);
 	m_pAM->setSoundVolume(1.0f);
+	soundID = m_pAM->RegisterSound("resource/Sound/coins.wav");
+	m_pAM->setSoundLooping(soundID, true);
+	m_pAM->playSound(soundID);
 }
 
 void OptionsMenuState::Exit() 
@@ -87,6 +90,8 @@ bool OptionsMenuState::Input()
 
 void OptionsMenuState::Update(float fElapsedTime)
 {
+	musicVolume = m_pAM->getMusicVolume();
+	sfxVolume = m_pAM->getSoundVolume();
 	if( m_pDI->KeyDown(DIK_RIGHT) )
 	{
 		if( m_nCursPosY == 200 && sfxVolume < 1.0f)
@@ -100,6 +105,7 @@ void OptionsMenuState::Update(float fElapsedTime)
 			sfxVolume -= 0.1f*fElapsedTime;
 		else if( m_nCursPosY == 225 && musicVolume > 0.0f)
 			musicVolume -= 0.1f*fElapsedTime;
+
 	}
 
 	m_pAM->setMusicVolume(musicVolume);

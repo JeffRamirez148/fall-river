@@ -43,8 +43,8 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	if( pRoot == nullptr )
 		return false;
 	TiXmlElement* pEmitter = pRoot->FirstChildElement("emitter_info");
-	double age;
-	int blendMode;
+	int blendModeS;
+	int blendModeD;
 	int endColor;
 	double endRot;
 	double endScaleX;
@@ -57,7 +57,6 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	int maxParticles;
 	RECT rect;
 	double spawnRate;
-	double spawnTimer;
 	int startColor;
 	double startRot;
 	double startScaleX;
@@ -77,8 +76,10 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	if( pText != nullptr )
 		strcpy_s( imageFilePath, 100, pText );
 	imageID = ViewManager::GetInstance()->RegisterTexture(imageFilePath);
-	pEmitter->Attribute("age", &age);
-	pEmitter->Attribute("blendMode", &blendMode);
+
+	pEmitter = pEmitter->NextSiblingElement("emitter_info");
+	pEmitter->Attribute("blendModeS", &blendModeS);
+	pEmitter->Attribute("blendModeD", &blendModeD);
 	pEmitter->Attribute("endColor", &endColor);
 	pEmitter->Attribute("endRot", &endRot);
 	pEmitter->Attribute("endScaleX", &endScaleX);
@@ -86,9 +87,9 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	pEmitter->Attribute("endVelX", &x);
 	pEmitter->Attribute("endVelY", &y);
 	pEmitter->Attribute("endVelZ", &z);
-	endVel.x = x;
-	endVel.y = y;
-	endVel.z = z;
+	endVel.x = (float)x;
+	endVel.y = (float)y;
+	endVel.z = (float)z;
 	pEmitter->Attribute("lifeSpan", &lifeSpan);
 	pEmitter->Attribute("lifeTime", &lifeTime);
 	pEmitter->Attribute("loopin", &loopin);
@@ -97,12 +98,11 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	pEmitter->Attribute("rectT", &top);
 	pEmitter->Attribute("rectR", &right);
 	pEmitter->Attribute("rectB", &bottom);
-	rect.left = left;
-	rect.bottom = bottom;
-	rect.top = top;
-	rect.right = right;
+	rect.left = (LONG)left;
+	rect.bottom = (LONG)bottom;
+	rect.top = (LONG)top;
+	rect.right = (LONG)right;
 	pEmitter->Attribute("spawnRate", &spawnRate);
-	pEmitter->Attribute("spawnTimer", &spawnTimer);
 	pEmitter->Attribute("startColor", &startColor);
 	pEmitter->Attribute("startRot", &startRot);
 	pEmitter->Attribute("startScaleX", &startScaleX);
@@ -110,9 +110,15 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	pEmitter->Attribute("startVelX", &x);
 	pEmitter->Attribute("startVelY", &y);
 	pEmitter->Attribute("startVelZ", &z);
-	startVel.x = x;
-	startVel.y = y;
-	startVel.z = z;
-	Emitter* emitter = new Emitter( spawnRate, loopin, rect, maxParticles,startVel,endVel, startScaleX, startScaleY, endScaleX, endScaleY, blendMode, imageID, lifeSpan, lifeTime, startColor, endColor, spawnTimer, startRot, endRot);
+	startVel.x = (float)x;
+	startVel.y = (float)y;
+	startVel.z = (float)z;
+	bool loop;
+	if(loopin == 0)
+		loop = false;
+	else
+		loop = true;
+
+	Emitter* emitter = new Emitter( (float)spawnRate, loop, rect, maxParticles,startVel,endVel, (float)startScaleX, (float)startScaleY, (float)endScaleX, (float)endScaleY, blendModeS, blendModeD, imageID, (float)lifeSpan, (float)lifeTime, startColor, endColor, (float)startRot, (float)endRot);
 	return emitter;
 }

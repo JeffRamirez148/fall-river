@@ -21,6 +21,7 @@ private:
 	float sfxVolume;
 	float musicVolume;
 	bool m_bIsWindowed;
+	int soundID;
 
 	OptionsMenuState();
 	~OptionsMenuState();
