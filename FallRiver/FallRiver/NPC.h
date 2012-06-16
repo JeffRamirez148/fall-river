@@ -21,7 +21,7 @@ public:
 
 	void SaySomething();
 
-	bool CheckCollision(BaseCharacter* pBase);
+	bool CheckCollision(IObjects* pBase);
 };
 
 #endif

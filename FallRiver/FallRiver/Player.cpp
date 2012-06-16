@@ -30,10 +30,32 @@ void Player::Render()
 	pVM->DrawRect(GetRect(), 0, 0, 255);
 }
 
-bool Player::CheckCollision(BaseCharacter* pBase) 
+bool Player::CheckCollision(IObjects* pBase) 
 {
-	// TODO:: Change this accordingly
-	return BaseCharacter::CheckCollision(pBase);
+	if(BaseCharacter::CheckCollision(pBase) == true )
+	{
+		if(pBase->GetObjectType() == OBJ_CHARACTER)
+		{
+			BaseCharacter* pCh = (BaseCharacter*)pBase;
+			if(pCh->GetCharacterType() == CHA_ENEMY)
+			{
+				if( GetRect().right <= pBase->GetRect().left )
+					GamePlayState::GetInstance()->SetCanMoveRight(false);
+				else if( GetRect().left >= pBase->GetRect().right )
+					GamePlayState::GetInstance()->SetCanMoveLeft(false);
+				else if( GetRect().top >= pBase->GetRect().bottom )
+					GamePlayState::GetInstance()->SetCanMoveUp(false);
+				else if( GetRect().bottom <= pBase->GetRect().top )
+					GamePlayState::GetInstance()->SetCanMoveDown(false);
+			}
+		}
+		return true;
+	}
+	GamePlayState::GetInstance()->SetCanMoveDown(true);
+	GamePlayState::GetInstance()->SetCanMoveUp(true);
+	GamePlayState::GetInstance()->SetCanMoveRight(true);
+	GamePlayState::GetInstance()->SetCanMoveLeft(true);
+	return false;
 }
 
 // Check if the player is still alive

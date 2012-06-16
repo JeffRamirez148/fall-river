@@ -36,9 +36,6 @@ void OptionsMenuState::Enter()
 
 	m_pAM->setMusicVolume(1.0f);
 	m_pAM->setSoundVolume(1.0f);
-	soundID = m_pAM->RegisterSound("resource/Sound/coins.wav");
-	m_pAM->setSoundLooping(soundID, true);
-	m_pAM->playSound(soundID);
 }
 
 void OptionsMenuState::Exit() 
@@ -90,7 +87,7 @@ bool OptionsMenuState::Input()
 
 void OptionsMenuState::Update(float fElapsedTime)
 {
-	musicVolume = m_pAM->getMusicVolume();
+
 	sfxVolume = m_pAM->getSoundVolume();
 	if( m_pDI->KeyDown(DIK_RIGHT) )
 	{
@@ -105,7 +102,6 @@ void OptionsMenuState::Update(float fElapsedTime)
 			sfxVolume -= 0.1f*fElapsedTime;
 		else if( m_nCursPosY == 225 && musicVolume > 0.0f)
 			musicVolume -= 0.1f*fElapsedTime;
-
 	}
 
 	m_pAM->setMusicVolume(musicVolume);
@@ -123,11 +119,11 @@ void OptionsMenuState::Render()
 
 	char buff[100];
 
-	itoa(sfxVolume*100, buff, 10);
+	_itoa_s(int(sfxVolume*100), buff, 10);
 	m_pVM->DrawTextW("Sound fx Volume", 300, 200, 255, 255, 0);
 	m_pVM->DrawTextW(buff, 450, 200, 255, 255, 255);
 
-	itoa(musicVolume*100, buff, 10);
+	_itoa_s(int(musicVolume*100), buff, 10);
 	m_pVM->DrawTextW("Music Volume", 300, 225, 255, 255, 0);
 	m_pVM->DrawTextW(buff, 450, 225, 255, 255, 255);
 

@@ -2,7 +2,7 @@
 
 BaseCharacter::BaseCharacter()
 {
-
+	m_nObjectType = OBJ_CHARACTER;
 }
 
 BaseCharacter::~BaseCharacter()
@@ -29,7 +29,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 
 RECT BaseCharacter::GetRect()
 {
-	RECT cRect = {GetPosX(), GetPosY(), GetPosX()+GetWidth(), GetPosY()+GetHeight()};
+	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 
 	return cRect;
 }

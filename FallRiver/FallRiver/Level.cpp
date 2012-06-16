@@ -1,11 +1,8 @@
-#include <Windows.h>
-#include <vector>
-using namespace std;
-
 #include "Level.h"
 #include "DirectInput.h"
 #include "tinyxml.h"
 #include "ViewManager.h"
+#include "GamePlayState.h"
 
 Level::Level() 
 {
@@ -29,16 +26,16 @@ void Level::Update(float fElapsedTime)
 	DirectInput* pDI = DirectInput::GetInstance();
 
 	//float time = fElapsedTime;
-	LONG test = 100.0f * fElapsedTime;
-	if(pDI->KeyDown(DIK_RIGHT) )
+	LONG test = long(100.0f * fElapsedTime);
+	if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
 	{
 		m_nPosX -= 100 * fElapsedTime;
 
 
-		for(int i = 0; i < m_vCollisions.size(); i++)
+		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
-			int tmpPosX = m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
 
 			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
 			m_vCollisions[i].m_rCollision.left	= tmpPosX;
@@ -46,13 +43,13 @@ void Level::Update(float fElapsedTime)
 			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
 		}
 	}
-	else if(pDI->KeyDown(DIK_LEFT) )
+	else if(pDI->KeyDown(DIK_LEFT) && GamePlayState::GetInstance()->CanMoveLeft() )
 	{
 		m_nPosX += 100 * fElapsedTime;
-		for(int i = 0; i < m_vCollisions.size(); i++)
+		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
-			int tmpPosX = m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
 
 			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
 			m_vCollisions[i].m_rCollision.left	= tmpPosX;
@@ -62,13 +59,13 @@ void Level::Update(float fElapsedTime)
 		}
 	}
 
-	if(pDI->KeyDown(DIK_UP) )
+	if(pDI->KeyDown(DIK_UP) && GamePlayState::GetInstance()->CanMoveUp() )
 	{
 		m_nPosY += 100 * fElapsedTime;
-		for(int i = 0; i < m_vCollisions.size(); i++)
+		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
-			int tmpPosX = m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
 
 			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
 			m_vCollisions[i].m_rCollision.left	= tmpPosX;
@@ -76,13 +73,13 @@ void Level::Update(float fElapsedTime)
 			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
 		}
 	}
-	else if(pDI->KeyDown(DIK_DOWN) )
+	else if(pDI->KeyDown(DIK_DOWN) && GamePlayState::GetInstance()->CanMoveDown() )
 	{
 		m_nPosY -= 100 * fElapsedTime;
-		for(int i = 0; i < m_vCollisions.size(); i++)
+		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
-			int tmpPosX = m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
 
 			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
 			m_vCollisions[i].m_rCollision.left	= tmpPosX;
@@ -105,12 +102,12 @@ void Level::Render()
 
 	
 	//m_nBackgroundID = pTM->LoadTexture(_T("resource/graphics/test.png"));
-	pView->DrawStaticTexture(m_nBackgroundID, m_nPosX, m_nPosY );
+	pView->DrawStaticTexture(m_nBackgroundID, (int)m_nPosX, (int)m_nPosY );
 
 	pView->GetSprite()->Flush();
 
 	
-	for( int i = 0; i < m_vCollisions.size(); i++ )
+	for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
 	{
 		//m_vCollisions[i].m_cType;
 		if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
@@ -204,15 +201,15 @@ bool Level::LoadLevel( const char* szFilename )
 		pLevel->Attribute( "width", &tmpW );
 		pLevel->Attribute( "height", &tmpH );
 
-		info.m_rCollision.left = tmpX;
-		info.m_rCollision.top = tmpY;
-		info.m_rCollision.right = tmpX+tmpW;
-		info.m_rCollision.bottom = tmpY+tmpH;
+		info.m_rCollision.left = (long)tmpX;
+		info.m_rCollision.top = (long)tmpY;
+		info.m_rCollision.right = long(tmpX+tmpW);
+		info.m_rCollision.bottom = long(tmpY+tmpH);
 
-		info.height = tmpH;
-		info.width = tmpW;
-		info.x = tmpX;
-		info.y = tmpY;
+		info.height = (long)tmpH;
+		info.width = (long)tmpW;
+		info.x = (long)tmpX;
+		info.y = (long)tmpY;
 
 		// Save this info to the vector
 		m_vCollisions.push_back( info );

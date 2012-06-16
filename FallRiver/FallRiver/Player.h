@@ -37,7 +37,7 @@ public:
 
 	void Update(float fElapsedTime);
 	void Render();
-	bool CheckCollision(BaseCharacter* pBase);
+	bool CheckCollision(IObjects* pBase);
 	bool CheckLifes();
 
 	// If the Player is in a bush or closet

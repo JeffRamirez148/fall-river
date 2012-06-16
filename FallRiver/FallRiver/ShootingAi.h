@@ -11,7 +11,7 @@ public:
 
 	virtual void Update(float aFElapsedTime);
 	virtual void Render();
-	virtual bool CheckCollision(BaseCharacter* aPBase);
+	virtual bool CheckCollision(IObjects* aPBase);
 	virtual void HandleEvent(Event* aPEvent);
 };
 

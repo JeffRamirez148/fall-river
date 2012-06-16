@@ -35,6 +35,6 @@ bool BaseObject::CheckCollision(IObjects* pBase)
 
 RECT BaseObject::GetRect()
 {
-	RECT mRect = {GetPosX(), GetPosY(), GetPosX()+GetWidth(), GetPosY()+GetHeight()};
+	RECT mRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 	return mRect;
 }

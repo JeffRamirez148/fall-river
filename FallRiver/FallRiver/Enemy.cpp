@@ -10,6 +10,7 @@ Enemy::Enemy()
 {
 	m_nVelX = 0;
 	m_nVelY = 0;
+	m_nCharacterType = CHA_ENEMY;
 }
 
 Enemy::~Enemy()
@@ -49,14 +50,14 @@ void Enemy::MoveTo(int c, int y)
 {
 }
 
-bool Enemy::CheckCollision(BaseObject* pBase) 
+bool Enemy::CheckCollision(IObjects* pBase) 
 {
 	return BaseCharacter::CheckCollision(pBase);
 }
 
 RECT Enemy::GetRect()
 {
-	RECT cRect = {GetPosX(), GetPosY(), GetPosX()+GetWidth(), GetPosY()+GetHeight()};
+	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 
 	return cRect;
 }

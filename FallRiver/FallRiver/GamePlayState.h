@@ -61,15 +61,15 @@ public:
 
 	// Check if the Player can move
 	bool CanMoveLeft()	{return m_bCanMoveLeft; }
-	bool CanMoveRight() {return m_bCanMoveLeft; }
-	bool CanMoveUp()	{return m_bCanMoveLeft; }
-	bool CanMoveDown()	{return m_bCanMoveLeft; }
+	bool CanMoveRight() {return m_bCanMoveRight; }
+	bool CanMoveUp()	{return m_bCanMoveUp; }
+	bool CanMoveDown()	{return m_bCanMoveDown; }
 
 	// Set if the player can move
-	void SetCanMoveLeft(bool left)	{m_bCanMoveLeft; }
-	void SetCanMoveRight(bool right){m_bCanMoveLeft; }
-	void SetCanMoveUp(bool up)		{m_bCanMoveLeft; }
-	void SetCanMoveDown(bool down)	{m_bCanMoveLeft; }
+	void SetCanMoveLeft(bool left)	{m_bCanMoveLeft = left; }
+	void SetCanMoveRight(bool right){m_bCanMoveRight = right; }
+	void SetCanMoveUp(bool up)		{m_bCanMoveUp = up; }
+	void SetCanMoveDown(bool down)	{m_bCanMoveDown = down; }
 
 	void Enter();
 

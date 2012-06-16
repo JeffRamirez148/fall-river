@@ -7,6 +7,7 @@ using namespace std;
 
 
 class DirectInput;
+class AudioManager;
 class IMenuState;
 class CGame;
 class IMenuState;

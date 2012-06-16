@@ -113,8 +113,8 @@ void GamePlayState::Enter()
 	pWeapon->SetHeight(10);
 	pWeapon->SetWidth(20);
 	pWeapon->SetImageID(-1);
-	pWeapon->SetPosX(int(CGame::GetInstance()->GetScreenWidth()*0.4));
-	pWeapon->SetPosY(int(CGame::GetInstance()->GetScreenHeight()*0.4));
+	pWeapon->SetPosX(float(CGame::GetInstance()->GetScreenWidth())*0.4f);
+	pWeapon->SetPosY(float(CGame::GetInstance()->GetScreenHeight())*0.4f);
 
 
 	m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
@@ -122,8 +122,8 @@ void GamePlayState::Enter()
 	pPlayer->SetHeight(32);
 	pPlayer->SetWidth(32);
 	pPlayer->SetImageID(-1);
-	pPlayer->SetPosX(int(CGame::GetInstance()->GetScreenWidth()*0.45));
-	pPlayer->SetPosY(int(CGame::GetInstance()->GetScreenHeight()*0.4));
+	pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.45));
+	pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.4));
 
 	m_pOM->AddObject(pPlayer);
 	m_pOM->AddObject(pWeapon);
@@ -131,12 +131,46 @@ void GamePlayState::Enter()
 
 void GamePlayState::Exit() 
 {
+	if( m_pES != nullptr )
+	{
+		m_pES->ClearEvents();
+		m_pES->Shutdown();
+		m_pES = nullptr;
+	}
+
+	if( m_pOM != nullptr )
+	{
+		m_pOM->RemoveAllObjects();
+		ObjectManager::DeleteInstance();
+		m_pOM = nullptr;
+	}
+
+	if( m_pOF != nullptr )
+	{
+		m_pOF->ShutdownObjectFactory();
+		m_pOF = nullptr;
+	}
+
+	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
+	{
+		m_cEnemies[i] = nullptr;
+	}
+	m_cEnemies.clear();
+
+	for(unsigned int i = 0; i < m_cNpcs.size(); i++)
+	{
+		m_cNpcs[i] = nullptr;
+	}
+	m_cNpcs.clear();
+
 	m_pVM = nullptr;
 	m_pDI = nullptr;
 	m_pAM = nullptr;
 	m_pOF = nullptr;
 	m_pOM = nullptr;
 	m_pES = nullptr;
+
+	m_cPlayer = nullptr;
 }
 
 bool GamePlayState::Input() 
@@ -151,6 +185,7 @@ void GamePlayState::Update(float fElapsedTime)
 {
 	m_clevel.Update(fElapsedTime);
 	m_pOM->UpdateAllObjects(fElapsedTime);
+	m_pOM->CheckCollisions();
 	m_pES->ProcessEvents();
 }
 

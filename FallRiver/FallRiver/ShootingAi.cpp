@@ -28,9 +28,9 @@ void ShootingAi::Render()
 	pVM->DrawRect(GetRect(), 100, 148, 100);
 }
 
-bool ShootingAi::CheckCollision(BaseCharacter* aPBase)
+bool ShootingAi::CheckCollision(IObjects* pBase)
 {
-	return true;
+	return Enemy::CheckCollision(pBase);
 }
 
 void ShootingAi::HandleEvent(Event* aPEvent)

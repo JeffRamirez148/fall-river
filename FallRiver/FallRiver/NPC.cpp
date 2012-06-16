@@ -2,6 +2,7 @@
 #include "ViewManager.h"
 #include "DestroyNPC.h"
 #include "DirectInput.h"
+#include "GamePlayState.h"
 
 NPC::NPC()
 {
@@ -19,16 +20,16 @@ void NPC::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
-	if( pDI->KeyDown(DIK_RIGHT) )
+	if( pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
 		SetVelX(-100);
-	else if( pDI->KeyDown(DIK_LEFT) )
+	else if( pDI->KeyDown(DIK_LEFT)  && GamePlayState::GetInstance()->CanMoveLeft() )
 		SetVelX(100);
 	else
 		SetVelX(0);
 
-	if( pDI->KeyDown(DIK_UP) )
+	if( pDI->KeyDown(DIK_UP)  && GamePlayState::GetInstance()->CanMoveUp() )
 		SetVelY(100);
-	else if( pDI->KeyDown(DIK_DOWN) )
+	else if( pDI->KeyDown(DIK_DOWN)  && GamePlayState::GetInstance()->CanMoveDown() )
 		SetVelY(-100);
 	else
 		SetVelY(0);
@@ -48,7 +49,7 @@ void NPC::SaySomething()
 {
 }
 
-bool NPC::CheckCollision(BaseCharacter* pBase) 
+bool NPC::CheckCollision(IObjects* pBase) 
 {
 	return false;
 }

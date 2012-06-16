@@ -12,6 +12,7 @@ public:
 	virtual void Update(float fElapsedTime) = 0;
 
 	virtual void Render() = 0;
+	virtual int GetObjectType() = 0;
 
 	virtual bool CheckCollision(IObjects* pBase) = 0;
 	virtual RECT GetRect() = 0;

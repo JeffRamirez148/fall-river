@@ -4,8 +4,8 @@
 #include "DirectInput.h"
 #include "ViewManager.h"
 #include "MainMenuState.h"
-#include "GamePlayState.h"
 #include "AudioManager.h"
+#include "GamePlayState.h"
 
 CGame* CGame::GetInstance()
 {
@@ -50,9 +50,10 @@ void CGame::Update()
 	float ElapsedTime = (time - m_dwCurrTime) / 1000.0f;
 	m_dwCurrTime = time;
 
+	AudioManager::GetInstance()->Update(ElapsedTime);
+
 	// Redirect to the current state
 	m_pCurrState->Update(ElapsedTime);
-	AudioManager::GetInstance()->Update(ElapsedTime);
 }
 
 void CGame::Render() 

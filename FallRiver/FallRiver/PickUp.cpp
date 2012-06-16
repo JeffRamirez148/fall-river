@@ -37,7 +37,7 @@ void PickUp::Render()
 
 RECT PickUp::GetRect()
 {
-	RECT cRect = {GetPosX(), GetPosY(), GetPosX()+GetWidth(), GetPosY()+GetHeight() };
+	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight()) };
 	return cRect;
 }
 

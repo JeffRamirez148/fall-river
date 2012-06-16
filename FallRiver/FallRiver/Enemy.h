@@ -33,7 +33,7 @@ public:
 
 	virtual void MoveTo(int x, int y);
 
-	virtual bool CheckCollision(BaseObject* pBase);
+	virtual bool CheckCollision(IObjects* pBase);
 	virtual RECT GetRect();
 };
 

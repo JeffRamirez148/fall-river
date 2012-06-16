@@ -5,6 +5,7 @@ using namespace std;
 #include "ObjectManager.h"
 #include "GamePlayState.h"
 #include "BaseObject.h"
+#include "BaseCharacter.h"
 
 // Instantiate the staic data member
 ObjectManager* ObjectManager::s_Instance = nullptr;
@@ -86,8 +87,8 @@ void ObjectManager::CheckCollisions( void )
 	{
 		for( OListIterator iter2 = m_Objects.begin(); iter2 != m_Objects.end(); ++iter2)
 		{
-			if((*iter1)->GetObjectType() == (*iter2)->GetObjectType() && (*iter1)->GetObjectType() != OBJ_CHARACTER)
-				break;
+			if((*iter1) == (*iter2) )
+				continue;
 
 			if((*iter1)->CheckCollision((*iter2)))
 			{

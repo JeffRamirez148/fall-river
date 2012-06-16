@@ -23,7 +23,7 @@ void Boss1::Render()
 
 }
 
-bool Boss1::CheckCollision(BaseObject* pBase)
+bool Boss1::CheckCollision(IObjects* pBase)
 {
 	if( BaseCharacter::CheckCollision(pBase) == false )
 		return false;
