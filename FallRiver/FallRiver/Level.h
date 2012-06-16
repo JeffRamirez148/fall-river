@@ -17,6 +17,7 @@ using namespace std;
 struct leveldata
 {
 	RECT m_rCollision;
+	int height, width, x,y;
 	char m_cType[ 32 ];
 };
 

@@ -28,13 +28,22 @@ void Level::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
+	//float time = fElapsedTime;
+	LONG test = 100.0f * fElapsedTime;
 	if(pDI->KeyDown(DIK_RIGHT) )
 	{
 		m_nPosX -= 100 * fElapsedTime;
+
+
 		for(int i = 0; i < m_vCollisions.size(); i++)
 		{
-			m_vCollisions[i].m_rCollision.right -= long(125.0f * fElapsedTime);
-			m_vCollisions[i].m_rCollision.left	-= long(125.0f * fElapsedTime);
+			int tmpPosX = m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+
+			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
+			m_vCollisions[i].m_rCollision.left	= tmpPosX;
+			m_vCollisions[i].m_rCollision.top	= tmpPosY;
+			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
 		}
 	}
 	else if(pDI->KeyDown(DIK_LEFT) )
@@ -42,8 +51,14 @@ void Level::Update(float fElapsedTime)
 		m_nPosX += 100 * fElapsedTime;
 		for(int i = 0; i < m_vCollisions.size(); i++)
 		{
-			m_vCollisions[i].m_rCollision.right += long(125.0f * fElapsedTime);
-			m_vCollisions[i].m_rCollision.left	+= long(125.0f * fElapsedTime);
+			int tmpPosX = m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+
+			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
+			m_vCollisions[i].m_rCollision.left	= tmpPosX;
+			m_vCollisions[i].m_rCollision.top	= tmpPosY;
+			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
+
 		}
 	}
 
@@ -52,8 +67,13 @@ void Level::Update(float fElapsedTime)
 		m_nPosY += 100 * fElapsedTime;
 		for(int i = 0; i < m_vCollisions.size(); i++)
 		{
-			m_vCollisions[i].m_rCollision.top += long(125.0 * fElapsedTime);
-			m_vCollisions[i].m_rCollision.bottom	+= long(125.0 * fElapsedTime);
+			int tmpPosX = m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+
+			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
+			m_vCollisions[i].m_rCollision.left	= tmpPosX;
+			m_vCollisions[i].m_rCollision.top	= tmpPosY;
+			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
 		}
 	}
 	else if(pDI->KeyDown(DIK_DOWN) )
@@ -61,8 +81,13 @@ void Level::Update(float fElapsedTime)
 		m_nPosY -= 100 * fElapsedTime;
 		for(int i = 0; i < m_vCollisions.size(); i++)
 		{
-			m_vCollisions[i].m_rCollision.top -= long(125.0f * fElapsedTime);
-			m_vCollisions[i].m_rCollision.bottom -= long(125.0f * fElapsedTime);
+			int tmpPosX = m_nPosX + m_vCollisions[i].x;
+			int tmpPosY = m_nPosY + m_vCollisions[i].y;
+
+			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
+			m_vCollisions[i].m_rCollision.left	= tmpPosX;
+			m_vCollisions[i].m_rCollision.top	= tmpPosY;
+			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
 		}
 	}
 
@@ -72,12 +97,7 @@ void Level::Render()
 {
 
 	ViewManager* pView = ViewManager::GetInstance();
-	//CSGD_TextureManager* pTM = CSGD_TextureManager::GetInstance();
-
-	//m_nBackgroundID = pTM->LoadTexture(_T("resource/graphics/test.png"), D3DCOLOR_XRGB(0,0,0));
-	//m_nBackgroundID = CSGD_TextureManager::GetInstance()->LoadTexture(buffer, D3DCOLOR_XRGB(0,0,0));
-	//pView->RegisterTexture(
-
+	
 	if( m_nBackgroundID == -1)
 	{
 		return;
@@ -87,28 +107,8 @@ void Level::Render()
 	//m_nBackgroundID = pTM->LoadTexture(_T("resource/graphics/test.png"));
 	pView->DrawStaticTexture(m_nBackgroundID, m_nPosX, m_nPosY );
 
-	////<level_info x="0" y="0" height="64" width="1024">Wall</level_info>
- //   //<level_info x="0" y="0" height="512" width="64">Wall</level_info>
- //   //<level_info x="0" y="448" height="64" width="1024">Wall</level_info>
- //   //<level_info x="960" y="0" height="512" width="64">Wall</level_info>
- //   //<level_info x="20" y="4" height="64" width="64">Powerup</level_info>
-
-	//RECT tmp1 = { 0, 0, 1024, 64 };
-	//RECT tmp2 = { 0, 0, 64, 512 };
-	//RECT tmp3 = { 0, 448, 1024, 448+64 };
-	//RECT tmp4 = { 960, 0, 960+64, 512 };
-	//RECT tmp5 = { 200, 200, 200+64, 200+64 };
-
 	pView->GetSprite()->Flush();
-	////pD3D->DrawLine(0,   0,    1024,   0,    1024,    64,   0,    64,     255,255,255);
-	////pD3D->DrawLine(0,   0,      64,   0,      64,   512,   0,    512,     255,255,255);
 
-	////pD3D->
-	//pD3D->DrawLine(tmp1,255,255,255);
-	//pD3D->DrawLine(tmp2,255,255,255);
-	//pD3D->DrawLine(tmp3,255,255,255);
-	//pD3D->DrawLine(tmp4,255,255,255);
-	//pD3D->DrawLine(tmp5,0,255,255);
 	
 	for( int i = 0; i < m_vCollisions.size(); i++ )
 	{
@@ -208,6 +208,11 @@ bool Level::LoadLevel( const char* szFilename )
 		info.m_rCollision.top = tmpY;
 		info.m_rCollision.right = tmpX+tmpW;
 		info.m_rCollision.bottom = tmpY+tmpH;
+
+		info.height = tmpH;
+		info.width = tmpW;
+		info.x = tmpX;
+		info.y = tmpY;
 
 		// Save this info to the vector
 		m_vCollisions.push_back( info );
