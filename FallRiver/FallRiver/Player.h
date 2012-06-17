@@ -18,6 +18,7 @@ class Player: public BaseCharacter
 private:
 	int m_nFrameX;
 	int m_nFrameY;
+	float m_fCurrRotation;
 	vector<Weapon*> m_vpWeapons;
 	vector<Light*> m_vpLights;
 

@@ -7,8 +7,6 @@
 Level::Level() 
 {
 	m_nBackgroundID = -1;
-	m_nPosX = 0;
-	m_nPosY = 0;
 }
 
 Level* Level::GetInstance() 
@@ -128,6 +126,8 @@ void Level::Render()
 
 bool Level::LoadLevel( const char* szFilename )
 {
+		m_nPosX = 0;
+	m_nPosY = 0;
 	//CSGD_TextureManager* pTM = CSGD_TextureManager::GetInstance();
 
 	// Create the TinyXML document

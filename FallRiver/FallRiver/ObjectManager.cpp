@@ -1,10 +1,7 @@
-#include <Windows.h>
-#include <vector>
-using namespace std;
-
 #include "ObjectManager.h"
 #include "GamePlayState.h"
 #include "BaseObject.h"
+#include "CGame.h"
 #include "BaseCharacter.h"
 
 // Instantiate the staic data member
@@ -78,7 +75,13 @@ void ObjectManager::UpdateAllObjects( float fElapsedTime )
 void ObjectManager::RenderAllObjects( void )
 {
 	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
-		(*iter)->Render();
+	{
+		if((*iter)->GetPosX() > CGame::GetInstance()->GetScreenWidth() || (*iter)->GetPosY() > CGame::GetInstance()->GetScreenHeight() ||
+			(*iter)->GetPosX() + (*iter)->GetWidth() < 0 || (*iter)->GetPosY() + (*iter)->GetHeight() < 0)
+			continue;
+		else
+			(*iter)->Render();
+	}
 }
 
 void ObjectManager::CheckCollisions( void )

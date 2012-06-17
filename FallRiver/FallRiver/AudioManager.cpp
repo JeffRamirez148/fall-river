@@ -136,5 +136,5 @@ void AudioManager::Update(float fElapsedTime)
 	_sys->update();
 
 	_t += (30 * (1.0f / (float)50));
-	Sleep(49);
+	//Sleep(49);
 }

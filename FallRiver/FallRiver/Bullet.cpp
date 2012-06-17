@@ -1,37 +1,39 @@
 #include "Bullet.h"
 #include "DestroyBullet.h"
 #include "EventSystem.h"
+#include "MessageSystem.h"
 #include "DirectInput.h"
+#include "ViewManager.h"
+#include "BaseCharacter.h"
+#include "CGame.h"
+#include "GamePlayState.h"
 
 Bullet::Bullet()
 {
 	m_nObjectType = OBJ_BULLET;
-
-	EventSystem::GetInstance()->RegisterClient( "target_destroyed", this );
 }
 
 Bullet::~Bullet()
 {
-	EventSystem::GetInstance()->UnregisterClient( "target_destroyed", this );
 }
 
 void Bullet::Update(float fElapsedTime) 
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
-	if(pDI->KeyDown(DIK_RIGHT) )
-		SetVelX(-100);
-	else if(pDI->KeyDown(DIK_LEFT) )
-		SetVelX(100);
+	if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
+		SetVelX(-100 + m_fSpeedX);
+	else if(pDI->KeyDown(DIK_LEFT) && GamePlayState::GetInstance()->CanMoveLeft() )
+		SetVelX(100 + m_fSpeedX);
 	else
-		SetVelX(0);
+		SetVelX(m_fSpeedX);
 
-	if(pDI->KeyDown(DIK_UP) )
-		SetVelY(100);
-	else if(pDI->KeyDown(DIK_DOWN) )
-		SetVelY(-100);
+	if(pDI->KeyDown(DIK_UP) && GamePlayState::GetInstance()->CanMoveUp() )
+		SetVelY(100+m_fSpeedY);
+	else if(pDI->KeyDown(DIK_DOWN) && GamePlayState::GetInstance()->CanMoveDown() )
+		SetVelY(-100+m_fSpeedY);
 	else
-		SetVelY(0);
+		SetVelY(m_fSpeedY);
 
 	m_nPosX += m_nVelX * fElapsedTime;
 	m_nPosY += m_nVelY * fElapsedTime;
@@ -39,14 +41,13 @@ void Bullet::Update(float fElapsedTime)
 
 void Bullet::Render() 
 {
+	ViewManager* pVM = ViewManager::GetInstance();
+
+	pVM->DrawRect(GetRect(), 100, 40, 255);
 }
 
 void Bullet::HandleEvent(Event* pEvent) 
 {
-	if(pEvent->GetEventID() == "target_destroyed")
-	{
-
-	}
 }
 
 RECT Bullet::GetRect()
@@ -55,10 +56,18 @@ RECT Bullet::GetRect()
 	return cRect;
 }
 
-bool Bullet::CheckCollision(BaseObject* pBase)
+bool Bullet::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
 	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == false  )
 		return false;
+	else if(pBase->GetObjectType() == OBJ_CHARACTER && GetOwner()->GetOwner() != pBase)
+	{
+		DestroyBullet* pMsg = new DestroyBullet(this);
+		MessageSystem::GetInstance()->SendMsg(pMsg);
+		pMsg = nullptr;
+
+		EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+	}
 	return true;
 }

@@ -4,7 +4,7 @@
 #include "Enemy.h"
 #include "IListener.h"
 
-class Boss1: public Enemy, public IListener
+class Boss1: public Enemy
 {
 public: 
 	Boss1();

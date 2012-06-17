@@ -6,7 +6,7 @@
 
 Weapon::Weapon()
 {
-
+	m_dwTickCount = 0;
 }
 
 Weapon::~Weapon()
@@ -30,17 +30,17 @@ bool Weapon::Init(WEAPONTYPE wType, int nAmmo, int nDamage, float currRotation )
 	switch( m_nWeaponType )
 	{
 	case WPN_PISTOL:
-		m_fFireRate = 0.5f;
+		m_fFireRate = 500;
 		m_fFiringRange = 128.0f;
 		m_nClip = 10;
 		break;
 	case WPN_SHOTGUN:
-		m_fFireRate = 1.0f;
+		m_fFireRate = 1000;
 		m_fFiringRange = 64.0f;
 		m_nClip = 5;
 		break;
 	case WPN_RIFLE:
-		m_fFireRate = 1.0f;
+		m_fFireRate = 1000;
 		m_fFiringRange = 288.0f;
 		m_nClip = 8;
 		break;
@@ -56,11 +56,25 @@ void Weapon::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
-	if(pDI->KeyDown(DIK_SPACE) )
+	if(pDI->KeyDown(DIK_SPACE) && 	m_dwTickCount  < GetTickCount() )
 	{
-		CreateBullet* pMsg = new CreateBullet( this );
-		MessageSystem::GetInstance()->SendMsg( pMsg );
-		pMsg = nullptr;
+		if( m_nWeaponType != WPN_MACHETE && m_nAmmo > 0 )
+		{
+			CreateBullet* pMsg = new CreateBullet( this );
+			MessageSystem::GetInstance()->SendMsg( pMsg );
+			pMsg = nullptr;
+			m_nAmmo--;
+			m_dwTickCount = GetTickCount() + (DWORD)m_fFireRate;
+			if(m_nWeaponType == WPN_SHOTGUN)
+			{
+				for(int i = 0; i < 2; i++)
+				{
+					CreateBullet* pMsg = new CreateBullet( this );
+					MessageSystem::GetInstance()->SendMsg( pMsg );
+					pMsg = nullptr;
+				}
+			}
+		}
 	}	
 }
 
@@ -77,7 +91,7 @@ RECT Weapon::GetRect()
 	return cRect;
 }
 
-bool Weapon::CheckCollision(BaseObject* pBase)
+bool Weapon::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
 	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == false  )

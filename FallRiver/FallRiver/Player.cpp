@@ -37,15 +37,15 @@ bool Player::CheckCollision(IObjects* pBase)
 		if(pBase->GetObjectType() == OBJ_CHARACTER)
 		{
 			BaseCharacter* pCh = (BaseCharacter*)pBase;
-			if(pCh->GetCharacterType() == CHA_ENEMY)
+			//if(pCh->GetCharacterType() == CHA_ENEMY)
 			{
-				if( GetRect().right <= pBase->GetRect().left )
+				if( GetRect().right <= pBase->GetRect().left + 5 )
 					GamePlayState::GetInstance()->SetCanMoveRight(false);
-				else if( GetRect().left >= pBase->GetRect().right )
+				else if( GetRect().left >= pBase->GetRect().right - 5 )
 					GamePlayState::GetInstance()->SetCanMoveLeft(false);
-				else if( GetRect().top >= pBase->GetRect().bottom )
+				else if( GetRect().top >= pBase->GetRect().bottom -5 )
 					GamePlayState::GetInstance()->SetCanMoveUp(false);
-				else if( GetRect().bottom <= pBase->GetRect().top )
+				else if( GetRect().bottom <= pBase->GetRect().top + 5 )
 					GamePlayState::GetInstance()->SetCanMoveDown(false);
 			}
 		}

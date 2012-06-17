@@ -140,7 +140,7 @@ void EventSystem::SendUniqueEvent(EVENTID eventID, void* pData)
 void EventSystem::ProcessEvents() 
 {
 	//	Go through my list of events that are waiting to be processed.
-	while(m_mCDatabase.size())
+	while(m_lCurrEvent.size())
 	{
 		DispatchEvent(&m_lCurrEvent.front());
 		m_lCurrEvent.pop_front();

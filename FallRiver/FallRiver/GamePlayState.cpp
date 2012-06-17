@@ -20,6 +20,7 @@
 #include "ShootingAi.h"
 #include "NPC.h"
 #include "PickUp.h"
+#include "CreateBullet.h"
 #include "DestroyBullet.h"
 #include "DestroyEnemyC.h"
 #include "DestroyEnemyS.h"
@@ -57,6 +58,7 @@ void GamePlayState::Enter()
 	m_pOF = Factory::GetInstance();
 	m_pOM = ObjectManager::GetInstance();
 	m_pES = EventSystem::GetInstance();
+	m_pMS = MessageSystem::GetInstance();
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
@@ -69,6 +71,27 @@ void GamePlayState::Enter()
 
 	m_clevel.LoadLevel("level.xml");
 
+	m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
+	Player* pPlayer = (Player*)(m_cPlayer);
+	pPlayer->SetHeight(32);
+	pPlayer->SetWidth(32);
+	pPlayer->SetImageID(-1);
+	pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.45));
+	pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.4));
+
+	m_cWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon") );
+	Weapon* pWeapon = (Weapon*)m_cWeapon;
+	pWeapon->SetHeight(20);
+	pWeapon->SetWidth(10);
+	pWeapon->SetImageID(-1);
+	pWeapon->SetOwner(pPlayer);
+	pWeapon->Init(WPN_RIFLE, 100, 10, 0);
+	pWeapon->SetPosX(float(CGame::GetInstance()->GetScreenWidth())*0.45f);
+	pWeapon->SetPosY(float(CGame::GetInstance()->GetScreenHeight())*0.4f);
+
+	pPlayer->AddWeapon(pWeapon);
+
+
 	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
@@ -77,8 +100,10 @@ void GamePlayState::Enter()
 		pEnemy->SetHeight(32);
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
+		pEnemy->SetTarget(m_cPlayer);
 		pEnemy->SetPosX(200);
 		pEnemy->SetPosY(100);
+		pEnemy->SetHealth(100);
 		m_pOM->AddObject(pEnemy);
 	}
 
@@ -90,8 +115,10 @@ void GamePlayState::Enter()
 		pEnemy->SetHeight(32);
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
+		pEnemy->SetTarget(m_cPlayer);
 		pEnemy->SetPosX(200);
 		pEnemy->SetPosY(200);
+		pEnemy->SetHealth(100);
 		m_pOM->AddObject(pEnemy);
 	}
 
@@ -108,25 +135,10 @@ void GamePlayState::Enter()
 		m_pOM->AddObject(pNpc);
 	}
 
-	m_cWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon") );
-	Weapon* pWeapon = (Weapon*)m_cWeapon;
-	pWeapon->SetHeight(10);
-	pWeapon->SetWidth(20);
-	pWeapon->SetImageID(-1);
-	pWeapon->SetPosX(float(CGame::GetInstance()->GetScreenWidth())*0.4f);
-	pWeapon->SetPosY(float(CGame::GetInstance()->GetScreenHeight())*0.4f);
-
-
-	m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
-	Player* pPlayer = (Player*)(m_cPlayer);
-	pPlayer->SetHeight(32);
-	pPlayer->SetWidth(32);
-	pPlayer->SetImageID(-1);
-	pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.45));
-	pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.4));
-
 	m_pOM->AddObject(pPlayer);
 	m_pOM->AddObject(pWeapon);
+
+	m_pMS->InitMessageSystem( &MessageProc );
 }
 
 void GamePlayState::Exit() 
@@ -136,6 +148,13 @@ void GamePlayState::Exit()
 		m_pES->ClearEvents();
 		m_pES->Shutdown();
 		m_pES = nullptr;
+	}
+
+	if( m_pMS != nullptr )
+	{
+		m_pMS->ClearMessages();
+		m_pMS->Shutdown();
+		m_pMS = nullptr;
 	}
 
 	if( m_pOM != nullptr )
@@ -187,6 +206,7 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
 	m_pES->ProcessEvents();
+	m_pMS->ProcessMessages();
 }
 
 void GamePlayState::Render() 
@@ -205,13 +225,17 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 	case MSG_CREATE_BULLET:
 		{
 			// Create bullet
-			Bullet* bullet = dynamic_cast< Bullet* >( self->m_pOF->CreateObject( _T("Bullet") ) );
+			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
 			//Set up data members			
-			//bullet->SetImageID( self->m_BulletID );
-			//bullet->SetHeight( );
-			//bullet->SetWidth( );
-			//bullet->SetPosX( );
-			//bullet->SetPosY( );
+			bullet->SetImageID( -1 );
+			bullet->SetHeight(16);
+			bullet->SetWidth(16);
+			bullet->SetOwner(pOwner);
+			bullet->SetPosX(pOwner->GetPosX());
+			bullet->SetPosY(pOwner->GetPosY());
+			bullet->SetSpeedX(-200);
+			bullet->SetSpeedY(0);
 			
 			// Add bullet to object manager
 			self->m_pOM->AddObject( bullet );

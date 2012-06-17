@@ -176,6 +176,12 @@ void CGame::RemoveState( void )
 	// Null the previous state
 	m_pPrevState = nullptr;
 
+	for(int i = m_vStates.size()-2; i > 0; i++ )
+	{
+		m_pPrevState = m_vStates[i];
+		break;
+	}
+
 	if( m_vStates.size() > 0 )
 	{
 		// Make the Current state equal to the back of the states

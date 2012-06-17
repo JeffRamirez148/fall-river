@@ -4,7 +4,7 @@
 #include "Enemy.h"
 #include "IListener.h"
 
-class Boss2: public Enemy, public IListener
+class Boss2: public Enemy
 {
 public: 
 	virtual void Update(float aTime);

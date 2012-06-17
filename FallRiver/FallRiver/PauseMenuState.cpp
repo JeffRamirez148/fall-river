@@ -84,7 +84,7 @@ void PauseMenuState::Render()
 	// Do Rendering here
 	RECT cRect = { 100, 100, 500, 400 };
 	RECT cursRect = { 225, m_nCursPosY, 235, m_nCursPosY+10 };
-	m_pVM->DrawRect(cRect, 100, 100, 100);
+	m_pVM->DrawRect(cRect, 100, 100, 100, 255);
 	m_pVM->DrawRect(cursRect, 255, 0, 0);
 
 	m_pVM->DrawTextW("Resume", 250, 150, 255, 255, 0);

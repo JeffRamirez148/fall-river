@@ -7,6 +7,7 @@ using namespace std;
 #include "IMenuState.h"
 #include "BaseObject.h"
 #include "ObjectFactory.h"
+#include "MessageSystem.h"
 
 class ViewManager;
 class AudioManager;
@@ -35,6 +36,7 @@ private:
 	Factory*		m_pOF;
 	ObjectManager*	m_pOM;
 	EventSystem*	m_pES;
+	MessageSystem*	m_pMS;
 
 	// Data Members
 	float fTime;
