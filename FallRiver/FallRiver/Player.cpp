@@ -3,6 +3,7 @@
 #include "GamePlayState.h"
 #include "Enemy.h"
 #include "ViewManager.h"
+#include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
 
@@ -11,6 +12,7 @@ Player::Player()
 	m_nCharacterType = CHA_PLAYER;
 	m_bIsAlive = true;
 	m_bIsHidden = false;
+	SetDirection(DIRE_UP);
 }
 
 Player::~Player()
@@ -20,7 +22,31 @@ Player::~Player()
 
 void Player::Update(float aFElapsedTime) 
 {
-	
+	DirectInput* pDI = DirectInput::GetInstance();
+
+	if( pDI->KeyDown(DIK_RIGHT))
+	{
+		if( pDI->KeyDown(DIK_UP))
+			SetDirection(DIRE_UPRIGHT);
+		else if(pDI->KeyDown(DIK_DOWN))
+			SetDirection(DIRE_DOWNRIGHT);
+		else
+			SetDirection(DIRE_RIGHT);		
+
+	}
+	else if( pDI->KeyDown(DIK_LEFT))
+	{
+		if( pDI->KeyDown(DIK_UP))
+			SetDirection(DIRE_UPLEFT);
+		else if(pDI->KeyDown(DIK_DOWN))
+			SetDirection(DIRE_DOWNLEFT);
+		else
+			SetDirection(DIRE_LEFT);		
+	}
+	else if( pDI->KeyDown(DIK_UP))
+		SetDirection(DIRE_UP);
+	else if( pDI->KeyDown(DIK_DOWN))
+		SetDirection(DIRE_DOWN);
 }
 
 void Player::Render()
@@ -32,7 +58,7 @@ void Player::Render()
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	if(BaseCharacter::CheckCollision(pBase) == true )
+	if(BaseObject::CheckCollision(pBase) == true )
 	{
 		if(pBase->GetObjectType() == OBJ_CHARACTER)
 		{

@@ -5,6 +5,10 @@
 
 class ShootingAi: public Enemy
 {
+private:
+	bool m_bIsMoving;
+
+	BaseObject* m_cInTheWay;
 public: 
 	ShootingAi();
 	~ShootingAi();

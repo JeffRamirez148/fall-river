@@ -86,8 +86,8 @@ void GamePlayState::Enter()
 	pWeapon->SetImageID(-1);
 	pWeapon->SetOwner(pPlayer);
 	pWeapon->Init(WPN_RIFLE, 100, 10, 0);
-	pWeapon->SetPosX(float(CGame::GetInstance()->GetScreenWidth())*0.45f);
-	pWeapon->SetPosY(float(CGame::GetInstance()->GetScreenHeight())*0.4f);
+	pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+	pWeapon->SetPosY(pPlayer->GetPosY());
 
 	pPlayer->AddWeapon(pWeapon);
 
@@ -116,7 +116,7 @@ void GamePlayState::Enter()
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(200);
+		pEnemy->SetPosX(50*i+200);
 		pEnemy->SetPosY(200);
 		pEnemy->SetHealth(100);
 		m_pOM->AddObject(pEnemy);
@@ -234,8 +234,58 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
-			bullet->SetSpeedX(-200);
-			bullet->SetSpeedY(0);
+				
+			switch(pOwner->GetOwner()->GetDirection())
+			{
+			case DIRE_UP:
+				{
+					bullet->SetSpeedX(0);
+					bullet->SetSpeedY(-200);
+					break;
+				}
+			case DIRE_LEFT:
+				{
+					bullet->SetSpeedX(-200);
+					bullet->SetSpeedY(0);
+					break;
+				}
+			case DIRE_RIGHT:
+				{
+					bullet->SetSpeedX(200);
+					bullet->SetSpeedY(0);
+					break;
+				}
+			case DIRE_DOWN:
+				{
+					bullet->SetSpeedX(0);
+					bullet->SetSpeedY(200);
+					break;
+				}
+			case DIRE_UPRIGHT:
+				{
+					bullet->SetSpeedX(200);
+					bullet->SetSpeedY(-200);
+					break;
+				}
+			case DIRE_UPLEFT:
+				{
+					bullet->SetSpeedX(-200);
+					bullet->SetSpeedY(-200);
+					break;
+				}
+			case DIRE_DOWNLEFT:
+				{
+					bullet->SetSpeedX(-200);
+					bullet->SetSpeedY(200);
+					break;
+				}
+			case DIRE_DOWNRIGHT:
+				{
+					bullet->SetSpeedX(200);
+					bullet->SetSpeedY(200);
+					break;
+				}
+			}
 			
 			// Add bullet to object manager
 			self->m_pOM->AddObject( bullet );

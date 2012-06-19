@@ -1,6 +1,3 @@
-#include <Windows.h>
-using namespace std;
-
 #ifndef __HowToPlayMenuState_h__
 #define __HowToPlayMenuState_h__
 

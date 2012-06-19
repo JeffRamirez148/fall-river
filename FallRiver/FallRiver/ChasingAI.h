@@ -10,8 +10,6 @@ private:
 	bool m_bIsChasing;
 	bool m_bIsMoving;
 
-	float m_fNewSpotX;
-	float m_fNewSpotY;
 
 	BaseObject* m_cInTheWay;
 

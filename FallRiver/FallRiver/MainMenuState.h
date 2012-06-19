@@ -3,6 +3,7 @@
 #define __MainMenuState_h__
 
 #include "IMenuState.h"
+#include <Windows.h>
 
 class ViewManager;
 class AudioManager;
@@ -19,6 +20,21 @@ private:
 	float sfxVolume;
 	float musicVolume;
 	float fTime;
+
+	// For Flashing effect
+	DWORD	m_dwFlash1;
+	DWORD	m_dwFlash2;
+	DWORD	m_dwFlash3;
+
+	DWORD	m_dwReset;
+
+	// Game Logo
+	int		m_nFallRiverID;
+	
+	// For the actual menu
+	int		m_nMenuPlayID;
+	int		m_nMenuHowToID;
+	int		m_nMenuOptionsID;
 
 	MainMenuState();
 	~MainMenuState();

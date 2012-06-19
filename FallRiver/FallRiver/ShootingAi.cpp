@@ -9,6 +9,8 @@
 
 ShootingAi::ShootingAi()
 {
+	m_bIsMoving = false;
+	m_cInTheWay = nullptr;
 	m_nVelX = 0;
 	m_nVelY = 0;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
@@ -29,6 +31,17 @@ void ShootingAi::Update(float fElapsedTime)
 	}
 
 	Enemy::Update(fElapsedTime);
+
+	//float distance = ( m_pTarget->GetPosX() + m_pTarget->GetPosY() ) - ( GetPosX() + GetPosY() );
+
+	//if( distance < 0)
+	//	distance = -distance;
+
+	//if( distance < 300 && distance > 2 && !m_bIsMoving)
+	//{
+	//	MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+	//	BaseCharacter::Update(fElapsedTime);
+	//}
 }
 
 void ShootingAi::Render()
@@ -41,7 +54,16 @@ void ShootingAi::Render()
 
 bool ShootingAi::CheckCollision(IObjects* pBase)
 {
-	return Enemy::CheckCollision(pBase);
+	if(Enemy::CheckCollision(pBase))
+	{
+		if(pBase != m_pTarget && pBase->GetObjectType() == OBJ_CHARACTER)
+		{
+			m_cInTheWay = (BaseObject*)pBase;
+			m_bIsMoving = true;
+		}
+		return true;
+	}
+	return false;
 }
 
 void ShootingAi::HandleEvent(Event* pEvent)

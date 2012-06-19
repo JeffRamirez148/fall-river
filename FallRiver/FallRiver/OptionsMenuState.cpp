@@ -72,6 +72,7 @@ bool OptionsMenuState::Input()
 		{
 			m_bIsWindowed = !m_bIsWindowed;
 			m_pVM->ChangeDisplayParam(CGame::GetInstance()->GetScreenWidth(), CGame::GetInstance()->GetScreenHeight(), m_bIsWindowed);
+			CGame::GetInstance()->SetWindowed(m_bIsWindowed);
 		}
 		else if( m_nCursPosY == 300 )
 			CGame::GetInstance()->RemoveState();
@@ -129,7 +130,7 @@ void OptionsMenuState::Render()
 
 	m_pVM->DrawTextW("Full Screen", 300, 250, 255, 255, 0);
 
-	RECT check = { 400, 250, 410, 260 };
+	RECT check = { 450, 250, 460, 260 };
 
 	if( !m_bIsWindowed )
 		m_pVM->DrawRect(check, 0, 200, 255);

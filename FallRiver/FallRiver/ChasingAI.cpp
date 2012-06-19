@@ -10,10 +10,8 @@
 
 ChasingAI::ChasingAI()
 {
-	m_bIsChasing = false;
 	m_bIsMoving = false;
-	m_fNewSpotX = 0;
-	m_fNewSpotY = 0;
+	m_bIsChasing = false;
 	m_cInTheWay = nullptr;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 }
@@ -40,7 +38,7 @@ void ChasingAI::Update(float fElapsedTime)
 	if( distance < 0)
 		distance = -distance;
 
-	if( distance < 200 && distance > 2 && !m_bIsMoving)
+	if( (distance < 200 && distance > 2 || m_bIsChasing) && !m_bIsMoving )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
@@ -62,7 +60,16 @@ void ChasingAI::Update(float fElapsedTime)
 				MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom+5, 80);
 		}
 		else if(GetRect().left - m_cInTheWay->GetRect().right <= 5)
-			MoveTo(GetPosX(), GetPosY(), 80);
+		{
+			float distToTop = float(GetRect().bottom - m_cInTheWay->GetRect().top);
+			float distToBot = float(m_cInTheWay->GetRect().bottom -GetRect().top);
+
+			if(distToTop <= distToBot)
+				MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().top-GetHeight(), 80);
+			else
+				MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom+5, 80);
+
+		}
 		BaseCharacter::Update(fElapsedTime);
 
 		if(GetRect().top - m_cInTheWay->GetRect().bottom <= 3)
