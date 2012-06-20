@@ -43,6 +43,13 @@ public:
 
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}
+
+	int GetScore() { return m_nScore;}
+	int GetLives() { return m_nLives;}
+	vector<Weapon*> GetWeapons() {return m_vpWeapons;}
+	vector<Light*> GetLights() {return m_vpLights;}
+	void SetScore(int sc) {m_nScore = sc;}
+	void SetLives(int live) {m_nLives = live;}
 	
 	void AddQuest(Quests* pQuest);
 	void AddWeapon(Weapon* pWeapon);

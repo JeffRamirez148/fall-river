@@ -8,6 +8,7 @@ using namespace std;
 class Emitter;
 class Level;
 class Animation;
+class Player;
 
 #include "tinystr.h"
 #include "tinyxml.h"
@@ -21,6 +22,11 @@ public:
 	void ParseAnim(char* aFile, Animation& anim);
 	static XMLManager* GetInstance(void);
 	Emitter* ParseEmitter(string aFile);
+
+	// For Saving and Loading the Players Progress
+	void SaveProgress( const char* szFilename, Player &player);
+	bool CheckSlot( const char* szFilename );
+	Player* LoadProgress(const char* szFilename);
 };
 
 #endif

@@ -12,6 +12,11 @@ Player::Player()
 	m_nCharacterType = CHA_PLAYER;
 	m_bIsAlive = true;
 	m_bIsHidden = false;
+	m_nScore = 0;
+	m_nLives = 3;
+	m_cName = "";
+	m_nFrameX = 0;
+	m_nFrameY = 0;
 	SetDirection(DIRE_UP);
 }
 
@@ -20,7 +25,7 @@ Player::~Player()
 
 }
 
-void Player::Update(float aFElapsedTime) 
+void Player::Update(float fElapsedTime) 
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
@@ -47,6 +52,9 @@ void Player::Update(float aFElapsedTime)
 		SetDirection(DIRE_UP);
 	else if( pDI->KeyDown(DIK_DOWN))
 		SetDirection(DIRE_DOWN);
+
+	for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
+		m_vpWeapons[i]->Update(fElapsedTime);
 }
 
 void Player::Render()
@@ -54,6 +62,9 @@ void Player::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawRect(GetRect(), 0, 0, 255);
+
+	for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
+		m_vpWeapons[i]->Render();
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
@@ -104,6 +115,10 @@ void Player::AddWeapon(Weapon* pWeapon)
 		return;
 
 	// Add the weapon and make it current
+	pWeapon->SetHeight(20);
+	pWeapon->SetWidth(10);
+	pWeapon->SetPosX(GetPosX()+(GetWidth()/2));
+	pWeapon->SetPosY(GetPosY());
 	m_vpWeapons.push_back(pWeapon);
 	m_currWeapon = pWeapon;
 }

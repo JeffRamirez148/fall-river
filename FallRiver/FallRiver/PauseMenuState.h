@@ -1,6 +1,3 @@
-#include <Windows.h>
-using namespace std;
-
 #ifndef __PauseMenuState_h__
 #define __PauseMenuState_h__
 
@@ -20,9 +17,11 @@ class PauseMenuState: public IMenuState
 private:
 	ViewManager* m_pVM;
 	DirectInput* m_pDI;
-	float fTime;
 	int m_nCursPosY;
 	AudioManager* audio;
+
+	// For Menu Part
+	int m_nPauseID;
 
 	PauseMenuState();
 	~PauseMenuState();

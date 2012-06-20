@@ -8,6 +8,8 @@ HowToPlayMenuState::HowToPlayMenuState()
 {
 	m_pDI = nullptr;
 	m_pVM = nullptr;
+	m_nHowToKeyID = -1;
+	m_nHowToJoyID = -1;
 }
 
 HowToPlayMenuState::~HowToPlayMenuState()
@@ -26,10 +28,14 @@ void HowToPlayMenuState::Enter()
 {
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
+
+	m_nHowToKeyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_keyboard.png");
+	m_nHowToJoyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_arcade.png");
 }
 
 void HowToPlayMenuState::Exit() 
 {
+
 }
 
 bool HowToPlayMenuState::Input() 
@@ -46,6 +52,9 @@ void HowToPlayMenuState::Update(float fElapsedTime)
 
 void HowToPlayMenuState::Render() 
 {
-
+	if(m_pDI->JoystickIsUnplugged(0) )
+		m_pVM->DrawStaticTexture(m_nHowToKeyID, 0, 0, 0.33f, 0.5f);
+	else
+		m_pVM->DrawStaticTexture(m_nHowToJoyID, 0, 0, 0.33f, 0.5f);
 }
 

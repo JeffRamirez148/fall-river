@@ -103,7 +103,7 @@ int	AudioManager::registerMusic(char* aFilePath)
 	tmp->pos.x = 0;
 	tmp->pos.y = 0;
 	tmp->pos.z = 0;
-	tmp->channel->setVolume(1.0f);
+	tmp->channel->setVolume(0.5f);
 	_result = _sys->createSound(aFilePath, FMOD_3D_LINEARROLLOFF,NULL, &tmp->noise); 
 	_result = tmp->noise->set3DMinMaxDistance(0.5f, 1000.0f);
 

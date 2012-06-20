@@ -23,6 +23,8 @@ private:
 	bool m_bIsWindowed;
 	int soundID;
 
+	int		m_nOptionID;
+
 	OptionsMenuState();
 	~OptionsMenuState();
 	OptionsMenuState(const OptionsMenuState&);

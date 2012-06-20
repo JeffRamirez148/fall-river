@@ -128,6 +128,7 @@
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quests.cpp" />
+    <ClCompile Include="SaveMenuState.cpp" />
     <ClCompile Include="ShootingAi.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quests.h" />
+    <ClInclude Include="SaveMenuState.h" />
     <ClInclude Include="ShootingAi.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Terrain.h" />

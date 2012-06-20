@@ -61,6 +61,8 @@ private:
 
 public:
 
+	Player* GetPlayer() {return m_cPlayer;}
+	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
 	// Check if the Player can move
 	bool CanMoveLeft()	{return m_bCanMoveLeft; }
 	bool CanMoveRight() {return m_bCanMoveRight; }

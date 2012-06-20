@@ -13,7 +13,7 @@ Weapon::~Weapon()
 {
 }
 
-bool Weapon::Init(WEAPONTYPE wType, int nAmmo, int nDamage, float currRotation )
+bool Weapon::Init(int wType, int nAmmo, int nDamage, float currRotation )
 {
 	// Just in case
 	if(wType < WPN_MAX)

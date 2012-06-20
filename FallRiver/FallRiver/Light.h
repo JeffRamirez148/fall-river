@@ -23,6 +23,9 @@ public:
 
 	void Update(float fElapsedTime);
 
+	float GetRadius() {return m_fRadius;}
+	void SetRadius(float rad) {m_fRadius = rad;}
+
 	void Render();
 
 	RECT GetRect();

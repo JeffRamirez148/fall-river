@@ -12,7 +12,8 @@ class HowToPlayMenuState: public IMenuState
 private: 
 	ViewManager* m_pVM;
 	DirectInput* m_pDI;
-	float fTime;
+	int		m_nHowToKeyID;
+	int		m_nHowToJoyID;
 
 	HowToPlayMenuState();
 	~HowToPlayMenuState();

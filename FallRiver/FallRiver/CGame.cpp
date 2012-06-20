@@ -50,7 +50,14 @@ void CGame::Update()
 	float ElapsedTime = (time - m_dwCurrTime) / 1000.0f;
 	m_dwCurrTime = time;
 
-	AudioManager::GetInstance()->Update(ElapsedTime);
+	//AudioManager::GetInstance()->Update(ElapsedTime);
+
+	FMOD_VECTOR vec;
+	vec.x = float(CGame::GetInstance()->GetScreenWidth()*0.45);
+	vec.y = float(CGame::GetInstance()->GetScreenHeight()*0.4);
+	vec.z = 0;
+
+	AudioManager::GetInstance()->SetListenerPos(vec);
 
 	// Redirect to the current state
 	m_pCurrState->Update(ElapsedTime);

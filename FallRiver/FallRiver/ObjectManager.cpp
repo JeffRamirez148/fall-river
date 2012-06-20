@@ -90,13 +90,6 @@ void ObjectManager::CheckCollisions( void )
 	{
 		for( OListIterator iter2 = m_Objects.begin(); iter2 != m_Objects.end(); ++iter2)
 		{
-			if((*iter1)->GetObjectType() == OBJ_CHARACTER && (*iter2)->GetObjectType() == OBJ_CHARACTER)
-			{
-
-			}
-			else if((*iter1)->GetObjectType() == (*iter2)->GetObjectType())
-				break;
-
 			if((*iter1) == (*iter2) )
 				continue;
 

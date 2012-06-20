@@ -31,10 +31,13 @@ public:
 
 	void Update(float fElapsedTime);
 
-	bool Init(WEAPONTYPE wType, int nAmmo, int nDamage, float currRotation );
+	bool Init(int wType, int nAmmo, int nDamage, float currRotation );
 
 	void SetOwner(Player* pOwner) {m_pOwner = pOwner;}
 	Player* GetOwner() {return m_pOwner;}
+	int GetWeaponType() {return m_nWeaponType;}
+	int GetAmmo() {return m_nAmmo;}
+	int GetDamage() {return m_nDamage;}
 
 	void Render();
 

@@ -9,9 +9,10 @@ OptionsMenuState::OptionsMenuState()
 {
 	m_nCursPosY = 200;
 	m_pAM = nullptr;
-	musicVolume = 1.0f;
-	sfxVolume = 1.0f;
+	musicVolume = 0.10f;
+	sfxVolume = 0.10f;
 	m_bIsWindowed = false;
+	m_nOptionID = -1;
 }
 
 OptionsMenuState::~OptionsMenuState()
@@ -32,14 +33,23 @@ void OptionsMenuState::Enter()
 	m_pVM = ViewManager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 
+	soundID = m_pAM->registerMusic("KCJ_MenuClick.wav");
+	m_nOptionID = m_pVM->RegisterTexture("resource/graphics/bg_options.png");
+
+	m_pAM->setMusicLooping(soundID, true);
+
 	m_bIsWindowed = CGame::GetInstance()->IsWindowed();
 
-	m_pAM->setMusicVolume(1.0f);
-	m_pAM->setSoundVolume(1.0f);
+	musicVolume = m_pAM->getMusicVolume();
+	sfxVolume = m_pAM->getSoundVolume();
+
+	m_pAM->playMusic(soundID);
 }
 
 void OptionsMenuState::Exit() 
 {
+	m_pAM->setMusicLooping(soundID, false);
+	m_pAM->toggleMuteMusic();
 	m_pVM = nullptr;
 	m_pDI = nullptr;
 	m_pAM = nullptr;
@@ -65,6 +75,24 @@ bool OptionsMenuState::Input()
 			m_nCursPosY = 300;
 	}
 
+	if( m_pDI->KeyDown(DIK_RIGHT) )
+	{
+		if( m_nCursPosY == 200 && sfxVolume < 1.0f)
+			sfxVolume += 0.1f;
+		else if( m_nCursPosY == 225 && musicVolume < 1.0f)
+			musicVolume += 0.1f;
+	}
+	else if( m_pDI->KeyDown(DIK_LEFT) )
+	{
+		if( m_nCursPosY == 200 && sfxVolume > 0.0f)
+			sfxVolume -= 0.1f;
+		else if( m_nCursPosY == 225 && musicVolume > 0.0f)
+			musicVolume -= 0.1f;
+	}
+
+	m_pAM->setMusicVolume(musicVolume);
+	m_pAM->setSoundVolume(sfxVolume);
+
 
 	if( m_pDI->KeyPressed(DIK_RETURN) )
 	{
@@ -88,30 +116,15 @@ bool OptionsMenuState::Input()
 
 void OptionsMenuState::Update(float fElapsedTime)
 {
-
-	sfxVolume = m_pAM->getSoundVolume();
-	if( m_pDI->KeyDown(DIK_RIGHT) )
-	{
-		if( m_nCursPosY == 200 && sfxVolume < 1.0f)
-			sfxVolume += 0.1f*fElapsedTime;
-		else if( m_nCursPosY == 225 && musicVolume < 1.0f)
-			musicVolume += 0.1f*fElapsedTime;
-	}
-	else if( m_pDI->KeyDown(DIK_LEFT) )
-	{
-		if( m_nCursPosY == 200 && sfxVolume > 0.0f)
-			sfxVolume -= 0.1f*fElapsedTime;
-		else if( m_nCursPosY == 225 && musicVolume > 0.0f)
-			musicVolume -= 0.1f*fElapsedTime;
-	}
-
-	m_pAM->setMusicVolume(musicVolume);
-	m_pAM->setSoundVolume(sfxVolume);
 }
 
 void OptionsMenuState::Render()
 {
 	// Do Rendering Here
+
+	m_pVM->DrawStaticTexture(m_nOptionID, 0, 0, 0.33f, 0.5f);
+
+	m_pVM->GetSprite()->Flush();
 
 	m_pVM->DrawTextW("OPTIONS", 100, 100, 255, 0, 0);
 

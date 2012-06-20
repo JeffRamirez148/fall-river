@@ -35,6 +35,9 @@ private:
 	int		m_nMenuPlayID;
 	int		m_nMenuHowToID;
 	int		m_nMenuOptionsID;
+	int		m_nMenuHighScoresID;
+	int		m_nMenuCreditsID;
+	int		m_nMenuExitID;
 
 	MainMenuState();
 	~MainMenuState();

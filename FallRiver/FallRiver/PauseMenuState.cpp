@@ -4,12 +4,15 @@
 #include "XMLManager.h"
 #include "DirectInput.h"
 #include "OptionsMenuState.h"
+#include "SaveMenuState.h"
+#include "XMLManager.h"
 #include "CGame.h"
 
 PauseMenuState::PauseMenuState()
 {
 	m_pDI = nullptr;
 	m_pVM = nullptr;
+	m_nPauseID = -1;
 	m_nCursPosY = 150;
 }
 
@@ -29,6 +32,8 @@ void PauseMenuState::Enter()
 {
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
+
+	m_nPauseID = m_pVM->RegisterTexture("resource/graphics/sprites_pauseMenu.png");
 }
 
 void PauseMenuState::Exit()
@@ -57,6 +62,8 @@ bool PauseMenuState::Input()
 	{
 		if( m_nCursPosY == 150 )
 			CGame::GetInstance()->RemoveState();
+		else if(m_nCursPosY == 200)
+			CGame::GetInstance()->ChangeState(SaveMenuState::GetInstance());
 		else if( m_nCursPosY == 250 )
 			CGame::GetInstance()->ChangeState(OptionsMenuState::GetInstance());
 		else if( m_nCursPosY == 300 )
@@ -81,15 +88,38 @@ void PauseMenuState::Update(float fElapsedTime)
 
 void PauseMenuState::Render() 
 {
+	//1535
 	// Do Rendering here
-	RECT cRect = { 100, 100, 500, 400 };
-	RECT cursRect = { 225, m_nCursPosY, 235, m_nCursPosY+10 };
-	m_pVM->DrawRect(cRect, 100, 100, 100, 255);
-	m_pVM->DrawRect(cursRect, 255, 0, 0);
+	RECT backRect = { 12, 12, backRect.left+1200, backRect.top+700};
+	m_pVM->DrawStaticTexture(m_nPauseID, 0, 0, 0.55f, 0.7f, &backRect);
 
-	m_pVM->DrawTextW("Resume", 250, 150, 255, 255, 0);
-	m_pVM->DrawTextW("Save Game", 250, 200, 255, 255, 0);
-	m_pVM->DrawTextW("Optons", 250, 250, 255, 255, 0);
-	m_pVM->DrawTextW("Back To Main Menu", 250, 300, 255, 255, 0);
+	RECT resumeRect = {1219, 13, resumeRect.left+287, resumeRect.top+44};
+	RECT saveRect = { 1219, 83, saveRect.left+287, saveRect.top+44};
+	RECT optionsRect = {1219, 153, optionsRect.left+287, optionsRect.top+44};
+	RECT ExitRect = {1219, 223, ExitRect.left+287, ExitRect.top+44};
+
+	if(m_nCursPosY == 150)
+	{resumeRect.left = 1535; resumeRect.right = resumeRect.left+287;}
+	else if(m_nCursPosY == 200)
+	{saveRect.left = 1535; saveRect.right = saveRect.left+287;}
+	else if(m_nCursPosY == 250)
+	{optionsRect.left = 1535; optionsRect.right = optionsRect.left+287;}
+	else if(m_nCursPosY == 300)
+	{ExitRect.left = 1535; ExitRect.right = ExitRect.left+287;}
+
+	m_pVM->DrawStaticTexture(m_nPauseID, 250, 150, 0.55f, 0.7f, &resumeRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 260, 200, 0.55f, 0.7f, &saveRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 280, 250, 0.55f, 0.7f, &optionsRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 300, 300, 0.55f, 0.7f, &ExitRect);
+
+	//RECT cRect = { 100, 100, 500, 400 };
+	//RECT cursRect = { 225, m_nCursPosY, 235, m_nCursPosY+10 };
+	//m_pVM->DrawRect(cRect, 100, 100, 100, 255);
+	//m_pVM->DrawRect(cursRect, 255, 0, 0);
+
+	//m_pVM->DrawTextW("Resume", 250, 150, 255, 255, 0);
+	//m_pVM->DrawTextW("Save Game", 250, 200, 255, 255, 0);
+	//m_pVM->DrawTextW("Optons", 250, 250, 255, 255, 0);
+	//m_pVM->DrawTextW("Back To Main Menu", 250, 300, 255, 255, 0);
 }
 

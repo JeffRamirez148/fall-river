@@ -1,3 +1,6 @@
+#include <Windows.h>
+using namespace std;
+
 #ifndef __LoadMenuState_h__
 #define __LoadMenuState_h__
 
@@ -8,7 +11,7 @@ class AudioManager;
 class XMLManager;
 class DirectInput;
 
-class LoadMenuState: public IMenuState
+class SaveMenuState: public IMenuState
 {
 private: 
 	ViewManager* m_pVM;
@@ -18,20 +21,15 @@ private:
 	AudioManager* audio;
 	bool m_bSure;
 	bool m_bCheck;
-	bool m_bIsLoading;
 
-	int m_nNewID;
-	int m_nLoadID;
-	int m_nExitID;
-
-	LoadMenuState();
-	~LoadMenuState();
-	LoadMenuState(const LoadMenuState&);
-	LoadMenuState& operator= (const LoadMenuState&);
+	SaveMenuState();
+	~SaveMenuState();
+	SaveMenuState(const SaveMenuState&);
+	SaveMenuState& operator= (const SaveMenuState&);
 
 public:
 
-	static LoadMenuState* GetInstance();
+	static SaveMenuState* GetInstance();
 
 	void Enter();
 

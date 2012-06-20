@@ -38,45 +38,26 @@ void ChasingAI::Update(float fElapsedTime)
 	if( distance < 0)
 		distance = -distance;
 
-	if( (distance < 200 && distance > 2 || m_bIsChasing) && !m_bIsMoving )
+	if( distance < 200 && distance > 2 && CanMove() )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
 		BaseCharacter::Update(fElapsedTime);
 	}
-	else if(m_bIsMoving)
+	else if( m_bIsChasing )
 	{
-		SetCanMove(true);
-		if(BaseCharacter::CheckCollision(m_cInTheWay) == false)
-			m_bIsMoving = false;
-		else if(m_cInTheWay->GetRect().left - GetRect().right <= 5)
+		if(m_pTarget->GetPosX() < GetPosX() && !CanMove() )
 		{
-			float distToTop = float(GetRect().bottom - m_cInTheWay->GetRect().top);
-			float distToBot = float(m_cInTheWay->GetRect().bottom -GetRect().top);
+			RECT fRect = m_cInTheWay->GetRect();
+			if( fRect.right <= GetRect().left)
+			{
 
-			if(distToTop <= distToBot)
-				MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().top-GetHeight(), 80);
-			else
-				MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom+5, 80);
+			}
 		}
-		else if(GetRect().left - m_cInTheWay->GetRect().right <= 5)
+		else if(m_pTarget->GetPosX() > GetPosX())
 		{
-			float distToTop = float(GetRect().bottom - m_cInTheWay->GetRect().top);
-			float distToBot = float(m_cInTheWay->GetRect().bottom -GetRect().top);
-
-			if(distToTop <= distToBot)
-				MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().top-GetHeight(), 80);
-			else
-				MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom+5, 80);
 
 		}
-		BaseCharacter::Update(fElapsedTime);
-
-		if(GetRect().top - m_cInTheWay->GetRect().bottom <= 3)
-			MoveTo(GetPosX(), GetPosY(), 80);
-		else if(m_cInTheWay->GetRect().top - GetRect().bottom <= 3)
-			MoveTo(GetPosX(), GetPosY(), 80);
-		BaseCharacter::Update(fElapsedTime);
 	}
 }
 
@@ -91,11 +72,8 @@ bool ChasingAI::CheckCollision(IObjects* pBase)
 {
 	if(Enemy::CheckCollision(pBase))
 	{
-		if(pBase != m_pTarget && pBase->GetObjectType() == OBJ_CHARACTER)
-		{
+		if(pBase != m_pTarget)
 			m_cInTheWay = (BaseObject*)pBase;
-			m_bIsMoving = true;
-		}
 		return true;
 	}
 	return false;

@@ -35,6 +35,7 @@ GamePlayState::GamePlayState()
 	m_pOF = nullptr;
 	m_pOM = nullptr;
 	m_pES = nullptr;
+	m_cPlayer = nullptr;
 
 	m_cWeapon = nullptr;
 
@@ -71,26 +72,68 @@ void GamePlayState::Enter()
 
 	m_clevel.LoadLevel("level.xml");
 
-	m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
-	Player* pPlayer = (Player*)(m_cPlayer);
-	pPlayer->SetHeight(32);
-	pPlayer->SetWidth(32);
-	pPlayer->SetImageID(-1);
-	pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.45));
-	pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.4));
+	Player* pPlayer = nullptr;
+	Weapon* pWeapon = nullptr;
 
-	m_cWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon") );
-	Weapon* pWeapon = (Weapon*)m_cWeapon;
-	pWeapon->SetHeight(20);
-	pWeapon->SetWidth(10);
-	pWeapon->SetImageID(-1);
-	pWeapon->SetOwner(pPlayer);
-	pWeapon->Init(WPN_RIFLE, 100, 10, 0);
-	pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
-	pWeapon->SetPosY(pPlayer->GetPosY());
+	if(m_cPlayer == nullptr)
+	{
+		m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
+		pPlayer = (m_cPlayer);
+		pPlayer->SetHeight(32);
+		pPlayer->SetWidth(32);
+		pPlayer->SetImageID(-1);
+		pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.45));
+		pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.4));
 
-	pPlayer->AddWeapon(pWeapon);
+		pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon->SetHeight(20);
+		pWeapon->SetWidth(10);
+		pWeapon->SetImageID(-1);
+		pWeapon->SetOwner(pPlayer);
+		pWeapon->Init(WPN_RIFLE, 100, 10, 0);
+		pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon->SetPosY(pPlayer->GetPosY());
 
+		pPlayer->AddWeapon(pWeapon);
+
+	}
+	else
+	{
+		//m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
+		pPlayer = (m_cPlayer);
+		pPlayer->SetHeight(32);
+		pPlayer->SetWidth(32);
+		pPlayer->SetImageID(-1);
+		pPlayer->SetPosX(m_cPlayer->GetPosX());
+		pPlayer->SetPosY(m_cPlayer->GetPosY());
+
+		for(unsigned int i = 0; i < m_cPlayer->GetWeapons().size(); i++)
+		{
+			pWeapon = m_cPlayer->GetWeapons()[i];
+			m_cPlayer->GetWeapons()[i] = (Weapon*)m_pOF->CreateObject( _T("Weapon") );
+			m_cPlayer->GetWeapons()[i]->Init(pWeapon->GetWeaponType(), pWeapon->GetAmmo(), pWeapon->GetDamage(), 0);
+			m_cPlayer->GetWeapons()[i]->SetPosX(pPlayer->GetPosX()+(pPlayer->GetWidth()/2));
+			m_cPlayer->GetWeapons()[i]->SetPosY(pPlayer->GetPosY());
+			m_cPlayer->GetWeapons()[i]->SetOwner(pWeapon->GetOwner());
+			m_cPlayer->GetWeapons()[i]->SetHeight(pWeapon->GetHeight());
+			m_cPlayer->GetWeapons()[i]->SetWidth(pWeapon->GetWidth());
+		}
+	}
+
+	for(int i = 0; i < 1; i++)
+	{
+		m_cEnemies.push_back(nullptr);
+		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
+		ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
+		pEnemy->SetHeight(32);
+		pEnemy->SetWidth(32);
+		pEnemy->SetImageID(-1);
+		pEnemy->SetTarget(m_cPlayer);
+		pEnemy->SetPosX(float(50*i+200));
+		pEnemy->SetPosY(200);
+		pEnemy->SetHealth(100);
+		m_pOM->AddObject(pEnemy);
+	}
 
 	for(int i = 0; i < 1; i++)
 	{
@@ -109,21 +152,6 @@ void GamePlayState::Enter()
 
 	for(int i = 0; i < 1; i++)
 	{
-		m_cEnemies.push_back(nullptr);
-		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
-		ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
-		pEnemy->SetHeight(32);
-		pEnemy->SetWidth(32);
-		pEnemy->SetImageID(-1);
-		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(50*i+200);
-		pEnemy->SetPosY(200);
-		pEnemy->SetHealth(100);
-		m_pOM->AddObject(pEnemy);
-	}
-
-	for(int i = 0; i < 1; i++)
-	{
 		m_cNpcs.push_back(nullptr);
 		m_cNpcs[i] = (NPC*)m_pOF->CreateObject( _T("NPC") );
 		NPC* pNpc =(NPC*)(m_cNpcs[i]);
@@ -136,7 +164,6 @@ void GamePlayState::Enter()
 	}
 
 	m_pOM->AddObject(pPlayer);
-	m_pOM->AddObject(pWeapon);
 
 	m_pMS->InitMessageSystem( &MessageProc );
 }
@@ -234,7 +261,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
-				
+
 			switch(pOwner->GetOwner()->GetDirection())
 			{
 			case DIRE_UP:
@@ -286,7 +313,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					break;
 				}
 			}
-			
+
 			// Add bullet to object manager
 			self->m_pOM->AddObject( bullet );
 			bullet->Release();
@@ -332,7 +359,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			self->m_pOM->AddObject(enemys);
 			enemys->Release();
 			enemys = nullptr;
-		break;
+			break;
 		}
 	case MSG_CREATE_NPC:
 		{
@@ -364,7 +391,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			//pickup->SetPosX( );
 			//pickup->SetPosY( );
 			//pickup->SetWidth( );
-			
+
 			// Add pickup to object manager
 			self->m_pOM->AddObject(pickup);
 			pickup->Release();
