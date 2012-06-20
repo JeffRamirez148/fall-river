@@ -120,44 +120,44 @@ void MainMenuState::Render()
 	if(m_nCursPosY == 175)
 	{
 		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.33f, 0.5f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
 		else
-			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 200)
 	{
 		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.33f, 0.5f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
 		else
-			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 225)
 	{
 		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.33f, 0.5f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
 		else
-			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 250)
 	{
 		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.33f, 0.5f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
 		else
-			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 275)
 	{
 		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.33f, 0.5f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
 		else
-			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 300)
 	{
 		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.33f, 0.5f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
 		else
-			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f);
 	}
 
 	m_pVM->DrawStaticTexture(m_nFallRiverID, -50, 10, 0.5f, 0.5f);

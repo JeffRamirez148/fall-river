@@ -50,14 +50,16 @@ void Enemy::Render()
 
 void Enemy::MoveTo(float x, float y, float speed) 
 {
-	if(!CanMove())
-		return;
-	if(GetPosY() < y)
+	if(GetPosY() == y)
+		SetVelY(0);
+	else if(GetPosY() < y)
 		SetVelY(speed);
 	else if(GetPosY() > y+5)
 		SetVelY(-speed);
 
-	if(GetPosX() < x)
+	if(GetPosX() == x)
+		SetVelX(0);
+	else if(GetPosX() < x)
 		SetVelX(speed);
 	else if(GetPosX() > x+5)
 		SetVelX(-speed);

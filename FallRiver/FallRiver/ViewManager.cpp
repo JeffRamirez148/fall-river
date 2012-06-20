@@ -127,6 +127,13 @@ int ViewManager::RegisterTexture(char* aFilePath)
 	}
 }
 
+int ViewManager::RegisterFont(char* filename )
+{
+
+	return RegisterTexture(filename);
+}
+
+
 int ViewManager::RegisterAnimation(char* aFilePath) 
 {
 	//Need a load animation function from XML Manager to do this;

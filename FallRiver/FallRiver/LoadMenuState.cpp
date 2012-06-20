@@ -164,7 +164,7 @@ void LoadMenuState::Render()
 {
 	if(m_bIsLoading)
 	{
-		m_pVM->DrawStaticTexture(m_nLoadID, 0, 0, 0.33f, 0.5f);
+		m_pVM->DrawStaticTexture(m_nLoadID, 0, 0,  0.4f, 0.6f);
 
 		m_pVM->GetSprite()->Flush();
 
@@ -185,11 +185,11 @@ void LoadMenuState::Render()
 	else
 	{
 		if(m_nCursPosY == 200)
-			m_pVM->DrawStaticTexture(m_nNewID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nNewID, 0, 0,  0.4f, 0.6f);
 		else if(m_nCursPosY == 300)
-			m_pVM->DrawStaticTexture(m_nLoadID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nLoadID, 0, 0, 0.4f, 0.6f);
 		else if(m_nCursPosY == 400)
-			m_pVM->DrawStaticTexture(m_nExitID, 0, 0, 0.33f, 0.5f);
+			m_pVM->DrawStaticTexture(m_nExitID, 0, 0,  0.4f, 0.6f);
 	}
 
 }

@@ -82,8 +82,8 @@ void GamePlayState::Enter()
 		pPlayer->SetHeight(32);
 		pPlayer->SetWidth(32);
 		pPlayer->SetImageID(-1);
-		pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.45));
-		pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.4));
+		pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.5));
+		pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.5));
 
 		pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 		pWeapon->SetHeight(20);
@@ -120,7 +120,7 @@ void GamePlayState::Enter()
 		}
 	}
 
-	for(int i = 0; i < 1; i++)
+	for(int i = 0; i < 0; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
@@ -148,6 +148,16 @@ void GamePlayState::Enter()
 		pEnemy->SetPosY(100);
 		pEnemy->SetHealth(100);
 		m_pOM->AddObject(pEnemy);
+
+		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		eWeapon->SetHeight(20);
+		eWeapon->SetWidth(10);
+		eWeapon->SetImageID(-1);
+		eWeapon->SetOwner(pEnemy);
+		eWeapon->Init(WPN_RIFLE, 100, 10, 0);
+		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
+		eWeapon->SetPosY(pEnemy->GetPosY());
+		pEnemy->SetWeapon(eWeapon);
 	}
 
 	for(int i = 0; i < 1; i++)

@@ -122,7 +122,7 @@ void OptionsMenuState::Render()
 {
 	// Do Rendering Here
 
-	m_pVM->DrawStaticTexture(m_nOptionID, 0, 0, 0.33f, 0.5f);
+	m_pVM->DrawStaticTexture(m_nOptionID, 0, 0,  0.4f, 0.6f);
 
 	m_pVM->GetSprite()->Flush();
 

@@ -91,7 +91,7 @@ void PauseMenuState::Render()
 	//1535
 	// Do Rendering here
 	RECT backRect = { 12, 12, backRect.left+1200, backRect.top+700};
-	m_pVM->DrawStaticTexture(m_nPauseID, 0, 0, 0.55f, 0.7f, &backRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 0, 0,  0.7f, 0.9f, &backRect);
 
 	RECT resumeRect = {1219, 13, resumeRect.left+287, resumeRect.top+44};
 	RECT saveRect = { 1219, 83, saveRect.left+287, saveRect.top+44};
@@ -107,10 +107,10 @@ void PauseMenuState::Render()
 	else if(m_nCursPosY == 300)
 	{ExitRect.left = 1535; ExitRect.right = ExitRect.left+287;}
 
-	m_pVM->DrawStaticTexture(m_nPauseID, 250, 150, 0.55f, 0.7f, &resumeRect);
-	m_pVM->DrawStaticTexture(m_nPauseID, 260, 200, 0.55f, 0.7f, &saveRect);
-	m_pVM->DrawStaticTexture(m_nPauseID, 280, 250, 0.55f, 0.7f, &optionsRect);
-	m_pVM->DrawStaticTexture(m_nPauseID, 300, 300, 0.55f, 0.7f, &ExitRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 320, 200,  0.7f, 0.9f, &resumeRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 330, 300,  0.7f, 0.9f, &saveRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 350, 400,  0.7f, 0.9f, &optionsRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, 370, 500,  0.7f, 0.9f, &ExitRect);
 
 	//RECT cRect = { 100, 100, 500, 400 };
 	//RECT cursRect = { 225, m_nCursPosY, 235, m_nCursPosY+10 };

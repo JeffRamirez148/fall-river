@@ -21,7 +21,7 @@ private:
 	float m_fFiringRange;
 	DWORD m_dwTickCount;
 
-	Player* m_pOwner;
+	BaseCharacter* m_pOwner;
 
 	bool m_bMelee;
 
@@ -31,10 +31,12 @@ public:
 
 	void Update(float fElapsedTime);
 
+	void FireWeapon();
+
 	bool Init(int wType, int nAmmo, int nDamage, float currRotation );
 
-	void SetOwner(Player* pOwner) {m_pOwner = pOwner;}
-	Player* GetOwner() {return m_pOwner;}
+	void SetOwner(BaseCharacter* pOwner) {m_pOwner = pOwner;}
+	BaseCharacter* GetOwner() {return m_pOwner;}
 	int GetWeaponType() {return m_nWeaponType;}
 	int GetAmmo() {return m_nAmmo;}
 	int GetDamage() {return m_nDamage;}

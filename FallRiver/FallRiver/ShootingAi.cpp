@@ -6,6 +6,8 @@
 #include "EventSystem.h"
 #include "MessageSystem.h"
 #include "DestroyEnemyS.h"
+#include "CreateBullet.h"
+#include "Weapon.h"
 
 ShootingAi::ShootingAi()
 {
@@ -13,6 +15,8 @@ ShootingAi::ShootingAi()
 	m_cInTheWay = nullptr;
 	m_nVelX = 0;
 	m_nVelY = 0;
+	m_dwFireDelay = 0;
+	m_pWeapon = nullptr;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 }
 
@@ -30,18 +34,70 @@ void ShootingAi::Update(float fElapsedTime)
 		pMsg = nullptr;
 	}
 
+	m_pWeapon->Update(fElapsedTime);
+
+	if( m_dwFireDelay == 0)
+		m_dwFireDelay = GetTickCount() + 1000;
+	if( m_dwFireDelay < GetTickCount() && m_bIsChasing )
+	{
+		m_dwFireDelay = GetTickCount() + 1000;
+		m_pWeapon->FireWeapon();
+	}
+
 	Enemy::Update(fElapsedTime);
 
-	//float distance = ( m_pTarget->GetPosX() + m_pTarget->GetPosY() ) - ( GetPosX() + GetPosY() );
+	float distanceX = ( m_pTarget->GetPosX() -  GetPosX() );
+	float distanceY = ( m_pTarget->GetPosY() -  GetPosY() );
 
-	//if( distance < 0)
-	//	distance = -distance;
+	if( distanceX < 0)
+		distanceX = -distanceX;
+	if( distanceY < 0)
+		distanceY = -distanceY;
 
-	//if( distance < 300 && distance > 2 && !m_bIsMoving)
-	//{
-	//	MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
-	//	BaseCharacter::Update(fElapsedTime);
-	//}
+	if( (distanceX < 200 && distanceX >= 50 && CanMove()) || (distanceY < 200 && distanceY >= 50 ) )
+	{
+		m_bIsChasing = true;
+		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+		BaseCharacter::Update(fElapsedTime);
+	}
+	else if( distanceY < 50 || distanceX < 50 && CanMove() )
+	{
+		if(m_pTarget->GetPosX() <= GetPosX() )
+			MoveTo(GetPosX()+100, GetPosY(), 80);
+		else if(m_pTarget->GetPosX() > GetPosX() )
+			MoveTo(GetPosX() - 100, GetPosY(), 80);
+		BaseCharacter::Update(fElapsedTime);
+
+		if(m_pTarget->GetPosY() <= GetPosY() )
+			MoveTo(GetPosX(), GetPosY()+100, 80);
+		else if(m_pTarget->GetPosY() > GetPosY() )
+			MoveTo(GetPosX(), GetPosY()-100, 80);
+
+		BaseCharacter::Update(fElapsedTime);
+	}
+
+	if(GetVelX() > 0)
+	{
+		if(GetVelY() > 0)
+			SetDirection(DIRE_DOWNRIGHT);
+		else if(GetVelY() < 0)
+			SetDirection(DIRE_UPRIGHT);
+		else
+			SetDirection(DIRE_RIGHT);
+	}
+	else if(GetVelX() < 0)
+	{
+		if(GetVelY() > 0)
+			SetDirection(DIRE_DOWNLEFT);
+		else if(GetVelY() < 0)
+			SetDirection(DIRE_UPLEFT);
+		else
+			SetDirection(DIRE_LEFT);
+	}
+	else if(GetVelY() > 0)
+		SetDirection(DIRE_DOWN);
+	else if(GetVelY() < 0)
+		SetDirection(DIRE_UP);
 }
 
 void ShootingAi::Render()

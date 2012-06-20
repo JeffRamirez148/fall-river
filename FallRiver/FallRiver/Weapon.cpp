@@ -54,27 +54,14 @@ bool Weapon::Init(int wType, int nAmmo, int nDamage, float currRotation )
 
 void Weapon::Update(float fElapsedTime)
 {
+	SetPosX(m_pOwner->GetPosX()+m_pOwner->GetWidth()/2);
+	SetPosY(m_pOwner->GetPosY());
+
 	DirectInput* pDI = DirectInput::GetInstance();
 
 	if(pDI->KeyDown(DIK_SPACE) && 	m_dwTickCount  < GetTickCount() )
 	{
-		if( m_nWeaponType != WPN_MACHETE && m_nAmmo > 0 )
-		{
-			CreateBullet* pMsg = new CreateBullet( this );
-			MessageSystem::GetInstance()->SendMsg( pMsg );
-			pMsg = nullptr;
-			m_nAmmo--;
-			m_dwTickCount = GetTickCount() + (DWORD)m_fFireRate;
-			if(m_nWeaponType == WPN_SHOTGUN)
-			{
-				for(int i = 0; i < 2; i++)
-				{
-					CreateBullet* pMsg = new CreateBullet( this );
-					MessageSystem::GetInstance()->SendMsg( pMsg );
-					pMsg = nullptr;
-				}
-			}
-		}
+		FireWeapon();
 	}	
 }
 
@@ -84,6 +71,28 @@ void Weapon::Render()
 
 	pVM->DrawRect(GetRect(), 0, 200, 210 );
 }
+
+void Weapon::FireWeapon()
+{
+	if( m_nWeaponType != WPN_MACHETE && m_nAmmo > 0 )
+	{
+		CreateBullet* pMsg = new CreateBullet( this );
+		MessageSystem::GetInstance()->SendMsg( pMsg );
+		pMsg = nullptr;
+		m_nAmmo--;
+		m_dwTickCount = GetTickCount() + (DWORD)m_fFireRate;
+		if(m_nWeaponType == WPN_SHOTGUN)
+		{
+			for(int i = 0; i < 2; i++)
+			{
+				CreateBullet* pMsg = new CreateBullet( this );
+				MessageSystem::GetInstance()->SendMsg( pMsg );
+				pMsg = nullptr;
+			}
+		}
+	}
+}
+
 
 RECT Weapon::GetRect()
 {

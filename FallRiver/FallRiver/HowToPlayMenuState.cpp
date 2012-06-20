@@ -53,8 +53,8 @@ void HowToPlayMenuState::Update(float fElapsedTime)
 void HowToPlayMenuState::Render() 
 {
 	if(m_pDI->JoystickIsUnplugged(0) )
-		m_pVM->DrawStaticTexture(m_nHowToKeyID, 0, 0, 0.33f, 0.5f);
+		m_pVM->DrawStaticTexture(m_nHowToKeyID, 0, 0, 0.4f, 0.6f);
 	else
-		m_pVM->DrawStaticTexture(m_nHowToJoyID, 0, 0, 0.33f, 0.5f);
+		m_pVM->DrawStaticTexture(m_nHowToJoyID, 0, 0, 0.4f, 0.6f);
 }
 

@@ -74,7 +74,38 @@ bool Player::CheckCollision(IObjects* pBase)
 		if(pBase->GetObjectType() == OBJ_CHARACTER)
 		{
 			BaseCharacter* pCh = (BaseCharacter*)pBase;
-			//if(pCh->GetCharacterType() == CHA_ENEMY)
+			if(pCh->GetCharacterType() == CHA_ENEMY)
+			{
+				Enemy*pEn = (Enemy*)pCh;
+				if(!GamePlayState::GetInstance()->CanMoveRight() || !GamePlayState::GetInstance()->CanMoveLeft() || !GamePlayState::GetInstance()->CanMoveDown() || !GamePlayState::GetInstance()->CanMoveUp() )
+					return true;
+				if(pEn->GetRect().left <= GetRect().right && GetRect().right - pEn->GetRect().left <= 5)
+				{
+					pEn->SetPosX(float(GetRect().right));
+					GamePlayState::GetInstance()->SetCanMoveRight(false);
+					pEn->SetCanMove(false);
+				}
+				else if(pEn->GetRect().right >= GetRect().left && pEn->GetRect().right - GetRect().left <= 5)
+				{
+					pEn->SetPosX(float(GetRect().left-pEn->GetWidth()));
+					GamePlayState::GetInstance()->SetCanMoveLeft(false);
+					pEn->SetCanMove(false);
+				}
+				else if(pEn->GetRect().top <= GetRect().bottom && GetRect().bottom - pEn->GetRect().top <= 5)
+				{
+					pEn->SetPosY(float(GetRect().bottom));
+					GamePlayState::GetInstance()->SetCanMoveUp(false);
+					pEn->SetCanMove(false);
+				}
+				else if(pEn->GetRect().bottom >= GetRect().top && pEn->GetRect().bottom - GetRect().top <= 5)
+				{
+					pEn->SetPosY(float(GetRect().top-pEn->GetHeight()));
+					GamePlayState::GetInstance()->SetCanMoveDown(false);
+					pEn->SetCanMove(false);
+				}
+				return true;
+			}
+			// Fixing the movement.. TODO: Change So is used for New Camera
 			{
 				if( GetRect().right <= pBase->GetRect().left + 5 )
 					GamePlayState::GetInstance()->SetCanMoveRight(false);
@@ -88,6 +119,7 @@ bool Player::CheckCollision(IObjects* pBase)
 		}
 		return true;
 	}
+
 	GamePlayState::GetInstance()->SetCanMoveDown(true);
 	GamePlayState::GetInstance()->SetCanMoveUp(true);
 	GamePlayState::GetInstance()->SetCanMoveRight(true);

@@ -99,6 +99,7 @@ public:
 	int RegisterTexture(char* aFilePath);
 	int RegisterAnimation(char* aFilePath);
 	int RegisterShader(char* aFilePath);
+	int RegisterFont(char* filename );
 
 	//For Drawing Animations
 	bool DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, float fRotCenterX = 0, 
