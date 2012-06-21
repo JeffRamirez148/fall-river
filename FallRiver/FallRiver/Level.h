@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <vector>
 using namespace std;
+#include "BaseObject.h"
 
 #ifndef __Level_h__
 #define __Level_h__
@@ -21,13 +22,27 @@ struct leveldata
 	char m_cType[ 32 ];
 };
 
+struct mapTiles
+{
+	RECT m_rImageRect;
+	float m_nWorldPosX,m_nWorldPosY;
+	float height, width;
+	int m_Layer;
+	int m_nTileID;
+};
 
+struct TwoInts
+{
+	int x;
+	int y;
+};
 
-class Level
+class Level :  public BaseObject
 {
 private:
 	vector<leveldata> m_vCollisions;
-	int m_nBackgroundID;
+	vector<mapTiles> m_vTiles;
+	//int m_nBackgroundID;
 	float m_nPosX;
 	float m_nPosY;
 	TCHAR buffer[100];
@@ -40,13 +55,12 @@ public:
 	//void Update(float time);
 	bool LoadLevel( const char* szFilename );
 
-	void Update(float fElapsed);
-	void Render();
+	virtual void Update(float fElapsed);
+	virtual void Render();
 	static Level* GetInstance();
 
-	void CheckCollision();
-	int GetBGID() { return m_nBackgroundID; }
-	void SetBGID(int x ) { m_nBackgroundID = x; }
+	virtual bool CheckCollision(IObjects* pBase);
+
 };
 
 #endif
