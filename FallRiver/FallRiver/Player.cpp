@@ -7,6 +7,7 @@
 #include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
+#include "Level.h"
 
 Player::Player()
 {
@@ -72,55 +73,66 @@ void Player::Render()
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	if(BaseObject::CheckCollision(pBase) == true )
+		if( pBase->GetObjectType() != OBJ_LEVEL)
 	{
-		if(pBase->GetObjectType() == OBJ_CHARACTER)
+		if(BaseObject::CheckCollision(pBase) == true )
 		{
-			BaseCharacter* pCh = (BaseCharacter*)pBase;
-			if(pCh->GetCharacterType() == CHA_ENEMY)
+			if(pBase->GetObjectType() == OBJ_CHARACTER)
 			{
-				Enemy*pEn = (Enemy*)pCh;
-				if(!GamePlayState::GetInstance()->CanMoveRight() || !GamePlayState::GetInstance()->CanMoveLeft() || !GamePlayState::GetInstance()->CanMoveDown() || !GamePlayState::GetInstance()->CanMoveUp() )
+				BaseCharacter* pCh = (BaseCharacter*)pBase;
+				if(pCh->GetCharacterType() == CHA_ENEMY)
+				{
+					Enemy*pEn = (Enemy*)pCh;
+					if(!GamePlayState::GetInstance()->CanMoveRight() || !GamePlayState::GetInstance()->CanMoveLeft() || !GamePlayState::GetInstance()->CanMoveDown() || !GamePlayState::GetInstance()->CanMoveUp() )
+						return true;
+					if(pEn->GetRect().left <= GetRect().right && GetRect().right - pEn->GetRect().left <= 5)
+					{
+						pEn->SetPosX(float(GetRect().right));
+						GamePlayState::GetInstance()->SetCanMoveRight(false);
+						pEn->SetCanMove(false);
+					}
+					else if(pEn->GetRect().right >= GetRect().left && pEn->GetRect().right - GetRect().left <= 5)
+					{
+						pEn->SetPosX(float(GetRect().left-pEn->GetWidth()));
+						GamePlayState::GetInstance()->SetCanMoveLeft(false);
+						pEn->SetCanMove(false);
+					}
+					else if(pEn->GetRect().top <= GetRect().bottom && GetRect().bottom - pEn->GetRect().top <= 5)
+					{
+						pEn->SetPosY(float(GetRect().bottom));
+						GamePlayState::GetInstance()->SetCanMoveUp(false);
+						pEn->SetCanMove(false);
+					}
+					else if(pEn->GetRect().bottom >= GetRect().top && pEn->GetRect().bottom - GetRect().top <= 5)
+					{
+						pEn->SetPosY(float(GetRect().top-pEn->GetHeight()));
+						GamePlayState::GetInstance()->SetCanMoveDown(false);
+						pEn->SetCanMove(false);
+					}
 					return true;
-				if(pEn->GetRect().left <= GetRect().right && GetRect().right - pEn->GetRect().left <= 5)
-				{
-					pEn->SetPosX(float(GetRect().right));
-					GamePlayState::GetInstance()->SetCanMoveRight(false);
-					pEn->SetCanMove(false);
 				}
-				else if(pEn->GetRect().right >= GetRect().left && pEn->GetRect().right - GetRect().left <= 5)
+				// Fixing the movement.. TODO: Change So is used for New Camera
 				{
-					pEn->SetPosX(float(GetRect().left-pEn->GetWidth()));
-					GamePlayState::GetInstance()->SetCanMoveLeft(false);
-					pEn->SetCanMove(false);
+					if( GetRect().right <= pBase->GetRect().left + 5 )
+						GamePlayState::GetInstance()->SetCanMoveRight(false);
+					else if( GetRect().left >= pBase->GetRect().right - 5 )
+						GamePlayState::GetInstance()->SetCanMoveLeft(false);
+					else if( GetRect().top >= pBase->GetRect().bottom -5 )
+						GamePlayState::GetInstance()->SetCanMoveUp(false);
+					else if( GetRect().bottom <= pBase->GetRect().top + 5 )
+						GamePlayState::GetInstance()->SetCanMoveDown(false);
 				}
-				else if(pEn->GetRect().top <= GetRect().bottom && GetRect().bottom - pEn->GetRect().top <= 5)
-				{
-					pEn->SetPosY(float(GetRect().bottom));
-					GamePlayState::GetInstance()->SetCanMoveUp(false);
-					pEn->SetCanMove(false);
-				}
-				else if(pEn->GetRect().bottom >= GetRect().top && pEn->GetRect().bottom - GetRect().top <= 5)
-				{
-					pEn->SetPosY(float(GetRect().top-pEn->GetHeight()));
-					GamePlayState::GetInstance()->SetCanMoveDown(false);
-					pEn->SetCanMove(false);
-				}
-				return true;
 			}
-			// Fixing the movement.. TODO: Change So is used for New Camera
-			{
-				if( GetRect().right <= pBase->GetRect().left + 5 )
-					GamePlayState::GetInstance()->SetCanMoveRight(false);
-				else if( GetRect().left >= pBase->GetRect().right - 5 )
-					GamePlayState::GetInstance()->SetCanMoveLeft(false);
-				else if( GetRect().top >= pBase->GetRect().bottom -5 )
-					GamePlayState::GetInstance()->SetCanMoveUp(false);
-				else if( GetRect().bottom <= pBase->GetRect().top + 5 )
-					GamePlayState::GetInstance()->SetCanMoveDown(false);
-			}
+			return true;
 		}
-		return true;
+	}
+	else
+	{
+		if( pBase->CheckCollision(this) == true )
+		{
+			return true;
+		}
+
 	}
 
 	GamePlayState::GetInstance()->SetCanMoveDown(true);
@@ -128,6 +140,7 @@ bool Player::CheckCollision(IObjects* pBase)
 	GamePlayState::GetInstance()->SetCanMoveRight(true);
 	GamePlayState::GetInstance()->SetCanMoveLeft(true);
 	return false;
+
 }
 
 // Check if the player is still alive

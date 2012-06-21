@@ -5,6 +5,10 @@
 #include "GamePlayState.h"
 #include <string>
 #include "CGame.h"
+#include "BaseCharacter.h"
+#include "Enemy.h"
+#include "EventSystem.h"
+
 Level::Level() 
 {
 	m_nObjectType = OBJ_LEVEL;
@@ -45,7 +49,7 @@ void Level::Update(float fElapsedTime)
 
 		for(unsigned int i = 0; i < m_vTiles.size(); i++)
 		{
-			m_vTiles[i].m_nWorldPosX -= 100 * fElapsedTime;
+			m_vTiles[i].m_nWorldPosX -= 100.0f * fElapsedTime;
 			//m_vTiles[i].m_nWorldPosY -=  100 * fElapsedTime;
 		}
 
@@ -68,7 +72,7 @@ void Level::Update(float fElapsedTime)
 	
 		for(unsigned int i = 0; i < m_vTiles.size(); i++)
 		{
-			m_vTiles[i].m_nWorldPosX +=  100 * fElapsedTime;
+			m_vTiles[i].m_nWorldPosX +=  100.0f * fElapsedTime;
 			//m_vTiles[i].m_nWorldPosY +=  100 * fElapsedTime;
 		}
 
@@ -92,7 +96,7 @@ void Level::Update(float fElapsedTime)
 		for(unsigned int i = 0; i < m_vTiles.size(); i++)
 		{
 			//m_vTiles[i].m_nWorldPosX +=  100 * fElapsedTime;
-			m_vTiles[i].m_nWorldPosY += 100 * fElapsedTime;
+			m_vTiles[i].m_nWorldPosY += 100.0f * fElapsedTime;
 		}
 
 	}
@@ -113,7 +117,7 @@ void Level::Update(float fElapsedTime)
 		for(unsigned int i = 0; i < m_vTiles.size(); i++)
 		{
 			//m_vTiles[i].m_nWorldPosX -=  100 * fElapsedTime;
-			m_vTiles[i].m_nWorldPosY -= 100 * fElapsedTime;
+			m_vTiles[i].m_nWorldPosY -= 100.0f * fElapsedTime;
 		}
 
 	}
@@ -125,15 +129,6 @@ void Level::Render()
 
 	ViewManager* pView = ViewManager::GetInstance();
 	
-	//if( m_nBackgroundID == -1)
-	//{
-	//	return;
-	//}
-
-	
-	//m_nBackgroundID = pTM->LoadTexture(_T("resource/graphics/test.png"));
-	//pView->DrawStaticTexture(m_nBackgroundID, (int)m_nPosX, (int)m_nPosY );
-
 
 	CGame* pGame = CGame::GetInstance();
 
@@ -242,20 +237,20 @@ void Level::Render()
 	pView->GetSprite()->Flush();
 
 
-	for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
-	{
-		//m_vCollisions[i].m_cType;
-		if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
-		{
-			pView->DrawUnfilledRect(m_vCollisions[i].m_rCollision,255,255,255);
-		}
+	//for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
+	//{
+	//	////m_vCollisions[i].m_cType;
+	//	//if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
+	//	//{
+	//	//	pView->DrawUnfilledRect(m_vCollisions[i].m_rCollision,255,255,255);
+	//	//}
 
-		if( _stricmp(m_vCollisions[i].m_cType,"powerup") == 0 )
-		{
-			pView->DrawUnfilledRect(m_vCollisions[i].m_rCollision,0,255,255);
-		}
+	//	//	//if( _stricmp(m_vCollisions[i].m_cType,"powerup") == 0 )
+	//	//{
+	//	pView->DrawUnfilledRect(m_vCollisions[i].m_rCollision,0,255,255);
+	//	//}
 
-	}
+	//}
 
 }
 
@@ -431,6 +426,8 @@ bool Level::LoadLevel( const char* szFilename )
 			info.m_rCollision.right = (LONG)(tmpX+tmpW);
 			info.m_rCollision.bottom = (LONG)(tmpY+tmpH);
 
+			info.m_bPrevColliding = false;
+
 			info.height = tmpH;
 			info.width = tmpW;
 			info.x = tmpX;
@@ -457,5 +454,275 @@ bool Level::LoadLevel( const char* szFilename )
 
 bool Level::CheckCollision(IObjects* pBase)
 {
-	return true;
+	bool checkcol = false;
+
+	for( int i = 0; i < m_vCollisions.size(); i++)
+	{
+		RECT cRect;
+		if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
+		{
+			if( m_vCollisions[i].m_bPrevColliding == true )
+			{
+				if(GamePlayState::GetInstance()->CanMoveUp() == true && GamePlayState::GetInstance()->CanMoveLeft() == true && GamePlayState::GetInstance()->CanMoveRight() == true && GamePlayState::GetInstance()->CanMoveDown() == true)
+				{
+					m_vCollisions[i].m_bPrevColliding = false;
+					m_vCollisions[i].test = 0;
+				}
+			}
+			continue;
+		}
+		else
+		{
+			checkcol = true;
+			if(pBase->GetObjectType() == OBJ_CHARACTER)
+			{
+				BaseCharacter* pCh = (BaseCharacter*)pBase;
+				if(pCh->GetCharacterType() == CHA_ENEMY)
+				{
+				
+					Enemy* pEn = (Enemy*)pCh;
+					pEn->CheckCollision(this);
+					////if(!GamePlayState::GetInstance()->CanMoveRight() || !GamePlayState::GetInstance()->CanMoveLeft() || !GamePlayState::GetInstance()->CanMoveDown() || !GamePlayState::GetInstance()->CanMoveUp() )
+					////	return true;
+					//if(pEn->GetRect().left <= m_vCollisions[i].m_rCollision.right && m_vCollisions[i].m_rCollision.right - pEn->GetRect().left <= 5)
+					//{
+					//	pEn->SetPosX(float(GetRect().right));
+					//	GamePlayState::GetInstance()->SetCanMoveRight(false);
+					//	pEn->SetCanMove(false);
+					//}
+					//else if(pEn->GetRect().right >= m_vCollisions[i].m_rCollision.left && pEn->GetRect().right - m_vCollisions[i].m_rCollision.left <= 5)
+					//{
+					//	pEn->SetPosX(float(GetRect().left-pEn->GetWidth()));
+					//	GamePlayState::GetInstance()->SetCanMoveLeft(false);
+					//	pEn->SetCanMove(false);
+					//}
+					//else if(pEn->GetRect().top <= m_vCollisions[i].m_rCollision.bottom && m_vCollisions[i].m_rCollision.bottom - pEn->GetRect().top <= 5)
+					//{
+					//	pEn->SetPosY(float(GetRect().bottom));
+					//	GamePlayState::GetInstance()->SetCanMoveUp(false);
+					//	pEn->SetCanMove(false);
+					//}
+					//else if(pEn->GetRect().bottom >= m_vCollisions[i].m_rCollision.top && pEn->GetRect().bottom - m_vCollisions[i].m_rCollision.top <= 5)
+					//{
+					//	pEn->SetPosY(float(GetRect().top-pEn->GetHeight()));
+					//	GamePlayState::GetInstance()->SetCanMoveDown(false);
+					//	pEn->SetCanMove(false);
+					//}
+				}
+				else if( pCh->GetCharacterType() == CHA_PLAYER)
+				{
+					Player* pPlayer = (Player*)pCh;
+
+					if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
+					{
+						int check = 0;
+
+						float intmid = float(cRect.top + cRect.bottom) / 2.0f;
+						float intmidx = float(cRect.left + cRect.right) / 2.0f;
+
+
+						float tilemid = float(m_vCollisions[i].m_rCollision.top + m_vCollisions[i].m_rCollision.bottom) / 2.0f;
+						float tilemidx = float(m_vCollisions[i].m_rCollision.left + m_vCollisions[i].m_rCollision.right) / 2.0f;
+
+
+						LONG x = cRect.bottom - cRect.top;
+						LONG y = cRect.right - cRect.left;
+
+						if( x != y )
+						{
+							if( y > x )
+							{
+								if( intmid < tilemid )
+								{
+									check = 1;
+								}
+								else
+								{
+									check = 2;
+								}
+							}
+
+							if( y < x )
+							{
+								if( intmidx < tilemidx )
+								{
+									check = 3;
+								}
+								else
+								{
+									check = 4;
+								}
+							}
+							
+							
+							/*
+							if( intmid < tilemid )
+							{
+								if( y > x )
+								{
+									check = 1;
+								}
+								else
+								{
+									check = 4;
+
+								}
+
+							}
+							else if (intmid > tilemid)
+							{
+								if( y < x )
+								{
+									check = 3;	
+								}
+								else
+								{
+									check = 2;
+								}
+
+							}
+							else
+							{
+								check = 3;
+							}*/
+						}
+						else
+						{
+							for( int j = 0; j < m_vCollisions.size(); j++)
+							{
+								
+								if(  m_vCollisions[j].m_bPrevColliding == true)
+								{
+									check = m_vCollisions[j].test;
+									break;
+								}
+
+								if( i == j )
+								{
+									if(  m_vCollisions[i].m_bPrevColliding == true)
+									{
+										check = m_vCollisions[i].test;
+										break;
+									}
+								}
+							}
+
+							DirectInput* pDI = DirectInput::GetInstance();
+							//check = 0;
+							if( check == 0 )
+							{
+								if(pDI->KeyDown(DIK_RIGHT) )
+								{
+									GamePlayState::GetInstance()->SetCanMoveRight(false);
+									GamePlayState::GetInstance()->SetCanMoveLeft(true);
+								}
+								else if(pDI->KeyDown(DIK_LEFT) )
+								{
+									GamePlayState::GetInstance()->SetCanMoveLeft(false);
+									GamePlayState::GetInstance()->SetCanMoveRight(true);
+
+								}
+
+								if(pDI->KeyDown(DIK_UP) )
+								{
+									GamePlayState::GetInstance()->SetCanMoveUp(false);
+									GamePlayState::GetInstance()->SetCanMoveDown(true);
+
+
+								}
+								else if(pDI->KeyDown(DIK_DOWN) )
+								{
+									GamePlayState::GetInstance()->SetCanMoveDown(false);
+									GamePlayState::GetInstance()->SetCanMoveUp(true);
+
+								}
+							}
+						}
+
+						if (check == 1)
+						{
+							GamePlayState::GetInstance()->SetCanMoveDown(false);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
+						}
+						else if (check == 2)
+						{
+							GamePlayState::GetInstance()->SetCanMoveUp(false);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
+
+
+						}
+						else if (check == 3)
+						{
+							GamePlayState::GetInstance()->SetCanMoveRight(false);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
+
+
+						}
+						else if (check == 4)
+						{
+							GamePlayState::GetInstance()->SetCanMoveLeft(false);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
+
+
+						}
+						
+
+					}
+					if(_stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
+						//m_vCollisions.erase(m_vCollisions[i]);
+					}
+				}
+			}
+		}
+	}
+
+	if( checkcol == true )
+	{
+		return true;
+	}
+
+	//if(BaseObject::CheckCollision(pBase) == true )
+	//{
+	//	
+
+	//		// Fixing the movement.. TODO: Change So is used for New Camera
+	//		/*	{
+	//		if( GetRect().right <= pBase->GetRect().left + 5 )
+	//		GamePlayState::GetInstance()->SetCanMoveRight(false);
+	//		else if( GetRect().left >= pBase->GetRect().right - 5 )
+	//		GamePlayState::GetInstance()->SetCanMoveLeft(false);
+	//			else if( GetRect().top >= pBase->GetRect().bottom -5 )
+	//				GamePlayState::GetInstance()->SetCanMoveUp(false);
+	//			else if( GetRect().bottom <= pBase->GetRect().top + 5 )
+	//				GamePlayState::GetInstance()->SetCanMoveDown(false);
+	//		}*/
+	//	}
+	//	return true;
+	//}
+
+	//GamePlayState::GetInstance()->SetCanMoveDown(true);
+	//GamePlayState::GetInstance()->SetCanMoveUp(true);
+	//GamePlayState::GetInstance()->SetCanMoveRight(true);
+	//GamePlayState::GetInstance()->SetCanMoveLeft(true);
+	//return false;
+
+
+
+
+
+
+
+
+
+	//RECT cRect;
+	//if( IntersectRect(&cRect, &GetRect(), &pBase->GetRect() ) == false )
+	//	return false;
+
+	return false;
 }

@@ -66,6 +66,7 @@ void GamePlayState::Enter()
 	m_pPM = Particle_Manager::GetInstance();
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
+	m_pOF->RegisterClassType< Level			>( _T("Level") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
 	m_pOF->RegisterClassType< Weapon		>( _T("Weapon") );
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
@@ -74,10 +75,18 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 
-	m_clevel.LoadLevel("level.xml");
 
 	Player* pPlayer = nullptr;
 	Weapon* pWeapon = nullptr;
+	Level* pLevel = nullptr;
+
+	if( pLevel == nullptr )
+	{
+		m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
+		pLevel = m_clevel;
+		pLevel->LoadLevel("level.xml");
+		m_pOM->AddObject(pLevel);
+	}
 
 	if(m_cPlayer == nullptr)
 	{
@@ -243,7 +252,7 @@ bool GamePlayState::Input()
 
 void GamePlayState::Update(float fElapsedTime) 
 {
-	m_clevel.Update(fElapsedTime);
+	//m_clevel.Update(fElapsedTime);
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
 	m_pES->ProcessEvents();
@@ -253,7 +262,7 @@ void GamePlayState::Update(float fElapsedTime)
 void GamePlayState::Render() 
 {
 	m_pVM->GetSprite()->Flush();
-	m_clevel.Render();
+	//m_clevel.Render();
 
 	m_pOM->RenderAllObjects();
 }

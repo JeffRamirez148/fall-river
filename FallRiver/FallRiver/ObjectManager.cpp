@@ -76,8 +76,8 @@ void ObjectManager::RenderAllObjects( void )
 {
 	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
 	{
-		if((*iter)->GetPosX() > CGame::GetInstance()->GetScreenWidth() || (*iter)->GetPosY() > CGame::GetInstance()->GetScreenHeight() ||
-			(*iter)->GetPosX() + (*iter)->GetWidth() < 0 || (*iter)->GetPosY() + (*iter)->GetHeight() < 0)
+		if(((*iter)->GetPosX() > CGame::GetInstance()->GetScreenWidth() || (*iter)->GetPosY() > CGame::GetInstance()->GetScreenHeight() ||
+			(*iter)->GetPosX() + (*iter)->GetWidth() < 0 || (*iter)->GetPosY() + (*iter)->GetHeight() < 0) && (*iter)->GetObjectType() != OBJ_LEVEL)
 			continue;
 		else
 			(*iter)->Render();
