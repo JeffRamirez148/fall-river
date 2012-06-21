@@ -456,7 +456,7 @@ bool Level::CheckCollision(IObjects* pBase)
 {
 	bool checkcol = false;
 
-	for( int i = 0; i < m_vCollisions.size(); i++)
+	for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 	{
 		RECT cRect;
 		if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
@@ -588,7 +588,7 @@ bool Level::CheckCollision(IObjects* pBase)
 						}
 						else
 						{
-							for( int j = 0; j < m_vCollisions.size(); j++)
+							for(unsigned int j = 0; j < m_vCollisions.size(); j++)
 							{
 								
 								if(  m_vCollisions[j].m_bPrevColliding == true)
