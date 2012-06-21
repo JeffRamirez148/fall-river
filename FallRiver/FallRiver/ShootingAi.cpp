@@ -8,6 +8,7 @@
 #include "DestroyEnemyS.h"
 #include "CreateBullet.h"
 #include "Weapon.h"
+#include "CGame.h"
 
 ShootingAi::ShootingAi()
 {
@@ -62,47 +63,49 @@ void ShootingAi::Update(float fElapsedTime)
 	}
 	else if( distanceY < 50 || distanceX < 50 && CanMove() )
 	{
-		if(m_pTarget->GetPosX() <= GetPosX() )
+		if(m_pTarget->GetPosX() < GetPosX()+5 )
 			MoveTo(GetPosX()+100, GetPosY(), 80);
-		else if(m_pTarget->GetPosX() > GetPosX() )
+		else if(m_pTarget->GetPosX() > GetPosX()-5 )
 			MoveTo(GetPosX() - 100, GetPosY(), 80);
 		BaseCharacter::Update(fElapsedTime);
 
-		if(m_pTarget->GetPosY() <= GetPosY() )
+		if(m_pTarget->GetPosY() < GetPosY()+5 )
 			MoveTo(GetPosX(), GetPosY()+100, 80);
-		else if(m_pTarget->GetPosY() > GetPosY() )
+		else if(m_pTarget->GetPosY() > GetPosY()-5 )
 			MoveTo(GetPosX(), GetPosY()-100, 80);
 
 		BaseCharacter::Update(fElapsedTime);
 	}
 
-	if(GetVelX() > 0)
+	if(m_pTarget->GetPosX() > GetPosX())
 	{
-		if(GetVelY() > 0)
+		if(m_pTarget->GetPosY() > GetPosY()+5)
 			SetDirection(DIRE_DOWNRIGHT);
-		else if(GetVelY() < 0)
+		else if(m_pTarget->GetPosY() < GetPosY()-5)
 			SetDirection(DIRE_UPRIGHT);
 		else
 			SetDirection(DIRE_RIGHT);
 	}
-	else if(GetVelX() < 0)
+	else if(m_pTarget->GetPosX() < 0)
 	{
-		if(GetVelY() > 0)
+		if(m_pTarget->GetPosY() > GetPosY()+5)
 			SetDirection(DIRE_DOWNLEFT);
-		else if(GetVelY() < 0)
+		else if(m_pTarget->GetPosY() < GetPosY()-5)
 			SetDirection(DIRE_UPLEFT);
 		else
 			SetDirection(DIRE_LEFT);
 	}
-	else if(GetVelY() > 0)
+	else if(m_pTarget->GetPosY() > GetPosY())
 		SetDirection(DIRE_DOWN);
-	else if(GetVelY() < 0)
+	else if(m_pTarget->GetPosY() < GetPosY())
 		SetDirection(DIRE_UP);
 }
 
 void ShootingAi::Render()
 {
 	// Do Rendering here
+	if(GetPosX() < 0 || GetPosY() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
+		return;
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawRect(GetRect(), 100, 148, 100);

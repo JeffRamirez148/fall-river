@@ -4,6 +4,7 @@
 #include "BaseCharacter.h"
 #include "ViewManager.h"
 #include "Event.h"
+#include "CGame.h"
 #include "EventSystem.h"
 #include "Enemy.h"
 #include "GamePlayState.h"
@@ -90,13 +91,13 @@ void ChasingAI::Update(float fElapsedTime)
 					if(DistToBottom > DistToRight)
 					{
 						SetCanMove(true);
-						MoveTo(GetPosX(), m_cInTheWay->GetRect().bottom, 80);
+						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 					{
 						SetCanMove(true);
-						MoveTo(m_cInTheWay->GetRect().right, GetPosY(), 80);
+						MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 				}
@@ -111,13 +112,13 @@ void ChasingAI::Update(float fElapsedTime)
 					if(DistToBottom > DistToLeft)
 					{
 						SetCanMove(true);
-						MoveTo(GetPosX(), m_cInTheWay->GetRect().bottom, 80);
+						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 					{
 						SetCanMove(true);
-						MoveTo(m_cInTheWay->GetRect().left-GetWidth(), GetPosY(), 80);
+						MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 				}
@@ -132,13 +133,13 @@ void ChasingAI::Update(float fElapsedTime)
 					if(DistToTop < DistToRight)
 					{
 						SetCanMove(true);
-						MoveTo(GetPosX(), m_cInTheWay->GetRect().top-GetHeight(), 80);
+						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 					{
 						SetCanMove(true);
-						MoveTo(m_cInTheWay->GetRect().right, GetPosY(), 80);
+						MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 
@@ -154,13 +155,13 @@ void ChasingAI::Update(float fElapsedTime)
 					if(DistToTop < DistToLeft)
 					{
 						SetCanMove(true);
-						MoveTo(GetPosX(), m_cInTheWay->GetRect().top-GetHeight(), 80);
+						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 					{
 						SetCanMove(true);
-						MoveTo(m_cInTheWay->GetRect().left-GetWidth(), GetPosY(), 80);
+						MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 				}
@@ -171,6 +172,8 @@ void ChasingAI::Update(float fElapsedTime)
 
 void ChasingAI::Render() 
 {
+	if(GetPosX() < 0 || GetPosY() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
+		return;
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawRect(GetRect(), 255, 0, 0);

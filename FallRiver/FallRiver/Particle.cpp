@@ -42,7 +42,7 @@ void Particle::Render()
 	}
 	else
 	{
-		RECT tmpRect = {pos.x - scaleX * .5f, pos.y - scaleY * .5f, pos.x + scaleX * .5f, pos.y + scaleY * .5f};
+		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};
 		view->DrawRect( tmpRect, (color << 8) >> 24, (color << 16) >> 24, (color << 24) >> 24, color >> 24);
 	}
 	view->GetSprite()->Flush();

@@ -22,8 +22,10 @@ private:
 	float musicVolume;
 	bool m_bIsWindowed;
 	int soundID;
+	int musicID;
 
 	int		m_nOptionID;
+	int		m_nFontID;
 
 	OptionsMenuState();
 	~OptionsMenuState();

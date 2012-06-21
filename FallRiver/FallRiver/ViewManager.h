@@ -29,6 +29,7 @@ using namespace std;
 
 class Texture;
 class Font;
+class Kerning;
 class Animation;
 class AnimInfo;
 class GamePlayState;
@@ -52,6 +53,7 @@ private:
 	vector<Animation> animations;
 	vector<Texture> textures;
 	vector<Font> fonts;
+	vector<Kerning> kerns;
 
 	ViewManager();
 	ViewManager(const ViewManager&);

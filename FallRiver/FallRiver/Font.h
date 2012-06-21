@@ -9,11 +9,35 @@ using namespace std;
 
 class ViewManager;
 
+class Kerning
+{
+public:
+	int amount;
+	int secondID;
+	int firstID;
+
+
+	Kerning();
+	~Kerning();
+};
+
 class Font
 {
 public:
-	vector<RECT> FontSourceRect; //Uppercase/LowerCase/Numbers
-	int nTextureID;
+	int id;
+	int yoffset;
+	int xoffset;
+	int height;
+	int width;
+	int x;
+	int y;
+	//RECT srcRect;
+	//int nTextureID;
+
+	Font();
+	~Font();
+
+
 };
 
 #endif

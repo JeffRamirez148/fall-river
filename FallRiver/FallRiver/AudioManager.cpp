@@ -116,12 +116,16 @@ void AudioManager::Update(float fElapsedTime)
 {
 	for( unsigned int i = 0; i < _sfxSound.size(); ++i)
 	{
+		_sfxSound[i]->channel->setMute(_sfxMute);
+		_sfxSound[i]->channel->setVolume(_sfxVolume);
 		_sfxSound[i]->channel->set3DAttributes(&_sfxSound[i]->pos, &_sfxSound[i]->vel);
 		//_sfxSound[i]->noise->setMusicSpeed(sqrt((((7+_sfxSound[i]->humidity)/(5+_sfxSound[i]->humidity) )*_gasConstant*_sfxSound[i]->temperature)/_sfxSound[i]->molecularWeight));
 	}
 	
 	for( unsigned int i = 0; i < _musicSound.size(); ++i)
 	{
+		_musicSound[i]->channel->setMute(_musicMute);
+		_musicSound[i]->channel->setVolume(_musicVolume);
 		_musicSound[i]->channel->set3DAttributes(&_musicSound[i]->pos, &_musicSound[i]->vel);
 		//_musicSound[i]->noise->setMusicSpeed(sqrt((((7+_musicSound[i]->humidity)/(5+_musicSound[i]->humidity) )*_gasConstant*_musicSound[i]->temperature)/_musicSound[i]->molecularWeight));
 	}

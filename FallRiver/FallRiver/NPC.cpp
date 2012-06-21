@@ -3,6 +3,7 @@
 #include "DestroyNPC.h"
 #include "DirectInput.h"
 #include "GamePlayState.h"
+#include "CGame.h"
 
 NPC::NPC()
 {
@@ -40,6 +41,8 @@ void NPC::Update(float fElapsedTime)
 void NPC::Render() 
 {
 	// Render this NPC
+	if(GetPosX() < 0 || GetPosY() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
+		return;
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawRect(GetRect(), 0, 255, 0);

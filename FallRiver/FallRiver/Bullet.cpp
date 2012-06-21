@@ -7,6 +7,8 @@
 #include "BaseCharacter.h"
 #include "CGame.h"
 #include "GamePlayState.h"
+#include "Particle_Manager.h"
+#include "Emitter.h"
 
 Bullet::Bullet()
 {
@@ -19,6 +21,9 @@ Bullet::~Bullet()
 
 void Bullet::Update(float fElapsedTime) 
 {
+	Particle_Manager::GetInstance()->GetActiveEmitter(activeemitterID)->SetRect(GetRect());
+	Particle_Manager::GetInstance()->GetActiveEmitter(activeemitterID)->Update(fElapsedTime);
+
 	DirectInput* pDI = DirectInput::GetInstance();
 
 	if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
@@ -42,6 +47,8 @@ void Bullet::Update(float fElapsedTime)
 void Bullet::Render() 
 {
 	ViewManager* pVM = ViewManager::GetInstance();
+
+	Particle_Manager::GetInstance()->GetActiveEmitter(activeemitterID)->Render();
 
 	pVM->DrawRect(GetRect(), 100, 40, 255);
 }

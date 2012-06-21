@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <string>
+#include <vector>
 using namespace std;
 
 #ifndef __XMLManager_h__
@@ -7,6 +8,8 @@ using namespace std;
 
 class Emitter;
 class Level;
+class Font;
+class Kerning;
 class Animation;
 class Player;
 
@@ -27,6 +30,9 @@ public:
 	void SaveProgress( const char* szFilename, Player &player);
 	bool CheckSlot( const char* szFilename );
 	Player* LoadProgress(const char* szFilename);
+
+	// Loading Fonts
+	bool LoadFont( char* szFilename,  vector<Font>&fonts, vector<Kerning>&kerns);
 };
 
 #endif

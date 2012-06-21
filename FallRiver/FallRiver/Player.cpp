@@ -3,6 +3,7 @@
 #include "GamePlayState.h"
 #include "Enemy.h"
 #include "ViewManager.h"
+#include "EventSystem.h"
 #include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
@@ -18,6 +19,8 @@ Player::Player()
 	m_nFrameX = 0;
 	m_nFrameY = 0;
 	SetDirection(DIRE_UP);
+	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
+	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
 }
 
 Player::~Player()
@@ -165,4 +168,23 @@ void Player::AddLight(Light* pLight)
 	m_vpLights.push_back(pLight);
 	m_currLight = pLight;
 }
+
+void Player::HandleEvent(Event* pEvent)
+{
+	if(pEvent->GetEventID() == "target_hit")
+	{
+		if( pEvent->GetParam() == this )
+		{
+			SetHealth(GetHealth()-30);
+		}
+	}
+	else if(pEvent->GetEventID() == "hit_wall")
+	{
+		GamePlayState::GetInstance()->SetCanMoveDown(true);
+		GamePlayState::GetInstance()->SetCanMoveUp(true);
+		GamePlayState::GetInstance()->SetCanMoveRight(true);
+		GamePlayState::GetInstance()->SetCanMoveLeft(true);
+	}
+}
+
 

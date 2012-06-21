@@ -427,6 +427,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram1.cd">
+      <Filter>Wrappers</Filter>
+    </None>
   </ItemGroup>
 </Project>

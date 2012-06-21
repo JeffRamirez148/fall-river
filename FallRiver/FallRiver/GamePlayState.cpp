@@ -5,6 +5,8 @@
 #include "OptionsMenuState.h"
 #include "PauseMenuState.h"
 #include "Level.h"
+#include "Particle_Manager.h"
+#include "Emitter.h"
 #include "CGame.h"
 #include "DirectInput.h"
 #include "Enemy.h"
@@ -35,6 +37,7 @@ GamePlayState::GamePlayState()
 	m_pOF = nullptr;
 	m_pOM = nullptr;
 	m_pES = nullptr;
+	m_pPM = nullptr;
 	m_cPlayer = nullptr;
 
 	m_cWeapon = nullptr;
@@ -60,6 +63,7 @@ void GamePlayState::Enter()
 	m_pOM = ObjectManager::GetInstance();
 	m_pES = EventSystem::GetInstance();
 	m_pMS = MessageSystem::GetInstance();
+	m_pPM = Particle_Manager::GetInstance();
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
@@ -271,6 +275,11 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
+			int emID = self->m_pPM->LoadEmitter("emitter.xml");
+
+			bullet->SetEmmiterID(self->m_pPM->ActivateEmitter(emID));
+
+			self->m_pPM->GetActiveEmitter(bullet->GetEmitterID())->SetLoopin(false);
 
 			switch(pOwner->GetOwner()->GetDirection())
 			{

@@ -15,6 +15,7 @@ private:
 	DirectInput* m_pDI;
 	int m_nCursPosY;
 	int m_nCursPosX;
+	int m_nFontID;
 	AudioManager* audio;
 	bool m_bSure;
 	bool m_bCheck;
