@@ -6,6 +6,7 @@ using namespace std;
 #define __Player_h__
 
 #include "BaseCharacter.h"
+#include "AnimInfo.h"
 
 class Quests;
 class GamePlayState;
@@ -32,6 +33,8 @@ private:
 	int m_nLives;
 	vector<Quests*> m_vpActiveQuests;
 
+	AnimInfo m_playerAnim;
+
 public: 
 	Player();
 	~Player();
@@ -54,6 +57,8 @@ public:
 	void AddQuest(Quests* pQuest);
 	void AddWeapon(Weapon* pWeapon);
 	void AddLight(Light* pLight);
+
+	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID;}
 };
 
 #endif

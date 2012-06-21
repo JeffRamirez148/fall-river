@@ -27,9 +27,10 @@ using namespace std;
 // #include "HUD.h"
 // #include "CutScene.h"
 
+#include "Animation.h"
+
 class Texture;
 class Font;
-class Animation;
 class AnimInfo;
 class GamePlayState;
 class GamePlayState;
@@ -66,8 +67,9 @@ private:
 	HWND						m_hWnd;
 
 public: 
-	static ViewManager* GetInstance();
+	Animation GetAnimation(int AnimID) {return animations[AnimID]; };
 
+	static ViewManager* GetInstance();
 	//Initializing the manager
 	bool InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight, bool bIsWindowed, bool bVsync);
 

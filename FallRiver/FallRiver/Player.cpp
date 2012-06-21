@@ -6,6 +6,7 @@
 #include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
+#include "EventSystem.h"
 
 Player::Player()
 {
@@ -18,6 +19,12 @@ Player::Player()
 	m_nFrameX = 0;
 	m_nFrameY = 0;
 	SetDirection(DIRE_UP);
+
+	//AnimInfo startup
+	m_playerAnim.curAnimation = 0;
+	m_playerAnim.curAnimID = 0;
+	m_playerAnim.curFrame = 0;
+	m_playerAnim.fTime = 0;
 }
 
 Player::~Player()
@@ -53,15 +60,48 @@ void Player::Update(float fElapsedTime)
 	else if( pDI->KeyDown(DIK_DOWN))
 		SetDirection(DIRE_DOWN);
 
+	if((pDI->KeyDown(DIK_RIGHT) || pDI->KeyDown(DIK_LEFT)|| pDI->KeyDown(DIK_UP)|| pDI->KeyDown(DIK_DOWN)) && m_playerAnim.curAnimation == 0)
+	{
+		m_playerAnim.curAnimation = 1;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if((!pDI->KeyDown(DIK_RIGHT) && !pDI->KeyDown(DIK_LEFT)&& !pDI->KeyDown(DIK_UP) && !pDI->KeyDown(DIK_DOWN)) && m_playerAnim.curAnimation == 1)
+	{
+		m_playerAnim.curAnimation = 0;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+
 	for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
 		m_vpWeapons[i]->Update(fElapsedTime);
+
+	//Updating the player's frame and timer for animations
+	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	m_playerAnim.fTime += fElapsedTime;
+
+	if(m_playerAnim.fTime >= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
+	{
+		m_playerAnim.fTime -= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
+		m_playerAnim.curFrame++;
+		if(m_playerAnim.curFrame < (int)thisAnim.frames[m_playerAnim.curAnimation].size())
+		{
+		if(strcmp(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
+			EventSystem::GetInstance()->SendEvent(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
+		}
+		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame = 0;
+		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame = thisAnim.frames.size() -1;
+	}
 }
 
 void Player::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
-
-	pVM->DrawRect(GetRect(), 0, 0, 255);
+	//Drawing Player Placeholder Sprite
+	pVM->DrawAnimation(&m_playerAnim, (int)GetPosX(), (int)GetPosY());
+	//pVM->DrawRect(GetRect(), 0, 0, 255);
 
 	for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
 		m_vpWeapons[i]->Render();
@@ -69,6 +109,9 @@ void Player::Render()
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
+	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+
 	if(BaseObject::CheckCollision(pBase) == true )
 	{
 		if(pBase->GetObjectType() == OBJ_CHARACTER)
@@ -79,25 +122,25 @@ bool Player::CheckCollision(IObjects* pBase)
 				Enemy*pEn = (Enemy*)pCh;
 				if(!GamePlayState::GetInstance()->CanMoveRight() || !GamePlayState::GetInstance()->CanMoveLeft() || !GamePlayState::GetInstance()->CanMoveDown() || !GamePlayState::GetInstance()->CanMoveUp() )
 					return true;
-				if(pEn->GetRect().left <= GetRect().right && GetRect().right - pEn->GetRect().left <= 5)
+				if(pEn->GetRect().left <= (GetPosX() + thisFrame.colRect.left) && (GetPosX() + thisFrame.colRect.left) - pEn->GetRect().left <= 5) //Formerly GetRect.right
 				{
-					pEn->SetPosX(float(GetRect().right));
+					pEn->SetPosX(float(GetPosX() + thisFrame.colRect.right));
 					GamePlayState::GetInstance()->SetCanMoveRight(false);
 					pEn->SetCanMove(false);
 				}
-				else if(pEn->GetRect().right >= GetRect().left && pEn->GetRect().right - GetRect().left <= 5)
+				else if(pEn->GetRect().right >= (GetPosX() + thisFrame.colRect.right) && pEn->GetRect().right - (GetPosX() + thisFrame.colRect.right) <= 5) //Formerly GetRect.left
 				{
 					pEn->SetPosX(float(GetRect().left-pEn->GetWidth()));
 					GamePlayState::GetInstance()->SetCanMoveLeft(false);
 					pEn->SetCanMove(false);
 				}
-				else if(pEn->GetRect().top <= GetRect().bottom && GetRect().bottom - pEn->GetRect().top <= 5)
+				else if(pEn->GetRect().top <= (GetPosY() + thisFrame.colRect.top) && (GetPosY() + thisFrame.colRect.top)  - pEn->GetRect().top <= 5) //Formerly GetRect.bottom
 				{
-					pEn->SetPosY(float(GetRect().bottom));
+					pEn->SetPosY(float(GetPosY() + thisFrame.colRect.bottom));
 					GamePlayState::GetInstance()->SetCanMoveUp(false);
 					pEn->SetCanMove(false);
 				}
-				else if(pEn->GetRect().bottom >= GetRect().top && pEn->GetRect().bottom - GetRect().top <= 5)
+				else if(pEn->GetRect().bottom >= (GetPosY() + thisFrame.colRect.bottom)  && pEn->GetRect().bottom - (GetPosY() + thisFrame.colRect.bottom) <= 5) //Formerly GetRect.top
 				{
 					pEn->SetPosY(float(GetRect().top-pEn->GetHeight()));
 					GamePlayState::GetInstance()->SetCanMoveDown(false);
@@ -107,13 +150,13 @@ bool Player::CheckCollision(IObjects* pBase)
 			}
 			// Fixing the movement.. TODO: Change So is used for New Camera
 			{
-				if( GetRect().right <= pBase->GetRect().left + 5 )
+				if( (GetPosX() + thisFrame.colRect.right) <= pBase->GetRect().left + 5 )
 					GamePlayState::GetInstance()->SetCanMoveRight(false);
-				else if( GetRect().left >= pBase->GetRect().right - 5 )
+				else if( (GetPosX() + thisFrame.colRect.left)  >= pBase->GetRect().right - 5 )
 					GamePlayState::GetInstance()->SetCanMoveLeft(false);
-				else if( GetRect().top >= pBase->GetRect().bottom -5 )
+				else if( (GetPosY() + thisFrame.colRect.top)  >= pBase->GetRect().bottom -5 )
 					GamePlayState::GetInstance()->SetCanMoveUp(false);
-				else if( GetRect().bottom <= pBase->GetRect().top + 5 )
+				else if( (GetPosY() + thisFrame.colRect.bottom) <= pBase->GetRect().top + 5 )
 					GamePlayState::GetInstance()->SetCanMoveDown(false);
 			}
 		}

@@ -94,6 +94,8 @@ void GamePlayState::Enter()
 		pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon->SetPosY(pPlayer->GetPosY());
 
+		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/playerAnimPlaceholder.xml"));
+
 		pPlayer->AddWeapon(pWeapon);
 
 	}

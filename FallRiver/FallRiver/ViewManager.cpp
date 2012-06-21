@@ -147,7 +147,7 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 
 		const char* pText = pRoot->GetText();
 		if(pText)
-			strcpy_s(Animate.filepath, 100, pText);
+			strcpy_s(Animate.filepath, 260, pText);
 		
 	TiXmlElement* pAnimation = pRoot->FirstChildElement("animation");
 	int j = 0;
@@ -173,7 +173,7 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 		//Read Name
 		pText = pPlayer->GetText();
 		if(pText)
-			strcpy_s(info.eventMsg, 32, pText);
+			strcpy_s(info.eventMsg, 100, pText);
 
 		int x = 0;
 		TiXmlElement* pSource = pPlayer->FirstChildElement("source_rect_info");
@@ -228,8 +228,9 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 	j++;
 	pAnimation = pAnimation->NextSiblingElement("animation");
 	}
-
-	Animate.nTextureID = RegisterTexture(Animate.filepath);
+	char temp[260] = "resource/graphics/";
+	strcat_s(temp, 260, Animate.filepath);
+	Animate.nTextureID = RegisterTexture(temp);
 
 	animations.push_back(Animate);
 
