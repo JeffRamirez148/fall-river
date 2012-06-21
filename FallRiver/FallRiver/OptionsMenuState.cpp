@@ -88,6 +88,9 @@ bool OptionsMenuState::Input()
 			m_nCursPosY = 300;
 	}
 
+	sfxVolume = m_pAM->getSoundVolume();
+	musicVolume = m_pAM->getMusicVolume();
+
 	if( m_pDI->KeyPressed(DIK_RIGHT) )
 	{
 		if( m_nCursPosY == 200 && sfxVolume < 1.0f)

@@ -41,7 +41,7 @@ void NPC::Update(float fElapsedTime)
 void NPC::Render() 
 {
 	// Render this NPC
-	if(GetPosX() < 0 || GetPosY() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
+	if(GetPosX()+GetWidth() < 0 || GetPosY()+GetHeight() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
 		return;
 	ViewManager* pVM = ViewManager::GetInstance();
 

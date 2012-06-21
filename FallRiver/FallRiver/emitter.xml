@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <emitter_list>
-  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="128" endGreen="0" endBlue="0" endRot="0" endScaleX="4" endScaleY="1" endVelX="2" endVelY="0" endVelZ="0" lifeSpan="1" lifeTime="1" loopin="1" maxParticles="1" rectL="0" rectT="0" rectR="100" rectB="20" spawnRate="0" startAlpha="255" startRed="255" startGreen="0" startBlue="0" startRot="0" startScaleX="8" startScaleY="2" startVelX="3" startVelY="0" StartVelZ="0" />
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="255" endGreen="255" endBlue="0" endRot="0" endScaleX="1" endScaleY="1" endVelX="2" endVelY="0" endVelZ="0" lifeSpan="1" lifeTime="1" loopin="1" maxParticles="1" rectL="366" rectT="337" rectR="376" rectB="347" spawnRate="1" startAlpha="255" startRed="255" startGreen="255" startBlue="0" startRot="0" startScaleX="2" startScaleY="2" startVelX="-1" startVelY="-1" StartVelZ="0">PMA_Bullet.png</emitter_info>
 </emitter_list>

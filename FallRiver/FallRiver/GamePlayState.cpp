@@ -135,7 +135,7 @@ void GamePlayState::Enter()
 		}
 	}
 
-	for(int i = 0; i < 0; i++)
+	for(int i = 0; i < 2; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
@@ -279,14 +279,14 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			// Create bullet
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
-			//Set up data members			
+			//Set up data members
 			bullet->SetImageID( -1 );
 			bullet->SetHeight(16);
 			bullet->SetWidth(16);
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
-			int emID = self->m_pPM->LoadEmitter("emitter.xml");
+			int emID = self->m_pPM->LoadEmitter("emitter1.xml");
 
 			bullet->SetEmmiterID(self->m_pPM->ActivateEmitter(emID));
 
