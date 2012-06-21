@@ -18,7 +18,7 @@ public:
 	RECT sourceRect;
 	RECT activeRect;
 	RECT colRect;
-	string event;
+	char eventMsg[100];
 };
 
 #endif

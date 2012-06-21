@@ -10,10 +10,10 @@ using namespace std;
 class Animation
 {
 public:
-	vector<Frame> frames;
-	string _name;
+	vector<vector<Frame>> frames;
+	char filepath[260];
 	int nTextureID;
-	bool looping;
+	vector<bool> looping;
 };
 
 #endif

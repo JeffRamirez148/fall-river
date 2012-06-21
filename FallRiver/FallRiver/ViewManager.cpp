@@ -127,17 +127,113 @@ int ViewManager::RegisterTexture(char* aFilePath)
 	}
 }
 
-int ViewManager::RegisterFont(char* filename )
-{
-
-	return RegisterTexture(filename);
-}
-
-
 int ViewManager::RegisterAnimation(char* aFilePath) 
 {
-	//Need a load animation function from XML Manager to do this;
-	return -1;
+	if (!aFilePath)	return -1;
+
+	Animation Animate;
+	//Create the tinyXML document structure
+	TiXmlDocument doc;
+
+	//attempt to load the file
+	if(doc.LoadFile(aFilePath) == false)
+		return false;
+
+	//Access the root element ("players_list")
+	TiXmlElement* pRoot = doc.RootElement();
+
+	if(pRoot == nullptr)
+		return false;
+
+		const char* pText = pRoot->GetText();
+		if(pText)
+			strcpy_s(Animate.filepath, 100, pText);
+		
+	TiXmlElement* pAnimation = pRoot->FirstChildElement("animation");
+	int j = 0;
+	while(pAnimation)
+	{
+
+		vector<Frame> TempAnim;
+
+		int loop = 0;
+		pAnimation->Attribute("looping", &loop);
+		if(loop == 0)
+			Animate.looping.push_back(false);
+		else
+			Animate.looping.push_back(true);
+
+	//Iterate through the nodes to load player data
+	TiXmlElement* pPlayer = pAnimation->FirstChildElement("frame_info");
+
+	while(pPlayer)
+	{
+		Frame info = { };
+
+		//Read Name
+		pText = pPlayer->GetText();
+		if(pText)
+			strcpy_s(info.eventMsg, 32, pText);
+
+		int x = 0;
+		TiXmlElement* pSource = pPlayer->FirstChildElement("source_rect_info");
+		pSource->Attribute("sourceRectLeft", &x);
+		info.sourceRect.left = x;
+		pSource->Attribute("sourceRectRight", &x);
+		info.sourceRect.right = x;
+		pSource->Attribute("sourceRectTop", &x);
+		info.sourceRect.top = x;
+		pSource->Attribute("sourceRectBottom", &x);
+		info.sourceRect.bottom = x;
+
+		TiXmlElement* pCol = pPlayer->FirstChildElement("col_rect_info");
+		pCol->Attribute("colRectLeft", &x);
+		info.colRect.left = x;
+		pCol->Attribute("colRectRight", &x);
+		info.colRect.right = x;
+		pCol->Attribute("colRectTop", &x);
+		info.colRect.top = x;
+		pCol->Attribute("colRectBottom", &x);
+		info.colRect.bottom = x;
+
+		TiXmlElement* pAct = pPlayer->FirstChildElement("act_rect_info");
+		pCol->Attribute("actRectLeft", &x);
+		info.activeRect.left = x;
+		pCol->Attribute("actRectRight", &x);
+		info.activeRect.right = x;
+		pCol->Attribute("actRectTop", &x);
+		info.activeRect.top = x;
+		pCol->Attribute("actRectBottom", &x);
+		info.activeRect.bottom = x;
+
+		double y = 0;
+		TiXmlElement* pDur = pPlayer->FirstChildElement("duration_info");
+		pDur->Attribute("duration", &y);
+		info.duration = (float)y;
+
+		TiXmlElement* pAnchor = pPlayer->FirstChildElement("anchor_info");
+		pAnchor->Attribute("anchorPointX", &x);
+		info.anchor.x = x;
+		pAnchor->Attribute("anchorPointY", &x);
+		info.anchor.y = x;
+
+		//Save this info the the vector
+
+		TempAnim.push_back(info);
+
+		pPlayer = pPlayer->NextSiblingElement("frame_info");
+	}
+
+	Animate.frames.push_back(TempAnim);
+	j++;
+	pAnimation = pAnimation->NextSiblingElement("animation");
+	}
+
+	Animate.nTextureID = RegisterTexture(Animate.filepath);
+
+	animations.push_back(Animate);
+
+	return (int)animations.size() - 1;
 }
 
 int ViewManager::RegisterShader(char* aFilePath)
@@ -150,12 +246,15 @@ int ViewManager::RegisterShader(char* aFilePath)
 bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
 							float fRotCenterY, float fRotation, D3DCOLOR color)
 {
-	assert(aAnimInfo->curAnimation > -1 && aAnimInfo->curAnimation < (int)fonts.size() && "Anim ID is out of range");
+	assert(aAnimInfo->curAnimID > -1 && aAnimInfo->curAnimID < (int)animations.size() && "Anim ID is out of range");
+	assert(aAnimInfo->curAnimation < (int)animations[aAnimInfo->curAnimID].frames.size() && "Current Animation is out of range");
+	assert(animations[aAnimInfo->curAnimID].nTextureID <  (int)textures.size() && "Texture ID is out of range");
+	assert(aAnimInfo->curFrame < (int)animations[aAnimInfo->curAnimID].frames[aAnimInfo->curAnimation].size() && "Current frame is out of Range");
 
-	assert(animations[aAnimInfo->curAnimation].nTextureID <  (int)textures.size() && "Texture ID is out of range");
+	Frame info = animations[aAnimInfo->curAnimID].frames[aAnimInfo->curAnimation][aAnimInfo->curFrame];
 
-	DrawStaticTexture(animations[aAnimInfo->curAnimation].nTextureID, nPosX, nPosY, fScaleX, fScaleY, 
-		&(animations[aAnimInfo->curAnimation].frames[aAnimInfo->curFrame].sourceRect), fRotCenterX, fRotCenterY, fRotation, color);
+	DrawStaticTexture(animations[aAnimInfo->curAnimID].nTextureID, nPosX - int((info.anchor.x * fScaleX)), nPosY - int((info.anchor.y * fScaleY)), fScaleX, fScaleY, 
+		&(animations[aAnimInfo->curAnimID].frames[aAnimInfo->curAnimation][aAnimInfo->curFrame].sourceRect), fRotCenterX, fRotCenterY, fRotation, color);
 	return true;
 }
 
