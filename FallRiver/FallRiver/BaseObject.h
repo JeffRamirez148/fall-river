@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include "IObjects.h"
 
-enum OBJECTS { OBJ_BUSH = 0, OBJ_CLOSET, OBJ_BULLET, OBJ_CHARACTER, OBJ_PICKUP, OBJ_LIGHT };
+enum OBJECTS { OBJ_BUSH = 0, OBJ_CLOSET, OBJ_BULLET, OBJ_CHARACTER, OBJ_PICKUP, OBJ_LIGHT, OBJ_LEVEL };
 
 class BaseObject : public IObjects
 {
