@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
+﻿<?xml version="1.0" encoding="utf-8"?>
 <emitter_list>
-    <emitter_info>resource/graphics/testParticle.png</emitter_info>
-
-    <emitter_info blendModeS="4" blendModeD="2" endColor="4278190080" endRot = "0" endScaleX = "1" endScaleY = "1" endVelX = "1" endVelY = "1" endVelZ = "0" lifeSpan = "5" lifeTime = "120" loopin = "1" maxParticles = "100" rectL = "30" rectT = "30" rectR = "130" rectB = "130" spawnRate = ".1" startColor = "4294967295" startRot = "0.7853975" startScaleX = "1" startScaleY = "1" startVelX = "2" startVelY = "2" StartVelZ = "0"></emitter_info>
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="128" endGreen="0" endBlue="0" endRot="0" endScaleX="4" endScaleY="1" endVelX="2" endVelY="0" endVelZ="0" lifeSpan="1" lifeTime="1" loopin="1" maxParticles="1" rectL="0" rectT="0" rectR="100" rectB="20" spawnRate="0" startAlpha="255" startRed="255" startGreen="0" startBlue="0" startRot="0" startScaleX="8" startScaleY="2" startVelX="3" startVelY="0" StartVelZ="0" />
 </emitter_list>

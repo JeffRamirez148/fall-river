@@ -40,6 +40,11 @@ void Particle::Render()
 		view->DrawStaticTexture(imageID, int(pos.x), int(pos.y), scaleX, scaleY, nullptr, 
 							0.0f, 0.0f, rot, color);
 	}
+	else
+	{
+		RECT tmpRect = {pos.x - scaleX * .5f, pos.y - scaleY * .5f, pos.x + scaleX * .5f, pos.y + scaleY * .5f};
+		view->DrawRect( tmpRect, (color << 8) >> 24, (color << 16) >> 24, (color << 24) >> 24, color >> 24);
+	}
 	view->GetSprite()->Flush();
 	view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmpD);
 	view->GetDirect3DDevice()->SetRenderState(D3DRS_SRCBLEND, tmpS);

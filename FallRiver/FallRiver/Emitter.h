@@ -43,8 +43,26 @@ public:
 	float GetAge(void) { return age; }
 	bool GetLooping(void) { return loopin;}
 	float GetLifeTime(void) { return lifeTime; }
+	RECT GetRect(void) {return rect; }
 
 	void SetAge(float newAge) { age = newAge; }
+	void SetLifeTime(float newLifeTime) { lifeTime = newLifeTime; }
+	void SetLifeSpan(float newLifeSpan) { lifeSpan = newLifeSpan; }
+	void SetStartScaleX(float newScaleX) { startScaleX = newScaleX; }
+	void SetEndScaleX(float newScaleX) { endScaleX = newScaleX; }
+	void SetStartScaleY(float newScaleY) { startScaleY = newScaleY; }
+	void SetEndScaleY(float newScaleY) { endScaleY = newScaleY; }
+	void SetSpawnRate(float newSpawnRate) { spawnRate = newSpawnRate; }
+	void SetLoopin(bool loop) { loopin = loop; }
+	void SetBlendModeS(int blendMode) { blendModeS = blendMode; }
+	void SetBlendModeD(int blendMode) { blendModeD = blendMode; }
+	void SetImageID(int newImageID) { imageID = newImageID; }
+	void SetStartColor(int newStartColor) { startColor = newStartColor; }
+	void SetEndColor(int newEndColor) { endColor = newEndColor; }
+	void SetMaxParticles(int newMax) { maxParticles = newMax; }
+	void SetStartRotation(float newRot) { startRot = newRot; }
+	void SetEndRotation(float newRot) { endRot = newRot; }                   
+	void SetRect(RECT newRect) { rect = newRect;}
 };
 
 #endif

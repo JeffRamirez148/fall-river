@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "Light.h"
+#include <string>
 
 XMLManager* XMLManager::GetInstance(void)
 {
@@ -62,7 +63,14 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	double startScaleX;
 	double startScaleY;
 	D3DXVECTOR3 startVel;
-
+	int endAlpha;
+	int endRed;
+	int endGreen;
+	int endBlue;
+	int startAlpha;
+	int startRed;
+	int startGreen;
+	int startBlue;
 	double x;
 	double y;
 	double z;
@@ -72,15 +80,27 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	double bottom;
 
 	const char* pText = pEmitter->GetText();
-	char imageFilePath[100];
-	if( pText != nullptr )
-		strcpy_s( imageFilePath, 100, pText );
-	imageID = ViewManager::GetInstance()->RegisterTexture(imageFilePath);
+	if( pText != NULL )
+	{
+		char imageFilePath[100];
+		string finalFilePath = pText;
+		finalFilePath = "resource/graphics/" + finalFilePath;
+		if( pText != nullptr )
+		strcpy_s( imageFilePath, 100, finalFilePath.c_str() );
+		imageID = ViewManager::GetInstance()->RegisterTexture(imageFilePath);
+	}
+	else
+		imageID = -1;
 
-	pEmitter = pEmitter->NextSiblingElement("emitter_info");
 	pEmitter->Attribute("blendModeS", &blendModeS);
 	pEmitter->Attribute("blendModeD", &blendModeD);
-	pEmitter->Attribute("endColor", &endColor);
+	pEmitter->Attribute("spawnRate", &spawnRate);
+	pEmitter->Attribute("endAlpha", &endAlpha);
+	pEmitter->Attribute("endRed",   &endRed);
+	pEmitter->Attribute("endGreen", &endGreen);
+	pEmitter->Attribute("endBlue",  &endBlue);
+	endColor = (endAlpha << 24) | (endRed << 16) | (endGreen << 8) | endBlue;
+
 	pEmitter->Attribute("endRot", &endRot);
 	pEmitter->Attribute("endScaleX", &endScaleX);
 	pEmitter->Attribute("endScaleY", &endScaleY);
@@ -102,8 +122,12 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	rect.bottom = (LONG)bottom;
 	rect.top = (LONG)top;
 	rect.right = (LONG)right;
-	pEmitter->Attribute("spawnRate", &spawnRate);
-	pEmitter->Attribute("startColor", &startColor);
+	pEmitter->Attribute("spawnRate",  &spawnRate);
+	pEmitter->Attribute("startAlpha", &startAlpha);
+	pEmitter->Attribute("startRed",   &startRed);
+	pEmitter->Attribute("startGreen", &startGreen);
+	pEmitter->Attribute("startBlue",  &startBlue);
+	startColor = (startAlpha << 24) | (startRed << 16) | (startGreen << 8) | startBlue;
 	pEmitter->Attribute("startRot", &startRot);
 	pEmitter->Attribute("startScaleX", &startScaleX);
 	pEmitter->Attribute("startScaleY", &startScaleY);

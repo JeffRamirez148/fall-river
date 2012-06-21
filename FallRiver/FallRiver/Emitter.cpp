@@ -24,6 +24,8 @@ void Emitter::Update(float fElapsedTime)
 		tmpPos.z = 0.0f;
 		tmpParticle->SetPos(tmpPos);
 		tmpParticle->SetVel(startVel);
+		tmpParticle->SetScaleX(startScaleX);
+        tmpParticle->SetScaleY(startScaleY);
 		D3DXVECTOR3 tmpDir;
 		tmpDir.x = float(((rand() % 3) - 1) >> 1);
 		tmpDir.y = float(((rand() % 3) - 1) >> 1);
@@ -139,7 +141,7 @@ void Emitter::Update(float fElapsedTime)
 
 			if(startScaleY > endScaleY)
 			{
-				tmpScaleX -= fElapsedTime;
+				tmpScaleY -= fElapsedTime;
 				if(tmpScaleY < endScaleY)
 					tmpScaleY = endScaleY;
 			}
