@@ -77,20 +77,20 @@ void ShootingAi::Update(float fElapsedTime)
 		BaseCharacter::Update(fElapsedTime);
 	}
 
-	if(m_pTarget->GetPosX() > GetPosX())
+	if(m_pTarget->GetPosX() > GetPosX()+10)
 	{
-		if(m_pTarget->GetPosY() > GetPosY()+5)
+		if(m_pTarget->GetPosY() > GetPosY()+10)
 			SetDirection(DIRE_DOWNRIGHT);
-		else if(m_pTarget->GetPosY() < GetPosY()-5)
+		else if(m_pTarget->GetPosY() < GetPosY()-10)
 			SetDirection(DIRE_UPRIGHT);
 		else
 			SetDirection(DIRE_RIGHT);
 	}
-	else if(m_pTarget->GetPosX() < 0)
+	else if(m_pTarget->GetPosX() < GetPosX()-10)
 	{
-		if(m_pTarget->GetPosY() > GetPosY()+5)
+		if(m_pTarget->GetPosY() > GetPosY()+10)
 			SetDirection(DIRE_DOWNLEFT);
-		else if(m_pTarget->GetPosY() < GetPosY()-5)
+		else if(m_pTarget->GetPosY() < GetPosY()-10)
 			SetDirection(DIRE_UPLEFT);
 		else
 			SetDirection(DIRE_LEFT);
