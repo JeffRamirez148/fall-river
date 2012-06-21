@@ -3129,216 +3129,6 @@
   </Tile>
   <Tile layer="2">
     <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="64" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="128" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="192" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="256" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="320" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="384" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="448" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="512" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="576" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="640" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="704" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="768" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="832" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="896" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="960" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1024" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1088" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1152" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1216" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1280" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1344" y="192" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1344" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1280" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1216" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1152" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1088" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="1024" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="960" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="896" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="832" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="768" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="704" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="640" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="576" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="512" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="448" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="384" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="320" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="256" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="192" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="128" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
-    <WorldPos x="64" y="256" />
-    <TileID ID="1" />
-  </Tile>
-  <Tile layer="2">
-    <ScrRect x="0" y="0" height="64" width="64" />
     <WorldPos x="1472" y="448" />
     <TileID ID="1" />
   </Tile>
@@ -4012,6 +3802,216 @@
     <WorldPos x="1152" y="1152" />
     <TileID ID="1" />
   </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="64" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="64" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="128" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="128" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="192" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="192" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="256" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="320" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="256" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="384" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="320" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="384" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="448" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="448" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="512" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="512" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="576" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="640" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="576" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="640" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="704" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="832" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="768" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="704" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="768" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="832" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="896" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="896" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="960" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1024" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1152" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1216" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1280" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1344" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1088" y="256" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1344" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1280" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1216" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1152" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1088" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="1024" y="192" />
+    <TileID ID="1" />
+  </Tile>
+  <Tile layer="2">
+    <ScrRect x="192" y="64" height="64" width="64" />
+    <WorldPos x="960" y="192" />
+    <TileID ID="1" />
+  </Tile>
   <Collision>
     <Type>Wall</Type>
     <ScrRect x="0" y="0" height="1600" width="64" />
@@ -4027,10 +4027,6 @@
   <Collision>
     <Type>Wall</Type>
     <ScrRect x="0" y="0" height="64" width="1600" />
-  </Collision>
-  <Collision>
-    <Type>Wall</Type>
-    <ScrRect x="64" y="192" height="128" width="1344" />
   </Collision>
   <Collision>
     <Type>Wall</Type>

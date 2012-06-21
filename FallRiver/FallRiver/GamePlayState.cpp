@@ -5,6 +5,8 @@
 #include "OptionsMenuState.h"
 #include "PauseMenuState.h"
 #include "Level.h"
+#include "Particle_Manager.h"
+#include "Emitter.h"
 #include "CGame.h"
 #include "DirectInput.h"
 #include "Enemy.h"
@@ -35,6 +37,7 @@ GamePlayState::GamePlayState()
 	m_pOF = nullptr;
 	m_pOM = nullptr;
 	m_pES = nullptr;
+	m_pPM = nullptr;
 	m_cPlayer = nullptr;
 
 	m_cWeapon = nullptr;
@@ -60,8 +63,10 @@ void GamePlayState::Enter()
 	m_pOM = ObjectManager::GetInstance();
 	m_pES = EventSystem::GetInstance();
 	m_pMS = MessageSystem::GetInstance();
+	m_pPM = Particle_Manager::GetInstance();
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
+	m_pOF->RegisterClassType< Level			>( _T("Level") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
 	m_pOF->RegisterClassType< Weapon		>( _T("Weapon") );
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
@@ -70,10 +75,18 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 
-	m_clevel.LoadLevel("level.xml");
 
 	Player* pPlayer = nullptr;
 	Weapon* pWeapon = nullptr;
+	Level* pLevel = nullptr;
+
+	if( pLevel == nullptr )
+	{
+		m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
+		pLevel = m_clevel;
+		pLevel->LoadLevel("level.xml");
+		m_pOM->AddObject(pLevel);
+	}
 
 	if(m_cPlayer == nullptr)
 	{
@@ -241,7 +254,7 @@ bool GamePlayState::Input()
 
 void GamePlayState::Update(float fElapsedTime) 
 {
-	m_clevel.Update(fElapsedTime);
+	//m_clevel.Update(fElapsedTime);
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
 	m_pES->ProcessEvents();
@@ -251,7 +264,7 @@ void GamePlayState::Update(float fElapsedTime)
 void GamePlayState::Render() 
 {
 	m_pVM->GetSprite()->Flush();
-	m_clevel.Render();
+	//m_clevel.Render();
 
 	m_pOM->RenderAllObjects();
 }
@@ -273,6 +286,11 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
+			int emID = self->m_pPM->LoadEmitter("emitter.xml");
+
+			bullet->SetEmmiterID(self->m_pPM->ActivateEmitter(emID));
+
+			self->m_pPM->GetActiveEmitter(bullet->GetEmitterID())->SetLoopin(false);
 
 			switch(pOwner->GetOwner()->GetDirection())
 			{

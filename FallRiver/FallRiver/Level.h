@@ -20,6 +20,8 @@ struct leveldata
 	RECT m_rCollision;
 	int height, width, x,y;
 	char m_cType[ 32 ];
+	bool m_bPrevColliding;
+	int test;
 };
 
 struct mapTiles
@@ -60,6 +62,8 @@ public:
 	static Level* GetInstance();
 
 	virtual bool CheckCollision(IObjects* pBase);
+
+	//vector<mapTiles> GetTiles() { return m_vTiles;};
 
 };
 

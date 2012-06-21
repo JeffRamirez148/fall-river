@@ -20,6 +20,7 @@ LoadMenuState::LoadMenuState()
 	m_pVM = nullptr;
 	m_nCursPosY = 0;
 	m_nCursPosX = 0;
+	m_nFontID = -1;
 	m_bSure = false;
 	m_bCheck = false;
 	m_bIsLoading = false;
@@ -42,6 +43,7 @@ void LoadMenuState::Enter()
 	m_nNewID	= m_pVM->RegisterTexture("resource/graphics/bg_loadMenu_newGame.png");
 	m_nLoadID	= m_pVM->RegisterTexture("resource/graphics/bg_loadMenu_loadGame.png");
 	m_nExitID	= m_pVM->RegisterTexture("resource/graphics/bg_loadMenu_exit.png");
+	m_nFontID	= m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
 
 	m_nCursPosY = 200;
 	m_nCursPosX = 280;
@@ -171,12 +173,13 @@ void LoadMenuState::Render()
 		RECT backRect = {100, 150, 500, 450};
 		m_pVM->DrawRect(backRect, 100, 100, 100);
 
-		m_pVM->DrawTextW("Load Progress", 200, 150, 255, 0, 0);
+		m_pVM->DrawFont(m_nFontID,"Load Progress", 200, 150);
 
-		m_pVM->DrawTextW("Save 1", 250, 200, 255, 255, 0);
-		m_pVM->DrawTextW("Save 2", 250, 250, 255, 255, 0);
-		m_pVM->DrawTextW("Save 3", 250, 300, 255, 255, 0);
-		m_pVM->DrawTextW("Exit Game", 300, 400, 255, 255, 0);
+		//m_pVM->DrawTextW("Save 1", 250, 200, 255, 255, 0);
+		m_pVM->DrawFont(m_nFontID, "Save 1", 250, 200);
+		m_pVM->DrawFont(m_nFontID,"Save 2", 250, 250);
+		m_pVM->DrawFont(m_nFontID, "Save 3", 250, 300);
+		m_pVM->DrawFont(m_nFontID,"Back", 300, 400);
 
 		RECT rRect = {225, m_nCursPosY, 235, m_nCursPosY+10};
 

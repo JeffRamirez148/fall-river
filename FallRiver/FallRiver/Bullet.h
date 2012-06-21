@@ -12,7 +12,7 @@ private:
 	Weapon* m_pOwner;
 	float m_fSpeedX;
 	float m_fSpeedY;
-
+	int activeemitterID;
 
 public: 
 	Bullet();
@@ -35,6 +35,9 @@ public:
 	// Get and Set Owner of this bullet
 	void SetOwner(Weapon* pOwner) {m_pOwner = pOwner;}
 	Weapon* GetOwner() {return m_pOwner;}
+
+	int GetEmitterID() {return activeemitterID;}
+	void SetEmmiterID(int id) {activeemitterID = id;}
 
 	bool CheckCollision(IObjects* pBase);
 

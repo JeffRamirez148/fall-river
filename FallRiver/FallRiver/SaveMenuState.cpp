@@ -18,6 +18,7 @@ SaveMenuState::SaveMenuState(void)
 	m_pVM = nullptr;
 	m_nCursPosY = 0;
 	m_nCursPosX = 0;
+	m_nFontID	= 0;
 	m_bSure = false;
 	m_bCheck = false;
 }
@@ -31,6 +32,9 @@ void SaveMenuState::Enter()
 {
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
+
+	m_nFontID = m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
+
 	m_nCursPosY = 200;
 	m_nCursPosX = 280;
 }
@@ -144,30 +148,32 @@ void SaveMenuState::Update(float fElapsedTime)
 
 void SaveMenuState::Render()
 {
-	m_pVM->DrawTextW("Save Progress", 20, 20, 255, 0, 0);
-
-	m_pVM->DrawTextW("Save 1", 250, 200, 255, 255, 0);
-	m_pVM->DrawTextW("Save 2", 250, 250, 255, 255, 0);
-	m_pVM->DrawTextW("Save 3", 250, 300, 255, 255, 0);
-	m_pVM->DrawTextW("Exit Game", 300, 400, 255, 255, 0);
-
-	RECT rRect = {225, m_nCursPosY, 235, m_nCursPosY+10};
-
-	m_pVM->DrawRect(rRect, 0, 255, 255, 100);
+	m_pVM->DrawFont(m_nFontID, "Save Progress", 20, 20);
 
 	if( m_bCheck )
 	{
-		RECT cRect = {200, 200, 500, 300};
+		RECT cRect = {200, 200, 600, 350};
 
 		m_pVM->DrawRect(cRect, 0, 100, 100, 100);
 
-		m_pVM->DrawTextW("You are about to overwrite a previous save...", 200, 200, 255, 255, 0);
-		m_pVM->DrawTextW("Do you want to continue?", 260, 220, 255, 255, 0);
-		m_pVM->DrawTextW("Yes", 300, 280, 255, 255, 0);
-		m_pVM->DrawTextW("No", 400, 280, 255, 255, 0);
+		m_pVM->DrawFont(m_nFontID, "You are about to overwrite a previous save...", 200, 200, 0.5f, 0.5f);
+		m_pVM->DrawFont(m_nFontID, "Do you want to continue", 260, 220, 0.5f, 0.5f);
+		m_pVM->DrawFont(m_nFontID, "Yes", 300, 280, 0.5f, 0.5f);
+		m_pVM->DrawFont(m_nFontID, "No", 400, 280, 0.5f, 0.5f);
 
 		RECT xRect = {m_nCursPosX, 280, m_nCursPosX+10, 290};
 
 		m_pVM->DrawRect(xRect, 0, 255, 255, 100);
+	}
+	else
+	{
+		m_pVM->DrawFont(m_nFontID, "Save 1", 250, 200);
+		m_pVM->DrawFont(m_nFontID, "Save 2", 250, 250);
+		m_pVM->DrawFont(m_nFontID, "Save 3", 250, 300);
+		m_pVM->DrawFont(m_nFontID, "Exit Game", 300, 400);
+
+		RECT rRect = {225, m_nCursPosY, 235, m_nCursPosY+10};
+
+		m_pVM->DrawRect(rRect, 0, 255, 255, 100);
 	}
 }

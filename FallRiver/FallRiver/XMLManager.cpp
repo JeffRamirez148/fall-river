@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "Light.h"
+#include "Font.h"
 #include <string>
 
 XMLManager* XMLManager::GetInstance(void)
@@ -286,3 +287,67 @@ Player* XMLManager::LoadProgress(const char* szFilename)
 
 	return m_cPlayer;
 }
+
+bool XMLManager::LoadFont( char* szFilename,  vector<Font>&fonts, vector<Kerning>&kerns)
+{
+	// Create the TinyXML document
+	TiXmlDocument doc;
+
+	// Attempt to load the file
+	if( doc.LoadFile( szFilename ) == false )
+		return false;
+	
+	// Access the root element ("player")
+	TiXmlElement* pRoot = doc.RootElement();
+
+	if( pRoot == nullptr )
+		return nullptr;
+
+	fonts.clear();
+	
+	// Iterate through the nodes to load player data
+	TiXmlElement* pInfo = pRoot->FirstChildElement( "info" );
+	pInfo = pInfo->NextSiblingElement("common");
+	pInfo = pInfo->NextSiblingElement("pages");
+	pInfo = pInfo->NextSiblingElement("chars");
+	TiXmlElement* pChar = pInfo->FirstChildElement("char");
+
+	while(pChar != nullptr)
+	{
+		Font pFont;
+
+		pChar->Attribute("id", &pFont.id);
+		pChar->Attribute("yoffset", &pFont.yoffset);
+		pChar->Attribute("xoffset", &pFont.xoffset);
+		pChar->Attribute("height", &pFont.height);
+		pChar->Attribute("width", &pFont.width);
+		pChar->Attribute("x", &pFont.x);
+		pChar->Attribute("y", &pFont.y);
+
+		fonts.push_back(pFont);
+
+		pChar = pChar->NextSiblingElement( "char" );
+	}
+
+	TiXmlElement* pKerns = pInfo->NextSiblingElement("kernings");
+	pKerns = pKerns->FirstChildElement("kerning");
+
+	kerns.clear();
+
+	while(pKerns != nullptr)
+	{
+		Kerning m_pKern;
+
+		pKerns->Attribute("amount", &m_pKern.amount);
+		pKerns->Attribute("second", &m_pKern.secondID);
+		pKerns->Attribute("first", &m_pKern.firstID);
+
+		kerns.push_back(m_pKern);
+
+		pKerns = pKerns->NextSiblingElement("kerning");
+	}
+	
+
+	return true;
+}
+

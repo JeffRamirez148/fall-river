@@ -22,6 +22,8 @@ private:
 	bool m_bSure;
 	bool m_bCheck;
 
+	int m_nFontID;
+
 	SaveMenuState();
 	~SaveMenuState();
 	SaveMenuState(const SaveMenuState&);

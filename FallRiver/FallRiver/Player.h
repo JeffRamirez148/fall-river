@@ -7,13 +7,14 @@ using namespace std;
 
 #include "BaseCharacter.h"
 #include "AnimInfo.h"
+#include "IListener.h"
 
 class Quests;
 class GamePlayState;
 class Weapon;
 class Light;
 
-class Player: public BaseCharacter
+class Player: public BaseCharacter, public IListener
 {
 
 private:
@@ -43,6 +44,7 @@ public:
 	void Render();
 	bool CheckCollision(IObjects* pBase);
 	bool CheckLifes();
+	void HandleEvent(Event* aPEvent);
 
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}

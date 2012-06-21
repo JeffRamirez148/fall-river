@@ -6,6 +6,12 @@
 
 class Boss1: public Enemy
 {
+	bool m_bIsChasing;
+	bool m_bIsMoving;
+
+
+	BaseObject* m_cInTheWay;
+
 public: 
 	Boss1();
 	~Boss1();

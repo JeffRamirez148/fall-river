@@ -127,6 +127,12 @@ int ViewManager::RegisterTexture(char* aFilePath)
 	}
 }
 
+int ViewManager::RegisterFont(char* filename )
+{
+	XMLManager::GetInstance()->LoadFont("resource/graphics/FallRiver.xml", fonts, kerns);
+	return RegisterTexture(filename);
+}
+
 int ViewManager::RegisterAnimation(char* aFilePath) 
 {
 	if (!aFilePath)	return -1;
@@ -264,38 +270,67 @@ bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float
 bool ViewManager::DrawFont(int nFontID, char* cString, int nPosX, int nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
 							float fRotCenterY, float fRotation, D3DCOLOR color)
 {
-		assert(nFontID > -1 && nFontID < (int)fonts.size() && "Font ID is out of range");
+		assert(nFontID > -1 && nFontID < (int)textures.size() && "Font ID is out of range");
 
-		assert(fonts[nFontID].nTextureID <  (int)textures.size() && "Texture ID is out of range");
+		//assert(fonts[nFontID].nTextureID <  (int)textures.size() && "Texture ID is out of range");
 
 		int nX = nPosX;
 		int nColStart = nX;
 		int nY = nPosY;
+		char first;
+		char second;
 
 		for(int i = 0; cString[i] != '\0'; i++)
 		{
 			char ch = cString[i];
-			int id = ch -  ' ';
+			int id = ch - ' ';
+			int find = 0;
+
+			if(i == 0)
+				second = ch;
+			else if(i == 1)
+				first = ch;
+
+			for(unsigned int j = 0; j < fonts.size(); j++)
+			{
+				if( ch == fonts[j].id )
+				{
+					id = j;
+					break;
+				}
+			}
 
 			if(ch == ' ')
 			{
-				//move the x over
-				nX += int(fonts[nFontID].FontSourceRect[id].right - fonts[nFontID].FontSourceRect[id].left * fScaleX);
+				nX += 7;
 				continue;
 			}
 			else if(ch == '\n' )
 			{
 				// move the y down
-				nY += int(fonts[nFontID].FontSourceRect[id].right - fonts[nFontID].FontSourceRect[id].left * fScaleY);
+				nY += int(fonts[id].height * fScaleY);
 				nX = nColStart;
 				continue;
 			}
 
+			if(i == 1)
+			{
+				for(unsigned int k = 0; k <kerns.size(); k++)
+				{
+					if( first == kerns[k].firstID && second == kerns[k].secondID )
+					{
+						nX += kerns[k].amount;
+						break;
+					}
+				}
+			}
+
 			//Draw!
-			DrawStaticTexture(fonts[nFontID].nTextureID, nX, nY, 1.0f, 1.0f, &(fonts[nFontID].FontSourceRect[id]), 0, 0, 0, 0xFFFFFFFF);
+			RECT srcRect = {fonts[id].x, fonts[id].y, fonts[id].x+fonts[id].width, fonts[id].y+fonts[id].height};
+			DrawStaticTexture(nFontID, nX+fonts[id].xoffset, nY+fonts[id].yoffset, fScaleX, fScaleY, &srcRect);
 
 			// Move position to next char
-			nX += int(fonts[nFontID].FontSourceRect[id].right - fonts[nFontID].FontSourceRect[id].left * fScaleX);
+			nX += int(fonts[id].width * fScaleX)+fonts[id].xoffset;
 		}
 
 		return true;

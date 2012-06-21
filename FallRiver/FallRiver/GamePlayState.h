@@ -13,8 +13,9 @@ class ViewManager;
 class AudioManager;
 class ObjectManager;
 class OptionsMenuState;
+class Particle_Manager;
 class EventSystem;
-#include "Level.h"
+class Level;
 class Weapon;
 class DirectInput;
 class Enemy;
@@ -29,7 +30,7 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	Level			m_clevel;
+	Level*			m_clevel;
 	ViewManager*	m_pVM;
 	DirectInput*	m_pDI;
 	AudioManager*	m_pAM;
@@ -37,6 +38,7 @@ private:
 	ObjectManager*	m_pOM;
 	EventSystem*	m_pES;
 	MessageSystem*	m_pMS;
+	Particle_Manager*m_pPM;
 
 	// Data Members
 	float fTime;
