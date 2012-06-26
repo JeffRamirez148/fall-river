@@ -19,7 +19,6 @@ private:
 	float m_fRecoil;
 	float m_fCurrRotation;
 	float m_fFiringRange;
-	DWORD m_dwTickCount;
 
 	BaseCharacter* m_pOwner;
 
@@ -40,6 +39,7 @@ public:
 	int GetWeaponType() {return m_nWeaponType;}
 	int GetAmmo() {return m_nAmmo;}
 	int GetDamage() {return m_nDamage;}
+	float GetFireRate() {return m_fFireRate;}
 
 	void Render();
 

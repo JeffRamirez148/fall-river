@@ -11,11 +11,12 @@
 
 class GamePlayState;
 
+enum ENEMYSTATES{ ESTATE_IDLE = 0, ESTATE_CHASING, ESTATE_DEAD};
+
 class Enemy: public BaseCharacter, public IListener
 {
 protected: 
-	int m_nFrameX;
-	int m_nFrameY;
+	int m_nState;
 
 protected: 
 	Player* m_pTarget;

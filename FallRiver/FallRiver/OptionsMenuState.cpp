@@ -162,7 +162,7 @@ void OptionsMenuState::Render()
 
 	m_pVM->GetSprite()->Flush();
 
-	m_pVM->DrawFont(m_nFontID, "OPTIONS", 100, 100);
+	m_pVM->DrawFont(m_nFontID, "OPTIONS", 100, 100, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(255, 255,255));
 
 	RECT cursRect= { 275, m_nCursPosY, 285, m_nCursPosY+10 };
 	m_pVM->DrawRect( cursRect, 255, 0, 0 );

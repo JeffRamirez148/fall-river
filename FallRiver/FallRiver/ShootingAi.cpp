@@ -58,7 +58,7 @@ void ShootingAi::Update(float fElapsedTime)
 	if( distanceY < 0)
 		distanceY = -distanceY;
 
-	if( ((distanceX < 300 && distanceX >= 100) || (distanceY < 300 && distanceY >= 100 )) && distanceX+distanceY < 300  )
+	if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );

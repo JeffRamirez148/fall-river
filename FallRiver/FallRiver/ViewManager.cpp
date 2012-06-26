@@ -280,6 +280,7 @@ bool ViewManager::DrawFont(int nFontID, char* cString, int nPosX, int nPosY, flo
 		int nY = nPosY;
 		char first;
 		char second;
+		char newline;
 
 		for(int i = 0; cString[i] != '\0'; i++)
 		{
@@ -309,7 +310,7 @@ bool ViewManager::DrawFont(int nFontID, char* cString, int nPosX, int nPosY, flo
 			else if(ch == '\n' )
 			{
 				// move the y down
-				nY += int(fonts[id].height * fScaleY);
+				nY += 20 * fScaleY;
 				nX = nColStart;
 				continue;
 			}
@@ -328,7 +329,7 @@ bool ViewManager::DrawFont(int nFontID, char* cString, int nPosX, int nPosY, flo
 
 			//Draw!
 			RECT srcRect = {fonts[id].x, fonts[id].y, fonts[id].x+fonts[id].width, fonts[id].y+fonts[id].height};
-			DrawStaticTexture(nFontID, nX+fonts[id].xoffset, nY+fonts[id].yoffset, fScaleX, fScaleY, &srcRect);
+			DrawStaticTexture(nFontID, nX+fonts[id].xoffset, nY+fonts[id].yoffset, fScaleX, fScaleY, &srcRect, fRotCenterX, fRotCenterY, fRotation, color);
 
 			// Move position to next char
 			nX += int(fonts[id].width * fScaleX)+fonts[id].xoffset;
@@ -447,14 +448,14 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	
 	// Wall wa are gonna watch
 	VERTUV tmp[6];
-	int WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
-	int WINDOW_HEIGHT = CGame::GetInstance()->GetScreenHeight();
-	tmp[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);	 tmp[0].uv = D3DXVECTOR2((float)(1/WINDOW_WIDTH) * .5f,(float)(1/WINDOW_HEIGHT) * .5f);
-	tmp[1].pos = D3DXVECTOR3(1.0f, 1.0f, 0.0f);	 tmp[1].uv = D3DXVECTOR2((float)(1 + ((1/WINDOW_WIDTH) * .5f)),(float)(1/WINDOW_HEIGHT) * .5f);
-	tmp[2].pos = D3DXVECTOR3(1.0f, -1.0f, 0.0f);	 tmp[2].uv = D3DXVECTOR2((float)(1 + ((1/WINDOW_WIDTH) * .5f)),(float)(1 + ((1/WINDOW_HEIGHT) * .5f)));
+	float WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
+	float WINDOW_HEIGHT = CGame::GetInstance()->GetScreenHeight();
+	tmp[0].pos = D3DXVECTOR3(-1, 1, 0);	 tmp[0].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,(1/WINDOW_HEIGHT) * .5);
+	tmp[1].pos = D3DXVECTOR3(1, 1, 0);	 tmp[1].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),(1/WINDOW_HEIGHT) * .5);
+	tmp[2].pos = D3DXVECTOR3(1, -1, 0);	 tmp[2].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),1 + ((1/WINDOW_HEIGHT) * .5));
 	tmp[3].pos = tmp[0].pos;			 tmp[3].uv = tmp[0].uv;
 	tmp[4].pos = tmp[2].pos;			 tmp[4].uv = tmp[2].uv;
-	tmp[5].pos = D3DXVECTOR3(-1.0f, -1.0f, 0.0f); tmp[5].uv = D3DXVECTOR2((float)(1/WINDOW_WIDTH) * .5f,(float)(1 + ((1/WINDOW_HEIGHT) * .5f)));
+	tmp[5].pos = D3DXVECTOR3(-1, -1, 0); tmp[5].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,1 + ((1/WINDOW_HEIGHT) * .5));
 	void* mem = 0;
 	m_lpDirect3DDevice->CreateVertexBuffer( sizeof(VERTUV) * 6, 0, 0, D3DPOOL_MANAGED, &wallbuff, 0);
 	wallbuff->Lock(0,0,&mem,0);
@@ -490,7 +491,7 @@ bool ViewManager::DeviceBegin(void)
 	renderTarget->GetSurfaceLevel(0,&output);
 	m_lpDirect3DDevice->SetRenderTarget(0,output);
 	// clear rendertarget
-	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);	// modify for zbuffer
+	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET , D3DCOLOR_XRGB(0,0,0), 1.0f, 0);	// modify for zbuffer
 	m_lpDirect3DDevice->BeginScene();
 	return true;
 }
@@ -530,7 +531,11 @@ bool ViewManager::DeviceEnd(void)
 	{
 		postEffect->BeginPass(i);
 		postEffect->SetTexture("gDiffuseTexture", renderTarget);
-		postEffect->SetInt("gSetting", 0);
+		postEffect->SetMatrix("gWorld", &wall);
+		//postEffect->SetMatrix("gViewProjection", &(cam * proj));
+		//postEffect->SetFloatArray("gLightDir", ,3);
+		//postEffect->SetFloatArray("gLightPos", ,3);
+		postEffect->SetInt("gSetting", 1);
 
 		postEffect->CommitChanges();
 		m_lpDirect3DDevice->SetVertexDeclaration(cubedecl);

@@ -14,6 +14,8 @@ class GamePlayState;
 class Weapon;
 class Light;
 
+enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH};
+
 class Player: public BaseCharacter, public IListener
 {
 
@@ -25,7 +27,11 @@ private:
 	Weapon* m_currWeapon;
 	Light* m_currLight;
 
+	DWORD m_dwGunCount;
+	DWORD m_dwGunReset;
+
 	int m_nScore;
+	int m_nState;
 	char* m_cName;
 	bool m_bIsAlive;
 	bool m_bIsHidden;
