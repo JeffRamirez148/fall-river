@@ -34,21 +34,21 @@ void OptionsMenuState::Enter()
 	m_pVM = ViewManager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 
-	soundID = m_pAM->RegisterSound("KCJ_MenuClick.wav");
 	m_nOptionID = m_pVM->RegisterTexture("resource/graphics/bg_options.png");
 	m_nFontID	= m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
 
 	FMOD_VECTOR tmp = {0,0,0};
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	m_pAM->SetListenerPos(tmp);
 	soundID = m_pAM->RegisterSound("KCJ_MenuClick.wav");
 	m_pAM->setSoundPos(soundID, sound1);
-	m_pAM->setSoundVolume( 1);
+
 	m_pAM->setSoundVel(soundID, tmp);
 	m_pAM->setSoundLooping(soundID, false);
 
-	musicID = m_pAM->registerMusic("wilderness.mp3");
+	musicID = m_pAM->registerMusic("resource/Sounds/walking.aif");
 	m_pAM->setMusicPos(musicID, sound1);
-	m_pAM->setMusicVolume( 1);
+
 	m_pAM->setMusicVel(musicID, tmp);
 	m_pAM->setMusicLooping(musicID, true);
 	m_pAM->playMusic(musicID);
@@ -61,8 +61,6 @@ void OptionsMenuState::Enter()
 
 void OptionsMenuState::Exit() 
 {
-	m_pAM->setMusicVolume(0);
-	m_pAM->setMusicLooping(musicID, false);
 	m_pVM = nullptr;
 	m_pDI = nullptr;
 	m_pAM = nullptr;

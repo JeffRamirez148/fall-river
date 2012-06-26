@@ -31,6 +31,8 @@ private:
 	bool m_bIsHidden;
 	bool m_bTalking;
 	int m_nLives;
+	int walkingID;
+	int hitID;
 	vector<Quests*> m_vpActiveQuests;
 
 	AnimInfo m_playerAnim;
