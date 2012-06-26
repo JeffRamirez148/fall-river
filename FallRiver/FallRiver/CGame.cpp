@@ -6,6 +6,7 @@
 #include "MainMenuState.h"
 #include "AudioManager.h"
 #include "GamePlayState.h"
+#include "sound.h"
 
 CGame* CGame::GetInstance()
 {
@@ -137,6 +138,12 @@ void CGame::ShutDown()
 
 void CGame::ChangeState(IMenuState* pNewState) 
 {
+	for(int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
+		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
+	for(int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
+		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
+
+
 	// Exit the current state (if any)
 	if( pNewState == nullptr)
 	{
@@ -173,6 +180,12 @@ IMenuState* CGame::GetPreviousState( void )		{return m_pPrevState; }
 
 void CGame::RemoveState( void )
 {
+	for(int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
+		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
+	for(int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
+		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
+
+
 	// Checking. Just in case
 	if( m_pCurrState != nullptr )
 		m_pCurrState->Exit();

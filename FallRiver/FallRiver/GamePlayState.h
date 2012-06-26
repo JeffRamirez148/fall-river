@@ -40,6 +40,17 @@ private:
 	MessageSystem*	m_pMS;
 	Particle_Manager*m_pPM;
 
+	// Sound Ids
+	int backGroundID;
+	int swingMissID;
+	int swingHitID;
+	int hitID;
+	int walkingID;
+	int notifyID;
+	int shotID;
+	int zombieHitID;
+	int zombieWalkingID;
+
 	// Data Members
 	float fTime;
 

@@ -41,6 +41,16 @@ GamePlayState::GamePlayState()
 	m_cPlayer = nullptr;
 
 	m_cWeapon = nullptr;
+
+	backGroundID = -1;
+	swingMissID = -1;
+	swingHitID = -1;
+	hitID = -1;
+	walkingID = -1;
+	notifyID = -1;
+	shotID = -1;
+	zombieHitID = -1;
+	zombieWalkingID = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -59,7 +69,8 @@ void GamePlayState::Enter()
 	m_pES = EventSystem::GetInstance();
 	m_pMS = MessageSystem::GetInstance();
 	m_pPM = Particle_Manager::GetInstance();
-
+	m_pAM = AudioManager::GetInstance();
+	m_pAM->TogleMuteSound();
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Level			>( _T("Level") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
@@ -187,7 +198,21 @@ void GamePlayState::Enter()
 
 	m_pMS->InitMessageSystem( &MessageProc );
 
+	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
+	swingMissID = m_pAM->RegisterSound("resource/Sounds/swingMiss.mp3");
+	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
+	hitID = m_pAM->RegisterSound("resource/Sounds/hit.aiff");
+	walkingID = m_pAM->RegisterSound("resource/Sounds/walking.aif");
+	notifyID = m_pAM->RegisterSound("resource/Sounds/notify.mp3");
+	shotID = m_pAM->RegisterSound("resource/Sounds/shot.mp3");
+	zombieHitID = m_pAM->RegisterSound("resource/Sounds/zombieHit.mp3");
+	zombieWalkingID = m_pAM->RegisterSound("resource/Sounds/zombieWalking.mp3");
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
+	m_pAM->setMusicPos(backGroundID, sound1);
+	m_pAM->setMusicVel(backGroundID, sound1);
+	m_pAM->setMusicLooping(backGroundID, true);
+	m_pAM->playMusic(backGroundID);
 }
 
 void GamePlayState::Exit() 

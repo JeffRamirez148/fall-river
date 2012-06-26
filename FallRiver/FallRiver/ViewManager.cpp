@@ -447,14 +447,14 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	
 	// Wall wa are gonna watch
 	VERTUV tmp[6];
-	float WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
-	float WINDOW_HEIGHT = CGame::GetInstance()->GetScreenHeight();
-	tmp[0].pos = D3DXVECTOR3(-1, 1, 0);	 tmp[0].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,(1/WINDOW_HEIGHT) * .5);
-	tmp[1].pos = D3DXVECTOR3(1, 1, 0);	 tmp[1].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),(1/WINDOW_HEIGHT) * .5);
-	tmp[2].pos = D3DXVECTOR3(1, -1, 0);	 tmp[2].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),1 + ((1/WINDOW_HEIGHT) * .5));
+	int WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
+	int WINDOW_HEIGHT = CGame::GetInstance()->GetScreenHeight();
+	tmp[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);	 tmp[0].uv = D3DXVECTOR2((float)(1/WINDOW_WIDTH) * .5f,(float)(1/WINDOW_HEIGHT) * .5f);
+	tmp[1].pos = D3DXVECTOR3(1.0f, 1.0f, 0.0f);	 tmp[1].uv = D3DXVECTOR2((float)(1 + ((1/WINDOW_WIDTH) * .5f)),(float)(1/WINDOW_HEIGHT) * .5f);
+	tmp[2].pos = D3DXVECTOR3(1.0f, -1.0f, 0.0f);	 tmp[2].uv = D3DXVECTOR2((float)(1 + ((1/WINDOW_WIDTH) * .5f)),(float)(1 + ((1/WINDOW_HEIGHT) * .5f)));
 	tmp[3].pos = tmp[0].pos;			 tmp[3].uv = tmp[0].uv;
 	tmp[4].pos = tmp[2].pos;			 tmp[4].uv = tmp[2].uv;
-	tmp[5].pos = D3DXVECTOR3(-1, -1, 0); tmp[5].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,1 + ((1/WINDOW_HEIGHT) * .5));
+	tmp[5].pos = D3DXVECTOR3(-1.0f, -1.0f, 0.0f); tmp[5].uv = D3DXVECTOR2((float)(1/WINDOW_WIDTH) * .5f,(float)(1 + ((1/WINDOW_HEIGHT) * .5f)));
 	void* mem = 0;
 	m_lpDirect3DDevice->CreateVertexBuffer( sizeof(VERTUV) * 6, 0, 0, D3DPOOL_MANAGED, &wallbuff, 0);
 	wallbuff->Lock(0,0,&mem,0);
@@ -490,7 +490,7 @@ bool ViewManager::DeviceBegin(void)
 	renderTarget->GetSurfaceLevel(0,&output);
 	m_lpDirect3DDevice->SetRenderTarget(0,output);
 	// clear rendertarget
-	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET , D3DCOLOR_XRGB(0,0,0), 1.0f, 0);	// modify for zbuffer
+	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);	// modify for zbuffer
 	m_lpDirect3DDevice->BeginScene();
 	return true;
 }
@@ -530,11 +530,7 @@ bool ViewManager::DeviceEnd(void)
 	{
 		postEffect->BeginPass(i);
 		postEffect->SetTexture("gDiffuseTexture", renderTarget);
-		postEffect->SetMatrix("gWorld", &wall);
-		//postEffect->SetMatrix("gViewProjection", &(cam * proj));
-		//postEffect->SetFloatArray("gLightDir", ,3);
-		//postEffect->SetFloatArray("gLightPos", ,3);
-		postEffect->SetInt("gSetting", 1);
+		postEffect->SetInt("gSetting", 0);
 
 		postEffect->CommitChanges();
 		m_lpDirect3DDevice->SetVertexDeclaration(cubedecl);
