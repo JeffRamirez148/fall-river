@@ -1,6 +1,5 @@
 // application exposed variables
 float4x4 gWorld : WORLD; // Value sent in
-float4x4 gViewProjection : VIEWPROJECTION; // Value sent in
 
 // global direction of light
 float3 gLightDir : DIRECTION  // Value sent in
@@ -8,7 +7,7 @@ float3 gLightDir : DIRECTION  // Value sent in
 = { 0, 0, 1 };
 
 // Light
-float3 gLightPos = {0,0,0}; // Value sent in
+float3 gLightPos = {0,0,-1}; // Value sent in
 float gInnerCone  = 0.95f;
 float gOuterCone  = 0.9f;
 float gAttenuation = 2.7f;
@@ -48,9 +47,9 @@ VS_OUTPUT myVertexShader(VS_INPUT input)
 	VS_OUTPUT output = (VS_OUTPUT)0;
 	float4 worldloc = float4(input.untransformed_pos, 1.0f);
 	float4 worldnrm = float4(input.untransformed_norm, 0.0f);
+	output.transformed_pos = float4(input.untransformed_pos, 1.0f);
 	worldloc = mul(worldloc, gWorld);
 	worldnrm = normalize(mul(worldnrm, gWorld));
-	//output.transformed_pos = mul(worldloc, gViewProjection);
 	output.world_pos = worldloc.xyz;
    	output.transformed_norm = worldnrm.xyz;
 	output.uv = input.uv;
@@ -69,14 +68,12 @@ VS_OUTPUT myVertexShader(VS_INPUT input)
 		gInnerCone = ;
 		gOuterCone = ;
 	} */
-	// Test Below
-	output.transformed_pos = float4(input.untransformed_pos, 1.0f);
 	return output; 
 }
 
 float4 myPixelShader(VS_OUTPUT input) : COLOR
 {
-	/*float3 ambientLight = {0.25,0.25,0.25};
+	float3 ambientLight = {1,1,1};
 	float3 surfacecolor = float3(0,0,0);
 	float3 final = float3(0,0,0);
 	float3 ldir = float3(0,0,0);
@@ -84,7 +81,7 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 	float3 	wnrm = normalize(input.transformed_norm);
 	float diffuseLightAmount = 0;
 	float attenuation = 0;
-	
+	surfacecolor = tex2D(gDiffuseSampler, input.uv);
 	if(gSetting == 1 || gSetting == 3)
 	{
 		ldir = -normalize(gLightDir);
@@ -103,9 +100,8 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 		else if(spotLightAmount > gOuterCone)
 			lightRatio = 1.0 - saturate((gInnerCone - spotLightAmount)/ (gInnerCone - gOuterCone));
 		final = saturate( (lightRatio * diffuseLightAmount * attenuation * surfacecolor) + (ambientLight * surfacecolor));
-	}*/
-	//return float4(final,1);
-	return tex2D(gDiffuseSampler, input.uv);
+	}
+	return float4(final,1);
 }
 
 technique myTechnique

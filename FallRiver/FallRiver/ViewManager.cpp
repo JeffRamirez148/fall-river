@@ -469,12 +469,13 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	};
 	m_lpDirect3DDevice->CreateVertexDeclaration(decl, &cubedecl);
 
-	D3DXVECTOR3 eye(0,2,-4), at(0,1,0), up(0,1,0);
+	D3DXVECTOR3 eye(0,2,-4), at(0,0,1), up(0,1,0);
 	D3DXMatrixLookAtLH(&cam,&eye,&at,&up);
 	float fov = (D3DXToRadian(75)), aspect = (WINDOW_WIDTH/(float)WINDOW_HEIGHT), znear = 0.01f, zfar = 100.0f; 
 	D3DXMatrixPerspectiveFovLH(&proj,fov,aspect,znear,zfar);
 	
 	D3DXMatrixIdentity(&wall);
+	D3DXMatrixTranslation(&wall, 0, 0, 0);
 	//	Return success.
 	return true;
 }
@@ -530,7 +531,7 @@ bool ViewManager::DeviceEnd(void)
 		postEffect->BeginPass(i);
 		postEffect->SetTexture("gDiffuseTexture", renderTarget);
 		postEffect->SetMatrix("gWorld", &wall);
-		postEffect->SetMatrix("gViewProjection", &(cam * proj));
+		//postEffect->SetMatrix("gViewProjection", &(cam * proj));
 		//postEffect->SetFloatArray("gLightDir", ,3);
 		//postEffect->SetFloatArray("gLightPos", ,3);
 		postEffect->SetInt("gSetting", 1);
@@ -654,7 +655,10 @@ void ViewManager::ShutdownDirect3D(void)
 	SAFE_RELEASE(m_lpLine);
 	SAFE_RELEASE(m_lpSprite);
 	SAFE_RELEASE(m_lpDirect3DDevice);
-	SAFE_RELEASE(m_lpDirect3DObject);
+	SAFE_RELEASE(cubedecl);
+	SAFE_RELEASE(wallbuff);
+	SAFE_RELEASE(renderTarget);
+	SAFE_RELEASE(postEffect);
 
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
