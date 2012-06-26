@@ -29,6 +29,7 @@ private:
 	char* m_cName;
 	bool m_bIsAlive;
 	bool m_bIsHidden;
+	bool m_bTalking;
 	int m_nLives;
 	vector<Quests*> m_vpActiveQuests;
 
@@ -46,6 +47,8 @@ public:
 
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}
+
+	bool IsTalking() {return m_bTalking;}
 
 	int GetScore() { return m_nScore;}
 	int GetLives() { return m_nLives;}

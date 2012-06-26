@@ -2,8 +2,10 @@
 #include "Quests.h"
 #include "GamePlayState.h"
 #include "Enemy.h"
+#include "Bullet.h"
 #include "ViewManager.h"
 #include "EventSystem.h"
+#include "DestroyBullet.h"
 #include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
@@ -141,6 +143,16 @@ bool Player::CheckCollision(IObjects* pBase)
 	{
 		if(BaseObject::CheckCollision(pBase) == true )
 		{
+			if(pBase->GetObjectType() == OBJ_BULLET)
+			{
+				Bullet* pBU = (Bullet*)pBase;
+				if(pBU->GetOwner()->GetOwner() == this)
+					return false;
+				DestroyBullet* pMsg = new DestroyBullet(pBU);
+				MessageSystem::GetInstance()->SendMsg(pMsg);
+				pMsg = nullptr;
+			}
+
 			if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
 				SetPosX(float(pBase->GetRect().left-GetWidth()-2));
 			else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
@@ -149,37 +161,6 @@ bool Player::CheckCollision(IObjects* pBase)
 				SetPosY(float(pBase->GetRect().top-GetHeight()-2));
 			else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 				SetPosY(float(pBase->GetRect().bottom));
-
-			if(pBase->GetObjectType() == OBJ_CHARACTER)
-			{
-	 			BaseCharacter* pCh = (BaseCharacter*)pBase;
-				if(pCh->GetCharacterType() == CHA_ENEMY)
-				{
-					/*Enemy*pEn = (Enemy*)pCh;
-					if(pEn->GetRect().left <= GetRect().right && GetRect().right - pEn->GetRect().left <= 5)
-					{
-						pEn->SetPosX(float(GetRect().right));
-						pEn->SetCanMove(false);
-					}
-					else if(pEn->GetRect().right >= GetRect().left && pEn->GetRect().right - GetRect().left <= 5)
-					{
-						pEn->SetPosX(float(GetRect().left-pEn->GetWidth()-4));
-						pEn->SetCanMove(false);
-					}
-					else if(pEn->GetRect().top <= GetRect().bottom && GetRect().bottom - pEn->GetRect().top <= 5)
-					{
-						pEn->SetPosY(float(GetRect().bottom+4));
-						pEn->SetCanMove(false);
-					}
-					else if(pEn->GetRect().bottom >= GetRect().top && pEn->GetRect().bottom - GetRect().top <= 5)
-					{
-						pEn->SetPosY(float(GetRect().top-pEn->GetHeight()-4));
-						pEn->SetCanMove(false);
-					}*/
-					return true;
-				}
-				return true;
-			}
 		}
 	}
 	else

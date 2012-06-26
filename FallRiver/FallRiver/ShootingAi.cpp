@@ -6,6 +6,7 @@
 #include "EventSystem.h"
 #include "MessageSystem.h"
 #include "DestroyEnemyS.h"
+#include "GamePlayState.h"
 #include "CreateBullet.h"
 #include "Weapon.h"
 #include "CGame.h"
@@ -18,6 +19,7 @@ ShootingAi::ShootingAi()
 	m_nVelY = 0;
 	m_dwFireDelay = 0;
 	m_pWeapon = nullptr;
+	m_bIsChasing = false;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 }
 
@@ -36,16 +38,17 @@ void ShootingAi::Update(float fElapsedTime)
 	}
 
 	m_pWeapon->Update(fElapsedTime);
-
-	if( m_dwFireDelay == 0)
-		m_dwFireDelay = GetTickCount() + 1000;
-	if( m_dwFireDelay < GetTickCount() && m_bIsChasing )
+	
+	if(m_bIsChasing)
 	{
-		m_dwFireDelay = GetTickCount() + 1000;
-		m_pWeapon->FireWeapon();
+		if( m_dwFireDelay == 0)
+			m_dwFireDelay = GetTickCount() + 1000;
+		if( m_dwFireDelay < GetTickCount() && m_bIsChasing )
+		{
+			m_dwFireDelay = GetTickCount() + 1000;
+			m_pWeapon->FireWeapon();
+		}
 	}
-
-	Enemy::Update(fElapsedTime);
 
 	float distanceX = ( m_pTarget->GetPosX() -  GetPosX() );
 	float distanceY = ( m_pTarget->GetPosY() -  GetPosY() );
@@ -55,7 +58,7 @@ void ShootingAi::Update(float fElapsedTime)
 	if( distanceY < 0)
 		distanceY = -distanceY;
 
-	if( (distanceX < 200 && distanceX >= 50) || (distanceY < 200 && distanceY >= 50 ) )
+	if( ((distanceX < 300 && distanceX >= 100) || (distanceY < 300 && distanceY >= 100 )) && distanceX+distanceY < 300  )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
@@ -104,11 +107,12 @@ void ShootingAi::Update(float fElapsedTime)
 void ShootingAi::Render()
 {
 	// Do Rendering here
-	if(GetPosX()+GetWidth() < 0 || GetPosY()+GetHeight() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
-		return;
+
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	pVM->DrawRect(GetRect(), 100, 148, 100);
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+
+	pVM->DrawRect(reRect, 255, 2, 0);
 }
 
 bool ShootingAi::CheckCollision(IObjects* pBase)

@@ -21,8 +21,6 @@ Bullet::~Bullet()
 
 void Bullet::Update(float fElapsedTime) 
 {
-	Particle_Manager::GetInstance()->GetActiveEmitter(activeemitterID)->SetRect(GetRect());
-	Particle_Manager::GetInstance()->GetActiveEmitter(activeemitterID)->Update(fElapsedTime);
 
 	DirectInput* pDI = DirectInput::GetInstance();
 
@@ -34,9 +32,9 @@ void Bullet::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	Particle_Manager::GetInstance()->GetActiveEmitter(activeemitterID)->Render();
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
-	pVM->DrawRect(GetRect(), 100, 40, 255);
+	pVM->DrawRect(reRect, 255, 0, 255);
 }
 
 void Bullet::HandleEvent(Event* pEvent) 

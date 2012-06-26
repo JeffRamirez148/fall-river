@@ -130,7 +130,7 @@ void GamePlayState::Enter()
 		}
 	}
 
-	for(int i = 0; i < 2; i++)
+	for(int i = 0; i < 0; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
@@ -145,7 +145,7 @@ void GamePlayState::Enter()
 		m_pOM->AddObject(pEnemy);
 	}
 
-	for(int i = 0; i < 0; i++)
+	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -287,11 +287,6 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
-			int emID = self->m_pPM->LoadEmitter("emitter1.xml");
-
-			bullet->SetEmmiterID(self->m_pPM->ActivateEmitter(emID));
-
-			self->m_pPM->GetActiveEmitter(bullet->GetEmitterID())->SetLoopin(false);
 
 			switch(pOwner->GetOwner()->GetDirection())
 			{

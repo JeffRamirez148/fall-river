@@ -45,7 +45,7 @@ void ChasingAI::Update(float fElapsedTime)
 	if( (distX < 10 && distY < 10) || (distX-m_pTarget->GetWidth() < 10 && distY - m_pTarget->GetHeight() < 10))
 		return;
 
-	if( distance < 200 && distance > GetWidth() )
+	if( distance < 200 && distance > GetWidth() && !m_cInTheWay )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
@@ -162,8 +162,6 @@ void ChasingAI::Update(float fElapsedTime)
 			}
 		}
 	}
-
-	Enemy::Update(fElapsedTime);
 }
 
 void ChasingAI::Render() 
@@ -179,25 +177,11 @@ bool ChasingAI::CheckCollision(IObjects* pBase)
 {
 	if(Enemy::CheckCollision(pBase))
 	{
-		if(pBase->GetObjectType() == OBJ_CHARACTER)
-		{
-			BaseCharacter* pCH = (BaseCharacter*)pBase;
-			if(pCH->GetCharacterType() == CHA_ENEMY)
-			{
-				if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-					SetPosX(float(pBase->GetRect().left-GetWidth()-2));
-				else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-					SetPosX(float(pBase->GetRect().right+2));
-				else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-					SetPosY(float(pBase->GetRect().top-GetHeight()-2));
-				else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
-					SetPosY(float(pBase->GetRect().bottom));
-			}
-		}
 		if(pBase != m_pTarget)
 			m_cInTheWay = (BaseObject*)pBase;
 		return true;
 	}
+	m_cInTheWay = nullptr;
 	return false;
 }
 

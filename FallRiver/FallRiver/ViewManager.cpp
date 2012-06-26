@@ -490,7 +490,7 @@ bool ViewManager::DeviceBegin(void)
 	renderTarget->GetSurfaceLevel(0,&output);
 	m_lpDirect3DDevice->SetRenderTarget(0,output);
 	// clear rendertarget
-	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);	// modify for zbuffer
+	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET , D3DCOLOR_XRGB(0,0,0), 1.0f, 0);	// modify for zbuffer
 	m_lpDirect3DDevice->BeginScene();
 	return true;
 }
@@ -518,7 +518,7 @@ bool ViewManager::DeviceEnd(void)
 
 	// Post Processing
 	// clear backbuffer
-	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0,255,0), 1.0f, 0);	// modify for zbuffer
+	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,255,0), 1.0f, 0);	// modify for zbuffer
 	m_lpDirect3DDevice->BeginScene();
 
 	// render quad with post shader
