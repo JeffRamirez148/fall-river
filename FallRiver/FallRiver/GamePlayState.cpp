@@ -191,6 +191,8 @@ void GamePlayState::Enter()
 	m_pOM->AddObject(pPlayer);
 
 	m_pMS->InitMessageSystem( &MessageProc );
+
+
 }
 
 void GamePlayState::Exit() 

@@ -11,22 +11,6 @@ using namespace std;
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 
-// #include "GamePlayState.h"
-// #include "HighScoresMenuState.h"
-// #include "WinMenuState.h"
-// #include "DefeatMenuState.h"
-// #include "CreditsMenuState.h"
-// #include "LoadMenuState.h"
-// #include "PauseMenuState.h"
-// #include "MainMenuState.h"
-// #include "HowToPlayMenuState.h"
-// #include "Texture.h"
-// #include "Font.h"
-// #include "Animation.h"
-// #include "AnimInfo.h"
-// #include "HUD.h"
-// #include "CutScene.h"
-
 #include "Animation.h"
 
 class Texture;
@@ -68,6 +52,23 @@ private:
 	LPD3DXLINE					m_lpLine;
 	D3DPRESENT_PARAMETERS		m_PresentParams;
 	HWND						m_hWnd;
+
+
+	ID3DXEffect					*postEffect;
+	IDirect3DTexture9			*renderTarget;
+	D3DSURFACE_DESC				backbuffer;
+	IDirect3DSurface9			*current;
+	IDirect3DSurface9			*output;
+	IDirect3DVertexBuffer9		*wallbuff;
+	IDirect3DVertexDeclaration9	*cubedecl;
+	D3DXMATRIX					cam;
+	D3DXMATRIX					proj;
+	D3DXMATRIX					wall;
+	struct VERTUV
+	{
+		D3DXVECTOR3 pos;
+		D3DXVECTOR2	uv;
+	};
 
 public: 
 	Animation GetAnimation(int AnimID) {return animations[AnimID]; };

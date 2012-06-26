@@ -22,6 +22,7 @@ using namespace std;
 #include "CutScene.h"
 #include "XMLManager.h"
 #include "Frame.h"
+#include "CGame.h"
 
 #ifndef SAFE_RELEASE
 	#define SAFE_RELEASE(p)			if (p) { p->Release(); p = NULL; }
@@ -432,12 +433,63 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	m_lpLine->SetAntialias(TRUE);
 	m_lpLine->SetWidth(3.0f);
 
+	// grab the actual display width
+	IDirect3DSurface9 *bBuffer = 0; 
+	m_lpDirect3DDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&bBuffer);
+	bBuffer->GetDesc(&backbuffer);
+	bBuffer->Release(); // drop ref count
+
+	// Load Shader
+	D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
+
+	// Create Render Target
+	D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
+	
+	// Wall wa are gonna watch
+	VERTUV tmp[6];
+	float WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
+	float WINDOW_HEIGHT = CGame::GetInstance()->GetScreenHeight();
+	tmp[0].pos = D3DXVECTOR3(-1, 1, 0);	 tmp[0].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,(1/WINDOW_HEIGHT) * .5);
+	tmp[1].pos = D3DXVECTOR3(1, 1, 0);	 tmp[1].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),(1/WINDOW_HEIGHT) * .5);
+	tmp[2].pos = D3DXVECTOR3(1, -1, 0);	 tmp[2].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),1 + ((1/WINDOW_HEIGHT) * .5));
+	tmp[3].pos = tmp[0].pos;			 tmp[3].uv = tmp[0].uv;
+	tmp[4].pos = tmp[2].pos;			 tmp[4].uv = tmp[2].uv;
+	tmp[5].pos = D3DXVECTOR3(-1, -1, 0); tmp[5].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,1 + ((1/WINDOW_HEIGHT) * .5));
+	void* mem = 0;
+	m_lpDirect3DDevice->CreateVertexBuffer( sizeof(VERTUV) * 6, 0, 0, D3DPOOL_MANAGED, &wallbuff, 0);
+	wallbuff->Lock(0,0,&mem,0);
+	memcpy(mem, tmp, 6 * sizeof(VERTUV)); 
+	wallbuff->Unlock();
+
+	D3DVERTEXELEMENT9 decl[] = 
+	{ 
+		{0, 0,  D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0},
+		{0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0},
+		D3DDECL_END()
+	};
+	m_lpDirect3DDevice->CreateVertexDeclaration(decl, &cubedecl);
+
+	D3DXVECTOR3 eye(0,2,-4), at(0,1,0), up(0,1,0);
+	D3DXMatrixLookAtLH(&cam,&eye,&at,&up);
+	float fov = (D3DXToRadian(75)), aspect = (WINDOW_WIDTH/(float)WINDOW_HEIGHT), znear = 0.01f, zfar = 100.0f; 
+	D3DXMatrixPerspectiveFovLH(&proj,fov,aspect,znear,zfar);
+	
+	D3DXMatrixIdentity(&wall);
 	//	Return success.
 	return true;
 }
 
 bool ViewManager::DeviceBegin(void)
 {
+	// store backbuffer
+	current = 0;
+	output = 0;
+	m_lpDirect3DDevice->GetRenderTarget(0,&current);
+	// get texture surface and set render target
+	renderTarget->GetSurfaceLevel(0,&output);
+	m_lpDirect3DDevice->SetRenderTarget(0,output);
+	// clear rendertarget
+	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);	// modify for zbuffer
 	m_lpDirect3DDevice->BeginScene();
 	return true;
 }
@@ -457,6 +509,45 @@ bool ViewManager::LineBegin(void)
 bool ViewManager::DeviceEnd(void)
 {
 	m_lpDirect3DDevice->EndScene();
+	// restore backbuffer
+	m_lpDirect3DDevice->SetRenderTarget(0,current);
+	// drop ref counts
+	current->Release();
+	output->Release();
+
+	// Post Processing
+	// clear backbuffer
+	m_lpDirect3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0,255,0), 1.0f, 0);	// modify for zbuffer
+	m_lpDirect3DDevice->BeginScene();
+
+	// render quad with post shader
+	unsigned passes(0);
+
+	postEffect->Begin(&passes, 0);
+
+	for(unsigned i(0); i<passes; ++i)
+	{
+		postEffect->BeginPass(i);
+		postEffect->SetTexture("gDiffuseTexture", renderTarget);
+		postEffect->SetMatrix("gWorld", &wall);
+		postEffect->SetMatrix("gViewProjection", &(cam * proj));
+		//postEffect->SetFloatArray("gLightDir", ,3);
+		//postEffect->SetFloatArray("gLightPos", ,3);
+		postEffect->SetInt("gSetting", 1);
+
+		postEffect->CommitChanges();
+		m_lpDirect3DDevice->SetVertexDeclaration(cubedecl);
+
+		m_lpDirect3DDevice->SetStreamSource( 0, wallbuff, 0, sizeof(VERTUV));
+
+		m_lpDirect3DDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, 2);
+		
+		postEffect->EndPass();
+	}
+	postEffect->End();
+
+	m_lpDirect3DDevice->EndScene();
+	m_lpDirect3DDevice->Present(0,0,0,0);
 	return true;
 }
 
