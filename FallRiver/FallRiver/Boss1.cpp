@@ -27,7 +27,7 @@ void Boss1::Update(float fElapsedTime)
 	if( distance < 0)
 		distance = -distance;
 
-	if( distance < 200 && distance > 2 && CanMove() )
+	if( distance < 200 && distance > 2  )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
@@ -53,15 +53,11 @@ void Boss1::Update(float fElapsedTime)
 				
 				if( ourDist < theirDist )
 				{
-					pEN->SetCanMove(false);
-					SetCanMove(true);
 					MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
 					BaseCharacter::Update(fElapsedTime);
 				}
 				else
 				{
-					pEN->SetCanMove(true);
-					SetCanMove(false);
 					pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
 					pEN->BaseCharacter::Update(fElapsedTime);
 				}
@@ -78,13 +74,11 @@ void Boss1::Update(float fElapsedTime)
 
 					if(DistToBottom > DistToRight)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom, 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo((float)m_cInTheWay->GetRect().right, GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
@@ -99,13 +93,11 @@ void Boss1::Update(float fElapsedTime)
 
 					if(DistToBottom > DistToLeft)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom, 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo((float)m_cInTheWay->GetRect().left-GetWidth(), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
@@ -120,13 +112,11 @@ void Boss1::Update(float fElapsedTime)
 
 					if(DistToTop < DistToRight)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().top-GetHeight(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo((float)m_cInTheWay->GetRect().right, GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
@@ -142,13 +132,11 @@ void Boss1::Update(float fElapsedTime)
 
 					if(DistToTop < DistToLeft)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().top-GetHeight(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo((float)m_cInTheWay->GetRect().left-GetWidth(), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}

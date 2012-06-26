@@ -18,8 +18,6 @@ Player::Player()
 	m_nScore = 0;
 	m_nLives = 3;
 	m_cName = "";
-	m_nFrameX = 0;
-	m_nFrameY = 0;
 	SetDirection(DIRE_UP);
 
 	//AnimInfo startup
@@ -65,6 +63,23 @@ void Player::Update(float fElapsedTime)
 	else if( pDI->KeyDown(DIK_DOWN))
 		SetDirection(DIRE_DOWN);
 
+	if( pDI->KeyDown(DIK_RIGHT) )
+		SetVelX(100);
+	else if( pDI->KeyDown(DIK_LEFT) )
+		SetVelX(-100);
+	else
+		SetVelX(0);
+
+	if( pDI->KeyDown(DIK_UP) )
+		SetVelY(-100);
+	else if( pDI->KeyDown(DIK_DOWN) )
+		SetVelY(100);
+	else
+		SetVelY(0);
+
+	BaseCharacter::Update(fElapsedTime);
+
+
 	if((pDI->KeyDown(DIK_RIGHT) || pDI->KeyDown(DIK_LEFT)|| pDI->KeyDown(DIK_UP)|| pDI->KeyDown(DIK_DOWN)) && m_playerAnim.curAnimation == 0)
 	{
 		m_playerAnim.curAnimation = 1;
@@ -104,12 +119,17 @@ void Player::Update(float fElapsedTime)
 void Player::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
-	//Drawing Player Placeholder Sprite
-	pVM->DrawAnimation(&m_playerAnim, (int)GetPosX(), (int)GetPosY());
-	//pVM->DrawRect(GetRect(), 0, 0, 255);
 
-	for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
-		m_vpWeapons[i]->Render();
+	//Drawing Player Placeholder Sprite
+	pVM->DrawAnimation(&m_playerAnim, int( (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2 ) , int( (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() ));
+	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
+
+	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
+
+	//pVM->DrawRect(reRect, 0, 0, 0);
+
+	/*for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
+		m_vpWeapons[i]->Render();*/
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
@@ -121,50 +141,42 @@ bool Player::CheckCollision(IObjects* pBase)
 	{
 		if(BaseObject::CheckCollision(pBase) == true )
 		{
+			if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
+				SetPosX(float(pBase->GetRect().left-GetWidth()-2));
+			else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
+				SetPosX(float(pBase->GetRect().right+2));
+			else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
+				SetPosY(float(pBase->GetRect().top-GetHeight()-2));
+			else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
+				SetPosY(float(pBase->GetRect().bottom));
+
 			if(pBase->GetObjectType() == OBJ_CHARACTER)
 			{
-				BaseCharacter* pCh = (BaseCharacter*)pBase;
+	 			BaseCharacter* pCh = (BaseCharacter*)pBase;
 				if(pCh->GetCharacterType() == CHA_ENEMY)
 				{
-					Enemy*pEn = (Enemy*)pCh;
-					if(!GamePlayState::GetInstance()->CanMoveRight() || !GamePlayState::GetInstance()->CanMoveLeft() || !GamePlayState::GetInstance()->CanMoveDown() || !GamePlayState::GetInstance()->CanMoveUp() )
-						return true;
+					/*Enemy*pEn = (Enemy*)pCh;
 					if(pEn->GetRect().left <= GetRect().right && GetRect().right - pEn->GetRect().left <= 5)
 					{
 						pEn->SetPosX(float(GetRect().right));
-						GamePlayState::GetInstance()->SetCanMoveRight(false);
 						pEn->SetCanMove(false);
 					}
 					else if(pEn->GetRect().right >= GetRect().left && pEn->GetRect().right - GetRect().left <= 5)
 					{
-						pEn->SetPosX(float(GetRect().left-pEn->GetWidth()));
-						GamePlayState::GetInstance()->SetCanMoveLeft(false);
+						pEn->SetPosX(float(GetRect().left-pEn->GetWidth()-4));
 						pEn->SetCanMove(false);
 					}
 					else if(pEn->GetRect().top <= GetRect().bottom && GetRect().bottom - pEn->GetRect().top <= 5)
 					{
-						pEn->SetPosY(float(GetRect().bottom));
-						GamePlayState::GetInstance()->SetCanMoveUp(false);
+						pEn->SetPosY(float(GetRect().bottom+4));
 						pEn->SetCanMove(false);
 					}
 					else if(pEn->GetRect().bottom >= GetRect().top && pEn->GetRect().bottom - GetRect().top <= 5)
 					{
-						pEn->SetPosY(float(GetRect().top-pEn->GetHeight()));
-						GamePlayState::GetInstance()->SetCanMoveDown(false);
+						pEn->SetPosY(float(GetRect().top-pEn->GetHeight()-4));
 						pEn->SetCanMove(false);
-					}
+					}*/
 					return true;
-				}
-				// Fixing the movement.. TODO: Change So is used for New Camera
-				{
-					if( GetRect().right <= pBase->GetRect().left + 5 )
-						GamePlayState::GetInstance()->SetCanMoveRight(false);
-					else if( GetRect().left >= pBase->GetRect().right - 5 )
-						GamePlayState::GetInstance()->SetCanMoveLeft(false);
-					else if( GetRect().top >= pBase->GetRect().bottom -5 )
-						GamePlayState::GetInstance()->SetCanMoveUp(false);
-					else if( GetRect().bottom <= pBase->GetRect().top + 5 )
-						GamePlayState::GetInstance()->SetCanMoveDown(false);
 				}
 				return true;
 			}
@@ -178,11 +190,6 @@ bool Player::CheckCollision(IObjects* pBase)
 		}
 
 	}
-
-	GamePlayState::GetInstance()->SetCanMoveDown(true);
-	GamePlayState::GetInstance()->SetCanMoveUp(true);
-	GamePlayState::GetInstance()->SetCanMoveRight(true);
-	GamePlayState::GetInstance()->SetCanMoveLeft(true);
 	return false;
 
 }
@@ -237,10 +244,7 @@ void Player::HandleEvent(Event* pEvent)
 	}
 	else if(pEvent->GetEventID() == "hit_wall")
 	{
-		GamePlayState::GetInstance()->SetCanMoveDown(true);
-		GamePlayState::GetInstance()->SetCanMoveUp(true);
-		GamePlayState::GetInstance()->SetCanMoveRight(true);
-		GamePlayState::GetInstance()->SetCanMoveLeft(true);
+		
 	}
 }
 

@@ -26,22 +26,8 @@ void Bullet::Update(float fElapsedTime)
 
 	DirectInput* pDI = DirectInput::GetInstance();
 
-	if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
-		SetVelX(-100 + m_fSpeedX);
-	else if(pDI->KeyDown(DIK_LEFT) && GamePlayState::GetInstance()->CanMoveLeft() )
-		SetVelX(100 + m_fSpeedX);
-	else
-		SetVelX(m_fSpeedX);
-
-	if(pDI->KeyDown(DIK_UP) && GamePlayState::GetInstance()->CanMoveUp() )
-		SetVelY(100+m_fSpeedY);
-	else if(pDI->KeyDown(DIK_DOWN) && GamePlayState::GetInstance()->CanMoveDown() )
-		SetVelY(-100+m_fSpeedY);
-	else
-		SetVelY(m_fSpeedY);
-
-	m_nPosX += m_nVelX * fElapsedTime;
-	m_nPosY += m_nVelY * fElapsedTime;
+	m_nPosX += m_fSpeedX * fElapsedTime;
+	m_nPosY += m_fSpeedY* fElapsedTime;
 }
 
 void Bullet::Render() 

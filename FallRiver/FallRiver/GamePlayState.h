@@ -50,10 +50,7 @@ private:
 	Weapon*			m_cWeapon;
 
 	// For Everyone else on the screen
-	bool m_bCanMoveLeft;
-	bool m_bCanMoveRight;
-	bool m_bCanMoveUp;
-	bool m_bCanMoveDown;
+	POINTFLOAT camera;
 
 	// Private Constructors
 	GamePlayState();
@@ -65,17 +62,8 @@ public:
 
 	Player* GetPlayer() {return m_cPlayer;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
-	// Check if the Player can move
-	bool CanMoveLeft()	{return m_bCanMoveLeft; }
-	bool CanMoveRight() {return m_bCanMoveRight; }
-	bool CanMoveUp()	{return m_bCanMoveUp; }
-	bool CanMoveDown()	{return m_bCanMoveDown; }
 
-	// Set if the player can move
-	void SetCanMoveLeft(bool left)	{m_bCanMoveLeft = left; }
-	void SetCanMoveRight(bool right){m_bCanMoveRight = right; }
-	void SetCanMoveUp(bool up)		{m_bCanMoveUp = up; }
-	void SetCanMoveDown(bool down)	{m_bCanMoveDown = down; }
+	POINTFLOAT GetCamera() {return camera;}
 
 	void Enter();
 

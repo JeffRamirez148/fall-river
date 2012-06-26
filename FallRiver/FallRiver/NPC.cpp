@@ -21,19 +21,6 @@ void NPC::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
-	if( pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
-		SetVelX(-100);
-	else if( pDI->KeyDown(DIK_LEFT)  && GamePlayState::GetInstance()->CanMoveLeft() )
-		SetVelX(100);
-	else
-		SetVelX(0);
-
-	if( pDI->KeyDown(DIK_UP)  && GamePlayState::GetInstance()->CanMoveUp() )
-		SetVelY(100);
-	else if( pDI->KeyDown(DIK_DOWN)  && GamePlayState::GetInstance()->CanMoveDown() )
-		SetVelY(-100);
-	else
-		SetVelY(0);
 
 	BaseCharacter::Update(fElapsedTime);
 }
@@ -41,11 +28,11 @@ void NPC::Update(float fElapsedTime)
 void NPC::Render() 
 {
 	// Render this NPC
-	if(GetPosX()+GetWidth() < 0 || GetPosY()+GetHeight() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
-		return;
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	pVM->DrawRect(GetRect(), 0, 255, 0);
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+
+	pVM->DrawRect(reRect, 0, 255, 0);
 }
 
 void NPC::SaySomething() 

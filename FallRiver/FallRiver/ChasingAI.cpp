@@ -31,15 +31,21 @@ void ChasingAI::Update(float fElapsedTime)
 		pMsg = nullptr;
 	}
 
-
-	Enemy::Update(fElapsedTime);
-
 	float distance = ( m_pTarget->GetPosX() + m_pTarget->GetPosY() ) - ( GetPosX() + GetPosY() );
+	float distX = GetPosX() - m_pTarget->GetPosX();
+	float distY = GetPosY() - m_pTarget->GetPosY();
 
 	if( distance < 0)
 		distance = -distance;
+	if( distX < 0)
+		distX = -distX;
+	if( distY < 0)
+		distY = -distY;
 
-	if( distance < 200 && distance > 2 && CanMove() )
+	if( (distX < 10 && distY < 10) || (distX-m_pTarget->GetWidth() < 10 && distY - m_pTarget->GetHeight() < 10))
+		return;
+
+	if( distance < 200 && distance > GetWidth() )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
@@ -55,7 +61,7 @@ void ChasingAI::Update(float fElapsedTime)
 			{
 				Enemy* pEN = (Enemy*)m_cInTheWay;
 
-				float ourDist = (GetPosX() + GetPosY()) - (m_pTarget->GetPosX() + m_pTarget->GetPosY());
+				float ourDist = distance;
 				float theirDist = (pEN->GetPosX() + pEN->GetPosY()) - (m_pTarget->GetPosX() + m_pTarget->GetPosY());
 
 				if(ourDist < 0)
@@ -65,15 +71,11 @@ void ChasingAI::Update(float fElapsedTime)
 				
 				if( ourDist < theirDist )
 				{
-					pEN->SetCanMove(false);
-					SetCanMove(true);
 					MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
 					BaseCharacter::Update(fElapsedTime);
 				}
 				else
 				{
-					pEN->SetCanMove(true);
-					SetCanMove(false);
 					pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
 					pEN->BaseCharacter::Update(fElapsedTime);
 				}
@@ -90,13 +92,11 @@ void ChasingAI::Update(float fElapsedTime)
 
 					if(DistToBottom > DistToRight)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
@@ -111,13 +111,11 @@ void ChasingAI::Update(float fElapsedTime)
 
 					if(DistToBottom > DistToLeft)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
@@ -132,13 +130,11 @@ void ChasingAI::Update(float fElapsedTime)
 
 					if(DistToTop < DistToRight)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
@@ -154,13 +150,11 @@ void ChasingAI::Update(float fElapsedTime)
 
 					if(DistToTop < DistToLeft)
 					{
-						SetCanMove(true);
 						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 					{
-						SetCanMove(true);
 						MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
 						BaseCharacter::Update(fElapsedTime);
 					}
@@ -168,21 +162,38 @@ void ChasingAI::Update(float fElapsedTime)
 			}
 		}
 	}
+
+	Enemy::Update(fElapsedTime);
 }
 
 void ChasingAI::Render() 
 {
-	if(GetPosX()+GetWidth() < 0 || GetPosY()+GetHeight() < 0 || GetPosX() > CGame::GetInstance()->GetScreenWidth() || GetPosY() > CGame::GetInstance()->GetScreenHeight() )
-		return;
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	pVM->DrawRect(GetRect(), 255, 0, 0);
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+
+	pVM->DrawRect(reRect, 255, 2, 0);
 }
 
 bool ChasingAI::CheckCollision(IObjects* pBase) 
 {
 	if(Enemy::CheckCollision(pBase))
 	{
+		if(pBase->GetObjectType() == OBJ_CHARACTER)
+		{
+			BaseCharacter* pCH = (BaseCharacter*)pBase;
+			if(pCH->GetCharacterType() == CHA_ENEMY)
+			{
+				if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
+					SetPosX(float(pBase->GetRect().left-GetWidth()-2));
+				else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
+					SetPosX(float(pBase->GetRect().right+2));
+				else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
+					SetPosY(float(pBase->GetRect().top-GetHeight()-2));
+				else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
+					SetPosY(float(pBase->GetRect().bottom));
+			}
+		}
 		if(pBase != m_pTarget)
 			m_cInTheWay = (BaseObject*)pBase;
 		return true;

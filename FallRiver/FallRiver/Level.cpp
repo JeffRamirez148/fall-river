@@ -30,102 +30,12 @@ void Level::Update(float fElapsedTime)
 
 	//float time = fElapsedTime;
 	LONG test = long(100.0f * fElapsedTime);
-	if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
-	{
-		m_nPosX -= 100 * fElapsedTime;
-
-
-		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
-		{
-			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
-
-			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
-			m_vCollisions[i].m_rCollision.left	= tmpPosX;
-			m_vCollisions[i].m_rCollision.top	= tmpPosY;
-			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
-		}
-
-
-		for(unsigned int i = 0; i < m_vTiles.size(); i++)
-		{
-			m_vTiles[i].m_nWorldPosX -= 100.0f * fElapsedTime;
-			//m_vTiles[i].m_nWorldPosY -=  100 * fElapsedTime;
-		}
-
-	}
-	else if(pDI->KeyDown(DIK_LEFT) && GamePlayState::GetInstance()->CanMoveLeft() )
-	{
-		m_nPosX += 100 * fElapsedTime;
-		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
-		{
-			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
-
-			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
-			m_vCollisions[i].m_rCollision.left	= tmpPosX;
-			m_vCollisions[i].m_rCollision.top	= tmpPosY;
-			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
-
-		}
-
-	
-		for(unsigned int i = 0; i < m_vTiles.size(); i++)
-		{
-			m_vTiles[i].m_nWorldPosX +=  100.0f * fElapsedTime;
-			//m_vTiles[i].m_nWorldPosY +=  100 * fElapsedTime;
-		}
-
-
-	}
-
-	if(pDI->KeyDown(DIK_UP) && GamePlayState::GetInstance()->CanMoveUp() )
-	{
-		m_nPosY += 100 * fElapsedTime;
-		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
-		{
-			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
-
-			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
-			m_vCollisions[i].m_rCollision.left	= tmpPosX;
-			m_vCollisions[i].m_rCollision.top	= tmpPosY;
-			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
-		}
-		
-		for(unsigned int i = 0; i < m_vTiles.size(); i++)
-		{
-			//m_vTiles[i].m_nWorldPosX +=  100 * fElapsedTime;
-			m_vTiles[i].m_nWorldPosY += 100.0f * fElapsedTime;
-		}
-
-	}
-	else if(pDI->KeyDown(DIK_DOWN) && GamePlayState::GetInstance()->CanMoveDown() )
-	{
-		m_nPosY -= 100 * fElapsedTime;
-		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
-		{
-			int tmpPosX = (int)m_nPosX + m_vCollisions[i].x;
-			int tmpPosY = (int)m_nPosY + m_vCollisions[i].y;
-
-			m_vCollisions[i].m_rCollision.right = tmpPosX+m_vCollisions[i].width;
-			m_vCollisions[i].m_rCollision.left	= tmpPosX;
-			m_vCollisions[i].m_rCollision.top	= tmpPosY;
-			m_vCollisions[i].m_rCollision.bottom= tmpPosY+m_vCollisions[i].height;
-		}
-
-		for(unsigned int i = 0; i < m_vTiles.size(); i++)
-		{
-			//m_vTiles[i].m_nWorldPosX -=  100 * fElapsedTime;
-			m_vTiles[i].m_nWorldPosY -= 100.0f * fElapsedTime;
-		}
-
-	}
 
 }
 
 void Level::Render() 
 {
+	POINTFLOAT cam = GamePlayState::GetInstance()->GetCamera();
 
 	ViewManager* pView = ViewManager::GetInstance();
 	
@@ -148,12 +58,12 @@ void Level::Render()
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		RECT intersect;
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 1)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX, (int)m_vTiles[i].m_nWorldPosY,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -167,12 +77,12 @@ void Level::Render()
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		RECT intersect;
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 2)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX, (int)m_vTiles[i].m_nWorldPosY,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -186,12 +96,12 @@ void Level::Render()
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		RECT intersect;
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 3)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX, (int)m_vTiles[i].m_nWorldPosY,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -205,12 +115,12 @@ void Level::Render()
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		RECT intersect;
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 4)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX, (int)m_vTiles[i].m_nWorldPosY,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -224,12 +134,12 @@ void Level::Render()
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		RECT intersect;
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 5)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX, (int)m_vTiles[i].m_nWorldPosY,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -463,11 +373,6 @@ bool Level::CheckCollision(IObjects* pBase)
 		{
 			if( m_vCollisions[i].m_bPrevColliding == true )
 			{
-				if(GamePlayState::GetInstance()->CanMoveUp() == true && GamePlayState::GetInstance()->CanMoveLeft() == true && GamePlayState::GetInstance()->CanMoveRight() == true && GamePlayState::GetInstance()->CanMoveDown() == true)
-				{
-					m_vCollisions[i].m_bPrevColliding = false;
-					m_vCollisions[i].test = 0;
-				}
 			}
 			continue;
 		}
@@ -611,43 +516,16 @@ bool Level::CheckCollision(IObjects* pBase)
 							//check = 0;
 							if( check == 0 )
 							{
-								if(pDI->KeyDown(DIK_RIGHT) )
-								{
-									GamePlayState::GetInstance()->SetCanMoveRight(false);
-									GamePlayState::GetInstance()->SetCanMoveLeft(true);
-								}
-								else if(pDI->KeyDown(DIK_LEFT) )
-								{
-									GamePlayState::GetInstance()->SetCanMoveLeft(false);
-									GamePlayState::GetInstance()->SetCanMoveRight(true);
-
-								}
-
-								if(pDI->KeyDown(DIK_UP) )
-								{
-									GamePlayState::GetInstance()->SetCanMoveUp(false);
-									GamePlayState::GetInstance()->SetCanMoveDown(true);
-
-
-								}
-								else if(pDI->KeyDown(DIK_DOWN) )
-								{
-									GamePlayState::GetInstance()->SetCanMoveDown(false);
-									GamePlayState::GetInstance()->SetCanMoveUp(true);
-
-								}
 							}
 						}
 
 						if (check == 1)
 						{
-							GamePlayState::GetInstance()->SetCanMoveDown(false);
 							m_vCollisions[i].m_bPrevColliding = true;
 							m_vCollisions[i].test = check;
 						}
 						else if (check == 2)
 						{
-							GamePlayState::GetInstance()->SetCanMoveUp(false);
 							m_vCollisions[i].m_bPrevColliding = true;
 							m_vCollisions[i].test = check;
 
@@ -655,7 +533,6 @@ bool Level::CheckCollision(IObjects* pBase)
 						}
 						else if (check == 3)
 						{
-							GamePlayState::GetInstance()->SetCanMoveRight(false);
 							m_vCollisions[i].m_bPrevColliding = true;
 							m_vCollisions[i].test = check;
 
@@ -663,7 +540,6 @@ bool Level::CheckCollision(IObjects* pBase)
 						}
 						else if (check == 4)
 						{
-							GamePlayState::GetInstance()->SetCanMoveLeft(false);
 							m_vCollisions[i].m_bPrevColliding = true;
 							m_vCollisions[i].test = check;
 

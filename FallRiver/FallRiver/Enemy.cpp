@@ -12,7 +12,6 @@ Enemy::Enemy()
 	m_nVelY = 0;
 	m_nCharacterType = CHA_ENEMY;
 	SetDirection(DIRE_UP);
-	m_bCanMove = true;
 }
 
 Enemy::~Enemy()
@@ -23,20 +22,6 @@ Enemy::~Enemy()
 void Enemy::Update(float fElapsedTime) 
 { 
 	DirectInput* pDI = DirectInput::GetInstance();
-
-	if( pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
-		SetVelX(-100);
-	else if( pDI->KeyDown(DIK_LEFT) && GamePlayState::GetInstance()->CanMoveLeft() )
-		SetVelX(100);
-	else
-		SetVelX(0);
-
-	if( pDI->KeyDown(DIK_UP) && GamePlayState::GetInstance()->CanMoveUp() )
-		SetVelY(100);
-	else if( pDI->KeyDown(DIK_DOWN) && GamePlayState::GetInstance()->CanMoveDown() )
-		SetVelY(-100);
-	else
-		SetVelY(0);
 
 	BaseCharacter::Update(fElapsedTime);
 }
@@ -69,11 +54,8 @@ bool Enemy::CheckCollision(IObjects* pBase)
 {
 	if( BaseCharacter::CheckCollision(pBase) )
 	{
-		SetCanMove(false);
 		return true;
 	}
-	else
-		SetCanMove(true);
 	return false;
 }
 

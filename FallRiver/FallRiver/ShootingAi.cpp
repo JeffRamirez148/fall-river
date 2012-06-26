@@ -55,13 +55,13 @@ void ShootingAi::Update(float fElapsedTime)
 	if( distanceY < 0)
 		distanceY = -distanceY;
 
-	if( (distanceX < 200 && distanceX >= 50 && CanMove()) || (distanceY < 200 && distanceY >= 50 ) )
+	if( (distanceX < 200 && distanceX >= 50) || (distanceY < 200 && distanceY >= 50 ) )
 	{
 		m_bIsChasing = true;
 		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
 		BaseCharacter::Update(fElapsedTime);
 	}
-	else if( distanceY < 50 || distanceX < 50 && CanMove() )
+	else if( distanceY < 50 || distanceX < 50 )
 	{
 		if(m_pTarget->GetPosX() < GetPosX()+5 )
 			MoveTo(GetPosX()+100, GetPosY(), 80);

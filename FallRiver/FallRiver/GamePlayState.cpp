@@ -41,11 +41,6 @@ GamePlayState::GamePlayState()
 	m_cPlayer = nullptr;
 
 	m_cWeapon = nullptr;
-
-	m_bCanMoveLeft	= true;
-	m_bCanMoveRight	= true;
-	m_bCanMoveUp	= true;
-	m_bCanMoveDown	= true;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -150,7 +145,7 @@ void GamePlayState::Enter()
 		m_pOM->AddObject(pEnemy);
 	}
 
-	for(int i = 0; i < 1; i++)
+	for(int i = 0; i < 0; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -259,6 +254,10 @@ void GamePlayState::Update(float fElapsedTime)
 	//m_clevel.Update(fElapsedTime);
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
+
+	camera.x = float(m_cPlayer->GetPosX() - (CGame::GetInstance()->GetScreenWidth()*0.5));
+	camera.y = float(m_cPlayer->GetPosY() - (CGame::GetInstance()->GetScreenHeight()*0.5));
+
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
 }
