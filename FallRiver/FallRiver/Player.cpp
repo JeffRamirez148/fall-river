@@ -22,6 +22,7 @@ Player::Player()
 	m_nScore = 0;
 	m_nState = PSTATE_IDLE;
 	m_nLives = 3;
+	m_nFontID = 0;
 	m_cName = "";
 	SetDirection(DIRE_UP);
 
@@ -38,6 +39,7 @@ Player::Player()
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
 	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
+	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(hitID, sound1);
 	AudioManager::GetInstance()->setSoundVel(walkingID, sound1);
@@ -262,6 +264,14 @@ void Player::Render()
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
+
+	
+	RECT logRect = { 600, 0, 800, 200};
+
+	pVM->DrawRect(logRect, 50, 50, 50);
+
+	for(unsigned int i = 0; i < m_vpActiveQuests.size(); i++)
+		pVM->DrawFont(m_nFontID, (char*)m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
 
 	//pVM->DrawRect(reRect, 0, 0, 0);
 

@@ -34,6 +34,8 @@ CGame::~CGame()
 
 bool CGame::Input() 
 {
+	m_bPrevWindowed = m_bIsWindowed;
+
 	// Just in case
 	if(m_pCurrState == nullptr)
 		return false;
@@ -66,6 +68,9 @@ void CGame::Update()
 
 void CGame::Render() 
 {
+	if(m_bIsWindowed != m_bPrevWindowed)
+		m_pVM->ChangeDisplayParam(m_nScreenWidth, m_nScreenHeight, m_bIsWindowed);
+
 	// Clear the background
 	m_pVM->Clear(0, 0, 0);
 

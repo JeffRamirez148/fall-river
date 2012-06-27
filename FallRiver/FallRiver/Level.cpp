@@ -59,7 +59,6 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 1)
@@ -78,7 +77,6 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 2)
@@ -97,7 +95,6 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 3)
@@ -116,7 +113,6 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 4)
@@ -135,7 +131,6 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 5)
