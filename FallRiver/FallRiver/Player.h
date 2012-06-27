@@ -40,7 +40,7 @@ private:
 	bool m_bTalking;
 	int m_nLives;
 	int walkingID;
-	vector<Quest_Struct*> m_vpActiveQuests;
+	
 	int hitID;
 //	vector<Quests*> m_vpActiveQuests;
 
@@ -49,6 +49,8 @@ private:
 public: 
 	Player();
 	~Player();
+
+	vector<Quest_Struct*> m_vpActiveQuests;
 
 	void Update(float fElapsedTime);
 	void Render();

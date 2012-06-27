@@ -47,8 +47,16 @@ void NPC::Update(float fElapsedTime)
 	if( distance <= 70.0f )
 	{
 		showQuest = true;
-		if(pDI->KeyPressed(DIK_A))
+		if(pDI->KeyPressed(DIK_A) )
+		{
+			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
+			{
+				if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID != NPCLabel || pGPS->GetPlayer()->m_vpActiveQuests[i] == nullptr )
+					pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
+				
+			}
 			pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
+		}
 	}
 	else
 		showQuest = false;
