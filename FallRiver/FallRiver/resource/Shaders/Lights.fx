@@ -1,5 +1,5 @@
 // application exposed variables
-float4x4 gWorld : WORLD; // Value sent in
+float4x4 gWorldInv : WORLD; // Value sent in
 
 // global direction of light
 float3 gLightDir : DIRECTION  // Value sent in
@@ -48,8 +48,8 @@ VS_OUTPUT myVertexShader(VS_INPUT input)
 	float4 worldloc = float4(input.untransformed_pos, 1.0f);
 	float4 worldnrm = float4(input.untransformed_norm, 0.0f);
 	output.transformed_pos = float4(input.untransformed_pos, 1.0f);
-	worldloc = mul(worldloc, gWorld);
-	worldnrm = normalize(mul(worldnrm, gWorld));
+	//worldloc = mul(worldloc, gWorld);
+	//worldnrm = normalize(mul(worldnrm, gWorld));
 	output.world_pos = worldloc.xyz;
    	output.transformed_norm = worldnrm.xyz;
 	output.uv = input.uv;
@@ -77,7 +77,7 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 	float3 surfacecolor = float3(0,0,0);
 	float3 final = float3(0,0,0);
 	float3 ldir = float3(0,0,0);
-
+	float3 lightPos = mul(float4(gLightPos, 1), gWorldInv).xyz;
 	float3 	wnrm = normalize(input.transformed_norm);
 	float diffuseLightAmount = 0;
 	float attenuation = 0;
@@ -90,16 +90,15 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 	}
 	else
 	{
-		ldir = normalize(gLightPos - input.world_pos);
+		ldir = normalize(lightPos - input.world_pos);
 		attenuation = 1.0 - saturate( abs(ldir)/ gAttenuation);
-		diffuseLightAmount = saturate(dot(ldir, wnrm));
 		float spotLightAmount = saturate( dot(normalize(-gLightDir), ldir));
 		float lightRatio = 0;
 		if(spotLightAmount > gInnerCone)
 			lightRatio = 1;
 		else if(spotLightAmount > gOuterCone)
 			lightRatio = 1.0 - saturate((gInnerCone - spotLightAmount)/ (gInnerCone - gOuterCone));
-		final = saturate( (lightRatio * diffuseLightAmount * attenuation * surfacecolor) + (ambientLight * surfacecolor));
+		final = saturate( (lightRatio *  attenuation * surfacecolor) + (ambientLight * surfacecolor));
 	}
 	return float4(final,1);
 }

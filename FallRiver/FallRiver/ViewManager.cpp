@@ -524,18 +524,20 @@ bool ViewManager::DeviceEnd(void)
 
 	// render quad with post shader
 	unsigned passes(0);
-
+	D3DXMATRIX tmp;
+	D3DXMatrixInverse(&tmp, 0, &wall);
 	postEffect->Begin(&passes, 0);
 
 	for(unsigned i(0); i<passes; ++i)
 	{
 		postEffect->BeginPass(i);
 		postEffect->SetTexture("gDiffuseTexture", renderTarget);
-		postEffect->SetMatrix("gWorld", &wall);
+
+		postEffect->SetMatrix("gWorldInv", &tmp);
 		//postEffect->SetMatrix("gViewProjection", &(cam * proj));
 		//postEffect->SetFloatArray("gLightDir", ,3);
 		//postEffect->SetFloatArray("gLightPos", ,3);
-		postEffect->SetInt("gSetting", 1);
+		postEffect->SetInt("gSetting", 0);
 
 		postEffect->CommitChanges();
 		m_lpDirect3DDevice->SetVertexDeclaration(cubedecl);

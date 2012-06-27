@@ -12,6 +12,10 @@ private:
 	DWORD m_dwFireDelay;
 
 	BaseObject* m_cInTheWay;
+	int hitID;
+	int walkingID;
+	int notifyID;
+	bool notified;
 
 public: 
 	ShootingAi();

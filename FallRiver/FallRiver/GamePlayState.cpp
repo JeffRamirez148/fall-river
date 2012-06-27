@@ -44,9 +44,7 @@ GamePlayState::GamePlayState()
 
 	backGroundID = -1;
 	swingHitID = -1;
-	notifyID = -1;
-	zombieHitID = -1;
-	zombieWalkingID = -1;
+
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -198,10 +196,8 @@ void GamePlayState::Enter()
 	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
-	notifyID = m_pAM->RegisterSound("resource/Sounds/notify.mp3");
 
-	zombieHitID = m_pAM->RegisterSound("resource/Sounds/zombieHit.mp3");
-	zombieWalkingID = m_pAM->RegisterSound("resource/Sounds/zombieWalking.mp3");
+
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
 	m_pAM->setMusicPos(backGroundID, sound1);

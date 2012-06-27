@@ -43,9 +43,7 @@ private:
 	// Sound Ids
 	int backGroundID;
 	int swingHitID;
-	int notifyID;
-	int zombieHitID;
-	int zombieWalkingID;
+
 
 	// Data Members
 	float fTime;
