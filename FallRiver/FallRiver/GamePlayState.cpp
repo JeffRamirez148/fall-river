@@ -180,6 +180,8 @@ void GamePlayState::Enter()
 		pNpc->SetImageID(-1);
 		pNpc->SetPosX(400);
 		pNpc->SetPosY(100);
+		pNpc->SetQuest(i+1);
+		pNpc->SetLabel(i);
 		m_pOM->AddObject(pNpc);
 	}
 

@@ -8,8 +8,9 @@ using namespace std;
 #include "BaseCharacter.h"
 #include "AnimInfo.h"
 #include "IListener.h"
+#include "Quests.h"
 
-class Quests;
+
 class GamePlayState;
 class Weapon;
 class Light;
@@ -37,7 +38,7 @@ private:
 	bool m_bIsHidden;
 	bool m_bTalking;
 	int m_nLives;
-	vector<Quests*> m_vpActiveQuests;
+	vector<Quest_Struct*> m_vpActiveQuests;
 
 	AnimInfo m_playerAnim;
 
@@ -63,7 +64,7 @@ public:
 	void SetScore(int sc) {m_nScore = sc;}
 	void SetLives(int live) {m_nLives = live;}
 	
-	void AddQuest(Quests* pQuest);
+	void AddQuest(Quest_Struct* pQuest);
 	void AddWeapon(Weapon* pWeapon);
 	void AddLight(Light* pLight);
 
