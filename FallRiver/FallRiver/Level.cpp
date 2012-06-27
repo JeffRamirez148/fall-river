@@ -8,6 +8,8 @@
 #include "BaseCharacter.h"
 #include "Enemy.h"
 #include "EventSystem.h"
+#include "DestroyBullet.h"
+#include "Bullet.h"
 
 Level::Level() 
 {
@@ -379,7 +381,14 @@ bool Level::CheckCollision(IObjects* pBase)
 		else
 		{
 			checkcol = true;
-			if(pBase->GetObjectType() == OBJ_CHARACTER)
+			if( pBase->GetObjectType() == OBJ_BULLET )
+			{
+				DestroyBullet* pMsg = new DestroyBullet((Bullet*)pBase);
+				MessageSystem::GetInstance()->SendMsg(pMsg);
+				pMsg = nullptr;
+				return true;
+			}
+			else if(pBase->GetObjectType() == OBJ_CHARACTER)
 			{
 				BaseCharacter* pCh = (BaseCharacter*)pBase;
 				/*	if(pCh->GetCharacterType() == CHA_ENEMY)
