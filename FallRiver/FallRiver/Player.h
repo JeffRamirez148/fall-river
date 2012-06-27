@@ -42,7 +42,7 @@ private:
 	int walkingID;
 	vector<Quest_Struct*> m_vpActiveQuests;
 	int hitID;
-	vector<Quests*> m_vpActiveQuests;
+//	vector<Quests*> m_vpActiveQuests;
 
 	AnimInfo m_playerAnim;
 

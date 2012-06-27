@@ -14,6 +14,9 @@ private:
 	int m_nClip;
 	int m_nDamage;
 
+	int swingMissID;
+	int shotID;
+
 	float m_fFireRate;
 	float m_fReloadSpeed;
 	float m_fRecoil;

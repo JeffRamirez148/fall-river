@@ -40,13 +40,13 @@ void OptionsMenuState::Enter()
 	FMOD_VECTOR tmp = {0,0,0};
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	m_pAM->SetListenerPos(tmp);
-	soundID = m_pAM->RegisterSound("KCJ_MenuClick.wav");
+	soundID = m_pAM->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
 	m_pAM->setSoundPos(soundID, sound1);
 
 	m_pAM->setSoundVel(soundID, tmp);
 	m_pAM->setSoundLooping(soundID, false);
 
-	musicID = m_pAM->registerMusic("resource/Sounds/walking.aif");
+	musicID = m_pAM->registerMusic("resource/Sounds/shot.mp3");
 	m_pAM->setMusicPos(musicID, sound1);
 
 	m_pAM->setMusicVel(musicID, tmp);
