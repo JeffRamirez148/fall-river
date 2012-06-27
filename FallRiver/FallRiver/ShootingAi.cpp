@@ -13,13 +13,15 @@
 
 ShootingAi::ShootingAi()
 {
-	m_bIsMoving = false;
 	m_cInTheWay = nullptr;
+	m_nState = ESTATE_IDLE;
+	m_pfDestination.x = 0;
+	m_pfDestination.y = 0;
+	m_dwIdleWait = 0;
 	m_nVelX = 0;
 	m_nVelY = 0;
 	m_dwFireDelay = 0;
 	m_pWeapon = nullptr;
-	m_bIsChasing = false;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 }
 
@@ -39,11 +41,11 @@ void ShootingAi::Update(float fElapsedTime)
 
 	m_pWeapon->Update(fElapsedTime);
 	
-	if(m_bIsChasing)
+	if(m_nState == ESTATE_CHASING)
 	{
 		if( m_dwFireDelay == 0)
 			m_dwFireDelay = GetTickCount() + 1000;
-		if( m_dwFireDelay < GetTickCount() && m_bIsChasing )
+		if( m_dwFireDelay < GetTickCount() && m_nState == ESTATE_CHASING )
 		{
 			m_dwFireDelay = GetTickCount() + 1000;
 			m_pWeapon->FireWeapon();
@@ -58,26 +60,55 @@ void ShootingAi::Update(float fElapsedTime)
 	if( distanceY < 0)
 		distanceY = -distanceY;
 
-	if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
+	if( (distanceX + distanceY >= 300) )
+		m_nState = ESTATE_IDLE;
+	else
+		m_nState = ESTATE_CHASING;
+
+	if( m_nState == ESTATE_IDLE )
 	{
-		m_bIsChasing = true;
-		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
-		BaseCharacter::Update(fElapsedTime);
+		float fDistX = m_pfDestination.x - GetPosX();
+		float fDistY = m_pfDestination.y - GetPosY();
+
+		if(fDistX < 0)
+			fDistX = -fDistX;
+		if(fDistY < 0)
+			fDistY = -fDistY;
+
+		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
+		{
+			m_pfDestination.x = GetPosX()+rand()%200-100; 
+			m_pfDestination.y = GetPosY()+rand()%200-100;
+			m_dwIdleWait = GetTickCount() + 1000;
+		}
+		if( fDistX  > 10 && fDistY > 10 )
+		{
+			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
+			BaseCharacter::Update(fElapsedTime);
+		}
 	}
-	else if( distanceY < 50 || distanceX < 50 )
+	else if( m_nState == ESTATE_CHASING)
 	{
-		if(m_pTarget->GetPosX() < GetPosX()+5 )
-			MoveTo(GetPosX()+100, GetPosY(), 80);
-		else if(m_pTarget->GetPosX() > GetPosX()-5 )
-			MoveTo(GetPosX() - 100, GetPosY(), 80);
-		BaseCharacter::Update(fElapsedTime);
+		if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
+		{
+			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+			BaseCharacter::Update(fElapsedTime);
+		}
+		else if( distanceY < 50 || distanceX < 50 )
+		{
+			if(m_pTarget->GetPosX() < GetPosX()+5 )
+				MoveTo(GetPosX()+100, GetPosY(), 80);
+			else if(m_pTarget->GetPosX() > GetPosX()-5 )
+				MoveTo(GetPosX() - 100, GetPosY(), 80);
+			BaseCharacter::Update(fElapsedTime);
 
-		if(m_pTarget->GetPosY() < GetPosY()+5 )
-			MoveTo(GetPosX(), GetPosY()+100, 80);
-		else if(m_pTarget->GetPosY() > GetPosY()-5 )
-			MoveTo(GetPosX(), GetPosY()-100, 80);
+			if(m_pTarget->GetPosY() < GetPosY()+5 )
+				MoveTo(GetPosX(), GetPosY()+100, 80);
+			else if(m_pTarget->GetPosY() > GetPosY()-5 )
+				MoveTo(GetPosX(), GetPosY()-100, 80);
 
-		BaseCharacter::Update(fElapsedTime);
+			BaseCharacter::Update(fElapsedTime);
+		}
 	}
 
 	if(m_pTarget->GetPosX() > GetPosX()+10)
@@ -112,7 +143,7 @@ void ShootingAi::Render()
 
 	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
-	pVM->DrawRect(reRect, 255, 2, 0);
+	pVM->DrawRect(reRect, 255, 255, 0);
 }
 
 bool ShootingAi::CheckCollision(IObjects* pBase)
@@ -122,7 +153,6 @@ bool ShootingAi::CheckCollision(IObjects* pBase)
 		if(pBase != m_pTarget && pBase->GetObjectType() == OBJ_CHARACTER)
 		{
 			m_cInTheWay = (BaseObject*)pBase;
-			m_bIsMoving = true;
 		}
 		return true;
 	}

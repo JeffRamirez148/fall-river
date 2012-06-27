@@ -11,9 +11,13 @@
 
 ChasingAI::ChasingAI()
 {
-	m_bIsMoving = false;
-	m_bIsChasing = false;
 	m_cInTheWay = nullptr;
+	m_nState = ESTATE_IDLE;
+	
+	m_pfDestination.x = 0;
+	m_pfDestination.y = 0;
+	m_dwIdleWait = 0;
+
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 }
 
@@ -45,118 +49,147 @@ void ChasingAI::Update(float fElapsedTime)
 	if( (distX < 10 && distY < 10) || (distX-m_pTarget->GetWidth() < 10 && distY - m_pTarget->GetHeight() < 10))
 		return;
 
-	if( distance < 200 && distance > GetWidth() && !m_cInTheWay )
+	if( (distance >= 200) )
+		m_nState = ESTATE_IDLE;
+	else
+		m_nState = ESTATE_CHASING;
+
+	if( m_nState == ESTATE_IDLE )
 	{
-		m_bIsChasing = true;
-		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
-		BaseCharacter::Update(fElapsedTime);
-	}
-	else if( m_bIsChasing && m_cInTheWay )
-	{
-		if( m_cInTheWay->GetObjectType() == OBJ_CHARACTER )
+		float fDistX = m_pfDestination.x - GetPosX();
+		float fDistY = m_pfDestination.y - GetPosY();
+
+		if(fDistX < 0)
+			fDistX = -fDistX;
+		if(fDistY < 0)
+			fDistY = -fDistY;
+
+		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
 		{
-			BaseCharacter* pCH = (BaseCharacter*)m_cInTheWay;
-
-			if(pCH->GetCharacterType() == CHA_ENEMY)
+			m_pfDestination.x = GetPosX()+rand()%200-100; 
+			m_pfDestination.y = GetPosY()+rand()%200-100;
+			m_dwIdleWait = GetTickCount() + 1000;
+		}
+		if( fDistX  > 10 && fDistY > 10 )
+		{
+			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
+			BaseCharacter::Update(fElapsedTime);
+		}
+	}
+	else if( m_nState == ESTATE_CHASING)
+	{
+		if( distance < 200 && distance > GetWidth() && !m_cInTheWay )
+		{
+			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+			BaseCharacter::Update(fElapsedTime);
+		}
+		else if( m_cInTheWay )
+		{
+			if( m_cInTheWay->GetObjectType() == OBJ_CHARACTER )
 			{
-				Enemy* pEN = (Enemy*)m_cInTheWay;
+				BaseCharacter* pCH = (BaseCharacter*)m_cInTheWay;
 
-				float ourDist = distance;
-				float theirDist = (pEN->GetPosX() + pEN->GetPosY()) - (m_pTarget->GetPosX() + m_pTarget->GetPosY());
-
-				if(ourDist < 0)
-					ourDist = -ourDist;
-				if(theirDist < 0)
-					theirDist = -theirDist;
-				
-				if( ourDist < theirDist )
+				if(pCH->GetCharacterType() == CHA_ENEMY)
 				{
-					MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
-					BaseCharacter::Update(fElapsedTime);
+					Enemy* pEN = (Enemy*)m_cInTheWay;
+
+					float ourDist = distance;
+					float theirDist = (pEN->GetPosX() + pEN->GetPosY()) - (m_pTarget->GetPosX() + m_pTarget->GetPosY());
+
+					if(ourDist < 0)
+						ourDist = -ourDist;
+					if(theirDist < 0)
+						theirDist = -theirDist;
+
+					if( ourDist < theirDist )
+					{
+						MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
+						BaseCharacter::Update(fElapsedTime);
+					}
+					else
+					{
+						pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
+						pEN->BaseCharacter::Update(fElapsedTime);
+					}
 				}
 				else
 				{
-					pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
-					pEN->BaseCharacter::Update(fElapsedTime);
-				}
-			}
-			else
-			{
-				if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
-				{
-					float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToRight = GetPosX() - m_cInTheWay->GetPosX();
-
-					if(DistToBottom < 0)
-						DistToBottom = -DistToBottom;
-
-					if(DistToBottom > DistToRight)
+					if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
 					{
-						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
-						BaseCharacter::Update(fElapsedTime);
+						float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
+						float DistToRight = GetPosX() - m_cInTheWay->GetPosX();
+
+						if(DistToBottom < 0)
+							DistToBottom = -DistToBottom;
+
+						if(DistToBottom > DistToRight)
+						{
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
+						else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
+						{
+							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
 					}
-					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
+					else if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
 					{
-						MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
+						float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
+						float DistToLeft = m_cInTheWay->GetPosX() - GetPosX();
+
+						if(DistToBottom < 0)
+							DistToBottom = -DistToBottom;
+
+						if(DistToBottom > DistToLeft)
+						{
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
+						else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
+						{
+							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
 					}
-				}
-				else if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
-				{
-					float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToLeft = m_cInTheWay->GetPosX() - GetPosX();
-
-					if(DistToBottom < 0)
-						DistToBottom = -DistToBottom;
-
-					if(DistToBottom > DistToLeft)
+					else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
 					{
-						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
-						BaseCharacter::Update(fElapsedTime);
+						float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
+						float DistToRight = m_cInTheWay->GetPosX() - GetPosX();
+
+						if(DistToTop < 0)
+							DistToTop = -DistToTop;
+
+						if(DistToTop < DistToRight)
+						{
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
+						else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
+						{
+							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
+
 					}
-					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
+					else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
 					{
-						MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-				}
-				else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
-				{
-					float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToRight = m_cInTheWay->GetPosX() - GetPosX();
+						float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
+						float DistToLeft = GetPosX() - m_cInTheWay->GetPosX();
 
-					if(DistToTop < 0)
-						DistToTop = -DistToTop;
+						if(DistToTop < 0)
+							DistToTop = -DistToTop;
 
-					if(DistToTop < DistToRight)
-					{
-						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
-					{
-						MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-
-				}
-				else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
-				{
-					float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToLeft = GetPosX() - m_cInTheWay->GetPosX();
-
-					if(DistToTop < 0)
-						DistToTop = -DistToTop;
-
-					if(DistToTop < DistToLeft)
-					{
-						MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
-					{
-						MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
+						if(DistToTop < DistToLeft)
+						{
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
+						else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
+						{
+							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
+							BaseCharacter::Update(fElapsedTime);
+						}
 					}
 				}
 			}
@@ -170,7 +203,7 @@ void ChasingAI::Render()
 
 	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
-	pVM->DrawRect(reRect, 255, 2, 0);
+	pVM->DrawRect(reRect, 255, 0, 0);
 }
 
 bool ChasingAI::CheckCollision(IObjects* pBase) 

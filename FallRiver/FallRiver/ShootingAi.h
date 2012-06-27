@@ -8,8 +8,6 @@ class Weapon;
 class ShootingAi: public Enemy
 {
 private:
-	bool m_bIsChasing;
-	bool m_bIsMoving;
 	Weapon* m_pWeapon;
 	DWORD m_dwFireDelay;
 

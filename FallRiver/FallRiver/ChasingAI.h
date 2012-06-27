@@ -7,10 +7,6 @@
 class ChasingAI: public Enemy
 {
 private:
-	bool m_bIsChasing;
-	bool m_bIsMoving;
-
-
 	BaseObject* m_cInTheWay;
 
 public: 
