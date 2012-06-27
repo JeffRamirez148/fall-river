@@ -12,6 +12,7 @@
 #include "EventSystem.h"
 #include "Level.h"
 #include "AudioManager.h"
+#include "Sound.h"
 
 Player::Player()
 {
@@ -91,7 +92,8 @@ void Player::Update(float fElapsedTime)
 			SetDirection(DIRE_DOWNRIGHT);
 		else
 			SetDirection(DIRE_RIGHT);		
-
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if( pDI->KeyDown(DIK_LEFT))
 	{
@@ -100,26 +102,51 @@ void Player::Update(float fElapsedTime)
 		else if(pDI->KeyDown(DIK_DOWN))
 			SetDirection(DIRE_DOWNLEFT);
 		else
-			SetDirection(DIRE_LEFT);		
+			SetDirection(DIRE_LEFT);
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if( pDI->KeyDown(DIK_UP))
+	{
 		SetDirection(DIRE_UP);
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
+	}
 	else if( pDI->KeyDown(DIK_DOWN))
+	{
 		SetDirection(DIRE_DOWN);
+		
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
+	}
 
 	if( pDI->KeyDown(DIK_RIGHT) )
+	{
 		SetVelX(100);
+	}
 	else if( pDI->KeyDown(DIK_LEFT) )
+	{
 		SetVelX(-100);
+	}
 	else
+	{
 		SetVelX(0);
+		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+	}
 
 	if( pDI->KeyDown(DIK_UP) )
+	{
 		SetVelY(-100);
+	}
 	else if( pDI->KeyDown(DIK_DOWN) )
+	{
 		SetVelY(100);
+	}
 	else
+	{
 		SetVelY(0);
+		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+	}
 
 	BaseCharacter::Update(fElapsedTime);
 
@@ -173,7 +200,7 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		AudioManager::GetInstance()->playSound(walkingID);
+		
 	}
 	else if(m_nState == PSTATE_SHOOT)
 	{
@@ -202,7 +229,6 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.fTime = 0;
 		}
 
-		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
 
 

@@ -42,10 +42,8 @@ private:
 
 	// Sound Ids
 	int backGroundID;
-	int swingMissID;
 	int swingHitID;
 	int notifyID;
-	int shotID;
 	int zombieHitID;
 	int zombieWalkingID;
 

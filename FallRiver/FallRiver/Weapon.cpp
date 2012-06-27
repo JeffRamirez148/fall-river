@@ -3,6 +3,7 @@
 #include "CreateBullet.h"
 #include "MessageSystem.h"
 #include "ViewManager.h"
+#include "AudioManager.h"
 
 Weapon::Weapon()
 {
@@ -48,6 +49,19 @@ bool Weapon::Init(int wType, int nAmmo, int nDamage, float currRotation )
 		m_bMelee = true;
 		break;
 	}
+	AudioManager* m_pAM = AudioManager::GetInstance();
+	swingMissID = m_pAM->RegisterSound("resource/Sounds/swingMiss.wav");
+	shotID = m_pAM->RegisterSound("resource/Sounds/shot.wav");
+
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	m_pAM->setSoundVel(swingMissID, sound1);
+	m_pAM->setSoundLooping(swingMissID, false);
+	m_pAM->setSoundVel(shotID, sound1);
+	m_pAM->setSoundLooping(shotID, false);
+	sound1.x = m_pOwner->GetPosX();
+	sound1.y = m_pOwner->GetPosY();
+	m_pAM->setSoundPos(swingMissID, sound1);
+	m_pAM->setSoundPos(shotID, sound1);
 
 	return true;
 }
@@ -58,6 +72,13 @@ void Weapon::Update(float fElapsedTime)
 	SetPosY(m_pOwner->GetPosY());
 
 	DirectInput* pDI = DirectInput::GetInstance();
+
+	AudioManager* m_pAM = AudioManager::GetInstance();
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	sound1.x = m_pOwner->GetPosX();
+	sound1.y = m_pOwner->GetPosY();
+	m_pAM->setSoundPos(swingMissID, sound1);
+	m_pAM->setSoundPos(shotID, sound1);
 }
 
 void Weapon::Render() 
@@ -84,6 +105,7 @@ void Weapon::FireWeapon()
 				pMsg = nullptr;
 			}
 		}
+		AudioManager::GetInstance()->playSound(shotID);
 	}
 }
 

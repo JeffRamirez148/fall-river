@@ -43,10 +43,8 @@ GamePlayState::GamePlayState()
 	m_cWeapon = nullptr;
 
 	backGroundID = -1;
-	swingMissID = -1;
 	swingHitID = -1;
 	notifyID = -1;
-	shotID = -1;
 	zombieHitID = -1;
 	zombieWalkingID = -1;
 }
@@ -196,10 +194,10 @@ void GamePlayState::Enter()
 	m_pMS->InitMessageSystem( &MessageProc );
 
 	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
-	swingMissID = m_pAM->RegisterSound("resource/Sounds/swingMiss.mp3");
+
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
 	notifyID = m_pAM->RegisterSound("resource/Sounds/notify.mp3");
-	shotID = m_pAM->RegisterSound("resource/Sounds/shot.mp3");
+
 	zombieHitID = m_pAM->RegisterSound("resource/Sounds/zombieHit.mp3");
 	zombieWalkingID = m_pAM->RegisterSound("resource/Sounds/zombieWalking.mp3");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
