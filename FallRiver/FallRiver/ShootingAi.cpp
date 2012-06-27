@@ -10,6 +10,7 @@
 #include "CreateBullet.h"
 #include "Weapon.h"
 #include "CGame.h"
+#include "AudioManager.h"
 
 ShootingAi::ShootingAi()
 {
@@ -23,6 +24,22 @@ ShootingAi::ShootingAi()
 	m_dwFireDelay = 0;
 	m_pWeapon = nullptr;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
+	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
+	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
+	notifyID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/notify.mp3");
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	AudioManager::GetInstance()->setSoundVel(hitID, sound1);
+	AudioManager::GetInstance()->setSoundVel(walkingID, sound1);
+	AudioManager::GetInstance()->setSoundVel(notifyID, sound1);
+	sound1.x = m_nPosX;
+	sound1.y = m_nPosY;
+	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(walkingID, true);
+	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(hitID, false);
+	AudioManager::GetInstance()->setSoundPos(notifyID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(notifyID, false);
+	notified = false;
 }
 
 ShootingAi::~ShootingAi()
@@ -32,6 +49,9 @@ ShootingAi::~ShootingAi()
 
 void ShootingAi::Update(float fElapsedTime) 
 {
+	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
+	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
+	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	if(GetHealth() <= 0)
 	{
 		DestroyEnemyS* pMsg = new DestroyEnemyS(this);
@@ -61,9 +81,17 @@ void ShootingAi::Update(float fElapsedTime)
 		distanceY = -distanceY;
 
 	if( (distanceX + distanceY >= 300) )
+	{
 		m_nState = ESTATE_IDLE;
+		notified = true;
+	}
 	else
+	{
+		if(notified)
+			AudioManager::GetInstance()->playSound(notifyID);		
+		notified = false;
 		m_nState = ESTATE_CHASING;
+	}
 
 	if( m_nState == ESTATE_IDLE )
 	{
@@ -86,6 +114,8 @@ void ShootingAi::Update(float fElapsedTime)
 			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
 			BaseCharacter::Update(fElapsedTime);
 		}
+		else
+			AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
 	else if( m_nState == ESTATE_CHASING)
 	{
@@ -97,18 +127,41 @@ void ShootingAi::Update(float fElapsedTime)
 		else if( distanceY < 50 || distanceX < 50 )
 		{
 			if(m_pTarget->GetPosX() < GetPosX()+5 )
+			{
 				MoveTo(GetPosX()+100, GetPosY(), 80);
+				if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);
+			}
 			else if(m_pTarget->GetPosX() > GetPosX()-5 )
+			{
 				MoveTo(GetPosX() - 100, GetPosY(), 80);
+				if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);
+			}
+			else
+				AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+
 			BaseCharacter::Update(fElapsedTime);
 
 			if(m_pTarget->GetPosY() < GetPosY()+5 )
+			{
 				MoveTo(GetPosX(), GetPosY()+100, 80);
+				if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);
+			}
 			else if(m_pTarget->GetPosY() > GetPosY()-5 )
+			{
 				MoveTo(GetPosX(), GetPosY()-100, 80);
+				if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);
+			}
+			else
+				AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 
 			BaseCharacter::Update(fElapsedTime);
 		}
+		else
+			AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
 
 	if(m_pTarget->GetPosX() > GetPosX()+10)
@@ -166,6 +219,7 @@ void ShootingAi::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			SetHealth(GetHealth()-30);
+			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}
 }

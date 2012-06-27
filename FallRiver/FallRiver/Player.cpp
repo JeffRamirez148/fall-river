@@ -36,8 +36,7 @@ Player::Player()
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
-	walkingID = -1;
-	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aif");
+	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(hitID, sound1);
@@ -92,8 +91,6 @@ void Player::Update(float fElapsedTime)
 			SetDirection(DIRE_DOWNRIGHT);
 		else
 			SetDirection(DIRE_RIGHT);		
-		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if( pDI->KeyDown(DIK_LEFT))
 	{
@@ -103,50 +100,51 @@ void Player::Update(float fElapsedTime)
 			SetDirection(DIRE_DOWNLEFT);
 		else
 			SetDirection(DIRE_LEFT);
-		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if( pDI->KeyDown(DIK_UP))
 	{
 		SetDirection(DIRE_UP);
-		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if( pDI->KeyDown(DIK_DOWN))
 	{
 		SetDirection(DIRE_DOWN);
-		
-		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-			AudioManager::GetInstance()->playSound(walkingID);
 	}
 
 	if( pDI->KeyDown(DIK_RIGHT) )
 	{
 		SetVelX(100);
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if( pDI->KeyDown(DIK_LEFT) )
 	{
 		SetVelX(-100);
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else
 	{
 		SetVelX(0);
-		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
 
 	if( pDI->KeyDown(DIK_UP) )
 	{
 		SetVelY(-100);
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if( pDI->KeyDown(DIK_DOWN) )
 	{
 		SetVelY(100);
+		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+			AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else
 	{
 		SetVelY(0);
-		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
+	if(GetVelX() == 0 && GetVelY() == 0)
+		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 
 	BaseCharacter::Update(fElapsedTime);
 
@@ -299,7 +297,7 @@ bool Player::CheckCollision(IObjects* pBase)
 			else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 				SetPosY(float(pBase->GetRect().bottom));
 
-			AudioManager::GetInstance()->playSound(hitID);
+
 		}
 	}
 	else
@@ -360,6 +358,7 @@ void Player::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			SetHealth(GetHealth()-30);
+			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}
 	else if(pEvent->GetEventID() == "hit_wall")
