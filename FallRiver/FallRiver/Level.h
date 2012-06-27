@@ -63,7 +63,8 @@ public:
 
 	virtual bool CheckCollision(IObjects* pBase);
 
-	//vector<mapTiles> GetTiles() { return m_vTiles;};
+	vector<leveldata> GetCollision() { return m_vCollisions;};
+	void SetCollision(vector<leveldata> x) { m_vCollisions = x; };
 
 };
 

@@ -28,6 +28,9 @@
 #include "DestroyEnemyS.h"
 #include "DestroyNPC.h"
 #include "DestroyPickUp.h"
+#include "Bush.h"
+
+
 
 GamePlayState::GamePlayState()
 {
@@ -64,10 +67,15 @@ void GamePlayState::Enter()
 	m_pMS = MessageSystem::GetInstance();
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
+
+	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
+
+
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Level			>( _T("Level") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
 	m_pOF->RegisterClassType< Weapon		>( _T("Weapon") );
+	m_pOF->RegisterClassType< Bush			>( _T("Bush") );
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
@@ -78,6 +86,8 @@ void GamePlayState::Enter()
 	Player* pPlayer = nullptr;
 	Weapon* pWeapon = nullptr;
 	Level* pLevel = nullptr;
+	Bush* pBush = nullptr;
+
 
 	if( pLevel == nullptr )
 	{
@@ -133,6 +143,31 @@ void GamePlayState::Enter()
 			m_cPlayer->GetWeapons()[i]->SetWidth(pWeapon->GetWidth());
 		}
 	}
+	
+	m_pOM->AddObject(pPlayer);
+
+	vector<leveldata> tmp = pLevel->GetCollision();
+	int x = tmp.size();
+	for(unsigned int i = 0; i < tmp.size(); i++) 
+	{
+		vector<leveldata>::iterator nth = tmp.begin() + i;
+
+		if( _stricmp(nth->m_cType,"Bush") == 0 )
+		{
+			pBush = (Bush*)m_pOF->CreateObject( _T("Bush") );
+			pBush->SetPosX(nth->x);
+			pBush->SetPosY(nth->y);
+			pBush->SetWidth(nth->width);
+			pBush->SetHeight(nth->height);
+			pBush->SetImageID(bush);
+			//pBush->CheckCollision(pLevel);
+			m_pOM->AddObject(pBush);
+			pBush = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+	}
+	pLevel->SetCollision(tmp);
 
 	for(int i = 0; i < 0; i++)
 	{
@@ -189,7 +224,8 @@ void GamePlayState::Enter()
 		m_pOM->AddObject(pNpc);
 	}
 
-	m_pOM->AddObject(pPlayer);
+
+
 
 	m_pMS->InitMessageSystem( &MessageProc );
 

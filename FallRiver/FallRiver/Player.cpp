@@ -13,6 +13,7 @@
 #include "Level.h"
 #include "AudioManager.h"
 #include "Sound.h"
+#include "Bush.h"
 
 Player::Player()
 {
@@ -67,7 +68,7 @@ void Player::Update(float fElapsedTime)
 
 	if(pDI->KeyDown(DIK_SPACE) && 	m_dwGunCount  < GetTickCount() )
 	{
-		if(m_dwGunCount == 0)
+ 		if(m_dwGunCount == 0)
 		{
 			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
 			m_nState = PSTATE_SHOOT;
@@ -276,28 +277,55 @@ bool Player::CheckCollision(IObjects* pBase)
 
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{
-		if(BaseObject::CheckCollision(pBase) == true )
+		if( pBase->GetObjectType() != OBJ_BUSH )
 		{
-			if(pBase->GetObjectType() == OBJ_BULLET)
+			if(BaseObject::CheckCollision(pBase) == true )
 			{
-				Bullet* pBU = (Bullet*)pBase;
-				if(pBU->GetOwner()->GetOwner() == this)
-					return false;
-				DestroyBullet* pMsg = new DestroyBullet(pBU);
-				MessageSystem::GetInstance()->SendMsg(pMsg);
-				pMsg = nullptr;
+				if(pBase->GetObjectType() == OBJ_BULLET)
+				{
+					Bullet* pBU = (Bullet*)pBase;
+					if(pBU->GetOwner()->GetOwner() == this)
+						return false;
+					DestroyBullet* pMsg = new DestroyBullet(pBU);
+					MessageSystem::GetInstance()->SendMsg(pMsg);
+					pMsg = nullptr;
+				}
+
+				if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
+					SetPosX(float(pBase->GetRect().left-GetWidth()-2));
+				else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
+					SetPosX(float(pBase->GetRect().right+2));
+				else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
+					SetPosY(float(pBase->GetRect().top-GetHeight()-2));
+				else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
+					SetPosY(float(pBase->GetRect().bottom));
+
+
 			}
+		}
+		else
+		{
+			if(BaseObject::CheckCollision(pBase) == true )
+			{
+				RECT cRect;
+				if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == TRUE )
+				{
+					if( cRect.top == GetRect().top && cRect.right == GetRect().right && cRect.left == GetRect().left && cRect.bottom == GetRect().bottom  )
+					{
+						Bush* tmp = (Bush*)pBase;
+						tmp->SetIsInBush( true );
+						m_bIsHidden = true;
 
-			if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-				SetPosX(float(pBase->GetRect().left-GetWidth()-2));
-			else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-				SetPosX(float(pBase->GetRect().right+2));
-			else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-				SetPosY(float(pBase->GetRect().top-GetHeight()-2));
-			else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
-				SetPosY(float(pBase->GetRect().bottom));
+					}
+				}
+			}
+			else
+			{
+				Bush* tmp = (Bush*)pBase;
+				tmp->SetIsInBush( false );
+				m_bIsHidden = false;
 
-
+			}
 		}
 	}
 	else
