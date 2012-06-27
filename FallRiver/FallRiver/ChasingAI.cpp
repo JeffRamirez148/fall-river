@@ -142,12 +142,12 @@ void ChasingAI::Update(float fElapsedTime)
 
 					if( ourDist < theirDist )
 					{
-						MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
+						MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50);
 						BaseCharacter::Update(fElapsedTime);
 					}
 					else
 					{
-						pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
+						pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50);
 						pEN->BaseCharacter::Update(fElapsedTime);
 					}
 				}
@@ -163,14 +163,14 @@ void ChasingAI::Update(float fElapsedTime)
 
 						if(DistToBottom > DistToRight)
 						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);
 						}
 						else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 						{
-							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
+							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);
@@ -188,14 +188,14 @@ void ChasingAI::Update(float fElapsedTime)
 
 						if(DistToBottom > DistToLeft)
 						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 80);
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);
 						}
 						else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 						{
-							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
+							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);
@@ -213,14 +213,14 @@ void ChasingAI::Update(float fElapsedTime)
 
 						if(DistToTop < DistToRight)
 						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);
 						}
 						else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
 						{
-							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 80);
+							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);
@@ -238,14 +238,14 @@ void ChasingAI::Update(float fElapsedTime)
 
 						if(DistToTop < DistToLeft)
 						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 80);
+							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);
 						}
 						else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
 						{
-							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 80);
+							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 50);
 							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 								AudioManager::GetInstance()->playSound(zombieWalkingID);
 							BaseCharacter::Update(fElapsedTime);

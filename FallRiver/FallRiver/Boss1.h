@@ -5,11 +5,10 @@
 #include "IListener.h"
 
 class Boss1: public Enemy
-{
-	bool m_bIsChasing;
-	bool m_bIsMoving;
+{	
+	DWORD m_dwFireDelay;
 
-
+	Weapon* m_pWeapon;
 	BaseObject* m_cInTheWay;
 
 public: 

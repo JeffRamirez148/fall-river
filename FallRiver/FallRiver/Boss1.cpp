@@ -4,10 +4,23 @@
 #include "MessageSystem.h"
 #include "DestroyEnemyC.h"
 #include "Enemy.h"
+#include "ViewManager.h"
+#include "EventSystem.h"
+#include "GamePlayState.h"
+#include "Weapon.h"
 
 Boss1::Boss1()
 {
-
+	m_cInTheWay = nullptr;
+	m_nState = ESTATE_IDLE;
+	m_pfDestination.x = 0;
+	m_pfDestination.y = 0;
+	m_dwIdleWait = 0;
+	m_nVelX = 0;
+	m_nVelY = 0;
+	m_dwFireDelay = 0;
+	m_pWeapon = nullptr;
+	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 }
 
 Boss1::~Boss1()
@@ -17,138 +30,118 @@ Boss1::~Boss1()
 
 void Boss1::Update(float fElapsedTime)
 {
-	Enemy::Update(fElapsedTime);
-
-
-	Enemy::Update(fElapsedTime);
-
-	float distance = ( m_pTarget->GetPosX() + m_pTarget->GetPosY() ) - ( GetPosX() + GetPosY() );
-
-	if( distance < 0)
-		distance = -distance;
-
-	if( distance < 200 && distance > 2  )
+	if(GetHealth() <= 0)
 	{
-		m_bIsChasing = true;
-		MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
-		BaseCharacter::Update(fElapsedTime);
+		/*DestroyEnemyS* pMsg = new DestroyEnemyS(this);
+		MessageSystem::GetInstance()->SendMsg(pMsg);
+		pMsg = nullptr;*/
 	}
-	else if( m_bIsChasing && m_cInTheWay )
+
+	m_pWeapon->Update(fElapsedTime);
+	
+	if(m_nState == ESTATE_CHASING)
 	{
-		if( m_cInTheWay->GetObjectType() == OBJ_CHARACTER )
+		if( m_dwFireDelay == 0)
+			m_dwFireDelay = GetTickCount() + 1000;
+		if( m_dwFireDelay < GetTickCount() && m_nState == ESTATE_CHASING )
 		{
-			BaseCharacter* pCH = (BaseCharacter*)m_cInTheWay;
-
-			if(pCH->GetCharacterType() == CHA_ENEMY)
-			{
-				Enemy* pEN = (Enemy*)m_cInTheWay;
-
-				float ourDist = (GetPosX() + GetPosY()) - (m_pTarget->GetPosX() + m_pTarget->GetPosY());
-				float theirDist = (pEN->GetPosX() + pEN->GetPosY()) - (m_pTarget->GetPosX() + m_pTarget->GetPosY());
-
-				if(ourDist < 0)
-					ourDist = -ourDist;
-				if(theirDist < 0)
-					theirDist = -theirDist;
-				
-				if( ourDist < theirDist )
-				{
-					MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
-					BaseCharacter::Update(fElapsedTime);
-				}
-				else
-				{
-					pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80);
-					pEN->BaseCharacter::Update(fElapsedTime);
-				}
-			}
-			else
-			{
-				if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
-				{
-					float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToRight = GetPosX() - m_cInTheWay->GetPosX();
-
-					if(DistToBottom < 0)
-						DistToBottom = -DistToBottom;
-
-					if(DistToBottom > DistToRight)
-					{
-						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom, 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
-					{
-						MoveTo((float)m_cInTheWay->GetRect().right, GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-				}
-				else if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
-				{
-					float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToLeft = m_cInTheWay->GetPosX() - GetPosX();
-
-					if(DistToBottom < 0)
-						DistToBottom = -DistToBottom;
-
-					if(DistToBottom > DistToLeft)
-					{
-						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().bottom, 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
-					{
-						MoveTo((float)m_cInTheWay->GetRect().left-GetWidth(), GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-				}
-				else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
-				{
-					float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToRight = m_cInTheWay->GetPosX() - GetPosX();
-
-					if(DistToTop < 0)
-						DistToTop = -DistToTop;
-
-					if(DistToTop < DistToRight)
-					{
-						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().top-GetHeight(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-					else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
-					{
-						MoveTo((float)m_cInTheWay->GetRect().right, GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-
-				}
-				else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
-				{
-					float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
-					float DistToLeft = GetPosX() - m_cInTheWay->GetPosX();
-
-					if(DistToTop < 0)
-						DistToTop = -DistToTop;
-
-					if(DistToTop < DistToLeft)
-					{
-						MoveTo(GetPosX(), (float)m_cInTheWay->GetRect().top-GetHeight(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-					else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
-					{
-						MoveTo((float)m_cInTheWay->GetRect().left-GetWidth(), GetPosY(), 80);
-						BaseCharacter::Update(fElapsedTime);
-					}
-				}
-			}
+			m_dwFireDelay = GetTickCount() + 1000;
+			m_pWeapon->FireWeapon();
 		}
 	}
+
+	float distanceX = ( m_pTarget->GetPosX() -  GetPosX() );
+	float distanceY = ( m_pTarget->GetPosY() -  GetPosY() );
+
+	if( distanceX < 0)
+		distanceX = -distanceX;
+	if( distanceY < 0)
+		distanceY = -distanceY;
+
+	if( (distanceX + distanceY >= 300) )
+		m_nState = ESTATE_IDLE;
+	else
+		m_nState = ESTATE_CHASING;
+
+	if( m_nState == ESTATE_IDLE )
+	{
+		float fDistX = m_pfDestination.x - GetPosX();
+		float fDistY = m_pfDestination.y - GetPosY();
+
+		if(fDistX < 0)
+			fDistX = -fDistX;
+		if(fDistY < 0)
+			fDistY = -fDistY;
+
+		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
+		{
+			m_pfDestination.x = GetPosX()+rand()%200-100; 
+			m_pfDestination.y = GetPosY()+rand()%200-100;
+			m_dwIdleWait = GetTickCount() + 1000;
+		}
+		if( fDistX  > 10 && fDistY > 10 )
+		{
+			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
+			BaseCharacter::Update(fElapsedTime);
+		}
+	}
+	else if( m_nState == ESTATE_CHASING)
+	{
+		if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
+		{
+			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+			BaseCharacter::Update(fElapsedTime);
+		}
+		else if( distanceY < 50 || distanceX < 50 )
+		{
+			if(m_pTarget->GetPosX() < GetPosX()+5 )
+				MoveTo(GetPosX()+100, GetPosY(), 80);
+			else if(m_pTarget->GetPosX() > GetPosX()-5 )
+				MoveTo(GetPosX() - 100, GetPosY(), 80);
+			BaseCharacter::Update(fElapsedTime);
+
+			if(m_pTarget->GetPosY() < GetPosY()+5 )
+				MoveTo(GetPosX(), GetPosY()+100, 80);
+			else if(m_pTarget->GetPosY() > GetPosY()-5 )
+				MoveTo(GetPosX(), GetPosY()-100, 80);
+
+			BaseCharacter::Update(fElapsedTime);
+		}
+	}
+
+	if(m_pTarget->GetPosX() > GetPosX()+10)
+	{
+		if(m_pTarget->GetPosY() > GetPosY()+10)
+			SetDirection(DIRE_DOWNRIGHT);
+		else if(m_pTarget->GetPosY() < GetPosY()-10)
+			SetDirection(DIRE_UPRIGHT);
+		else
+			SetDirection(DIRE_RIGHT);
+	}
+	else if(m_pTarget->GetPosX() < GetPosX()-10)
+	{
+		if(m_pTarget->GetPosY() > GetPosY()+10)
+			SetDirection(DIRE_DOWNLEFT);
+		else if(m_pTarget->GetPosY() < GetPosY()-10)
+			SetDirection(DIRE_UPLEFT);
+		else
+			SetDirection(DIRE_LEFT);
+	}
+	else if(m_pTarget->GetPosY() > GetPosY())
+		SetDirection(DIRE_DOWN);
+	else if(m_pTarget->GetPosY() < GetPosY())
+		SetDirection(DIRE_UP);
 }
 
 void Boss1::Render()
 {
+	// Do Rendering here
 
+	ViewManager* pVM = ViewManager::GetInstance();
+
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+
+	pVM->DrawRect(reRect, 255, 255, 0);
 }
 
 bool Boss1::CheckCollision(IObjects* pBase)
@@ -161,9 +154,12 @@ bool Boss1::CheckCollision(IObjects* pBase)
 
 void Boss1::HandleEvent(Event* pEvent)
 {
-
+	if(pEvent->GetEventID() == "target_hit")
+	{
+		if( pEvent->GetParam() == this )
+		{
+			SetHealth(GetHealth()-30);
+		}
+	}
 }
-
-
-
 

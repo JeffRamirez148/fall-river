@@ -314,49 +314,49 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			case DIRE_UP:
 				{
 					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(-200);
+					bullet->SetSpeedY(-300);
 					break;
 				}
 			case DIRE_LEFT:
 				{
-					bullet->SetSpeedX(-200);
+					bullet->SetSpeedX(-300);
 					bullet->SetSpeedY(0);
 					break;
 				}
 			case DIRE_RIGHT:
 				{
-					bullet->SetSpeedX(200);
+					bullet->SetSpeedX(300);
 					bullet->SetSpeedY(0);
 					break;
 				}
 			case DIRE_DOWN:
 				{
 					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(200);
+					bullet->SetSpeedY(300);
 					break;
 				}
 			case DIRE_UPRIGHT:
 				{
-					bullet->SetSpeedX(200);
-					bullet->SetSpeedY(-200);
+					bullet->SetSpeedX(300);
+					bullet->SetSpeedY(-300);
 					break;
 				}
 			case DIRE_UPLEFT:
 				{
-					bullet->SetSpeedX(-200);
-					bullet->SetSpeedY(-200);
+					bullet->SetSpeedX(-300);
+					bullet->SetSpeedY(-300);
 					break;
 				}
 			case DIRE_DOWNLEFT:
 				{
-					bullet->SetSpeedX(-200);
-					bullet->SetSpeedY(200);
+					bullet->SetSpeedX(-300);
+					bullet->SetSpeedY(300);
 					break;
 				}
 			case DIRE_DOWNRIGHT:
 				{
-					bullet->SetSpeedX(200);
-					bullet->SetSpeedY(200);
+					bullet->SetSpeedX(300);
+					bullet->SetSpeedY(300);
 					break;
 				}
 			}
