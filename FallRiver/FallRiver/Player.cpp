@@ -317,7 +317,7 @@ bool Player::CheckCollision(IObjects* pBase)
 // Check if the player is still alive
 bool Player::CheckLifes() {return m_bIsAlive;}
 
-void Player::AddQuest(Quests* pQuest)
+void Player::AddQuest(Quest_Struct* pQuest)
 {
 	// Just in case
 	if(pQuest == nullptr)
