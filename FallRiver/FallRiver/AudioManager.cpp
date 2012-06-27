@@ -104,7 +104,7 @@ int	AudioManager::registerMusic(char* aFilePath)
 	tmp->pos.y = 0;
 	tmp->pos.z = 0;
 	tmp->channel->setVolume(_musicVolume);
-	_result = _sys->createSound(aFilePath, FMOD_3D_LINEARROLLOFF,NULL, &tmp->noise); 
+	_result = _sys->createSound(aFilePath, FMOD_HARDWARE,NULL, &tmp->noise); 
 	_result = tmp->noise->set3DMinMaxDistance(0.5f, 1000.0f);
 
 	_musicSound.push_back(tmp);
@@ -126,7 +126,6 @@ void AudioManager::Update(float fElapsedTime)
 	{
 		_musicSound[i]->channel->setMute(_musicMute);
 		_musicSound[i]->channel->setVolume(_musicVolume);
-		_musicSound[i]->channel->set3DAttributes(&_musicSound[i]->pos, &_musicSound[i]->vel);
 		//_musicSound[i]->noise->setMusicSpeed(sqrt((((7+_musicSound[i]->humidity)/(5+_musicSound[i]->humidity) )*_gasConstant*_musicSound[i]->temperature)/_musicSound[i]->molecularWeight));
 	}
 

@@ -10,6 +10,7 @@ using namespace std;
 #include "IListener.h"
 #include "Quests.h"
 
+class Quests;
 
 class GamePlayState;
 class Weapon;
@@ -38,7 +39,10 @@ private:
 	bool m_bIsHidden;
 	bool m_bTalking;
 	int m_nLives;
+	int walkingID;
 	vector<Quest_Struct*> m_vpActiveQuests;
+	int hitID;
+	vector<Quests*> m_vpActiveQuests;
 
 	AnimInfo m_playerAnim;
 

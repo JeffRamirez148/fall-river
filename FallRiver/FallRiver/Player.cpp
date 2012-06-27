@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "EventSystem.h"
 #include "Level.h"
+#include "AudioManager.h"
 
 Player::Player()
 {
@@ -34,6 +35,19 @@ Player::Player()
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
+	walkingID = -1;
+	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aif");
+	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	AudioManager::GetInstance()->setSoundVel(hitID, sound1);
+	AudioManager::GetInstance()->setSoundVel(walkingID, sound1);
+	sound1.x = m_nPosX;
+	sound1.y = m_nPosY;
+	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(walkingID, true);
+	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(hitID, false);
+
 }
 
 Player::~Player()
@@ -44,6 +58,9 @@ Player::~Player()
 void Player::Update(float fElapsedTime) 
 {
 	DirectInput* pDI = DirectInput::GetInstance();
+	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
+	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
+	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
@@ -156,6 +173,7 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
+		AudioManager::GetInstance()->playSound(walkingID);
 	}
 	else if(m_nState == PSTATE_SHOOT)
 	{
@@ -184,6 +202,7 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.fTime = 0;
 		}
 
+		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
 
 
@@ -253,6 +272,8 @@ bool Player::CheckCollision(IObjects* pBase)
 				SetPosY(float(pBase->GetRect().top-GetHeight()-2));
 			else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 				SetPosY(float(pBase->GetRect().bottom));
+
+			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}
 	else

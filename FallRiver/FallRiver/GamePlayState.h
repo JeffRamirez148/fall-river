@@ -44,8 +44,6 @@ private:
 	int backGroundID;
 	int swingMissID;
 	int swingHitID;
-	int hitID;
-	int walkingID;
 	int notifyID;
 	int shotID;
 	int zombieHitID;
