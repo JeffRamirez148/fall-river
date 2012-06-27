@@ -62,11 +62,11 @@ bool Enemy::CheckCollision(IObjects* pBase)
 				if(pCH->GetCharacterType() == CHA_ENEMY)
 				{
 					if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-						SetPosX(float(pBase->GetRect().left-GetWidth()-2));
+						SetPosX(float(pBase->GetRect().left-GetWidth()));
 					else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-						SetPosX(float(pBase->GetRect().right+2));
+						SetPosX(float(pBase->GetRect().right));
 					else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-						SetPosY(float(pBase->GetRect().top-GetHeight()-2));
+						SetPosY(float(pBase->GetRect().top-GetHeight()));
 					else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 						SetPosY(float(pBase->GetRect().bottom));
 				}
@@ -81,8 +81,8 @@ bool Enemy::CheckCollision(IObjects* pBase)
 			}
 
 		}
-		return false;
 	}
+	return false;
 }
 
 RECT Enemy::GetRect()

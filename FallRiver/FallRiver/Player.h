@@ -34,6 +34,7 @@ private:
 
 	int m_nScore;
 	int m_nState;
+	int	m_nFontID;
 	char* m_cName;
 	bool m_bIsAlive;
 	bool m_bIsHidden;
@@ -42,7 +43,6 @@ private:
 	int walkingID;
 	vector<Quest_Struct*> m_vpActiveQuests;
 	int hitID;
-//	vector<Quests*> m_vpActiveQuests;
 
 	AnimInfo m_playerAnim;
 

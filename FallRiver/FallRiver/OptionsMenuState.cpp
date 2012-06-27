@@ -133,7 +133,6 @@ bool OptionsMenuState::Input()
 		if( m_nCursPosY == 250 )
 		{
 			m_bIsWindowed = !m_bIsWindowed;
-			m_pVM->ChangeDisplayParam(CGame::GetInstance()->GetScreenWidth(), CGame::GetInstance()->GetScreenHeight(), m_bIsWindowed);
 			CGame::GetInstance()->SetWindowed(m_bIsWindowed);
 		}
 		else if( m_nCursPosY == 300 )
