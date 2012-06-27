@@ -222,9 +222,10 @@ void GamePlayState::Enter()
 		pNpc->SetQuest(i+1);
 		pNpc->SetLabel(i);
 		m_pOM->AddObject(pNpc);
+
 	}
 
-	m_pOM->AddObject(pPlayer);
+	//m_pOM->AddObject(pPlayer);
 
 
 
