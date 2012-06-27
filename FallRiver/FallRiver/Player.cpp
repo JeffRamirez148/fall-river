@@ -19,6 +19,7 @@ Player::Player()
 	m_bIsAlive = true;
 	m_bIsHidden = false;
 	m_nScore = 0;
+	m_nState = PSTATE_IDLE;
 	m_nLives = 3;
 	m_cName = "";
 	SetDirection(DIRE_UP);
@@ -28,6 +29,9 @@ Player::Player()
 	m_playerAnim.curAnimID = 0;
 	m_playerAnim.curFrame = 0;
 	m_playerAnim.fTime = 0;
+
+	m_dwGunCount = 0;
+	m_dwGunReset = 0;
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
@@ -57,6 +61,27 @@ void Player::Update(float fElapsedTime)
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
+
+	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
+		m_nState = PSTATE_IDLE;
+
+	if(pDI->KeyDown(DIK_SPACE) && 	m_dwGunCount  < GetTickCount() )
+	{
+		if(m_dwGunCount == 0)
+		{
+			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
+			m_nState = PSTATE_SHOOT;
+			m_currWeapon->FireWeapon();
+			m_dwGunReset = GetTickCount() + 500;
+		}
+		else if( m_dwGunCount < GetTickCount() )
+		{
+			m_nState = PSTATE_SHOOT;
+			m_currWeapon->FireWeapon();
+			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
+			m_dwGunReset = GetTickCount() + 500;
+		}
+	}	
 
 	if( pDI->KeyDown(DIK_RIGHT))
 	{
@@ -98,21 +123,88 @@ void Player::Update(float fElapsedTime)
 
 	BaseCharacter::Update(fElapsedTime);
 
-
-	if((pDI->KeyDown(DIK_RIGHT) || pDI->KeyDown(DIK_LEFT)|| pDI->KeyDown(DIK_UP)|| pDI->KeyDown(DIK_DOWN)) && m_playerAnim.curAnimation == 0)
+	if(m_nState == PSTATE_IDLE)
 	{
-		m_playerAnim.curAnimation = 1;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() < 0)
+		{
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 4 && GetVelY() == 0)
+		{
+			m_playerAnim.curAnimation = 4;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 1 && GetVelY() > 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 5 && GetVelY() == 0)
+		{
+			m_playerAnim.curAnimation = 5;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 2 && GetVelX() > 0)
+		{
+			m_playerAnim.curAnimation = 2;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 7 && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 7;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 3 && GetVelX() < 0)
+		{
+			m_playerAnim.curAnimation = 3;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 6 && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 6;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
 		AudioManager::GetInstance()->playSound(walkingID);
 	}
-	else if((!pDI->KeyDown(DIK_RIGHT) && !pDI->KeyDown(DIK_LEFT)&& !pDI->KeyDown(DIK_UP) && !pDI->KeyDown(DIK_DOWN)) && m_playerAnim.curAnimation == 1)
+	else if(m_nState == PSTATE_SHOOT)
 	{
-		m_playerAnim.curAnimation = 0;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 8)
+		{
+			m_playerAnim.curAnimation = 8;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 9)
+		{
+			m_playerAnim.curAnimation = 9;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 10)
+		{
+			m_playerAnim.curAnimation = 10;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 11)
+		{
+			m_playerAnim.curAnimation = 11;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+
 		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
+
 
 	for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
 		m_vpWeapons[i]->Update(fElapsedTime);

@@ -6,7 +6,7 @@
 
 Weapon::Weapon()
 {
-	m_dwTickCount = 0;
+	
 }
 
 Weapon::~Weapon()
@@ -58,11 +58,6 @@ void Weapon::Update(float fElapsedTime)
 	SetPosY(m_pOwner->GetPosY());
 
 	DirectInput* pDI = DirectInput::GetInstance();
-
-	if(pDI->KeyDown(DIK_SPACE) && 	m_dwTickCount  < GetTickCount() )
-	{
-		FireWeapon();
-	}	
 }
 
 void Weapon::Render() 
@@ -80,7 +75,6 @@ void Weapon::FireWeapon()
 		MessageSystem::GetInstance()->SendMsg( pMsg );
 		pMsg = nullptr;
 		m_nAmmo--;
-		m_dwTickCount = GetTickCount() + (DWORD)m_fFireRate;
 		if(m_nWeaponType == WPN_SHOTGUN)
 		{
 			for(int i = 0; i < 2; i++)
