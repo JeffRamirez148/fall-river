@@ -2,21 +2,20 @@
 float4x4 gWorldInv : WORLD; // Value sent in
 
 // global direction of light
-float3 gLightDir : DIRECTION  // Value sent in
-< string Object = "DirectionalLight"; >
-= { 0, 0, 1 };
+float3 gLightDir[20];  // Value sent in
+
 
 // Light
-float3 gLightPos = {0,0,-1}; // Value sent in
-float gInnerCone  = 0.95f;
-float gOuterCone  = 0.9f;
+float3 gLightPos[20]; // Value sent in
+float gInnerCone[20];
+float gOuterCone[20];
+float3 gColor[20];
 float gAttenuation = 2.7f;
-// 0 - Default Spotlight, 1 - Flashlight, 2 - Lighter, 3 - Mag light, 4 - Lantern 
-int gSetting;  // Value sent in 
 
 // texture to be used
 Texture2D gDiffuseTexture : DIFFUSE = NULL;
 // the matching sampler
+
 sampler gDiffuseSampler = sampler_state 
 {
     Texture = <gDiffuseTexture>;
@@ -48,58 +47,37 @@ VS_OUTPUT myVertexShader(VS_INPUT input)
 	float4 worldloc = float4(input.untransformed_pos, 1.0f);
 	float4 worldnrm = float4(input.untransformed_norm, 0.0f);
 	output.transformed_pos = float4(input.untransformed_pos, 1.0f);
-	//worldloc = mul(worldloc, gWorld);
-	//worldnrm = normalize(mul(worldnrm, gWorld));
 	output.world_pos = worldloc.xyz;
    	output.transformed_norm = worldnrm.xyz;
 	output.uv = input.uv;
-	/* if(gSetting == 0)
-	{
-		gInnerCone = ;
-		gOuterCone = ;
-	}
-	else if(gSetting == 2)
-	{
-		gInnerCone = ;
-		gOuterCone = ;
-	}
-	else if(gSetting == 4)
-	{
-		gInnerCone = ;
-		gOuterCone = ;
-	} */
 	return output; 
 }
 
 float4 myPixelShader(VS_OUTPUT input) : COLOR
 {
-	float3 ambientLight = {1,1,1};
 	float3 surfacecolor = float3(0,0,0);
-	float3 final = float3(0,0,0);
-	float3 ldir = float3(0,0,0);
-	float3 lightPos = mul(float4(gLightPos, 1), gWorldInv).xyz;
-	float3 	wnrm = normalize(input.transformed_norm);
-	float diffuseLightAmount = 0;
-	float attenuation = 0;
 	surfacecolor = tex2D(gDiffuseSampler, input.uv);
-	if(gSetting == 1 || gSetting == 3)
+	float3 ambientLight = {1,1,1};
+	float3 final = float3(0,0,0);
+	for( int i = 0; i < 20; ++i)
 	{
-		ldir = -normalize(gLightDir);
-		diffuseLightAmount = saturate(dot(ldir, wnrm));
-		final = saturate( diffuseLightAmount * surfacecolor  + (ambientLight * surfacecolor));
-	}
-	else
-	{
+		float3 ldir = float3(0,0,0);
+		float3 lightPos = mul(float4(gLightPos[i], 1), gWorldInv).xyz;
+		float3 	wnrm = normalize(input.transformed_norm);
+		float attenuation = 0;
+
 		ldir = normalize(lightPos - input.world_pos);
 		attenuation = 1.0 - saturate( abs(ldir)/ gAttenuation);
-		float spotLightAmount = saturate( dot(normalize(-gLightDir), ldir));
+		float spotLightAmount = saturate( dot(normalize(-gLightDir[i]), ldir));
 		float lightRatio = 0;
-		if(spotLightAmount > gInnerCone)
+		if(spotLightAmount > gInnerCone[i])
 			lightRatio = 1;
-		else if(spotLightAmount > gOuterCone)
-			lightRatio = 1.0 - saturate((gInnerCone - spotLightAmount)/ (gInnerCone - gOuterCone));
-		final = saturate( (lightRatio *  attenuation * surfacecolor) + (ambientLight * surfacecolor));
+		else if(spotLightAmount > gOuterCone[i])
+			lightRatio = 1.0 - saturate((gInnerCone[i] - spotLightAmount)/ (gInnerCone[i] - gOuterCone[i]));
+		final += saturate( (lightRatio *  attenuation * gColor[i]));
 	}
+	final += (ambientLight);
+	final = saturate(final)* surfacecolor;
 	return float4(final,1);
 }
 
@@ -113,6 +91,6 @@ technique myTechnique
 		//ShadeMode = GOURAUD; // smooth color interpolation across triangles
         //FillMode = SOLID; // no wireframes, no point drawing.
 		ZEnable = FALSE;
-       //CullMode = CCW; // cull any counterclockwise polygons.
+       //CullMode = NONE; // cull any counterclockwise polygons.
     }
 }

@@ -189,15 +189,16 @@ void XMLManager::SaveProgress( const char* szFilename, Player &player)
 		pRoot->LinkEndChild( pWeapon );
 	}
 
-	for(unsigned int i = 0; i < player.GetLights().size(); i++)
-	{
-		TiXmlElement* pLight = new TiXmlElement( "player_lights" );
-
-		// Saving all of the lights info
-		pLight->SetDoubleAttribute( "light_radius", player.GetLights()[i]->GetRadius());
-
-		pRoot->LinkEndChild( pLight );
-	}
+	// TODO: UPDATE CODE
+	//for(unsigned int i = 0; i < player.GetLights().size(); i++)
+	//{
+	//	TiXmlElement* pLight = new TiXmlElement( "player_lights" );
+	//
+	//	// Saving all of the lights info
+	//	pLight->SetDoubleAttribute( "light_radius", player.GetLights()[i]->GetRadius());
+	//
+	//	pRoot->LinkEndChild( pLight );
+	//}
 
 	// Save the XML document
 	doc.SaveFile( szFilename );
@@ -277,7 +278,8 @@ Player* XMLManager::LoadProgress(const char* szFilename)
 
 		int lightRad;
 		pWeapon->Attribute("light_radius", &lightRad); 
-		m_cLight.SetRadius((float)lightRad);
+		// TODO: UPDATE CODE
+		//m_cLight.SetRadius((float)lightRad);
 
 		m_cPlayer->AddLight(&m_cLight);
 

@@ -148,7 +148,7 @@ void CGame::ChangeState(IMenuState* pNewState)
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
-
+	m_pVM->RemoveLights();
 	// Exit the current state (if any)
 	if( pNewState == nullptr)
 	{
@@ -190,6 +190,7 @@ void CGame::RemoveState( void )
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
+	m_pVM->RemoveLights();
 
 	// Checking. Just in case
 	if( m_pCurrState != nullptr )

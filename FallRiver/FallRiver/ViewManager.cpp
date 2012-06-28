@@ -441,7 +441,7 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	bBuffer->Release(); // drop ref count
 
 	// Load Shader
-	D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
+	HRESULT hr = D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
 
 	// Create Render Target
 	D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
@@ -528,16 +528,34 @@ bool ViewManager::DeviceEnd(void)
 	D3DXMatrixInverse(&tmp, 0, &wall);
 	postEffect->Begin(&passes, 0);
 
+	int difference = 2 - lights.size();
+
 	for(unsigned i(0); i<passes; ++i)
 	{
 		postEffect->BeginPass(i);
 		postEffect->SetTexture("gDiffuseTexture", renderTarget);
-
 		postEffect->SetMatrix("gWorldInv", &tmp);
-		//postEffect->SetMatrix("gViewProjection", &(cam * proj));
-		//postEffect->SetFloatArray("gLightDir", ,3);
-		//postEffect->SetFloatArray("gLightPos", ,3);
-		postEffect->SetInt("gSetting", 0);
+
+		for(int j = 0; j < lights.size(); ++j)
+		{
+			//postEffect->SetVectorArray( "gLightDir", , 2)
+			postEffect->SetFloatArray("gLightDir", lights[j]->lightDir,3);
+			postEffect->SetFloatArray("gLightPos", lights[j]->lightPos,3);
+			postEffect->SetFloat("gInnerCone", lights[j]->innerCone);
+			postEffect->SetFloat("gOuterCone", lights[j]->outerCone);
+			postEffect->SetFloatArray("gColor", lights[j]->color, 3);
+		}
+
+		for(int j = 0; j < difference; ++j)
+		{
+			Light light;
+			postEffect->SetFloatArray("gLightDir", light.lightDir,3);
+			postEffect->SetFloatArray("gLightPos", light.lightPos,3);
+			postEffect->SetFloat("gInnerCone", light.innerCone);
+			postEffect->SetFloat("gOuterCone", light.outerCone);
+			postEffect->SetFloatArray("gColor", light.color, 3);
+		}
+
 
 		postEffect->CommitChanges();
 		m_lpDirect3DDevice->SetVertexDeclaration(cubedecl);
@@ -740,4 +758,29 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 		SetWindowPos(m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
 
 	}
+}
+
+void ViewManager::RemoveLight(int id)
+{
+	lights.erase( lights.begin() + id, lights.begin() + id + 1);
+}
+
+int ViewManager::RegisterLight(Light light)
+{
+	if(lights.size() >39)
+		return -1;
+	Light* tmp = new Light();
+	*tmp = light;
+	lights.push_back(tmp);
+	return lights.size() - 1;
+}
+
+Light* ViewManager::GetLight(int id)
+{
+	return lights[id];
+}
+
+void ViewManager::RemoveLights(void)
+{
+	lights.clear();
 }

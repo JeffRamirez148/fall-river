@@ -3,11 +3,17 @@
 
 Light::Light()
 {
-	m_nObjectType = OBJ_LIGHT;
-	m_pOwner = nullptr;
-	m_fRadius = 0;
-	m_fCone = 0;
-	m_nColor = 0;
+	lightDir[0] = 0;
+	lightDir[1] = 0;
+	lightDir[2] = 0;
+	lightPos[0] = 0;
+	lightPos[1] = 0;
+	lightPos[2] = 0;
+	color[0] = 1;
+	color[1] = 1;
+	color[2] = 1;
+	outerCone = .9f;
+	innerCone = .95f;
 }
 
 Light::~Light()
@@ -17,23 +23,5 @@ Light::~Light()
 
 void Light::Update(float fElapsedTime) 
 {
-}
-
-void Light::Render() 
-{
-}
-
-RECT Light::GetRect()
-{
-	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight()) };
-	return cRect;
-}
-
-bool Light::CheckCollision(BaseObject* pBase)
-{
-	RECT cRect;
-	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == false  )
-		return false;
-	return true;
 }
 

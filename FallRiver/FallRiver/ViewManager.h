@@ -12,6 +12,7 @@ using namespace std;
 #pragma comment(lib, "d3dx9.lib")
 
 #include "Animation.h"
+#include "Light.h"
 
 class Texture;
 class Font;
@@ -40,6 +41,7 @@ private:
 	vector<Texture> textures;
 	vector<Font> fonts;
 	vector<Kerning> kerns;
+	vector<Light*> lights;
 
 	ViewManager();
 	ViewManager(const ViewManager&);
@@ -121,6 +123,12 @@ public:
 
 	//
 	void ShutdownDirect3D(void);
+
+	// Lights
+	int RegisterLight(Light light);
+	void RemoveLight(int id);
+	void RemoveLights(void);
+	Light* GetLight(int id);
 
 };
 
