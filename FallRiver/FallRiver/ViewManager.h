@@ -108,15 +108,15 @@ public:
 	int RegisterFont(char* filename );
 
 	//For Drawing Animations
-	bool DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, float fRotCenterX = 0, 
+	bool DrawAnimation(AnimInfo* aAnimInfo, float nPosX, float nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, float fRotCenterX = 0, 
 								float fRotCenterY = 0, float fRotation = 0, D3DCOLOR color = 0xFFFFFFFF);
  
 	//For Drawing Fonts
-	bool DrawFont(int nFontID, char* cString, int nPosX, int nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, float fRotCenterX = 0, 
+	bool DrawFont(int nFontID, char* cString, float nPosX, float nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, float fRotCenterX = 0, 
 								float fRotCenterY = 0, float fRotation = 0, D3DCOLOR color = 0xFFFFFFFF);
 
 	//For Anything Else
-	bool DrawStaticTexture(int nTextureID, int nPosX, int nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, RECT* sourceRect = nullptr, 
+	bool DrawStaticTexture(int nTextureID, float nPosX, float nPosY, float fScaleX = 1.0f, float fScaleY = 1.0f, RECT* sourceRect = nullptr, 
 							float fRotCenterX = 0, float fRotCenterY = 0, float fRotation = 0, D3DCOLOR color = 0xFFFFFFFF);
 
 	//

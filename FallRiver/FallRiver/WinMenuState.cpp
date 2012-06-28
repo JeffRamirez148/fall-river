@@ -7,6 +7,8 @@
 #include "XMLManager.h"
 #include "IMenuState.h"
 
+using namespace std;
+
 void WinMenuState::Enter()
 {
 	

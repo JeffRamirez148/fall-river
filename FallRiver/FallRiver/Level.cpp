@@ -64,7 +64,7 @@ void Level::Render()
 			if( m_vTiles[i].m_Layer == 1)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -82,7 +82,7 @@ void Level::Render()
 			if( m_vTiles[i].m_Layer == 2)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -100,7 +100,7 @@ void Level::Render()
 			if( m_vTiles[i].m_Layer == 3)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -118,7 +118,7 @@ void Level::Render()
 			if( m_vTiles[i].m_Layer == 4)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -136,7 +136,7 @@ void Level::Render()
 			if( m_vTiles[i].m_Layer == 5)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}

@@ -117,6 +117,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LoadMenuState.cpp" />
+    <ClCompile Include="LoseMenuState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageSystem.cpp" />
     <ClCompile Include="NPC.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LoadMenuState.h" />
+    <ClInclude Include="LoseMenuState.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MessageSystem.h" />

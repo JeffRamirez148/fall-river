@@ -143,9 +143,9 @@ void CGame::ShutDown()
 
 void CGame::ChangeState(IMenuState* pNewState) 
 {
-	for(int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
 		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
-	for(int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
 
@@ -185,9 +185,9 @@ IMenuState* CGame::GetPreviousState( void )		{return m_pPrevState; }
 
 void CGame::RemoveState( void )
 {
-	for(int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
 		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
-	for(int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
 

@@ -71,7 +71,7 @@ void Player::Update(float fElapsedTime)
 	{
 		if(m_dwGunCount == 0)
 		{
-			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
+			m_dwGunCount = GetTickCount() + (DWORD)m_currWeapon->GetFireRate();
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
 			m_dwGunReset = GetTickCount() + 500;
@@ -80,7 +80,7 @@ void Player::Update(float fElapsedTime)
 		{
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
-			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
+			m_dwGunCount = GetTickCount() + (DWORD)m_currWeapon->GetFireRate();
 			m_dwGunReset = GetTickCount() + 500;
 		}
 	}	
@@ -260,7 +260,7 @@ void Player::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	//Drawing Player Placeholder Sprite
-	pVM->DrawAnimation(&m_playerAnim, int( (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2 ) , int( (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() ));
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x + GetWidth()/2 ) , (GetPosY() - GamePlayState::GetInstance()->GetCamera().y + GetHeight() ));
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
@@ -271,7 +271,7 @@ void Player::Render()
 	pVM->DrawRect(logRect, 50, 50, 50);
 
 	for(unsigned int i = 0; i < m_vpActiveQuests.size(); i++)
-		pVM->DrawFont(m_nFontID, (char*)m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
+		pVM->DrawFont(m_nFontID, (char*)m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, i*50+50.0f, 0.5f, 0.5f);
 
 	//pVM->DrawRect(reRect, 0, 0, 0);
 

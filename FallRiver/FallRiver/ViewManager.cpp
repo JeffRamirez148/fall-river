@@ -251,7 +251,7 @@ int ViewManager::RegisterShader(char* aFilePath)
 }
 
 //For Drawing Animations
-bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
+bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, float nPosX, float nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
 							float fRotCenterY, float fRotation, D3DCOLOR color)
 {
 	assert(aAnimInfo->curAnimID > -1 && aAnimInfo->curAnimID < (int)animations.size() && "Anim ID is out of range");
@@ -268,19 +268,19 @@ bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, int nPosX, int nPosY, float
 
  
 //For Drawing Fonts
-bool ViewManager::DrawFont(int nFontID, char* cString, int nPosX, int nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
+bool ViewManager::DrawFont(int nFontID, char* cString, float nPosX, float nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
 							float fRotCenterY, float fRotation, D3DCOLOR color)
 {
 		assert(nFontID > -1 && nFontID < (int)textures.size() && "Font ID is out of range");
 
 		//assert(fonts[nFontID].nTextureID <  (int)textures.size() && "Texture ID is out of range");
 
-		int nX = nPosX;
-		int nColStart = nX;
-		int nY = nPosY;
+		float nX = nPosX;
+		float nColStart = nX;
+		float nY = nPosY;
 		char first;
 		char second;
-		char newline;
+		//char newline;
 
 		for(int i = 0; cString[i] != '\0'; i++)
 		{
@@ -340,7 +340,7 @@ bool ViewManager::DrawFont(int nFontID, char* cString, int nPosX, int nPosY, flo
 
 
 //For Anything Else
-bool ViewManager::DrawStaticTexture(int nTextureID, int nPosX, int nPosY, float fScaleX, float fScaleY, RECT* sourceRect, float fRotCenterX, 
+bool ViewManager::DrawStaticTexture(int nTextureID, float nPosX, float nPosY, float fScaleX, float fScaleY, RECT* sourceRect, float fRotCenterX, 
 							float fRotCenterY, float fRotation, D3DCOLOR color)
 {
 	// Make sure the nID is in range.
@@ -448,14 +448,14 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	
 	// Wall wa are gonna watch
 	VERTUV tmp[6];
-	float WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
-	float WINDOW_HEIGHT = CGame::GetInstance()->GetScreenHeight();
-	tmp[0].pos = D3DXVECTOR3(-1, 1, 0);	 tmp[0].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,(1/WINDOW_HEIGHT) * .5);
-	tmp[1].pos = D3DXVECTOR3(1, 1, 0);	 tmp[1].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),(1/WINDOW_HEIGHT) * .5);
-	tmp[2].pos = D3DXVECTOR3(1, -1, 0);	 tmp[2].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5),1 + ((1/WINDOW_HEIGHT) * .5));
-	tmp[3].pos = tmp[0].pos;			 tmp[3].uv = tmp[0].uv;
-	tmp[4].pos = tmp[2].pos;			 tmp[4].uv = tmp[2].uv;
-	tmp[5].pos = D3DXVECTOR3(-1, -1, 0); tmp[5].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5,1 + ((1/WINDOW_HEIGHT) * .5));
+	int WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
+	int WINDOW_HEIGHT = CGame::GetInstance()->GetScreenHeight();
+	tmp[0].pos = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);		tmp[0].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5f,(1/WINDOW_HEIGHT) * .5f);
+	tmp[1].pos = D3DXVECTOR3(1.0f, 1.0f, 0.0f);			tmp[1].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5f),(1/WINDOW_HEIGHT) * .5f);
+	tmp[2].pos = D3DXVECTOR3(1.0f, -1.0f, 0.0f);		tmp[2].uv = D3DXVECTOR2(1 + ((1/WINDOW_WIDTH) * .5f),1 + ((1/WINDOW_HEIGHT) * .5f));
+	tmp[3].pos = tmp[0].pos;							tmp[3].uv = tmp[0].uv;
+	tmp[4].pos = tmp[2].pos;							tmp[4].uv = tmp[2].uv;
+	tmp[5].pos = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);		tmp[5].uv = D3DXVECTOR2((1/WINDOW_WIDTH) * .5f,1 + ((1/WINDOW_HEIGHT) * .5f));
 	void* mem = 0;
 	m_lpDirect3DDevice->CreateVertexBuffer( sizeof(VERTUV) * 6, 0, 0, D3DPOOL_MANAGED, &wallbuff, 0);
 	wallbuff->Lock(0,0,&mem,0);

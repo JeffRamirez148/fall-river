@@ -1,9 +1,7 @@
-#include <Windows.h>
-using namespace std;
-
 #ifndef __WinMenuState_h__
 #define __WinMenuState_h__
-
+#include <Windows.h>
+using namespace std;
 // #include "ViewManager.h"
 // #include "AudioManager.h"
 // #include "IDirectInputDevice.h"

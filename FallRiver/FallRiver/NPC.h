@@ -1,5 +1,5 @@
 #include <Windows.h>
-using namespace std;
+
 
 #ifndef __NPC_h__
 #define __NPC_h__

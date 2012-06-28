@@ -37,7 +37,7 @@ void Particle::Render()
 	view->GetSprite()->Flush();
 	if(imageID != -1)
 	{
-		view->DrawStaticTexture(imageID, int(pos.x), int(pos.y), scaleX, scaleY, nullptr, 
+		view->DrawStaticTexture(imageID, pos.x, pos.y, scaleX, scaleY, nullptr, 
 							0.0f, 0.0f, rot, color);
 	}
 	else
