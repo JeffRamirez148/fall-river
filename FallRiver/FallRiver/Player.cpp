@@ -25,7 +25,7 @@ Player::Player()
 	m_bIsHidden = false;
 	m_nScore = 0;
 	m_nState = PSTATE_IDLE;
-	this->SetHealth(1000);
+	this->SetHealth(100);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -97,13 +97,14 @@ void Player::Update(float fElapsedTime)
 
 	if( this->GetHealth() < 0 )
 	{
-		m_nLives--;
-		SetHealth(100);
-	}
-	if( this->GetLives() < 0 )
-	{
 		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
+		//m_nLives--;
+		//SetHealth(100);
 	}
+	//if( this->GetLives() < 0 )
+	//{
+	//	CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
+	//}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
