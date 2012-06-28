@@ -7,7 +7,7 @@
 #include "ChasingAI.h"
 #include "Enemy.h"
 
-#define SPAWNCAP 5;
+//#define SPAWNCAP 5;
 
 
 SpawnPoint::SpawnPoint(void)
@@ -16,7 +16,7 @@ SpawnPoint::SpawnPoint(void)
 	m_fSpawnTime = 0;
 	m_bCanSpawn = false;
 	m_bIsColliding = false;
-	//m_nSpawnCounter = 0;
+	m_nSpawnCounter = 0;
 }
 
 
@@ -58,7 +58,7 @@ void SpawnPoint::Update(float fElapsedTime)
 	//ChasingAI* pEnemy;
 	if( m_fSpawnTime > 30 )
 	{
-		if( m_nSpawnCounter < 5 )
+		if( m_nSpawnCounter < 3 )
 		{
 			m_bCanSpawn = true;
 			m_fSpawnTime = 0;

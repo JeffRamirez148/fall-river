@@ -52,7 +52,9 @@ private:
 	int walkingID;
 	int hitID;
 	bool lightOn;
+public:
 	int battery;
+private:
 	float batteryTime;
 
 	AnimInfo m_playerAnim;

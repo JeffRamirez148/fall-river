@@ -48,10 +48,10 @@ void Level::Render()
 	CGame* pGame = CGame::GetInstance();
 
 	RECT cull;
-	cull.left = cam.x;
-	cull.top = cam.y;
-	cull.right = cam.x+pGame->GetScreenWidth();
-	cull.bottom = cam.y+pGame->GetScreenHeight(); 
+	cull.left = (long)cam.x;
+	cull.top = (long)cam.y;
+	cull.right = (long)cam.x+pGame->GetScreenWidth();
+	cull.bottom = (long)cam.y+pGame->GetScreenHeight(); 
 
 	RECT intersect;
 
