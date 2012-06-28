@@ -104,8 +104,8 @@ void GamePlayState::Enter()
 		pPlayer->SetHeight(32);
 		pPlayer->SetWidth(32);
 		pPlayer->SetImageID(-1);
-		pPlayer->SetPosX(float(CGame::GetInstance()->GetScreenWidth()*0.5));
-		pPlayer->SetPosY(float(CGame::GetInstance()->GetScreenHeight()*0.5));
+		pPlayer->SetPosX(600);
+		pPlayer->SetPosY(500);
 
 		pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 		pWeapon->SetHeight(20);
@@ -147,7 +147,6 @@ void GamePlayState::Enter()
 	m_pOM->AddObject(pPlayer);
 
 	vector<leveldata> tmp = pLevel->GetCollision();
-	int x = tmp.size();
 	for(unsigned int i = 0; i < tmp.size(); i++) 
 	{
 		vector<leveldata>::iterator nth = tmp.begin() + i;
@@ -160,70 +159,86 @@ void GamePlayState::Enter()
 			pBush->SetWidth(nth->width);
 			pBush->SetHeight(nth->height);
 			pBush->SetImageID(bush);
-			//pBush->CheckCollision(pLevel);
 			m_pOM->AddObject(pBush);
 			pBush = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"NPC") == 0)
+		{
+			m_cNpcs.push_back(nullptr);
+			m_cNpcs[m_cNpcs.size()-1] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+			NPC* pNpc =(NPC*)(m_cNpcs[m_cNpcs.size()-1]);
+			pNpc->SetHeight(32);
+			pNpc->SetWidth(32);
+			pNpc->SetImageID(-1);
+			pNpc->SetPosX(nth->x);
+			pNpc->SetPosY(nth->y);
+			pNpc->SetQuest(m_cNpcs.size());
+			pNpc->SetLabel(m_cNpcs.size()-1);
+			m_pOM->AddObject(pNpc);
+			pNpc = nullptr;
 			tmp.erase(nth);
 			i--;
 		}
 	}
 	pLevel->SetCollision(tmp);
 
-	for(int i = 0; i < 1; i++)
-	{
-		m_cEnemies.push_back(nullptr);
-		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
-		ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
-		pEnemy->SetHeight(32);
-		pEnemy->SetWidth(32);
-		pEnemy->SetImageID(-1);
-		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(float(50+200));
-		pEnemy->SetPosY(200);
-		pEnemy->SetHealth(100);
-		m_pOM->AddObject(pEnemy);
-	}
+	//for(int i = 0; i < 1; i++)
+	//{
+	//	m_cEnemies.push_back(nullptr);
+	//	m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
+	//	ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
+	//	pEnemy->SetHeight(32);
+	//	pEnemy->SetWidth(32);
+	//	pEnemy->SetImageID(-1);
+	//	pEnemy->SetTarget(m_cPlayer);
+	//	pEnemy->SetPosX(float(50+200));
+	//	pEnemy->SetPosY(200);
+	//	pEnemy->SetHealth(100);
+	//	m_pOM->AddObject(pEnemy);
+	//}
 
-	for(int i = 0; i < 1; i++)
-	{
-		m_cEnemies.push_back(nullptr);
-		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
-		ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[i]);
-		pEnemy->SetHeight(32);
-		pEnemy->SetWidth(32);
-		pEnemy->SetImageID(-1);
-		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(200);
-		pEnemy->SetPosY(100);
-		pEnemy->SetHealth(100);
-		m_pOM->AddObject(pEnemy);
+	//for(int i = 0; i < 1; i++)
+	//{
+	//	m_cEnemies.push_back(nullptr);
+	//	m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+	//	ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[i]);
+	//	pEnemy->SetHeight(32);
+	//	pEnemy->SetWidth(32);
+	//	pEnemy->SetImageID(-1);
+	//	pEnemy->SetTarget(m_cPlayer);
+	//	pEnemy->SetPosX(200);
+	//	pEnemy->SetPosY(100);
+	//	pEnemy->SetHealth(100);
+	//	m_pOM->AddObject(pEnemy);
 
-		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
-		eWeapon->SetHeight(20);
-		eWeapon->SetWidth(10);
-		eWeapon->SetImageID(-1);
-		eWeapon->SetOwner(pEnemy);
-		eWeapon->Init(WPN_RIFLE, 100, 10, 0);
-		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
-		eWeapon->SetPosY(pEnemy->GetPosY());
-		pEnemy->SetWeapon(eWeapon);
-	}
+	//	Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+	//	eWeapon->SetHeight(20);
+	//	eWeapon->SetWidth(10);
+	//	eWeapon->SetImageID(-1);
+	//	eWeapon->SetOwner(pEnemy);
+	//	eWeapon->Init(WPN_RIFLE, 100, 10, 0);
+	//	eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
+	//	eWeapon->SetPosY(pEnemy->GetPosY());
+	//	pEnemy->SetWeapon(eWeapon);
+	//}
 
-	for(int i = 0; i < 1; i++)
-	{
-		m_cNpcs.push_back(nullptr);
-		m_cNpcs[i] = (NPC*)m_pOF->CreateObject( _T("NPC") );
-		NPC* pNpc =(NPC*)(m_cNpcs[i]);
-		pNpc->SetHeight(32);
-		pNpc->SetWidth(32);
-		pNpc->SetImageID(-1);
-		pNpc->SetPosX(400);
-		pNpc->SetPosY(100);
-		pNpc->SetQuest(i+1);
-		pNpc->SetLabel(i);
-		m_pOM->AddObject(pNpc);
+	//for(int i = 0; i < 1; i++)
+	//{
+	//	m_cNpcs.push_back(nullptr);
+	//	m_cNpcs[i] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+	//	NPC* pNpc =(NPC*)(m_cNpcs[i]);
+	//	pNpc->SetHeight(32);
+	//	pNpc->SetWidth(32);
+	//	pNpc->SetImageID(-1);
+	//	pNpc->SetPosX(400);
+	//	pNpc->SetPosY(100);
+	//	pNpc->SetQuest(i+1);
+	//	pNpc->SetLabel(i);
+	//	m_pOM->AddObject(pNpc);
 
-	}
+	//}
 
 	m_pMS->InitMessageSystem( &MessageProc );
 

@@ -79,8 +79,9 @@ void Player::Update(float fElapsedTime)
 
 	if(pDI->KeyDown(DIK_SPACE) && 	m_dwGunCount  < GetTickCount() )
 	{
- 		if(m_dwGunCount == 0)
+		if(m_dwGunCount == 0)
 		{
+			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
 			m_dwGunReset = GetTickCount() + 500;
@@ -89,8 +90,10 @@ void Player::Update(float fElapsedTime)
 		{
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
+			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
 			m_dwGunReset = GetTickCount() + 500;
 		}
+
 	}	
 
 	if( pDI->KeyDown(DIK_RIGHT))
