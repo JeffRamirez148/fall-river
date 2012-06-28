@@ -536,7 +536,7 @@ bool ViewManager::DeviceEnd(void)
 		postEffect->SetTexture("gDiffuseTexture", renderTarget);
 		postEffect->SetMatrix("gWorldInv", &tmp);
 
-		for(int j = 0; j < lights.size(); ++j)
+		for(unsigned int j = 0; j < lights.size(); ++j)
 		{
 			//postEffect->SetVectorArray( "gLightDir", , 2)
 			postEffect->SetFloatArray("gLightDir", lights[j]->lightDir,3);

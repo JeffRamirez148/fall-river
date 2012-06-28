@@ -44,7 +44,8 @@ void Bush::Render()
 	ViewManager* pView = ViewManager::GetInstance();
 	if( m_bIsInBush == false )
 	{
-		int x, y,z;
+		float x, y;
+		int z;
 		x = GetPosX();
 		y = GetPosY();
 		z = GetImageID();
@@ -54,7 +55,8 @@ void Bush::Render()
 	}
 	else
 	{
-		int x, y,z;
+		float x, y;
+		int z;
 		x = GetPosX();
 		y = GetPosY();
 		z = GetImageID();

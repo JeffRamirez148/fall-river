@@ -14,7 +14,7 @@ class Quests;
 
 class GamePlayState;
 class Weapon;
-class Light;
+#include "Light.h"
 
 enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH};
 
@@ -40,7 +40,9 @@ public:
 private:
 	char* m_cName;
 	bool m_bIsAlive;
+public:
 	bool m_bIsHidden;
+private:
 	bool m_bTalking;
 	int m_nLives;
 	int walkingID;

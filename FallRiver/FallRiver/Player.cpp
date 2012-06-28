@@ -81,7 +81,7 @@ void Player::Update(float fElapsedTime)
 	{
 		if(m_dwGunCount == 0)
 		{
-			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
+			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
 			m_dwGunReset = GetTickCount() + 500;
@@ -90,7 +90,7 @@ void Player::Update(float fElapsedTime)
 		{
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
-			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
+			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 			m_dwGunReset = GetTickCount() + 500;
 		}
 
@@ -271,7 +271,7 @@ void Player::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	//Drawing Player Placeholder Sprite
-	pVM->DrawAnimation(&m_playerAnim, int( (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2 ) , int( (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() ));
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight());
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
@@ -330,13 +330,9 @@ bool Player::CheckCollision(IObjects* pBase)
 				RECT cRect;
 				if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == TRUE )
 				{
-					if( cRect.top == GetRect().top && cRect.right == GetRect().right && cRect.left == GetRect().left && cRect.bottom == GetRect().bottom  )
-					{
-						Bush* tmp = (Bush*)pBase;
-						tmp->SetIsInBush( true );
-						m_bIsHidden = true;
-
-					}
+					Bush* tmp = (Bush*)pBase;
+					tmp->SetIsInBush( true );
+					m_bIsHidden = true;
 				}
 			}
 			else

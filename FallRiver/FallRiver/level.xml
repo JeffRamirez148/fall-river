@@ -9186,4 +9186,104 @@
     <Type>Shooting Enemy</Type>
     <ScrRect x="1856" y="1664" height="64" width="64" />
   </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="2127" y="1486" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="1362" y="1363" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="726" y="794" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="851" y="1687" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="463" y="726" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="589" y="2008" height="1" width="1" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1280" y="512" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1344" y="512" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1344" y="576" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1856" y="1344" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1792" y="1344" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1728" y="1344" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1664" y="1344" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="1600" y="1344" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="576" y="1600" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="576" y="1664" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="576" y="1728" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="448" y="2048" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="512" y="2112" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="576" y="2112" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="640" y="2112" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="704" y="2112" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="768" y="2112" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="832" y="2112" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Bush</Type>
+    <ScrRect x="896" y="2112" height="64" width="64" />
+  </Collision>
 </levels_list>
