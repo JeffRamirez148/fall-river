@@ -187,6 +187,7 @@ void GamePlayState::Enter()
 			pNpc->SetPosY((float)nth->y);
 			pNpc->SetQuest(m_cNpcs.size());
 			pNpc->SetLabel(m_cNpcs.size()-1);
+			pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
 			m_pOM->AddObject(pNpc);
 			pNpc = nullptr;
 			tmp.erase(nth);
@@ -218,6 +219,7 @@ void GamePlayState::Enter()
 				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
 				pEnemy->SetHealth(100);
+				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
 				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
 			}
@@ -252,6 +254,7 @@ void GamePlayState::Enter()
 		pEnemy->SetPosX(600);
 		pEnemy->SetPosY(490);
 		pEnemy->SetHealth(100);
+		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);
 
 		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
@@ -416,6 +419,7 @@ void GamePlayState::Update(float fElapsedTime)
 			pEnemy->SetPosX(m_cSpawn[i]->GetPosX()+(rand()%20-10));
 			pEnemy->SetPosY(m_cSpawn[i]->GetPosY()+(rand()%20-10));
 			pEnemy->SetHealth(100);
+			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
 			GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 			m_cSpawn[i]->SetSpawn( false );
 		}

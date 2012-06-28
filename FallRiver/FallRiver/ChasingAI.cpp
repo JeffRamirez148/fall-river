@@ -37,6 +37,12 @@ ChasingAI::ChasingAI()
 	m_pAM->setSoundPos(notifyID, sound1);
 	m_pAM->setSoundLooping(notifyID, false);
 	notified = false;
+
+	//AnimInfo startup
+	m_playerAnim.curAnimation = 0;
+	m_playerAnim.curAnimID = 0;
+	m_playerAnim.curFrame = 0;
+	m_playerAnim.fTime = 0;
 }
 
 ChasingAI::~ChasingAI()
@@ -263,15 +269,108 @@ void ChasingAI::Update(float fElapsedTime)
 		else
 			AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
 	}
+
+	if(m_pTarget->GetPosX() > GetPosX()+30)
+	{
+		if(m_pTarget->GetPosY() > GetPosY()+30)
+			SetDirection(DIRE_DOWNRIGHT);
+		else if(m_pTarget->GetPosY() < GetPosY()-30)
+			SetDirection(DIRE_UPRIGHT);
+		else
+			SetDirection(DIRE_RIGHT);
+	}
+	else if(m_pTarget->GetPosX() < GetPosX()-30)
+	{
+		if(m_pTarget->GetPosY() > GetPosY()+30)
+			SetDirection(DIRE_DOWNLEFT);
+		else if(m_pTarget->GetPosY() < GetPosY()-30)
+			SetDirection(DIRE_UPLEFT);
+		else
+			SetDirection(DIRE_LEFT);
+	}
+	else if(m_pTarget->GetPosY() > GetPosY())
+		SetDirection(DIRE_DOWN);
+	else if(m_pTarget->GetPosY() < GetPosY())
+		SetDirection(DIRE_UP);
+
+	if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() == 0)
+	{
+		m_playerAnim.curAnimation = 0;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 4 && GetVelY() < 0)
+	{
+		m_playerAnim.curAnimation = 4;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 1 && GetVelY() == 0)
+	{
+		m_playerAnim.curAnimation = 1;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 5 && GetVelY() > 0)
+	{
+		m_playerAnim.curAnimation = 5;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 2 && GetVelX() == 0)
+	{
+		m_playerAnim.curAnimation = 2;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 6 && GetVelX() > 0)
+	{
+		m_playerAnim.curAnimation = 6;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 3 && GetVelX() == 0)
+	{
+		m_playerAnim.curAnimation = 3;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+	else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 7 && GetVelX() < 0)
+	{
+		m_playerAnim.curAnimation = 7;
+		m_playerAnim.curFrame = 0;
+		m_playerAnim.fTime = 0;
+	}
+
+	//Updating the ChasingAI's frame and timer for animations
+	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	m_playerAnim.fTime += fElapsedTime;
+
+	if(m_playerAnim.fTime >= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
+	{
+		m_playerAnim.fTime -= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
+		m_playerAnim.curFrame++;
+		if(m_playerAnim.curFrame < (int)thisAnim.frames[m_playerAnim.curAnimation].size())
+		{
+			if(strcmp(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
+				EventSystem::GetInstance()->SendEvent(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
+		}
+		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame = 0;
+		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame = thisAnim.frames.size() -1;
+	}
 }
 
 void ChasingAI::Render() 
 {
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
 
-	pVM->DrawRect(reRect, 255, 0, 0);
+	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+
+	//pVM->DrawRect(reRect, 255, 0, 0);
 }
 
 bool ChasingAI::CheckCollision(IObjects* pBase) 
