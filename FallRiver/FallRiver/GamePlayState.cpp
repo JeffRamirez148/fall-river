@@ -445,6 +445,7 @@ void GamePlayState::Update(float fElapsedTime)
 	// Total quest completion to win the game
 	if(GetPlayer()->completedQuest == 2)
 	{
+		questFlag = false;
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
 	}
 
@@ -466,6 +467,8 @@ void GamePlayState::Render()
 	{
 		m_cBushes[i]->Render();
 	}
+
+
 	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 
