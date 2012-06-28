@@ -13,6 +13,7 @@
 #include "Level.h"
 #include "AudioManager.h"
 #include "Sound.h"
+#include "ViewManager.h"
 
 Player::Player()
 {
@@ -48,6 +49,14 @@ Player::Player()
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(hitID, false);
 
+	Light tmpLight;
+	tmpLight.lightPos[0] = 0.0f;
+	tmpLight.lightPos[1] = 0.0f;
+	tmpLight.lightPos[2] = -1.0f;
+	tmpLight.lightDir[0] = 0.0f;
+	tmpLight.lightDir[1] = 0.0f;
+	tmpLight.lightDir[2] = 1.0f;
+	ViewManager::GetInstance()->RegisterLight(tmpLight);
 }
 
 Player::~Player()

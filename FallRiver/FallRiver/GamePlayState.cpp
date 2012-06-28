@@ -278,7 +278,7 @@ void GamePlayState::Update(float fElapsedTime)
 	tmp.x = m_cPlayer->GetPosX();
 	tmp.y = m_cPlayer->GetPosY();
 	tmp.z = 0;
-	//m_pAM->SetListenerPos(tmp);
+	m_pAM->SetListenerPos(tmp);
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
 }
