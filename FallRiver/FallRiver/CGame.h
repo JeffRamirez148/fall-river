@@ -28,6 +28,7 @@ private:
 	// Window Attributes
 	int m_nScreenWidth;
 	int m_nScreenHeight;
+	bool m_bPrevWindowed;
 	bool m_bIsWindowed;
 	DWORD m_dwCurrTime;
 

@@ -47,8 +47,24 @@ void NPC::Update(float fElapsedTime)
 	if( distance <= 70.0f )
 	{
 		showQuest = true;
-		if(pDI->KeyPressed(DIK_A))
-			pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
+		if(pDI->KeyPressed(DIK_A) )
+		{
+			bool questEmpty = true;
+			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
+			{
+				if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel || pGPS->GetPlayer()->m_vpActiveQuests[i] == nullptr )
+				{
+					questEmpty = false;
+				}
+				
+					//pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
+				
+			}
+			//if(pGPS->GetPlayer()->m_vpActiveQuests[NPCLabel]->QuestID != NPCLabel)
+			if(questEmpty)
+				pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
+			
+		}
 	}
 	else
 		showQuest = false;
@@ -61,11 +77,12 @@ void NPC::Render()
 	// Render this NPC
  //ViewManager* pVM = ViewManager::GetInstance();
 
- RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	pVM->GetSprite()->Flush();
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
- pVM->DrawRect(reRect, 0, 255, 0);
-	
-	 
+	pVM->DrawRect(reRect, 0, 255, 0);
+
+
 
 	//pVM->DrawRect(GetRect(), 0, 255, 0);
 

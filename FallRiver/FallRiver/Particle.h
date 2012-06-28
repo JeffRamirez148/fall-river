@@ -1,8 +1,8 @@
-#include <Windows.h>
-using namespace std;
-
 #ifndef __Particle_h__
 #define __Particle_h__
+
+#include <Windows.h>
+using namespace std;
 #include <D3DX9.h>
 #pragma comment(lib, "D3DX9.lib")
 class Particle

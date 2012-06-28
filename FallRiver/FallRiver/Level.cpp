@@ -31,7 +31,7 @@ void Level::Update(float fElapsedTime)
 	DirectInput* pDI = DirectInput::GetInstance();
 
 	//float time = fElapsedTime;
-	LONG test = long(100.0f * fElapsedTime);
+	//LONG test = long(100.0f * fElapsedTime);
 
 }
 
@@ -59,13 +59,12 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 1)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -78,13 +77,12 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 2)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -97,13 +95,12 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 3)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -116,13 +113,12 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 4)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -135,13 +131,12 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		RECT intersect;
 		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 5)
 			{
 
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1,1, &m_vTiles[i].m_rImageRect );
+				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 			}
 		}
 	}
@@ -149,20 +144,17 @@ void Level::Render()
 	pView->GetSprite()->Flush();
 
 
-	//for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
-	//{
-	//	////m_vCollisions[i].m_cType;
-	//	//if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
-	//	//{
-	//	//	pView->DrawUnfilledRect(m_vCollisions[i].m_rCollision,255,255,255);
-	//	//}
+	for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
+	{
+		RECT test = { m_vCollisions[i].m_rCollision.left-GamePlayState::GetInstance()->GetCamera().x,
+			m_vCollisions[i].m_rCollision.top-GamePlayState::GetInstance()->GetCamera().y,
+			m_vCollisions[i].m_rCollision.right-GamePlayState::GetInstance()->GetCamera().x,
+			m_vCollisions[i].m_rCollision.bottom-GamePlayState::GetInstance()->GetCamera().y,
+		};
 
-	//	//	//if( _stricmp(m_vCollisions[i].m_cType,"powerup") == 0 )
-	//	//{
-	//	pView->DrawUnfilledRect(m_vCollisions[i].m_rCollision,0,255,255);
-	//	//}
-
-	//}
+						
+		pView->DrawUnfilledRect(test,0,255,255);
+	}
 
 }
 

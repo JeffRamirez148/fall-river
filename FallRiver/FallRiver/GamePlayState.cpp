@@ -28,6 +28,9 @@
 #include "DestroyEnemyS.h"
 #include "DestroyNPC.h"
 #include "DestroyPickUp.h"
+#include "Bush.h"
+
+
 
 GamePlayState::GamePlayState()
 {
@@ -64,10 +67,15 @@ void GamePlayState::Enter()
 	m_pMS = MessageSystem::GetInstance();
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
+
+	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
+
+
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Level			>( _T("Level") );
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
 	m_pOF->RegisterClassType< Weapon		>( _T("Weapon") );
+	m_pOF->RegisterClassType< Bush			>( _T("Bush") );
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
@@ -78,6 +86,8 @@ void GamePlayState::Enter()
 	Player* pPlayer = nullptr;
 	Weapon* pWeapon = nullptr;
 	Level* pLevel = nullptr;
+	Bush* pBush = nullptr;
+
 
 	if( pLevel == nullptr )
 	{
@@ -133,8 +143,33 @@ void GamePlayState::Enter()
 			m_cPlayer->GetWeapons()[i]->SetWidth(pWeapon->GetWidth());
 		}
 	}
+	
+	m_pOM->AddObject(pPlayer);
 
-	for(int i = 0; i < 0; i++)
+	vector<leveldata> tmp = pLevel->GetCollision();
+	int x = tmp.size();
+	for(unsigned int i = 0; i < tmp.size(); i++) 
+	{
+		vector<leveldata>::iterator nth = tmp.begin() + i;
+
+		if( _stricmp(nth->m_cType,"Bush") == 0 )
+		{
+			pBush = (Bush*)m_pOF->CreateObject( _T("Bush") );
+			pBush->SetPosX(nth->x);
+			pBush->SetPosY(nth->y);
+			pBush->SetWidth(nth->width);
+			pBush->SetHeight(nth->height);
+			pBush->SetImageID(bush);
+			//pBush->CheckCollision(pLevel);
+			m_pOM->AddObject(pBush);
+			pBush = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+	}
+	pLevel->SetCollision(tmp);
+
+	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
@@ -143,7 +178,7 @@ void GamePlayState::Enter()
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(float(50*i+200));
+		pEnemy->SetPosX(float(50+200));
 		pEnemy->SetPosY(200);
 		pEnemy->SetHealth(100);
 		m_pOM->AddObject(pEnemy);
@@ -187,17 +222,14 @@ void GamePlayState::Enter()
 		pNpc->SetQuest(i+1);
 		pNpc->SetLabel(i);
 		m_pOM->AddObject(pNpc);
-	}
 
-	m_pOM->AddObject(pPlayer);
+	}
 
 	m_pMS->InitMessageSystem( &MessageProc );
 
 	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
-
-
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
 	m_pAM->setMusicPos(backGroundID, sound1);
@@ -289,6 +321,15 @@ void GamePlayState::Render()
 	//m_clevel.Render();
 
 	m_pOM->RenderAllObjects();
+
+	RECT logRect = { 600, 0, 800, 200};
+
+	m_pVM->DrawRect(logRect, 50, 50, 50);
+
+	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
+		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
+
+
 }
 
 void GamePlayState::MessageProc(IMessage* pMsg)
@@ -314,49 +355,49 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			case DIRE_UP:
 				{
 					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(-200);
+					bullet->SetSpeedY(-300);
 					break;
 				}
 			case DIRE_LEFT:
 				{
-					bullet->SetSpeedX(-200);
+					bullet->SetSpeedX(-300);
 					bullet->SetSpeedY(0);
 					break;
 				}
 			case DIRE_RIGHT:
 				{
-					bullet->SetSpeedX(200);
+					bullet->SetSpeedX(300);
 					bullet->SetSpeedY(0);
 					break;
 				}
 			case DIRE_DOWN:
 				{
 					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(200);
+					bullet->SetSpeedY(300);
 					break;
 				}
 			case DIRE_UPRIGHT:
 				{
-					bullet->SetSpeedX(200);
-					bullet->SetSpeedY(-200);
+					bullet->SetSpeedX(300);
+					bullet->SetSpeedY(-300);
 					break;
 				}
 			case DIRE_UPLEFT:
 				{
-					bullet->SetSpeedX(-200);
-					bullet->SetSpeedY(-200);
+					bullet->SetSpeedX(-300);
+					bullet->SetSpeedY(-300);
 					break;
 				}
 			case DIRE_DOWNLEFT:
 				{
-					bullet->SetSpeedX(-200);
-					bullet->SetSpeedY(200);
+					bullet->SetSpeedX(-300);
+					bullet->SetSpeedY(300);
 					break;
 				}
 			case DIRE_DOWNRIGHT:
 				{
-					bullet->SetSpeedX(200);
-					bullet->SetSpeedY(200);
+					bullet->SetSpeedX(300);
+					bullet->SetSpeedY(300);
 					break;
 				}
 			}

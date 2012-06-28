@@ -50,7 +50,7 @@ bool Quests::LoadQuests(const char* sz_Filename)
 			temp_title = pQuestInfo->Attribute("Quest_Title");
 			temp_quest = pQuestInfo->Attribute("Quest_Dialog");
 
-			for(int i = 0; i < temp_quest.size();i++)
+			for(unsigned int i = 0; i < temp_quest.size();i++)
 			{
 				
 

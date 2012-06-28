@@ -34,6 +34,8 @@ CGame::~CGame()
 
 bool CGame::Input() 
 {
+	m_bPrevWindowed = m_bIsWindowed;
+
 	// Just in case
 	if(m_pCurrState == nullptr)
 		return false;
@@ -66,6 +68,9 @@ void CGame::Update()
 
 void CGame::Render() 
 {
+	if(m_bIsWindowed != m_bPrevWindowed)
+		m_pVM->ChangeDisplayParam(m_nScreenWidth, m_nScreenHeight, m_bIsWindowed);
+
 	// Clear the background
 	m_pVM->Clear(0, 0, 0);
 
@@ -138,9 +143,9 @@ void CGame::ShutDown()
 
 void CGame::ChangeState(IMenuState* pNewState) 
 {
-	for(int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
 		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
-	for(int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
 	m_pVM->RemoveLights();
@@ -180,9 +185,9 @@ IMenuState* CGame::GetPreviousState( void )		{return m_pPrevState; }
 
 void CGame::RemoveState( void )
 {
-	for(int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
 		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
-	for(int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
 	m_pVM->RemoveLights();
