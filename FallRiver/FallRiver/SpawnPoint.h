@@ -20,6 +20,7 @@ private:
 	float m_fSpawnTime;
 	bool m_bCanSpawn;
 	bool m_bIsColliding;
+	int m_nSpawnCounter;
 	//Factory*		m_pOF;
 	//ObjectManager*	m_pOM;
 

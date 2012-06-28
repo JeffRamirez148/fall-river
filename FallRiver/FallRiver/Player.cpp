@@ -23,6 +23,7 @@ Player::Player()
 	m_bIsHidden = false;
 	m_nScore = 0;
 	m_nState = PSTATE_IDLE;
+	this->SetHealth(100);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -67,12 +68,35 @@ Player::~Player()
 
 }
 
+int Player::GetAmmo()
+{
+	return this->m_currWeapon->GetAmmo();
+}
+int Player::GetClip()
+{
+	return this->m_currWeapon->GetClip();
+}
+int Player::GetWeaponType()
+{
+	return this->m_currWeapon->GetWeaponType();
+}
+
 void Player::Update(float fElapsedTime) 
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
+
+	if( this->GetHealth() < 0 )
+	{
+		m_nLives--;
+		SetHealth(100);
+	}
+	if( this->GetLives() < 0 )
+	{
+
+	}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
@@ -274,6 +298,21 @@ void Player::Render()
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight());
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
+
+	//char szName[100] = {};
+	//
+	//TCHAR buffer[ 100 ];
+	////int playerScore = 15;
+	//_stprintf_s( buffer, 100, _T("Health - %i"), GetHealth() );
+
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+	//pVM->GetSprite()->Flush();
+	//pVM->DrawTextW("hello",0,0,0,255,255);
+
+	////m_pVM->DrawText(szName,0,0,255,255,255);
+	//pVM->DrawFont(m_nFontID,szName,0,50);
+
+
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
 
 	
@@ -303,25 +342,29 @@ bool Player::CheckCollision(IObjects* pBase)
 			{
 				if(pBase->GetObjectType() == OBJ_BULLET)
 				{
+					//if(pBU->GetOwner()->GetOwner() == this)
+					//return false;
 					Bullet* pBU = (Bullet*)pBase;
+					//EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
 					if(pBU->GetOwner()->GetOwner() == this)
 						return false;
-					DestroyBullet* pMsg = new DestroyBullet(pBU);
-					MessageSystem::GetInstance()->SendMsg(pMsg);
-					pMsg = nullptr;
+					else
+						return true;
+					//DestroyBullet* pMsg = new DestroyBullet(pBU);
+					//MessageSystem::GetInstance()->SendMsg(pMsg);
+					//pMsg = nullptr;
 				}
 
 				if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-					SetPosX(float(pBase->GetRect().left-GetWidth()-2));
+					SetPosX(float(pBase->GetRect().left-GetWidth()));
 				else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-					SetPosX(float(pBase->GetRect().right+2));
+					SetPosX(float(pBase->GetRect().right));
 				else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-					SetPosY(float(pBase->GetRect().top-GetHeight()-2));
+					SetPosY(float(pBase->GetRect().top-GetHeight()));
 				else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 					SetPosY(float(pBase->GetRect().bottom));
-
-
 			}
+
 		}
 		else
 		{

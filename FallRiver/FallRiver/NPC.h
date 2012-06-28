@@ -22,7 +22,9 @@ private:
 	bool showQuest;
 	GamePlayState* pGPS;
 	ViewManager* pVM;
+public:
 	int temp_font_id;
+private:
 	int NPCLabel;
 	//bool winLose; // win is alive lose is dead
 public:

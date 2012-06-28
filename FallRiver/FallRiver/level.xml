@@ -9204,10 +9204,6 @@
   </Collision>
   <Collision>
     <Type>Spawn Point</Type>
-    <ScrRect x="463" y="726" height="32" width="32" />
-  </Collision>
-  <Collision>
-    <Type>Spawn Point</Type>
     <ScrRect x="589" y="2008" height="1" width="1" />
   </Collision>
   <Collision>
@@ -9285,5 +9281,9 @@
   <Collision>
     <Type>Bush</Type>
     <ScrRect x="896" y="2112" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Spawn Point</Type>
+    <ScrRect x="448" y="896" height="32" width="32" />
   </Collision>
 </levels_list>

@@ -360,148 +360,148 @@ bool Level::CheckCollision(IObjects* pBase)
 {
 	bool checkcol = false;
 
-	//for(unsigned int i = 0; i < m_vCollisions.size(); i++)
-	//{
-	//	RECT cRect;
-	//	if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
-	//	{
-	//		if( m_vCollisions[i].m_bPrevColliding == true )
-	//		{
-	//		}
-	//		continue;
-	//	}
-	//	else
-	//	{
-	//		checkcol = true;
-	//		if( pBase->GetObjectType() == OBJ_BULLET )
-	//		{
-	//			DestroyBullet* pMsg = new DestroyBullet((Bullet*)pBase);
-	//			MessageSystem::GetInstance()->SendMsg(pMsg);
-	//			pMsg = nullptr;
-	//			return true;
-	//		}
-	//		else if(pBase->GetObjectType() == OBJ_CHARACTER)
-	//		{
-	//			BaseCharacter* pCh = (BaseCharacter*)pBase;
-	//			/*	if(pCh->GetCharacterType() == CHA_ENEMY)
-	//			{
+	for(unsigned int i = 0; i < m_vCollisions.size(); i++)
+	{
+		RECT cRect;
+		if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
+		{
+			if( m_vCollisions[i].m_bPrevColliding == true )
+			{
+			}
+			continue;
+		}
+		else
+		{
+			checkcol = true;
+			if( pBase->GetObjectType() == OBJ_BULLET )
+			{
+				DestroyBullet* pMsg = new DestroyBullet((Bullet*)pBase);
+				MessageSystem::GetInstance()->SendMsg(pMsg);
+				pMsg = nullptr;
+				return true;
+			}
+			else if(pBase->GetObjectType() == OBJ_CHARACTER)
+			{
+				BaseCharacter* pCh = (BaseCharacter*)pBase;
+				/*	if(pCh->GetCharacterType() == CHA_ENEMY)
+				{
 
-	//			Enemy* pEn = (Enemy*)pCh;
-	//			pEn->CheckCollision(this);
+				Enemy* pEn = (Enemy*)pCh;
+				pEn->CheckCollision(this);
 
-	//			}
-	//			else if( pCh->GetCharacterType() == CHA_PLAYER)
-	//			{*/
-	//			//Player* pPlayer = (Player*)pCh;
+				}
+				else if( pCh->GetCharacterType() == CHA_PLAYER)
+				{*/
+				//Player* pPlayer = (Player*)pCh;
 
-	//			if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
-	//			{
-	//				int check = 0;
+				if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
+				{
+					int check = 0;
 
-	//				float intmid = float(cRect.top + cRect.bottom) / 2.0f;
-	//				float intmidx = float(cRect.left + cRect.right) / 2.0f;
-
-
-	//				float tilemid = float(m_vCollisions[i].m_rCollision.top + m_vCollisions[i].m_rCollision.bottom) / 2.0f;
-	//				float tilemidx = float(m_vCollisions[i].m_rCollision.left + m_vCollisions[i].m_rCollision.right) / 2.0f;
+					float intmid = float(cRect.top + cRect.bottom) / 2.0f;
+					float intmidx = float(cRect.left + cRect.right) / 2.0f;
 
 
-	//				LONG x = cRect.bottom - cRect.top;
-	//				LONG y = cRect.right - cRect.left;
+					float tilemid = float(m_vCollisions[i].m_rCollision.top + m_vCollisions[i].m_rCollision.bottom) / 2.0f;
+					float tilemidx = float(m_vCollisions[i].m_rCollision.left + m_vCollisions[i].m_rCollision.right) / 2.0f;
 
-	//				if( x != y )
-	//				{
-	//					if( y > x )
-	//					{
-	//						if( intmid < tilemid )
-	//						{
-	//							check = 1;
-	//						}
-	//						else
-	//						{
-	//							check = 2;
-	//						}
-	//					}
 
-	//					if( y < x )
-	//					{
-	//						if( intmidx < tilemidx )
-	//						{
-	//							check = 3;
-	//						}
-	//						else
-	//						{
-	//							check = 4;
-	//						}
-	//					}
+					LONG x = cRect.bottom - cRect.top;
+					LONG y = cRect.right - cRect.left;
 
-	//				}
-	//				else
-	//				{
-	//					for(unsigned int j = 0; j < m_vCollisions.size(); j++)
-	//					{
+					if( x != y )
+					{
+						if( y > x )
+						{
+							if( intmid < tilemid )
+							{
+								check = 1;
+							}
+							else
+							{
+								check = 2;
+							}
+						}
 
-	//						if(  m_vCollisions[j].m_bPrevColliding == true)
-	//						{
-	//							check = m_vCollisions[j].test;
-	//							break;
-	//						}
+						if( y < x )
+						{
+							if( intmidx < tilemidx )
+							{
+								check = 3;
+							}
+							else
+							{
+								check = 4;
+							}
+						}
 
-	//						if( i == j )
-	//						{
-	//							if(  m_vCollisions[i].m_bPrevColliding == true)
-	//							{
-	//								check = m_vCollisions[i].test;
-	//								break;
-	//							}
-	//						}
-	//					}
+					}
+					else
+					{
+						for(unsigned int j = 0; j < m_vCollisions.size(); j++)
+						{
 
-	//					DirectInput* pDI = DirectInput::GetInstance();
-	//					//check = 0;
-	//					if( check == 0 )
-	//					{
-	//					}
-	//				}
+							if(  m_vCollisions[j].m_bPrevColliding == true)
+							{
+								check = m_vCollisions[j].test;
+								break;
+							}
 
-	//				if (check == 1)
-	//				{
-	//					pCh->SetPosY(pCh->GetPosY()-x);
-	//					m_vCollisions[i].m_bPrevColliding = true;
-	//					m_vCollisions[i].test = check;
-	//				}
-	//				else if (check == 2)
-	//				{
-	//					pCh->SetPosY(pCh->GetPosY()+x);
-	//					m_vCollisions[i].m_bPrevColliding = true;
-	//					m_vCollisions[i].test = check;
-	//				}
-	//				else if (check == 3)
-	//				{
-	//					pCh->SetPosX(pCh->GetPosX()-y);
-	//					m_vCollisions[i].m_bPrevColliding = true;
-	//					m_vCollisions[i].test = check;
-	//				}
-	//				else if (check == 4)
-	//				{
-	//					pCh->SetPosX(pCh->GetPosX()+y);
-	//					m_vCollisions[i].m_bPrevColliding = true;
-	//					m_vCollisions[i].test = check;
-	//				}
-	//			}
-	//			if(_stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
-	//			{
-	//				EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
-	//			}
-	//		}
+							if( i == j )
+							{
+								if(  m_vCollisions[i].m_bPrevColliding == true)
+								{
+									check = m_vCollisions[i].test;
+									break;
+								}
+							}
+						}
 
-	//	}
-	//}
+						DirectInput* pDI = DirectInput::GetInstance();
+						//check = 0;
+						if( check == 0 )
+						{
+						}
+					}
 
-	//if( checkcol == true )
-	//{
-	//	return true;
-	//}
+					if (check == 1)
+					{
+						pCh->SetPosY(pCh->GetPosY()-x);
+						m_vCollisions[i].m_bPrevColliding = true;
+						m_vCollisions[i].test = check;
+					}
+					else if (check == 2)
+					{
+						pCh->SetPosY(pCh->GetPosY()+x);
+						m_vCollisions[i].m_bPrevColliding = true;
+						m_vCollisions[i].test = check;
+					}
+					else if (check == 3)
+					{
+						pCh->SetPosX(pCh->GetPosX()-y);
+						m_vCollisions[i].m_bPrevColliding = true;
+						m_vCollisions[i].test = check;
+					}
+					else if (check == 4)
+					{
+						pCh->SetPosX(pCh->GetPosX()+y);
+						m_vCollisions[i].m_bPrevColliding = true;
+						m_vCollisions[i].test = check;
+					}
+				}
+				if(_stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
+				{
+					EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
+				}
+			}
+
+		}
+	}
+
+	if( checkcol == true )
+	{
+		return true;
+	}
 
 
 

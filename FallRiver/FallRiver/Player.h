@@ -67,6 +67,10 @@ public:
 	bool IsTalking() {return m_bTalking;}
 
 	int GetScore() { return m_nScore;}
+	int GetAmmo();
+	int GetWeaponType();
+	int GetClip();
+
 	int GetLives() { return m_nLives;}
 	vector<Weapon*> GetWeapons() {return m_vpWeapons;}
 	vector<Light*> GetLights() {return m_vpLights;}

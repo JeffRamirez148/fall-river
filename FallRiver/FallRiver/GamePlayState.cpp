@@ -70,6 +70,7 @@ void GamePlayState::Enter()
 	m_pMS = MessageSystem::GetInstance();
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
+	m_pHUD = new HUD;
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 
@@ -134,6 +135,7 @@ void GamePlayState::Enter()
 		pPlayer->SetWidth(32);
 		pPlayer->SetImageID(-1);
 		pPlayer->SetPosX(m_cPlayer->GetPosX());
+		pPlayer->SetHealth(100);
 		pPlayer->SetPosY(m_cPlayer->GetPosY());
 
 		for(unsigned int i = 0; i < m_cPlayer->GetWeapons().size(); i++)
@@ -236,30 +238,30 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
-	//for(int i = 0; i < 1; i++)
-	//{
-	//	m_cEnemies.push_back(nullptr);
-	//	m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
-	//	ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[i]);
-	//	pEnemy->SetHeight(32);
-	//	pEnemy->SetWidth(32);
-	//	pEnemy->SetImageID(-1);
-	//	pEnemy->SetTarget(m_cPlayer);
-	//	pEnemy->SetPosX(200);
-	//	pEnemy->SetPosY(100);
-	//	pEnemy->SetHealth(100);
-	//	m_pOM->AddObject(pEnemy);
+	for(int i = 0; i < 1; i++)
+	{
+		m_cEnemies.push_back(nullptr);
+		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+		ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[i]);
+		pEnemy->SetHeight(32);
+		pEnemy->SetWidth(32);
+		pEnemy->SetImageID(-1);
+		pEnemy->SetTarget(m_cPlayer);
+		pEnemy->SetPosX(600);
+		pEnemy->SetPosY(490);
+		pEnemy->SetHealth(100);
+		m_pOM->AddObject(pEnemy);
 
-	//	Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
-	//	eWeapon->SetHeight(20);
-	//	eWeapon->SetWidth(10);
-	//	eWeapon->SetImageID(-1);
-	//	eWeapon->SetOwner(pEnemy);
-	//	eWeapon->Init(WPN_RIFLE, 100, 10, 0);
-	//	eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
-	//	eWeapon->SetPosY(pEnemy->GetPosY());
-	//	pEnemy->SetWeapon(eWeapon);
-	//}
+		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		eWeapon->SetHeight(20);
+		eWeapon->SetWidth(10);
+		eWeapon->SetImageID(-1);
+		eWeapon->SetOwner(pEnemy);
+		eWeapon->Init(WPN_RIFLE, 100, 10, 0);
+		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
+		eWeapon->SetPosY(pEnemy->GetPosY());
+		pEnemy->SetWeapon(eWeapon);
+	}
 
 	//for(int i = 0; i < 1; i++)
 	//{
@@ -412,6 +414,8 @@ void GamePlayState::Update(float fElapsedTime)
 			m_cSpawn[i]->SetSpawn( false );
 		}
 	}
+	m_pHUD->Input();
+	m_pHUD->Update(fElapsedTime);
 
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
 	{
@@ -438,6 +442,36 @@ void GamePlayState::Render()
 	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
 
+	m_pVM->GetSprite()->Flush();
+
+
+	//char szName[100] = {};
+	//
+	//TCHAR buffer[ 100 ];
+	////int playerScore = 15;
+	//_stprintf_s( buffer, 100, _T("Health = %i"), m_pHUD->m_fHealth );
+
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+	//m_pVM->DrawTextW("hello",GamePlayState::GetInstance()->GetCamera().x,GamePlayState::GetInstance()->GetCamera().y,255,255,255);
+
+	////m_pVM->DrawText(szName,0,0,255,255,255);
+	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,0);
+
+	////char szName1[100] = {};
+	////
+	////TCHAR buffer1[ 100 ];
+	////int playerScore = 15;
+	//_stprintf_s( buffer, 100, _T("Lives = %i"), m_pHUD->m_nLives );
+
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
+
+
+
+
+
+	m_pHUD->Render();
 
 }
 

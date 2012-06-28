@@ -41,6 +41,7 @@ public:
 	BaseCharacter* GetOwner() {return m_pOwner;}
 	int GetWeaponType() {return m_nWeaponType;}
 	int GetAmmo() {return m_nAmmo;}
+	int GetClip() {return m_nClip;}
 	int GetDamage() {return m_nDamage;}
 	float GetFireRate() {return m_fFireRate;}
 

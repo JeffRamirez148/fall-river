@@ -103,7 +103,7 @@ void ChasingAI::Update(float fElapsedTime)
 
 		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
 		{
-			m_pfDestination.x = GetPosX()+rand()%100-50; 
+			m_pfDestination.x = GetPosX()+rand()%100-50;
 			m_pfDestination.y = GetPosY()+rand()%100-50;
 			m_dwIdleWait = GetTickCount() + 1000;
 		}
