@@ -128,6 +128,11 @@ void NPC::Render()
   		pVM->DrawRect(questBox,255,255,255);
 		pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
 	}
+	if(showQuest == true && NPCLabel == 2)
+	{  
+  		pVM->DrawRect(questBox,255,255,255);
+		pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
+	}
 }
 
 void NPC::SetQuest(int q_id) 
