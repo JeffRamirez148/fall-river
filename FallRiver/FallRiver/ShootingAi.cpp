@@ -105,8 +105,8 @@ void ShootingAi::Update(float fElapsedTime)
 
 		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
 		{
-			m_pfDestination.x = GetPosX()+rand()%200-100; 
-			m_pfDestination.y = GetPosY()+rand()%200-100;
+			m_pfDestination.x = GetPosX()+rand()%25-12; 
+			m_pfDestination.y = GetPosY()+rand()%25-12;
 			m_dwIdleWait = GetTickCount() + 1000;
 		}
 		if( fDistX  > 10 && fDistY > 10 )

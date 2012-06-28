@@ -148,6 +148,10 @@ void SaveMenuState::Update(float fElapsedTime)
 
 void SaveMenuState::Render()
 {
+
+	m_pVM->GetSprite()->Flush();
+	m_pVM->Clear();
+
 	m_pVM->DrawFont(m_nFontID, "Save Progress", 20, 20);
 
 	if( m_bCheck )

@@ -23,7 +23,7 @@ private:
 	// Game States
 	IMenuState*			m_pCurrState;
 	IMenuState*			m_pPrevState;
-	vector<IMenuState*> m_vStates;
+	
 	
 	// Window Attributes
 	int m_nScreenWidth;
@@ -67,7 +67,8 @@ public:
 
 	// Pop the current state off the top
 	void RemoveState( void );
-
+	void RemoveState(int state);
+	vector<IMenuState*> m_vStates;
 	///////////////////////////////
 
 	void	SetWindowed(bool _is)			{ m_bIsWindowed = _is; }

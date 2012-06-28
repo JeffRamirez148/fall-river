@@ -158,6 +158,7 @@ void OptionsMenuState::Render()
 	//m_pVM->DrawStaticTexture(m_nOptionID, 0, 0,  0.4f, 0.6f);
 
 	m_pVM->GetSprite()->Flush();
+	m_pVM->Clear();
 
 	m_pVM->DrawFont(m_nFontID, "OPTIONS", 100, 100, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(255, 255,255));
 

@@ -10,6 +10,7 @@
 #include "CGame.h"
 #include "GamePlayState.h"
 #include "LoadMenuState.h"
+#include "MainMenuState.h"
 
 using namespace std;
 
@@ -35,6 +36,8 @@ void LoseMenuState::Exit()
 	pVM	= nullptr;
 	pDI	= nullptr;
 	pAM	= nullptr;
+
+	GamePlayState::GetInstance()->SetWinLose(true);
 }
 bool LoseMenuState::Input()
 {
@@ -57,10 +60,17 @@ bool LoseMenuState::Input()
 	if(pDI->KeyPressed(DIK_RETURN))
 	{
 		if( curPos == 250 )
+		{
+			CGame::GetInstance()->RemoveState();
+			CGame::GetInstance()->RemoveState();
 			CGame::GetInstance()->ChangeState(LoadMenuState::GetInstance());
+			//CGame::GetInstance()->ChangeState(LoadMenuState::GetInstance());
+		}
 		else if( curPos == 300 )
 		{
 			CGame::GetInstance()->RemoveState();
+			CGame::GetInstance()->RemoveState();
+			CGame::GetInstance()->ChangeState(MainMenuState::GetInstance());
 		
 		}
 	}
@@ -72,6 +82,8 @@ void LoseMenuState::Update(float aFElapsedTime)
 }
 void LoseMenuState::Render()
 {
+	pVM->GetSprite()->Flush();
+	pVM->Clear();
 	RECT backRect = { 0, 0,1024, 1024};
 	pVM->DrawStaticTexture(LMS_ID, 0, 0,  0.8f, 0.5f, &backRect);
 

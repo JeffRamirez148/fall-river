@@ -74,8 +74,12 @@ void ChasingAI::Update(float fElapsedTime)
 	if( (distX < 10 && distY < 10) || (distX-m_pTarget->GetWidth() < 10 && distY - m_pTarget->GetHeight() < 10))
 		return;
 
-	if( (distance >= 200) )
+	if( (distance >= 200) || m_pTarget->CheckHidden())
 	{
+		if(  m_pTarget->CheckHidden() )
+		{
+			m_nState = ESTATE_IDLE;
+		}
 		m_nState = ESTATE_IDLE;
 		notified = true;
 	}
@@ -99,8 +103,8 @@ void ChasingAI::Update(float fElapsedTime)
 
 		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
 		{
-			m_pfDestination.x = GetPosX()+rand()%200-100; 
-			m_pfDestination.y = GetPosY()+rand()%200-100;
+			m_pfDestination.x = GetPosX()+rand()%100-50; 
+			m_pfDestination.y = GetPosY()+rand()%100-50;
 			m_dwIdleWait = GetTickCount() + 1000;
 		}
 		if( fDistX  > 10 && fDistY > 10 )

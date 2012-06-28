@@ -18,6 +18,7 @@ private:
 	float fTime;
 	float fAttractTime;
 	AudioManager* audio;
+	int fontID;
 
 	CreditsMenuState();
 	~CreditsMenuState();

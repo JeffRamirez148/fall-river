@@ -146,10 +146,10 @@ void Level::Render()
 
 	for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
 	{
-		RECT test = { m_vCollisions[i].m_rCollision.left-GamePlayState::GetInstance()->GetCamera().x,
-			m_vCollisions[i].m_rCollision.top-GamePlayState::GetInstance()->GetCamera().y,
-			m_vCollisions[i].m_rCollision.right-GamePlayState::GetInstance()->GetCamera().x,
-			m_vCollisions[i].m_rCollision.bottom-GamePlayState::GetInstance()->GetCamera().y,
+		RECT test = { (LONG)(m_vCollisions[i].m_rCollision.left-GamePlayState::GetInstance()->GetCamera().x),
+			(LONG)(m_vCollisions[i].m_rCollision.top-GamePlayState::GetInstance()->GetCamera().y),
+			(LONG)(m_vCollisions[i].m_rCollision.right-GamePlayState::GetInstance()->GetCamera().x),
+			(LONG)(m_vCollisions[i].m_rCollision.bottom-GamePlayState::GetInstance()->GetCamera().y),
 		};
 
 						

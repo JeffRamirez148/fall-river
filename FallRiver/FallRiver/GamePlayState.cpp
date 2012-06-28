@@ -289,6 +289,8 @@ void GamePlayState::Enter()
 	m_pAM->setMusicLooping(backGroundID, true);
 	m_pAM->playMusic(backGroundID);
 
+	winLose = true;
+
 }
 
 void GamePlayState::Exit() 

@@ -69,8 +69,11 @@ void WinMenuState::Update(float aFElapsedTime)
 
 void WinMenuState::Render()
 {
+	pVM->GetSprite()->Flush();
+	pVM->Clear();
+
 	RECT backRect = { 12, 12, backRect.left+1200, backRect.top+700};
-	pVM->DrawStaticTexture(WMS_ID, 0, 0,  0.7f, 0.9f, &backRect);
+	pVM->DrawStaticTexture(WMS_ID, 0, 0,  0.8f, 0.9f, &backRect);
 
 	RECT resumeRect = {1219, 13, resumeRect.left+287, resumeRect.top+44};
 	RECT ExitRect = {1219, 223, ExitRect.left+287, ExitRect.top+44};
@@ -80,8 +83,8 @@ void WinMenuState::Render()
 	else if(curPos == 300)
 	{ExitRect.left = 1535; ExitRect.right = ExitRect.left+287;}
 
-	pVM->DrawStaticTexture(tempWinID, 350, 400,  0.7f, 0.9f, &resumeRect);
-	pVM->DrawStaticTexture(tempWinID, 370, 500,  0.7f, 0.9f, &ExitRect);
+	pVM->DrawStaticTexture(tempWinID, 350, 400,  0.5f, 0.9f, &resumeRect);
+	pVM->DrawStaticTexture(tempWinID, 370, 500,  0.5f, 0.9f, &ExitRect);
 
 }
 

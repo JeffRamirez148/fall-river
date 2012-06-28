@@ -24,6 +24,7 @@ class HUD;
 class NPC;
 class IMessage;
 class SpawnPoint;
+class Bush;
 
 
 typedef CObjectFactory< std::wstring, BaseObject> Factory;
@@ -53,7 +54,8 @@ private:
 	// Characters In the world
 	Player*			m_cPlayer;
 	vector<Enemy*>	m_cEnemies;
-	//vector<SpawnPoint*> m_cSpawn;
+	vector<SpawnPoint*> m_cSpawn;
+	vector<Bush*> m_cBushes;
 	vector<NPC*>	m_cNpcs;
 	Weapon*			m_cWeapon;
 
@@ -73,6 +75,8 @@ public:
 
 	Player* GetPlayer() {return m_cPlayer;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
+
+	void SetWinLose(bool wl)	{winLose = wl;}
 	bool GetWinLose()			{return winLose;}
 
 	POINTFLOAT GetCamera() {return camera;}

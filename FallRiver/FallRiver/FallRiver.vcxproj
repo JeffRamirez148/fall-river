@@ -131,6 +131,7 @@
     <ClCompile Include="Quests.cpp" />
     <ClCompile Include="SaveMenuState.cpp" />
     <ClCompile Include="ShootingAi.cpp" />
+    <ClCompile Include="SpawnPoint.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="tinystr.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="SaveMenuState.h" />
     <ClInclude Include="ShootingAi.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="SpawnPoint.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="tinystr.h" />

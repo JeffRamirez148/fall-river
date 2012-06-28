@@ -35,16 +35,19 @@ CGame::~CGame()
 bool CGame::Input() 
 {
 	m_bPrevWindowed = m_bIsWindowed;
-
-	// Just in case
-	if(m_pCurrState == nullptr)
-		return false;
-
-
+	
 	// Refresh Devices
 	m_pDI->ReadDevices();
 
-	return m_pCurrState->Input();
+	// Just in case
+	if(m_vStates.size() > 0)
+		return m_vStates.back()->Input();
+	else
+		return false;
+
+
+	
+	//return m_pCurrState->Input();
 }
 
 void CGame::Update() 
@@ -63,7 +66,10 @@ void CGame::Update()
 	AudioManager::GetInstance()->SetListenerPos(vec);
 
 	// Redirect to the current state
-	m_pCurrState->Update(ElapsedTime);
+	//m_pCurrState->Update(ElapsedTime);
+
+	if(m_vStates.size() > 0)
+		m_vStates.back()->Update(ElapsedTime);
 }
 
 void CGame::Render() 
@@ -79,12 +85,14 @@ void CGame::Render()
 	m_pVM->SpriteBegin();
 
 
-
+	// Fixing stuff
+	for(unsigned int i = 0; i < m_vStates.size();i++)
+		m_vStates[i]->Render();
 	// Redirect to the current state
-	if( m_pPrevState == GamePlayState::GetInstance() )
+	/*if( m_pPrevState == GamePlayState::GetInstance() )
 		m_pPrevState->Render();
 
-	m_pCurrState->Render();
+	m_pCurrState->Render();*/
 
 
 	// End the D3D rendering (draw to buffer)
@@ -111,15 +119,16 @@ void CGame::Initialize(HWND hWnd, HINSTANCE hInstance, int nScreenWidth, int nSc
 
 
 	// Start the game in the gamplay state
-	ChangeState( MainMenuState::GetInstance() );
+	m_vStates.push_back( MainMenuState::GetInstance() );
+	m_vStates.back()->Enter();
 }
 
 bool CGame::Main()
 {
-	if( Input() == false )
+	if( this->Input() == false )
 		return false;
 
-	if(m_pCurrState == nullptr)
+	if(m_vStates.back() == nullptr)
 		return false;
 
 	Update();
@@ -149,8 +158,15 @@ void CGame::ChangeState(IMenuState* pNewState)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
 	m_pVM->RemoveLights();
+
+	// Fixing stuff
+	if(pNewState != nullptr)
+	{
+		m_vStates.push_back(pNewState);
+		pNewState->Enter();
+	}
 	// Exit the current state (if any)
-	if( pNewState == nullptr)
+	/*if( pNewState == nullptr)
 	{
 		m_pCurrState->Exit();
 		if(m_pPrevState != nullptr)
@@ -158,21 +174,23 @@ void CGame::ChangeState(IMenuState* pNewState)
 
 		m_pCurrState = nullptr;
 		m_pPrevState = nullptr;
-	}
+	}*/
 
 	// Set the Previous State to what Current State is now
-	if(m_pCurrState != nullptr )
-		m_pPrevState = m_pCurrState;
+	/*if(m_pCurrState != nullptr )
+		m_pPrevState = m_pCurrState;*/
 	
-	// Add the new State
-	m_vStates.push_back(pNewState);
+	
 
-	// Assign the current state
-	m_pCurrState = pNewState;
+	//// Add the new State
+	//m_vStates.push_back(pNewState);
 
-	// Enter the new state (if any)
-	if( m_pCurrState != nullptr )
-		m_pCurrState->Enter();
+	//// Assign the current state
+	//m_pCurrState = pNewState;
+
+	//// Enter the new state (if any)
+	//if( m_pCurrState != nullptr )
+	//	m_pCurrState->Enter();
 }
 
 ///////////////////////////
@@ -192,29 +210,42 @@ void CGame::RemoveState( void )
 
 	m_pVM->RemoveLights();
 
-	// Checking. Just in case
-	if( m_pCurrState != nullptr )
-		m_pCurrState->Exit();
-
-	// Take off the top state
-	m_vStates.pop_back();
-
-	// Null the previous state
-	m_pPrevState = nullptr;
-
-	for(int i = m_vStates.size()-2; i > 0; i++ )
+	// Fixing stuff
+	if( m_vStates.back() != nullptr )
 	{
-		m_pPrevState = m_vStates[i];
-		break;
+		m_vStates.back()->Exit();
+		m_vStates.pop_back();		
 	}
+	//// Checking. Just in case
+	//if( m_pCurrState != nullptr )
+	//	m_pCurrState->Exit();
 
-	if( m_vStates.size() > 0 )
-	{
-		// Make the Current state equal to the back of the states
-		// Would set to previous state but not previous could not exist.
-		m_pCurrState = m_vStates.back();
-	}
-	else
-		m_pCurrState = nullptr;
+	//// Take off the top state
+	//m_vStates.pop_back();
+
+	//// Null the previous state
+	//m_pPrevState = nullptr;
+
+	//for(int i = m_vStates.size()-2; i > 0; i++ )
+	//{
+	//	m_pPrevState = m_vStates[i];
+	//	break;
+	//}
+
+	//if( m_vStates.size() > 0 )
+	//{
+	//	// Make the Current state equal to the back of the states
+	//	// Would set to previous state but not previous could not exist.
+	//	m_pCurrState = m_vStates.back();
+	//}
+	//else
+	//	m_pCurrState = nullptr;
 }
-
+void CGame::RemoveState(int state)
+{
+	for(int i = 0; i < state; i++)
+	{
+		m_vStates.back()->Exit();
+		m_vStates.pop_back();
+	}
+}
