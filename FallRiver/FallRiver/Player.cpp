@@ -67,6 +67,7 @@ Player::Player()
 	ViewManager::GetInstance()->RegisterLight(tmpLight);
 	lightOn = false;
 	battery = 100;
+	batteryTime = 0;
 }
 
 Player::~Player()
@@ -329,7 +330,12 @@ void Player::Update(float fElapsedTime)
 	if(lightOn)
 	{
 		ViewManager::GetInstance()->SetLightPos(0,0,0);
-		--battery;
+		batteryTime += fElapsedTime;
+		if(batteryTime > .2f)
+		{
+			--battery;
+			batteryTime = 0;
+		}
 	}
 	else
 		ViewManager::GetInstance()->SetLightPos(0,0,-1);
