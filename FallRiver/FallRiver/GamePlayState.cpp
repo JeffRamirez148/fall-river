@@ -30,7 +30,7 @@
 #include "DestroyPickUp.h"
 #include "Bush.h"
 #include "SpawnPoint.h"
-
+#include "LoseMenuState.h"
 
 
 GamePlayState::GamePlayState()
@@ -48,6 +48,8 @@ GamePlayState::GamePlayState()
 
 	backGroundID = -1;
 	swingHitID = -1;
+
+	winLose = true;
 
 }
 
@@ -289,6 +291,8 @@ void GamePlayState::Enter()
 	m_pAM->setMusicLooping(backGroundID, true);
 	m_pAM->playMusic(backGroundID);
 
+	winLose = true;
+
 }
 
 void GamePlayState::Exit() 
@@ -413,6 +417,10 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
 
+	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
+	{
+		winLose = false;
+	}
 }
 
 void GamePlayState::Render() 

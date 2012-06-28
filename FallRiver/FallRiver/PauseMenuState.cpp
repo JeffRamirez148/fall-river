@@ -7,6 +7,7 @@
 #include "SaveMenuState.h"
 #include "XMLManager.h"
 #include "CGame.h"
+#include "MainMenuState.h"
 
 PauseMenuState::PauseMenuState()
 {
@@ -68,8 +69,8 @@ bool PauseMenuState::Input()
 			CGame::GetInstance()->ChangeState(OptionsMenuState::GetInstance());
 		else if( m_nCursPosY == 300 )
 		{
-			CGame::GetInstance()->RemoveState();
-			CGame::GetInstance()->RemoveState();
+			CGame::GetInstance()->RemoveState(2);
+			CGame::GetInstance()->ChangeState(MainMenuState::GetInstance());
 		}
 
 		return true;

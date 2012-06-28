@@ -1,12 +1,13 @@
 #ifndef __WinMenuState_h__
 #define __WinMenuState_h__
 #include <Windows.h>
-using namespace std;
+
 // #include "ViewManager.h"
 // #include "AudioManager.h"
 // #include "IDirectInputDevice.h"
 // #include "XMLManager.h"
 #include "IMenuState.h"
+using namespace std;
 
 class ViewManager;
 class AudioManager;
@@ -18,11 +19,13 @@ class WinMenuState;
 class WinMenuState: public IMenuState
 {
 private: 
-	ViewManager* view;
-	DirectInput* input;
-	AudioManager* audio;
-	int y;
-	float fTime;
+	ViewManager*	pVM;
+	DirectInput*	pDI;
+	AudioManager*	pAM;
+	int				WMS_ID;
+	int				tempWinID;
+	int				curPos;
+	float			fTime;
 
 public: 
 

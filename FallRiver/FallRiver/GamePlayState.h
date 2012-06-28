@@ -63,6 +63,9 @@ private:
 	// For Everyone else on the screen
 	POINTFLOAT camera;
 
+	// Win/Lose thing
+	bool winLose;
+
 	// Private Constructors
 	GamePlayState();
 	~GamePlayState()	{ }
@@ -73,6 +76,9 @@ public:
 
 	Player* GetPlayer() {return m_cPlayer;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
+
+	void SetWinLose(bool wl)	{winLose = wl;}
+	bool GetWinLose()			{return winLose;}
 
 	POINTFLOAT GetCamera() {return camera;}
 

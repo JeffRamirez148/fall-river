@@ -6,6 +6,8 @@
 #include "CGame.h"
 #include "Quests.h"
 #include "Player.h"
+#include "WinMenuState.h"
+#include "LoseMenuState.h"
 
 NPC::NPC()
 {
@@ -18,6 +20,7 @@ NPC::NPC()
 	pGPS = GamePlayState::GetInstance();
 	pVM = ViewManager::GetInstance();
 	temp_font_id = pVM->RegisterFont("resource/graphics/FallRiver_0.png");
+	//winLose = true;
 }
 
 NPC::~NPC()
@@ -50,21 +53,38 @@ void NPC::Update(float fElapsedTime)
 		if(pDI->KeyPressed(DIK_A) )
 		{
 			bool questEmpty = true;
+
 			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
 			{
 				if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel || pGPS->GetPlayer()->m_vpActiveQuests[i] == nullptr )
 				{
 					questEmpty = false;
 				}
-				
-					//pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
-				
+				/*if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel + 1)
+				{
+					CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
+				}*/
 			}
-			//if(pGPS->GetPlayer()->m_vpActiveQuests[NPCLabel]->QuestID != NPCLabel)
 			if(questEmpty)
-				pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
-			
+				pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);			
 		}
+		if(pDI->KeyPressed(DIK_RETURN))
+		{
+			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
+			{
+				if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel - 1)
+				{
+					// temp for first playable
+					// Change this to put in next level and complete the quest 
+					CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
+					
+				}
+			}
+		}
+		if(GamePlayState::GetInstance()->GetWinLose() == false)
+			CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
+		
+			
 	}
 	else
 		showQuest = false;
@@ -99,6 +119,11 @@ void NPC::Render()
 	questBox.bottom = CGame::GetInstance()->GetScreenHeight();
 
 	if(showQuest == true && NPCLabel == 0)
+	{  
+  		pVM->DrawRect(questBox,255,255,255);
+		pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
+	}
+	if(showQuest == true && NPCLabel == 1)
 	{  
   		pVM->DrawRect(questBox,255,255,255);
 		pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));

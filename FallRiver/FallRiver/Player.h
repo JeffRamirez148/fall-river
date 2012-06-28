@@ -5,13 +5,11 @@ using namespace std;
 #ifndef __Player_h__
 #define __Player_h__
 
-
 #include "BaseCharacter.h"
 #include "AnimInfo.h"
 #include "IListener.h"
 #include "Quests.h"
-//#include "Weapon.h"
-
+#include "Weapon.h"
 class Quests;
 
 class GamePlayState;

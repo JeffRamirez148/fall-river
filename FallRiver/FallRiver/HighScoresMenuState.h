@@ -22,6 +22,7 @@ private:
 	int scores[10];
 	string player[10];
 	AudioManager* audio;
+	int fontID;
 
 	HighScoresMenuState();
 	~HighScoresMenuState();
