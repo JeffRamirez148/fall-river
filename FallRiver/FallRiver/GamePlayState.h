@@ -33,15 +33,16 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	Level*			m_clevel;
-	ViewManager*	m_pVM;
-	DirectInput*	m_pDI;
-	AudioManager*	m_pAM;
-	Factory*		m_pOF;
-	ObjectManager*	m_pOM;
-	EventSystem*	m_pES;
-	MessageSystem*	m_pMS;
-	Particle_Manager*m_pPM;
+	HUD*				m_pHUD;
+	Level*				m_clevel;
+	ViewManager*		m_pVM;
+	DirectInput*		m_pDI;
+	AudioManager*		m_pAM;
+	Factory*			m_pOF;
+	ObjectManager*		m_pOM;
+	EventSystem*		m_pES;
+	MessageSystem*		m_pMS;
+	Particle_Manager*	m_pPM;
 
 	// Sound Ids
 	int backGroundID;
@@ -52,19 +53,19 @@ private:
 	float fTime;
 
 	// Characters In the world
-	Player*			m_cPlayer;
-	vector<Enemy*>	m_cEnemies;
-	vector<SpawnPoint*> m_cSpawn;
-	vector<Bush*> m_cBushes;
-	vector<NPC*>	m_cNpcs;
-	Weapon*			m_cWeapon;
+	Player*						m_cPlayer;
+	vector<Enemy*>				m_cEnemies;
+	vector<SpawnPoint*>			m_cSpawn;
+	vector<Bush*>				m_cBushes;
+	vector<NPC*>				m_cNpcs;
+	Weapon*						m_cWeapon;
 
 	// For Everyone else on the screen
 	POINTFLOAT camera;
 
-	// Win/Lose thing
+	// Win/Lose/Quest Flags
 	bool winLose;
-
+	bool questFlag;
 	// Private Constructors
 	GamePlayState();
 	~GamePlayState()	{ }

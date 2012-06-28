@@ -76,8 +76,10 @@ void NPC::Update(float fElapsedTime)
 				{
 					// temp for first playable
 					// Change this to put in next level and complete the quest 
-					CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
-					
+					//CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
+					vector<Quest_Struct*>::iterator temp = pGPS->GetPlayer()->m_vpActiveQuests.begin()+i;
+					pGPS->GetPlayer()->completedQuest++;
+					pGPS->GetPlayer()->m_vpActiveQuests.erase(temp);
 				}
 			}
 		}
@@ -129,6 +131,11 @@ void NPC::RenderQuests(void)
 		pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
 	}
 	if(showQuest == true && NPCLabel == 1)
+	{  
+  		pVM->DrawRect(questBox,255,255,255);
+		pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
+	}
+	if(showQuest == true && NPCLabel == 2)
 	{  
   		pVM->DrawRect(questBox,255,255,255);
 		pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));

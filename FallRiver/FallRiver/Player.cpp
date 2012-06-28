@@ -25,10 +25,12 @@ Player::Player()
 	m_bIsHidden = false;
 	m_nScore = 0;
 	m_nState = PSTATE_IDLE;
-	this->SetHealth(100);
+	this->SetHealth(1000);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
+	questCounter = 0;
+	completedQuest = 0;
 	SetDirection(DIRE_UP);
 
 	//AnimInfo startup

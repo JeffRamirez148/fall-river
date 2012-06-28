@@ -54,7 +54,7 @@ bool Quests::LoadQuests(const char* sz_Filename)
 			{
 				
 
-				if( temp_quest[i] == '.' )
+				if( temp_quest[i] == '.' || temp_quest[i] == ',' )
 					temp_quest.insert(i+1,1,'\n');//temp_quest.insert(i+1,'\n');
 				
 			}
