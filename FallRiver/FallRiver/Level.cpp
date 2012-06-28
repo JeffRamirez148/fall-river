@@ -14,6 +14,7 @@
 Level::Level() 
 {
 	m_nObjectType = OBJ_LEVEL;
+	m_bNoClip = false;
 }
 
 Level* Level::GetInstance() 
@@ -29,6 +30,11 @@ Level::~Level()
 void Level::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
+
+	if(pDI->KeyPressed(DIK_G) )
+	{
+		m_bNoClip = !m_bNoClip;
+	}
 
 	//float time = fElapsedTime;
 	//LONG test = long(100.0f * fElapsedTime);
@@ -360,150 +366,152 @@ bool Level::CheckCollision(IObjects* pBase)
 {
 	bool checkcol = false;
 
-	for(unsigned int i = 0; i < m_vCollisions.size(); i++)
+	if( m_bNoClip == false )
 	{
-		RECT cRect;
-		if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
+		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
-			if( m_vCollisions[i].m_bPrevColliding == true )
+			RECT cRect;
+			if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
 			{
-			}
-			continue;
-		}
-		else
-		{
-			checkcol = true;
-			if( pBase->GetObjectType() == OBJ_BULLET )
-			{
-				DestroyBullet* pMsg = new DestroyBullet((Bullet*)pBase);
-				MessageSystem::GetInstance()->SendMsg(pMsg);
-				pMsg = nullptr;
-				return true;
-			}
-			else if(pBase->GetObjectType() == OBJ_CHARACTER)
-			{
-				BaseCharacter* pCh = (BaseCharacter*)pBase;
-				/*	if(pCh->GetCharacterType() == CHA_ENEMY)
+				if( m_vCollisions[i].m_bPrevColliding == true )
 				{
-
-				Enemy* pEn = (Enemy*)pCh;
-				pEn->CheckCollision(this);
-
 				}
-				else if( pCh->GetCharacterType() == CHA_PLAYER)
-				{*/
-				//Player* pPlayer = (Player*)pCh;
-
-				if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
+				continue;
+			}
+			else
+			{
+				checkcol = true;
+				if( pBase->GetObjectType() == OBJ_BULLET )
 				{
-					int check = 0;
-
-					float intmid = float(cRect.top + cRect.bottom) / 2.0f;
-					float intmidx = float(cRect.left + cRect.right) / 2.0f;
-
-
-					float tilemid = float(m_vCollisions[i].m_rCollision.top + m_vCollisions[i].m_rCollision.bottom) / 2.0f;
-					float tilemidx = float(m_vCollisions[i].m_rCollision.left + m_vCollisions[i].m_rCollision.right) / 2.0f;
-
-
-					LONG x = cRect.bottom - cRect.top;
-					LONG y = cRect.right - cRect.left;
-
-					if( x != y )
+					DestroyBullet* pMsg = new DestroyBullet((Bullet*)pBase);
+					MessageSystem::GetInstance()->SendMsg(pMsg);
+					pMsg = nullptr;
+					return true;
+				}
+				else if(pBase->GetObjectType() == OBJ_CHARACTER)
+				{
+					BaseCharacter* pCh = (BaseCharacter*)pBase;
+					/*	if(pCh->GetCharacterType() == CHA_ENEMY)
 					{
-						if( y > x )
-						{
-							if( intmid < tilemid )
-							{
-								check = 1;
-							}
-							else
-							{
-								check = 2;
-							}
-						}
 
-						if( y < x )
-						{
-							if( intmidx < tilemidx )
-							{
-								check = 3;
-							}
-							else
-							{
-								check = 4;
-							}
-						}
+					Enemy* pEn = (Enemy*)pCh;
+					pEn->CheckCollision(this);
 
 					}
-					else
+					else if( pCh->GetCharacterType() == CHA_PLAYER)
+					{*/
+					//Player* pPlayer = (Player*)pCh;
+
+					if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
 					{
-						for(unsigned int j = 0; j < m_vCollisions.size(); j++)
+						int check = 0;
+
+						float intmid = float(cRect.top + cRect.bottom) / 2.0f;
+						float intmidx = float(cRect.left + cRect.right) / 2.0f;
+
+
+						float tilemid = float(m_vCollisions[i].m_rCollision.top + m_vCollisions[i].m_rCollision.bottom) / 2.0f;
+						float tilemidx = float(m_vCollisions[i].m_rCollision.left + m_vCollisions[i].m_rCollision.right) / 2.0f;
+
+
+						LONG x = cRect.bottom - cRect.top;
+						LONG y = cRect.right - cRect.left;
+
+						if( x != y )
 						{
-
-							if(  m_vCollisions[j].m_bPrevColliding == true)
+							if( y > x )
 							{
-								check = m_vCollisions[j].test;
-								break;
-							}
-
-							if( i == j )
-							{
-								if(  m_vCollisions[i].m_bPrevColliding == true)
+								if( intmid < tilemid )
 								{
-									check = m_vCollisions[i].test;
-									break;
+									check = 1;
+								}
+								else
+								{
+									check = 2;
 								}
 							}
-						}
 
-						DirectInput* pDI = DirectInput::GetInstance();
-						//check = 0;
-						if( check == 0 )
+							if( y < x )
+							{
+								if( intmidx < tilemidx )
+								{
+									check = 3;
+								}
+								else
+								{
+									check = 4;
+								}
+							}
+
+						}
+						else
 						{
+							for(unsigned int j = 0; j < m_vCollisions.size(); j++)
+							{
+
+								if(  m_vCollisions[j].m_bPrevColliding == true)
+								{
+									check = m_vCollisions[j].test;
+									break;
+								}
+
+								if( i == j )
+								{
+									if(  m_vCollisions[i].m_bPrevColliding == true)
+									{
+										check = m_vCollisions[i].test;
+										break;
+									}
+								}
+							}
+
+							DirectInput* pDI = DirectInput::GetInstance();
+							//check = 0;
+							if( check == 0 )
+							{
+							}
+						}
+
+						if (check == 1)
+						{
+							pCh->SetPosY(pCh->GetPosY()-x);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
+						}
+						else if (check == 2)
+						{
+							pCh->SetPosY(pCh->GetPosY()+x);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
+						}
+						else if (check == 3)
+						{
+							pCh->SetPosX(pCh->GetPosX()-y);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
+						}
+						else if (check == 4)
+						{
+							pCh->SetPosX(pCh->GetPosX()+y);
+							m_vCollisions[i].m_bPrevColliding = true;
+							m_vCollisions[i].test = check;
 						}
 					}
+					if(_stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
+					}
+				}
 
-					if (check == 1)
-					{
-						pCh->SetPosY(pCh->GetPosY()-x);
-						m_vCollisions[i].m_bPrevColliding = true;
-						m_vCollisions[i].test = check;
-					}
-					else if (check == 2)
-					{
-						pCh->SetPosY(pCh->GetPosY()+x);
-						m_vCollisions[i].m_bPrevColliding = true;
-						m_vCollisions[i].test = check;
-					}
-					else if (check == 3)
-					{
-						pCh->SetPosX(pCh->GetPosX()-y);
-						m_vCollisions[i].m_bPrevColliding = true;
-						m_vCollisions[i].test = check;
-					}
-					else if (check == 4)
-					{
-						pCh->SetPosX(pCh->GetPosX()+y);
-						m_vCollisions[i].m_bPrevColliding = true;
-						m_vCollisions[i].test = check;
-					}
-				}
-				if(_stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
-				{
-					EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
-				}
 			}
-
 		}
+
+		if( checkcol == true )
+		{
+			return true;
+		}
+
 	}
-
-	if( checkcol == true )
-	{
-		return true;
-	}
-
-
 
 	return false;
 }
