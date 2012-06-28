@@ -69,6 +69,9 @@ private:
 	float						ambientLight[3];
 	float						lightDir[3];
 	float						lightPos[3];
+	float						spotLightPos[3];
+	float						innerCone;
+	float						outerCone;
 	struct VERTUV
 	{
 		D3DXVECTOR3 pos;
@@ -154,6 +157,17 @@ public:
 		lightPos[1] = y;
 		lightPos[2] = z;
 	}
+
+	void SetInnerCone(float cone) { innerCone = cone; }
+	void SetOuterCone(float cone) { outerCone = cone; }
+
+	void SetSpotLightPos(float x, float y, float z)
+	{
+		spotLightPos[0] = x;
+		spotLightPos[1] = y;
+		spotLightPos[2] = z;
+	}
+
 
 };
 

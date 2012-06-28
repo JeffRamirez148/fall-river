@@ -1,9 +1,8 @@
-#include <Windows.h>
-using namespace std;
-
 #ifndef __CreditsMenuState_h__
 #define __CreditsMenuState_h__
 
+#include <Windows.h>
+using namespace std;
 #include "IMenuState.h"
 
 class ViewManager;
@@ -19,6 +18,8 @@ private:
 	float fAttractTime;
 	AudioManager* audio;
 	int fontID;
+	int creditsBGID;
+	int logoID;
 
 	CreditsMenuState();
 	~CreditsMenuState();

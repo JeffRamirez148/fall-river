@@ -489,7 +489,11 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	lightPos[0] = 0.0f;
 	lightPos[1] = 0.0f;
 	lightPos[2] = 1.0f;
-
+	spotLightPos[0] = 0.0f;
+	spotLightPos[1] = 0.0f;
+	spotLightPos[2] = -1.0f;
+	innerCone = .95f;
+	outerCone = .9f;
 	//	Return success.
 	return true;
 }
@@ -549,6 +553,10 @@ bool ViewManager::DeviceEnd(void)
 		postEffect->SetFloatArray("gLightDir2", lightDir,3);
 		postEffect->SetFloatArray("ambientLight", ambientLight, 3);
 		postEffect->SetFloatArray("gLightPos2", lightPos,3);
+		postEffect->SetFloatArray("gLightPos", spotLightPos, 3);
+		postEffect->SetFloat("gInnerCone2", innerCone);
+		postEffect->SetFloat("gOuterCone2", outerCone);
+
 		postEffect->SetInt("gSetting", 0);
 
 		postEffect->CommitChanges();
@@ -592,8 +600,14 @@ bool ViewManager::DeviceEnd(void)
 			DrawRect(questBox,255,255,255);
 			DrawFont(tmp->m_nFontID,"You killed enough zombies...for now \n Press enter to continue.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
 		}
+
+		if(ambientLight[2] == .1f)
+		{
+			PauseMenuState::GetInstance()->Render();
+		}
 		m_lpSprite->End();
 		m_lpDirect3DDevice->EndScene();
+
 	}
 
 	m_lpDirect3DDevice->Present(0,0,0,0);

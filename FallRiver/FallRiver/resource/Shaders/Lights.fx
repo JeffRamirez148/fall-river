@@ -14,6 +14,8 @@ float3 gLightPos = {0,0,-1}; // Value sent in
 float3 gLightPos2 = {0,0,0}; // Value sent in
 float gInnerCone  = 0.95f;
 float gOuterCone  = 0.9f;
+float gInnerCone2  = 0.95f;
+float gOuterCone2  = 0.9f;
 float gAttenuation = 2.7f;
 float3 ambientLight;
 // 0 - Default Spotlight, 1 - Flashlight, 2 - Lighter, 3 - Mag light, 4 - Lantern 
@@ -80,6 +82,7 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 {
 
 	float3 surfacecolor = float3(0,0,0);
+	float3 lightColor = float3(0.5,0.5,0.5);
 	float3 final = float3(0,0,0);
 	float3 ldir = float3(0,0,0);
 	float3 lightPos = mul(float4(gLightPos, 1), gWorldInv).xyz;
@@ -99,18 +102,18 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 	else if(spotLightAmount > gOuterCone)
 		lightRatio = 1.0 - saturate((gInnerCone - spotLightAmount)/ (gInnerCone - gOuterCone));
 		
-	final = saturate( (lightRatio *  attenuation) + (ambientLight));
+	final = saturate( (lightRatio *  attenuation * lightColor) + (ambientLight));
 		
 	ldir = normalize(lightPos2 - input.world_pos);
 	attenuation = 1.0 - saturate( abs(ldir)/ gAttenuation);
 	spotLightAmount = saturate( dot(normalize(-gLightDir2), ldir));
 	lightRatio = 0;
-	if(spotLightAmount > gInnerCone)
+	if(spotLightAmount > gInnerCone2)
 		lightRatio = 1;
-	else if(spotLightAmount > gOuterCone)
-		lightRatio = 1.0 - saturate((gInnerCone - spotLightAmount)/ (gInnerCone - gOuterCone));	
+	else if(spotLightAmount > gOuterCone2)
+		lightRatio = 1.0 - saturate((gInnerCone2 - spotLightAmount)/ (gInnerCone2 - gOuterCone2));	
 		
-	final += saturate( (lightRatio *  attenuation ));
+	final += saturate( (lightRatio *  attenuation * lightColor ));
 	final = saturate(final) * surfacecolor;
 		
 	return float4(final,1);

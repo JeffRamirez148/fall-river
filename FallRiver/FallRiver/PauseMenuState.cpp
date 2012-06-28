@@ -35,10 +35,13 @@ void PauseMenuState::Enter()
 	m_pVM = ViewManager::GetInstance();
 
 	m_nPauseID = m_pVM->RegisterTexture("resource/graphics/sprites_pauseMenu.png");
+	m_pVM->SetAmbientLight(0,0,.1f);
 }
 
 void PauseMenuState::Exit()
 {
+	m_pVM->SetAmbientLight(1,1,1);
+
 	m_pDI = nullptr;
 	m_pVM = nullptr;
 	m_nCursPosY = 150;
