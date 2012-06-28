@@ -61,6 +61,13 @@ void HUD::Render()
 
 	pVM->DrawFont(m_nFontID,szName,0,80);
 
+	_stprintf_s( buffer, 100, _T("Battery - %i"),  GamePlayState::GetInstance()->GetPlayer()->battery);
+
+	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	pVM->DrawFont(m_nFontID,szName,0,100);
+
+
 	/*RECT test;
 	test.top = 16;
 	test.right = 270;
