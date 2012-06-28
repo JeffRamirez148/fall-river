@@ -9,29 +9,44 @@
 #include "IMenuState.h"
 
 using namespace std;
-WinMenuState* GetInstance()
+
+WinMenuState* LoseMenuState::GetInstance()
 {
 	static WinMenuState s_Instance;
 
 	return &s_Instance;
 }
-void Enter()
+void LoseMenuState::Enter()
 {
+	pVM	= ViewManager::GetInstance();
+	pDI	= DirectInput::GetInstance();
+	pAM	= AudioManager::GetInstance();
+
+	youLose_ID = pVM->RegisterTexture("resource/graphics/youLose.png");
 
 }
-void Exit()
+void LoseMenuState::Exit()
 {
-
+	pVM	= nullptr;
+	pDI	= nullptr;
+	pAM	= nullptr;
 }
-bool Input()
+bool LoseMenuState::Input()
 {
+	if( pDI->KeyPressed(DIK_DOWNARROW) )
+	{
+	}
+	if(pDI->KeyPressed(DIK_RETURN))
+	{
+
+	}
 	return true;
 }
-void Update(float aFElapsedTime)
+void LoseMenuState::Update(float aFElapsedTime)
 {
 
 }
-void Render()
+void LoseMenuState::Render()
 {
 
 }

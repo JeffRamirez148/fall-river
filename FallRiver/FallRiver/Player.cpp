@@ -259,6 +259,7 @@ void Player::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	//Drawing Player Placeholder Sprite
+	pVM->DrawAnimation(&m_playerAnim, GetPosX() - (GamePlayState::GetInstance()->GetCamera().x + GetWidth()/2)  , (GetPosY() - GamePlayState::GetInstance()->GetCamera().y + GetHeight())) ;
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};

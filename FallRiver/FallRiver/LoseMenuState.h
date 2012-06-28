@@ -12,10 +12,10 @@ class LoseMenuState :
 {
 
 private:
-	ViewManager* view;
-	DirectInput* input;
-	AudioManager* audio;
-	int y;
+	ViewManager*	pVM;
+	DirectInput*	pDI;
+	AudioManager*	pAM;
+	int youLose_ID;
 	float fTime;
 public:
 	void Enter();
