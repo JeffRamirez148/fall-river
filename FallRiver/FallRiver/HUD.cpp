@@ -54,7 +54,7 @@ void HUD::Render()
 	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 
 	pVM->DrawFont(m_nFontID,szName,0,60);
-
+	
 	_stprintf_s( buffer, 100, _T("Weapon - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() );
 
 	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
@@ -86,7 +86,7 @@ void HUD::Render()
 
 
 
-}*/
+*/
 }
 
 void HUD::Input() 
