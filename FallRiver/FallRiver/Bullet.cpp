@@ -54,11 +54,13 @@ bool Bullet::CheckCollision(IObjects* pBase)
 		return false;
 	else if(pBase->GetObjectType() == OBJ_CHARACTER && GetOwner()->GetOwner() != pBase)
 	{
+		Player* tmp = (Player*)pBase;
+
 		DestroyBullet* pMsg = new DestroyBullet(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
-
 		EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+
 	}
 	return true;
 }

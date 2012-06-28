@@ -20,11 +20,7 @@ HUD::~HUD()
 void HUD::Update(float aTime)
 {
 
-	this->m_fHealth = GamePlayState::GetInstance()->GetPlayer()->GetHealth();
-	this->m_nAmmo = GamePlayState::GetInstance()->GetPlayer()->GetAmmo();
-	this->m_nClip = GamePlayState::GetInstance()->GetPlayer()->GetClip();
-	this->m_nWeapon = GamePlayState::GetInstance()->GetPlayer()->GetWeaponType();
-	this->m_nLives = GamePlayState::GetInstance()->GetPlayer()->GetLives();
+
 	//this->
 }
 
@@ -41,20 +37,32 @@ void HUD::Render()
 	_stprintf_s( buffer, 100, _T("Health - %i"), GamePlayState::GetInstance()->GetPlayer()->GetHealth() );
 
 	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-	//pVM->DrawTextW("hello",GamePlayState::GetInstance()->GetCamera().x,GamePlayState::GetInstance()->GetCamera().y,255,255,255);
-
-	//m_pVM->DrawText(szName,0,0,255,255,255);
+	
 	pVM->DrawFont(m_nFontID,szName,0,0);
 
-	//char szName1[100] = {};
-	//
-	//TCHAR buffer1[ 100 ];
-	//int playerScore = 15;
-	_stprintf_s( buffer, 100, _T("Lives - %i"), m_nLives );
+	_stprintf_s( buffer, 100, _T("Lives - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetLives() );
 
 	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 
 	pVM->DrawFont(m_nFontID,szName,0,20);
+
+	_stprintf_s( buffer, 100, _T("Clip - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetClip() );
+
+	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	pVM->DrawFont(m_nFontID,szName,0,40);
+
+	_stprintf_s( buffer, 100, _T("Ammo - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetAmmo() );
+
+	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	pVM->DrawFont(m_nFontID,szName,0,60);
+
+	_stprintf_s( buffer, 100, _T("Weapon - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() );
+
+	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	pVM->DrawFont(m_nFontID,szName,0,80);
 
 }
 

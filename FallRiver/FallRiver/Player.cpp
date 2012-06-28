@@ -88,6 +88,16 @@ void Player::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 
+	if( this->GetHealth() < 0 )
+	{
+		m_nLives--;
+		SetHealth(100);
+	}
+	if( this->GetLives() < 0 )
+	{
+
+	}
+
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
 
@@ -289,18 +299,18 @@ void Player::Render()
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
 
-	char szName[100] = {};
-	
-	TCHAR buffer[ 100 ];
-	//int playerScore = 15;
-	_stprintf_s( buffer, 100, _T("Health - %i"), GetHealth() );
+	//char szName[100] = {};
+	//
+	//TCHAR buffer[ 100 ];
+	////int playerScore = 15;
+	//_stprintf_s( buffer, 100, _T("Health - %i"), GetHealth() );
 
-	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-	pVM->GetSprite()->Flush();
-	pVM->DrawTextW("hello",0,0,0,255,255);
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+	//pVM->GetSprite()->Flush();
+	//pVM->DrawTextW("hello",0,0,0,255,255);
 
-	//m_pVM->DrawText(szName,0,0,255,255,255);
-	pVM->DrawFont(m_nFontID,szName,0,50);
+	////m_pVM->DrawText(szName,0,0,255,255,255);
+	//pVM->DrawFont(m_nFontID,szName,0,50);
 
 
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
@@ -332,12 +342,17 @@ bool Player::CheckCollision(IObjects* pBase)
 			{
 				if(pBase->GetObjectType() == OBJ_BULLET)
 				{
+					//if(pBU->GetOwner()->GetOwner() == this)
+					//return false;
 					Bullet* pBU = (Bullet*)pBase;
+					//EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
 					if(pBU->GetOwner()->GetOwner() == this)
 						return false;
-					DestroyBullet* pMsg = new DestroyBullet(pBU);
-					MessageSystem::GetInstance()->SendMsg(pMsg);
-					pMsg = nullptr;
+					else
+						return true;
+					//DestroyBullet* pMsg = new DestroyBullet(pBU);
+					//MessageSystem::GetInstance()->SendMsg(pMsg);
+					//pMsg = nullptr;
 				}
 
 				if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
@@ -348,9 +363,8 @@ bool Player::CheckCollision(IObjects* pBase)
 					SetPosY(float(pBase->GetRect().top-GetHeight()-2));
 				else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 					SetPosY(float(pBase->GetRect().bottom));
-
-
 			}
+
 		}
 		else
 		{
