@@ -68,6 +68,8 @@ Player::Player()
 	lightOn = false;
 	battery = 100;
 	batteryTime = 0;
+	flashLightType = 0;
+	decreaseTime = 0;
 }
 
 Player::~Player()
@@ -127,10 +129,76 @@ void Player::Update(float fElapsedTime)
 
 	}	
 
+	// Flashlight
+	if( pDI->KeyPressed(DIK_E))
+	{
+		++flashLightType;
+		if(flashLightType > 3)
+			flashLightType = 3;
+	}
+	if( pDI->KeyPressed(DIK_Q))
+	{
+		--flashLightType;
+		if(flashLightType < 0)
+			flashLightType = 0;
+	}
+
 	if( pDI->KeyPressed(DIK_F))
 	{
 		lightOn = !lightOn;
 	}
+
+	if(lightOn)
+	{
+		ViewManager::GetInstance()->SetLightPos(0,0,0);
+		batteryTime += fElapsedTime;
+		if(batteryTime > decreaseTime)
+		{
+			--battery;
+			batteryTime = 0;
+		}
+		switch(flashLightType)
+		{
+		case 0:		// Flashlight
+			{
+				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1);
+				ViewManager::GetInstance()->SetInnerCone(.95f);
+				ViewManager::GetInstance()->SetOuterCone(.9f);
+				decreaseTime = 1.2f;
+			}
+			break;
+		case 1:		// Mag Light
+			{
+				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1);
+				ViewManager::GetInstance()->SetInnerCone(.75f);
+				ViewManager::GetInstance()->SetOuterCone(.7f);
+				decreaseTime = .6f;			
+			}
+			break;
+		case 2:		// Lantern
+			{
+				ViewManager::GetInstance()->SetLightPos(0, 0, -1);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1.25);
+				ViewManager::GetInstance()->SetInnerCone(.95f);
+				ViewManager::GetInstance()->SetOuterCone(.9f);
+				decreaseTime = .8f;			
+			}
+			break;
+		case 3:		// Lighter
+			{
+				ViewManager::GetInstance()->SetLightPos(0, 0, -1);	
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+				ViewManager::GetInstance()->SetInnerCone(.95f);
+				ViewManager::GetInstance()->SetOuterCone(.9f);
+				decreaseTime = 1.4f;						
+			}
+			break;
+		}
+	}
+	else
+		ViewManager::GetInstance()->SetLightPos(0,0,-1);
 
 	if( pDI->KeyDown(DIK_RIGHT))
 	{
@@ -327,18 +395,7 @@ void Player::Update(float fElapsedTime)
 		lightOn = false;
 	}
 
-	if(lightOn)
-	{
-		ViewManager::GetInstance()->SetLightPos(0,0,0);
-		batteryTime += fElapsedTime;
-		if(batteryTime > .2f)
-		{
-			--battery;
-			batteryTime = 0;
-		}
-	}
-	else
-		ViewManager::GetInstance()->SetLightPos(0,0,-1);
+
 
 
 
