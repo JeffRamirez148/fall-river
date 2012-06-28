@@ -15,14 +15,16 @@ private:
 	ViewManager*	pVM;
 	DirectInput*	pDI;
 	AudioManager*	pAM;
-	int youLose_ID;
-	float fTime;
+	int				LMS_ID;
+	int				tempLoseID;
+	int				curPos;
+	float			fTime;
 public:
 	void Enter();
 	void Exit();
 	bool Input();
 	void Update(float aFElapsedTime);
 	void Render();
-	static WinMenuState* GetInstance();
+	static LoseMenuState* GetInstance();
 };
 

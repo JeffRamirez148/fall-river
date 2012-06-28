@@ -2,13 +2,14 @@
 <Quest_Locker>
   <Quest_Layer>
     <Quest_Info Quest_ID="0" Quest_Title="Escape the Forest" Quest_Dialog="Completed when the player reaches the end of the map. (before he fights the boss). Starts as soon as tutorial is done.(in this case as soon as the game starts). Press 'A' to add quest"/>
-    <Quest_Info Quest_ID="1" Quest_Title="Find any survivors" Quest_Dialog="Completed when the player finds the shelter that all the survivors are in
+    <Quest_Info Quest_ID="1" Quest_Title="Quest 1 Done" Quest_Dialog="You have gotten gotten out of the forest. Press Enter to continue"/>
+    <Quest_Info Quest_ID="2" Quest_Title="Find any survivors" Quest_Dialog="Completed when the player finds the shelter that all the survivors are in
 	Starts once player enters the city (after defeating the first boss)"/>
-    <Quest_Info Quest_ID="2" Quest_Title="Kill the zombies" Quest_Dialog="Completed when the player kills all (10) zombies
+    <Quest_Info Quest_ID="3" Quest_Title="Kill the zombies" Quest_Dialog="Completed when the player kills all (10) zombies
 	Starts once the player finds the survivors and talks to one of them"/>
-    <Quest_Info Quest_ID="3" Quest_Title="Find the Hospital" Quest_Dialog="Completed when the player walks into the hospital
+    <Quest_Info Quest_ID="4" Quest_Title="Find the Hospital" Quest_Dialog="Completed when the player walks into the hospital
 	Starts once the player talks to leader of the survivors"/>
-    <Quest_Info Quest_ID="4" Quest_Title="Find the medicine" Quest_Dialog="Completed when the player Kills the second boss and grabs the medicine
+    <Quest_Info Quest_ID="5" Quest_Title="Find the medicine" Quest_Dialog="Completed when the player Kills the second boss and grabs the medicine
 	Starts once the player walks into the hospital"/>
   </Quest_Layer>
   

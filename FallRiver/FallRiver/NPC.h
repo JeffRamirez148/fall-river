@@ -24,6 +24,7 @@ private:
 	ViewManager* pVM;
 	int temp_font_id;
 	int NPCLabel;
+	//bool winLose; // win is alive lose is dead
 public:
 	NPC();
 	~NPC();
@@ -38,11 +39,13 @@ public:
 
 	void ShowDialog();
 
-	void SetLabel(int l)  {NPCLabel = l;}
-	void SetShowQuest(bool q) {showQuest = q;}
+	void SetLabel(int l)		{NPCLabel = l;}
+	void SetShowQuest(bool q)	{showQuest = q;}
+	//void SetWinLose(bool wl)	{winLose = wl;}
 
-	bool GetShowQuest() {return showQuest;}
-	int GetLabel()  {return NPCLabel;}
+	bool GetShowQuest()			{return showQuest;}
+	int GetLabel()				{return NPCLabel;}
+	//bool GetWinLose()			{return winLose;}
 
 };
 
