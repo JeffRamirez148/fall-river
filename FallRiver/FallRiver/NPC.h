@@ -47,6 +47,7 @@ public:
 
 	bool GetShowQuest()			{return showQuest;}
 	int GetLabel()				{return NPCLabel;}
+	void RenderQuests(void);
 	//bool GetWinLose()			{return winLose;}
 
 };

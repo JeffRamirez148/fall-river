@@ -440,12 +440,9 @@ void GamePlayState::Render()
 		m_cBushes[i]->Render();
 	}
 
-	RECT logRect = { 600, 0, 800, 200};
 
-	m_pVM->DrawRect(logRect, 50, 50, 50);
 	m_pVM->GetSprite()->Flush();
-	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
-		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
+
 
 	m_pVM->GetSprite()->Flush();
 
@@ -471,13 +468,6 @@ void GamePlayState::Render()
 	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 
 	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
-
-
-
-
-
-	m_pHUD->Render();
-
 }
 
 void GamePlayState::MessageProc(IMessage* pMsg)

@@ -23,6 +23,8 @@ using namespace std;
 #include "XMLManager.h"
 #include "Frame.h"
 #include "CGame.h"
+#include "Player.h"
+#include "NPC.h"
 
 #ifndef SAFE_RELEASE
 	#define SAFE_RELEASE(p)			if (p) { p->Release(); p = NULL; }
@@ -561,6 +563,28 @@ bool ViewManager::DeviceEnd(void)
 	postEffect->End();
 
 	m_lpDirect3DDevice->EndScene();
+
+	if(ambientLight[0] == .1f)
+	{
+		m_lpDirect3DDevice->BeginScene();
+		m_lpSprite->Begin(D3DXSPRITE_ALPHABLEND);
+
+		GamePlayState::GetInstance()->m_pHUD->Render();
+		Player* tmp = GamePlayState::GetInstance()->GetPlayer();
+		RECT logRect = { 600, 0, 800, 200};
+		DrawRect(logRect, 50, 50, 50);
+		for(unsigned int i = 0; i < tmp->m_vpActiveQuests.size(); i++)
+			DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
+
+		vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
+		for( int i = 0; i < tmpNPCs.size(); ++i)
+		{
+			tmpNPCs[i]->RenderQuests();
+		}
+		m_lpSprite->End();
+		m_lpDirect3DDevice->EndScene();
+	}
+
 	m_lpDirect3DDevice->Present(0,0,0,0);
 	return true;
 }
