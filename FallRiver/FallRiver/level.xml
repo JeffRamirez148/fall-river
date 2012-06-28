@@ -9286,4 +9286,8 @@
     <Type>Spawn Point</Type>
     <ScrRect x="448" y="896" height="32" width="32" />
   </Collision>
+  <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="1748" y="2132" height="32" width="32" />
+  </Collision>
 </levels_list>
