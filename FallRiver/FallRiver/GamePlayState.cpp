@@ -152,7 +152,7 @@ void GamePlayState::Enter()
 		}
 	}
 	
-	m_pVM->SetAmbientLight( .1f, .1f, .1f);
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 	m_pOM->AddObject(pPlayer);
 
 	vector<leveldata> tmp = pLevel->GetCollision();
@@ -361,7 +361,7 @@ bool GamePlayState::Input()
 void GamePlayState::Update(float fElapsedTime) 
 {
 	//m_clevel.Update(fElapsedTime);
-	m_pVM->SetAmbientLight( .1f, .1f, .1f);
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
 
 	m_pOM->UpdateAllObjects(fElapsedTime);
@@ -468,6 +468,7 @@ void GamePlayState::Render()
 	m_pVM->GetSprite()->Flush();
 	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
+
 
 	m_pVM->GetSprite()->Flush();
 

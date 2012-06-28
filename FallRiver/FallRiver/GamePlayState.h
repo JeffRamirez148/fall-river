@@ -33,7 +33,6 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	HUD*				m_pHUD;
 	Level*				m_clevel;
 	ViewManager*		m_pVM;
 	DirectInput*		m_pDI;
@@ -73,7 +72,7 @@ private:
 	GamePlayState& operator=(const GamePlayState&);
 
 public:
-
+	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
 
@@ -95,6 +94,7 @@ public:
 	static GamePlayState* GetInstance();
 
 	static void MessageProc(IMessage* pMsg);
+	vector<NPC*>* GetNPCs(void) { return &m_cNpcs; }
 };
 
 #endif
