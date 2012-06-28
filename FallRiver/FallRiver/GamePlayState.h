@@ -64,7 +64,7 @@ private:
 
 	// Win/Lose/Quest Flags
 	bool winLose;
-	bool questFlag;
+	
 	// Private Constructors
 	GamePlayState();
 	~GamePlayState()	{ }
@@ -72,6 +72,7 @@ private:
 	GamePlayState& operator=(const GamePlayState&);
 
 public:
+	bool questFlag;
 	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}

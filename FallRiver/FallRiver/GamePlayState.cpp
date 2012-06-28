@@ -461,16 +461,7 @@ void GamePlayState::Render()
 	{
 		m_cBushes[i]->Render();
 	}
-
-	RECT logRect = { 600, 0, 800, 200};
-
-	m_pVM->DrawRect(logRect, 50, 50, 50);
-	m_pVM->GetSprite()->Flush();
-	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
-		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
-
-
-	m_pVM->GetSprite()->Flush();
+	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 
 	//char szName[100] = {};
@@ -494,19 +485,8 @@ void GamePlayState::Render()
 	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 
 	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
-	m_pHUD->Render();
 
-	RECT questBox;
-	questBox.left = 0;
-	questBox.top = CGame::GetInstance()->GetScreenHeight() - 100;
-	questBox.right = CGame::GetInstance()->GetScreenWidth();
-	questBox.bottom = CGame::GetInstance()->GetScreenHeight();
 
-	if(questFlag)
-	{
-		m_pVM->DrawRect(questBox,255,255,255);
-		m_pVM->DrawFont(GetPlayer()->m_nFontID,"You killed enough zombies...for now \n Press enter to continue.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
-	}
 
 
 
