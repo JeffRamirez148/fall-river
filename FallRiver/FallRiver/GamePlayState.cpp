@@ -29,6 +29,7 @@
 #include "DestroyNPC.h"
 #include "DestroyPickUp.h"
 #include "Bush.h"
+#include "SpawnPoint.h"
 #include "LoseMenuState.h"
 
 
@@ -83,12 +84,14 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
+	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
 
 
 	Player* pPlayer = nullptr;
 	Weapon* pWeapon = nullptr;
 	Level* pLevel = nullptr;
 	Bush* pBush = nullptr;
+	SpawnPoint* pSpawn = nullptr;
 
 
 	if( pLevel == nullptr )
@@ -155,9 +158,11 @@ void GamePlayState::Enter()
 
 		if( _stricmp(nth->m_cType,"Bush") == 0 )
 		{
-			pBush = (Bush*)m_pOF->CreateObject( _T("Bush") );
-			pBush->SetPosX(nth->x);
-			pBush->SetPosY(nth->y);
+			m_cBushes.push_back(nullptr);
+			m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+			pBush = m_cBushes[m_cBushes.size()-1];
+			pBush->SetPosX((float)nth->x);
+			pBush->SetPosY((float)nth->y);
 			pBush->SetWidth(nth->width);
 			pBush->SetHeight(nth->height);
 			pBush->SetImageID(bush);
@@ -174,14 +179,44 @@ void GamePlayState::Enter()
 			pNpc->SetHeight(32);
 			pNpc->SetWidth(32);
 			pNpc->SetImageID(-1);
-			pNpc->SetPosX(nth->x);
-			pNpc->SetPosY(nth->y);
+			pNpc->SetPosX((float)nth->x);
+			pNpc->SetPosY((float)nth->y);
 			pNpc->SetQuest(m_cNpcs.size());
 			pNpc->SetLabel(m_cNpcs.size()-1);
 			m_pOM->AddObject(pNpc);
 			pNpc = nullptr;
 			tmp.erase(nth);
 			i--;
+		}
+		else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
+		{
+			m_cSpawn.push_back(nullptr);
+			m_cSpawn[m_cSpawn.size()-1] = (SpawnPoint*)m_pOF->CreateObject( _T("SpawnPoint") );
+			pSpawn = m_cSpawn[m_cSpawn.size()-1];
+			pSpawn->SetPosX( (float)nth->x );
+			pSpawn->SetPosY( (float)nth->y );
+			pSpawn->SetHeight( nth->height );
+			pSpawn->SetWidth( nth->width );
+			pSpawn->SetImageID( -1 );
+			//m_pOM->AddObject(pSpawn);
+			pSpawn = nullptr;
+			tmp.erase(nth);
+			i--;
+			for( int i = 0; i < 1; i++)
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+				ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+				pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(GetPlayer());
+				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+				pEnemy->SetHealth(100);
+				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+			}
 		}
 	}
 	pLevel->SetCollision(tmp);
@@ -330,6 +365,52 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pAM->SetListenerPos(tmp);
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
+
+	bool check = false;
+	for( unsigned int i = 0; i < m_cBushes.size(); i++)
+	{
+		m_cBushes[i]->Update(fElapsedTime);
+		if( m_cBushes[i]->CheckCollision(GetPlayer() ) == true )
+		{
+			m_cBushes[i]->SetIsInBush( true );
+			check = true;
+		}
+		else
+		{
+			m_cBushes[i]->SetIsInBush( false );
+		}
+	}
+
+	if( check == true )
+	{
+		GetPlayer()->m_bIsHidden = true; 
+	}
+	else
+	{
+		GetPlayer()->m_bIsHidden = false; 
+	}
+
+
+	for( unsigned int i = 0; i < m_cSpawn.size(); i++)
+	{
+		m_cSpawn[i]->Update(fElapsedTime);
+		if(m_cSpawn[i]->CanSpawn() == true)
+		{
+			m_cEnemies.push_back(nullptr);
+			m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+			ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+			pEnemy->SetHeight(m_cSpawn[i]->GetHeight());
+			pEnemy->SetWidth(m_cSpawn[i]->GetWidth());
+			pEnemy->SetImageID(-1);
+			pEnemy->SetTarget(GetPlayer());
+			pEnemy->SetPosX(m_cSpawn[i]->GetPosX()+(rand()%20-10));
+			pEnemy->SetPosY(m_cSpawn[i]->GetPosY()+(rand()%20-10));
+			pEnemy->SetHealth(100);
+			GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+			m_cSpawn[i]->SetSpawn( false );
+		}
+	}
+
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
 	{
 		winLose = false;
@@ -343,12 +424,17 @@ void GamePlayState::Render()
 
 	m_pOM->RenderAllObjects();
 
+	for( unsigned int i = 0; i < m_cBushes.size(); i++)
+	{
+		m_cBushes[i]->Render();
+	}
+
 	RECT logRect = { 600, 0, 800, 200};
 
 	m_pVM->DrawRect(logRect, 50, 50, 50);
-
+	m_pVM->GetSprite()->Flush();
 	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
-		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
+		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
 
 
 }
@@ -516,12 +602,30 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 	case MSG_DESTROY_ENEMYC:
 		{
 			ChasingAI* enemyc = dynamic_cast<DestroyEnemyC*>(pMsg)->GetEnemyC();
+			for( unsigned int i = 0; i < self->m_cEnemies.size(); i++ )
+			{
+				if( enemyc == self->m_cEnemies[i] )
+				{
+					vector<Enemy*>::iterator nth = self->m_cEnemies.begin() + i;
+					self->m_cEnemies.erase(nth);
+					break;
+				}
+			}
 			self->m_pOM->RemoveObject( enemyc );
 			break;
 		}
 	case MSG_DESTROY_ENEMYS:
 		{
 			ShootingAi* enemys = dynamic_cast<DestroyEnemyS*>(pMsg)->GetEnemyS();
+			for( unsigned int i = 0; i < self->m_cEnemies.size(); i++ )
+			{
+				if( enemys == self->m_cEnemies[i] )
+				{
+					vector<Enemy*>::iterator nth = self->m_cEnemies.begin() + i;
+					self->m_cEnemies.erase(nth);
+					break;
+				}
+			}
 			self->m_pOM->RemoveObject( enemys );
 			break;
 		}
