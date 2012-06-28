@@ -5,10 +5,12 @@ using namespace std;
 #ifndef __Player_h__
 #define __Player_h__
 
+
 #include "BaseCharacter.h"
 #include "AnimInfo.h"
 #include "IListener.h"
 #include "Quests.h"
+//#include "Weapon.h"
 
 class Quests;
 
@@ -67,6 +69,10 @@ public:
 	bool IsTalking() {return m_bTalking;}
 
 	int GetScore() { return m_nScore;}
+	int GetAmmo();
+	int GetWeaponType();
+	int GetClip();
+
 	int GetLives() { return m_nLives;}
 	vector<Weapon*> GetWeapons() {return m_vpWeapons;}
 	vector<Light*> GetLights() {return m_vpLights;}

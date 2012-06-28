@@ -23,6 +23,7 @@ Player::Player()
 	m_bIsHidden = false;
 	m_nScore = 0;
 	m_nState = PSTATE_IDLE;
+	this->SetHealth(100);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -65,6 +66,19 @@ Player::Player()
 Player::~Player()
 {
 
+}
+
+int Player::GetAmmo()
+{
+	return this->m_currWeapon->GetAmmo();
+}
+int Player::GetClip()
+{
+	return this->m_currWeapon->GetClip();
+}
+int Player::GetWeaponType()
+{
+	return this->m_currWeapon->GetWeaponType();
 }
 
 void Player::Update(float fElapsedTime) 
@@ -273,6 +287,21 @@ void Player::Render()
 	//Drawing Player Placeholder Sprite
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight());
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
+
+
+	char szName[100] = {};
+	
+	TCHAR buffer[ 100 ];
+	//int playerScore = 15;
+	_stprintf_s( buffer, 100, _T("Health - %i"), GetHealth() );
+
+	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+	pVM->GetSprite()->Flush();
+	pVM->DrawTextW("hello",0,0,0,255,255);
+
+	//m_pVM->DrawText(szName,0,0,255,255,255);
+	pVM->DrawFont(m_nFontID,szName,0,50);
+
 
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
 
