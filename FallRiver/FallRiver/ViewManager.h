@@ -66,6 +66,9 @@ private:
 	D3DXMATRIX					cam;
 	D3DXMATRIX					proj;
 	D3DXMATRIX					wall;
+	float						ambientLight[3];
+	float						lightDir[3];
+	float						lightPos[3];
 	struct VERTUV
 	{
 		D3DXVECTOR3 pos;
@@ -129,6 +132,28 @@ public:
 	void RemoveLight(int id);
 	void RemoveLights(void);
 	Light* GetLight(int id);
+
+	
+	void SetAmbientLight(float r, float g, float b)
+	{
+		ambientLight[0] = r;
+		ambientLight[1] = g;
+		ambientLight[2] = b;
+	}
+
+	void SetLightDir(float x, float y, float z)
+	{
+		lightDir[0] = x;
+		lightDir[1] = y;
+		lightDir[2] = z;
+	}
+
+	void SetLightPos(float x, float y, float z)
+	{
+		lightPos[0] = x;
+		lightPos[1] = y;
+		lightPos[2] = z;
+	}
 
 };
 

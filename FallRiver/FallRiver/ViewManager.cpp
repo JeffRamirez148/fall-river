@@ -477,6 +477,17 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	
 	D3DXMatrixIdentity(&wall);
 	D3DXMatrixTranslation(&wall, 0, 0, 0);
+
+	ambientLight[0] = 1.0f;
+	ambientLight[1] = 1.0f;
+	ambientLight[2] = 1.0f;
+	lightDir[0] = 0.0f;
+	lightDir[1] = 1.0f;
+	lightDir[2] = 0.0f;
+	lightPos[0] = 0.0f;
+	lightPos[1] = 0.0f;
+	lightPos[2] = 1.0f;
+
 	//	Return success.
 	return true;
 }
@@ -528,34 +539,15 @@ bool ViewManager::DeviceEnd(void)
 	D3DXMatrixInverse(&tmp, 0, &wall);
 	postEffect->Begin(&passes, 0);
 
-	int difference = 2 - lights.size();
-
 	for(unsigned i(0); i<passes; ++i)
 	{
 		postEffect->BeginPass(i);
 		postEffect->SetTexture("gDiffuseTexture", renderTarget);
 		postEffect->SetMatrix("gWorldInv", &tmp);
-
-		for(unsigned int j = 0; j < lights.size(); ++j)
-		{
-			//postEffect->SetVectorArray( "gLightDir", , 2)
-			postEffect->SetFloatArray("gLightDir", lights[j]->lightDir,3);
-			postEffect->SetFloatArray("gLightPos", lights[j]->lightPos,3);
-			postEffect->SetFloat("gInnerCone", lights[j]->innerCone);
-			postEffect->SetFloat("gOuterCone", lights[j]->outerCone);
-			postEffect->SetFloatArray("gColor", lights[j]->color, 3);
-		}
-
-		for(int j = 0; j < difference; ++j)
-		{
-			Light light;
-			postEffect->SetFloatArray("gLightDir", light.lightDir,3);
-			postEffect->SetFloatArray("gLightPos", light.lightPos,3);
-			postEffect->SetFloat("gInnerCone", light.innerCone);
-			postEffect->SetFloat("gOuterCone", light.outerCone);
-			postEffect->SetFloatArray("gColor", light.color, 3);
-		}
-
+		postEffect->SetFloatArray("gLightDir2", lightDir,3);
+		postEffect->SetFloatArray("ambientLight", ambientLight, 3);
+		postEffect->SetFloatArray("gLightPos2", lightPos,3);
+		postEffect->SetInt("gSetting", 0);
 
 		postEffect->CommitChanges();
 		m_lpDirect3DDevice->SetVertexDeclaration(cubedecl);
