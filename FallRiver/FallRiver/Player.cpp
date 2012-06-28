@@ -79,8 +79,9 @@ void Player::Update(float fElapsedTime)
 
 	if(pDI->KeyDown(DIK_SPACE) && 	m_dwGunCount  < GetTickCount() )
 	{
- 		if(m_dwGunCount == 0)
+		if(m_dwGunCount == 0)
 		{
+			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
 			m_dwGunReset = GetTickCount() + 500;
@@ -89,8 +90,10 @@ void Player::Update(float fElapsedTime)
 		{
 			m_nState = PSTATE_SHOOT;
 			m_currWeapon->FireWeapon();
+			m_dwGunCount = GetTickCount() + m_currWeapon->GetFireRate();
 			m_dwGunReset = GetTickCount() + 500;
 		}
+
 	}	
 
 	if( pDI->KeyDown(DIK_RIGHT))
@@ -268,7 +271,7 @@ void Player::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	//Drawing Player Placeholder Sprite
-	pVM->DrawAnimation(&m_playerAnim, GetPosX() - (GamePlayState::GetInstance()->GetCamera().x + GetWidth()/2)  , (GetPosY() - GamePlayState::GetInstance()->GetCamera().y + GetHeight())) ;
+	pVM->DrawAnimation(&m_playerAnim, int( (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2 ) , int( (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() ));
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
