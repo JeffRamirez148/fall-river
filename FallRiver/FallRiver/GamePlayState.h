@@ -23,6 +23,8 @@ class Player;
 class HUD;
 class NPC;
 class IMessage;
+class SpawnPoint;
+
 
 typedef CObjectFactory< std::wstring, BaseObject> Factory;
 
@@ -51,6 +53,7 @@ private:
 	// Characters In the world
 	Player*			m_cPlayer;
 	vector<Enemy*>	m_cEnemies;
+	//vector<SpawnPoint*> m_cSpawn;
 	vector<NPC*>	m_cNpcs;
 	Weapon*			m_cWeapon;
 

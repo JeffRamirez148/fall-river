@@ -34,14 +34,16 @@ private:
 
 	int m_nScore;
 	int m_nState;
+public:
 	int	m_nFontID;
+	vector<Quest_Struct*> m_vpActiveQuests;
+private:
 	char* m_cName;
 	bool m_bIsAlive;
 	bool m_bIsHidden;
 	bool m_bTalking;
 	int m_nLives;
 	int walkingID;
-	
 	int hitID;
 
 	AnimInfo m_playerAnim;
@@ -50,7 +52,6 @@ public:
 	Player();
 	~Player();
 
-	vector<Quest_Struct*> m_vpActiveQuests;
 
 	void Update(float fElapsedTime);
 	void Render();

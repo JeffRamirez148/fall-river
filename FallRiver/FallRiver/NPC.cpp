@@ -77,11 +77,12 @@ void NPC::Render()
 	// Render this NPC
  //ViewManager* pVM = ViewManager::GetInstance();
 
- RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	pVM->GetSprite()->Flush();
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
- pVM->DrawRect(reRect, 0, 255, 0);
-	
-	 
+	pVM->DrawRect(reRect, 0, 255, 0);
+
+
 
 	//pVM->DrawRect(GetRect(), 0, 255, 0);
 

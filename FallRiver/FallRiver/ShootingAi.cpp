@@ -80,7 +80,7 @@ void ShootingAi::Update(float fElapsedTime)
 	if( distanceY < 0)
 		distanceY = -distanceY;
 
-	if( (distanceX + distanceY >= 300) )
+	if( (distanceX + distanceY >= 300) || m_pTarget->CheckHidden() )
 	{
 		m_nState = ESTATE_IDLE;
 		notified = true;

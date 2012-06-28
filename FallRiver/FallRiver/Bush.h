@@ -6,6 +6,8 @@
 
 class Bush: public BaseObject
 {
+private:
+	bool m_bIsInBush;
 public:
 	Bush();
 	virtual ~Bush();
@@ -16,7 +18,9 @@ public:
 
 	RECT GetRect();
 
-	bool CheckCollision(BaseObject* pBase);
+	virtual bool CheckCollision(IObjects* pBase);
+	void SetIsInBush( bool x ) { m_bIsInBush = x; }
+	bool GetIsInBush( ) { return m_bIsInBush ;}
 };
 
 #endif
