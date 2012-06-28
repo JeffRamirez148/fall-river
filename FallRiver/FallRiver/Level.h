@@ -48,6 +48,7 @@ private:
 	float m_nPosX;
 	float m_nPosY;
 	TCHAR buffer[100];
+	bool m_bNoClip;
 
 public: 
 	Level();
