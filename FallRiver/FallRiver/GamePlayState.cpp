@@ -31,6 +31,7 @@
 #include "Bush.h"
 #include "SpawnPoint.h"
 #include "LoseMenuState.h"
+#include "WinMenuState.h"
 
 
 GamePlayState::GamePlayState()
@@ -50,7 +51,7 @@ GamePlayState::GamePlayState()
 	swingHitID = -1;
 
 	winLose = true;
-
+	questFlag = false;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -417,6 +418,27 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
 
+	// Quest 2 completion
+	if(GetPlayer()->questCounter == 1)
+	{
+		questFlag = true;
+		if(m_pDI->KeyPressed(DIK_RETURN))
+		{
+			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
+			{
+				GetPlayer()->completedQuest++;
+				GetPlayer()->m_vpActiveQuests.pop_back();
+			}
+			questFlag = false;
+		}
+	}
+	// Total quest completion to win the game
+	if(GetPlayer()->completedQuest == 2)
+	{
+		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
+	}
+
+	// Auto Lose
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
 	{
 		winLose = false;
@@ -466,12 +488,23 @@ void GamePlayState::Render()
 	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 
 	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
-
-
-
-
-
 	m_pHUD->Render();
+
+	RECT questBox;
+	questBox.left = 0;
+	questBox.top = CGame::GetInstance()->GetScreenHeight() - 100;
+	questBox.right = CGame::GetInstance()->GetScreenWidth();
+	questBox.bottom = CGame::GetInstance()->GetScreenHeight();
+
+	if(questFlag)
+	{
+		m_pVM->DrawRect(questBox,255,255,255);
+		m_pVM->DrawFont(GetPlayer()->m_nFontID,"You killed enough zombies...for now \n Press enter to continue.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
+	}
+
+
+
+	
 
 }
 
@@ -647,6 +680,12 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					break;
 				}
 			}
+			for(unsigned int i = 0; i < self->GetPlayer()->m_vpActiveQuests.size();i++)
+			{
+				if(self->GetPlayer()->m_vpActiveQuests[i]->QuestID == 2)
+					self->GetPlayer()->questCounter++;
+			}		
+
 			self->m_pOM->RemoveObject( enemyc );
 			break;
 		}

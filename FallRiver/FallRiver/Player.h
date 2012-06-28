@@ -36,6 +36,8 @@ private:
 	int m_nState;
 public:
 	int	m_nFontID;
+	int questCounter;
+	int completedQuest;
 	vector<Quest_Struct*> m_vpActiveQuests;
 private:
 	char* m_cName;

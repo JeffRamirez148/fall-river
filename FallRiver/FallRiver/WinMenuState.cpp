@@ -52,7 +52,10 @@ bool WinMenuState::Input()
 	if(pDI->KeyPressed(DIK_RETURN))
 	{
 		if( curPos == 250 )
+		{
+			CGame::GetInstance()->RemoveState();
 			CGame::GetInstance()->ChangeState(HighScoresMenuState::GetInstance());
+		}
 		else if( curPos == 300 )
 		{
 			CGame::GetInstance()->RemoveState();
