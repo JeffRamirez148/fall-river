@@ -56,7 +56,7 @@ void SpawnPoint::Update(float fElapsedTime)
 	}
 	*/
 	//ChasingAI* pEnemy;
-	if( m_fSpawnTime > 30 )
+	if( m_fSpawnTime > 10 )
 	{
 		if( m_nSpawnCounter < 5 )
 		{

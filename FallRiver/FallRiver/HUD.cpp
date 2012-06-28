@@ -10,7 +10,7 @@
 HUD::HUD() 
 {
 	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
-
+	m_nHudID = -1;
 }
 
 HUD::~HUD() 
@@ -19,9 +19,6 @@ HUD::~HUD()
 
 void HUD::Update(float aTime)
 {
-
-
-	//this->
 }
 
 void HUD::Render() 
@@ -64,6 +61,32 @@ void HUD::Render()
 
 	pVM->DrawFont(m_nFontID,szName,0,80);
 
+	/*RECT test;
+	test.top = 16;
+	test.right = 270;
+	test.left = 18;
+	test.bottom = 264;
+
+	RECT test1;
+	test1.top = 317;
+	test1.right = 312;
+	test1.left = 18;
+	test1.bottom = 452;
+
+	RECT test2;
+	test2.top = 654;
+	test2.right = 691;
+	test2.left = 410;
+	test2.bottom = 790;
+
+
+	pVM->DrawStaticTexture(m_nHudID,0,0,0.5f,0.5f,&test);
+	pVM->DrawStaticTexture(m_nHudID,200,200,0.5f,0.5f,&test1);
+	pVM->DrawStaticTexture(m_nHudID,400,400,0.5f,0.5f,&test2);
+
+
+
+}*/
 }
 
 void HUD::Input() 
