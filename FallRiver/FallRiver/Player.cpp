@@ -66,6 +66,7 @@ Player::Player()
 	tmpLight.lightDir[2] = 1.0f;
 	ViewManager::GetInstance()->RegisterLight(tmpLight);
 	lightOn = false;
+	battery = 100;
 }
 
 Player::~Player()
@@ -318,11 +319,22 @@ void Player::Update(float fElapsedTime)
 		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = thisAnim.frames.size() -1;
 	}
+		
+	if(battery <=0)
+	{
+		battery = 0;
+		lightOn = false;
+	}
 
 	if(lightOn)
+	{
 		ViewManager::GetInstance()->SetLightPos(0,0,0);
+		--battery;
+	}
 	else
 		ViewManager::GetInstance()->SetLightPos(0,0,-1);
+
+
 
 }
 

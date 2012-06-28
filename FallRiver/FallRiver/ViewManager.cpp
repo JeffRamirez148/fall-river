@@ -577,7 +577,7 @@ bool ViewManager::DeviceEnd(void)
 			DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
 
 		vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
-		for( int i = 0; i < tmpNPCs.size(); ++i)
+		for(unsigned int i = 0; i < tmpNPCs.size(); ++i)
 		{
 			tmpNPCs[i]->RenderQuests();
 		}

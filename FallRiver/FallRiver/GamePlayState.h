@@ -33,7 +33,6 @@ class GamePlayState : public IMenuState
 {
 private: 
 	// Wrapper Memebers
-	HUD*				m_pHUD;
 	Level*				m_clevel;
 	ViewManager*		m_pVM;
 	DirectInput*		m_pDI;

@@ -50,6 +50,7 @@ private:
 	int walkingID;
 	int hitID;
 	bool lightOn;
+	int battery;
 
 	AnimInfo m_playerAnim;
 
