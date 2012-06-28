@@ -15,14 +15,14 @@ class HighScoresMenuState;
 class HighScoresMenuState : public IMenuState
 {
 private: 
-	ViewManager* m_pVM;
-	DirectInput* m_pDI;
-	float fTime;
-	bool end;
-	int scores[10];
-	string player[10];
-	AudioManager* audio;
-	int fontID;
+	ViewManager*	m_pVM;
+	DirectInput*	m_pDI;
+	float			fTime;
+	bool			end;
+	int				scores[10];
+	string			player[10];
+	AudioManager*	audio;
+	int				fontID;
 
 	HighScoresMenuState();
 	~HighScoresMenuState();
