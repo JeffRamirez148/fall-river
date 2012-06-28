@@ -36,6 +36,7 @@ private:
 	int m_nState;
 	int flashLightType; // 0 - Flashlight, 1 - Maglight, 2 - Lantern, 3 - Lighter
 	float decreaseTime;
+	int flickerRate;
 public:
 	int	m_nFontID;
 	int questCounter;

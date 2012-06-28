@@ -17,6 +17,7 @@ float gOuterCone  = 0.9f;
 float gInnerCone2  = 0.95f;
 float gOuterCone2  = 0.9f;
 float gAttenuation = 2.7f;
+float3 lightColor = float3(0.5,0.5,0.5);
 float3 ambientLight;
 // 0 - Default Spotlight, 1 - Flashlight, 2 - Lighter, 3 - Mag light, 4 - Lantern 
 int gSetting;  // Value sent in 
@@ -82,7 +83,7 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 {
 
 	float3 surfacecolor = float3(0,0,0);
-	float3 lightColor = float3(0.5,0.5,0.5);
+
 	float3 final = float3(0,0,0);
 	float3 ldir = float3(0,0,0);
 	float3 lightPos = mul(float4(gLightPos, 1), gWorldInv).xyz;

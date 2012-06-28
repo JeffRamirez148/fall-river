@@ -483,6 +483,9 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	ambientLight[0] = 1.0f;
 	ambientLight[1] = 1.0f;
 	ambientLight[2] = 1.0f;
+	color[0] = .5f;
+	color[1] = .5f;
+	color[2] = .5f;
 	lightDir[0] = 0.0f;
 	lightDir[1] = 1.0f;
 	lightDir[2] = 0.0f;
@@ -556,7 +559,7 @@ bool ViewManager::DeviceEnd(void)
 		postEffect->SetFloatArray("gLightPos", spotLightPos, 3);
 		postEffect->SetFloat("gInnerCone2", innerCone);
 		postEffect->SetFloat("gOuterCone2", outerCone);
-
+		postEffect->SetFloatArray("lightColor", color, 3);
 		postEffect->SetInt("gSetting", 0);
 
 		postEffect->CommitChanges();

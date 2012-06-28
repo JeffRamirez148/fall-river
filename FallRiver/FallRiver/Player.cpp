@@ -41,6 +41,7 @@ Player::Player()
 
 	m_dwGunCount = 0;
 	m_dwGunReset = 0;
+	flickerRate = 9;
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
@@ -163,18 +164,20 @@ void Player::Update(float fElapsedTime)
 		case 0:		// Flashlight
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.75);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
+				ViewManager::GetInstance()->SetColor(.5, .5, .5);
 				decreaseTime = 1.2f;
 			}
 			break;
 		case 1:		// Mag Light
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.75);
 				ViewManager::GetInstance()->SetInnerCone(.75f);
 				ViewManager::GetInstance()->SetOuterCone(.7f);
+				ViewManager::GetInstance()->SetColor(.5, .5, .5);
 				decreaseTime = .6f;			
 			}
 			break;
@@ -184,6 +187,11 @@ void Player::Update(float fElapsedTime)
 				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1.25);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
+				if(rand() % flickerRate == 0)
+					ViewManager::GetInstance()->SetColor(1, 0, 0);
+				else
+					ViewManager::GetInstance()->SetColor(1, .6, 0);
+
 				decreaseTime = .8f;			
 			}
 			break;
@@ -193,6 +201,10 @@ void Player::Update(float fElapsedTime)
 				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
+				if(rand() % flickerRate == 0)
+					ViewManager::GetInstance()->SetColor(1, 0, 0);
+				else
+					ViewManager::GetInstance()->SetColor(1, .6, 0);
 				decreaseTime = 1.4f;						
 			}
 			break;
@@ -282,7 +294,13 @@ void Player::Update(float fElapsedTime)
 		SetVelY(0);
 	}
 	if(GetVelX() == 0 && GetVelY() == 0)
+	{
+		flickerRate = 9;
 		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+	}
+	else
+		flickerRate = 5;
+
 
 	BaseCharacter::Update(fElapsedTime);
 
