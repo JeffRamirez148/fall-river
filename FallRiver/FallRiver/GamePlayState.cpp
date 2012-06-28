@@ -31,6 +31,7 @@
 #include "Bush.h"
 #include "SpawnPoint.h"
 #include "LoseMenuState.h"
+#include "WinMenuState.h"
 
 
 GamePlayState::GamePlayState()
@@ -50,7 +51,7 @@ GamePlayState::GamePlayState()
 	swingHitID = -1;
 
 	winLose = true;
-
+	questFlag = false;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -152,6 +153,7 @@ void GamePlayState::Enter()
 		}
 	}
 	
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 	m_pOM->AddObject(pPlayer);
 
 	vector<leveldata> tmp = pLevel->GetCollision();
@@ -186,6 +188,7 @@ void GamePlayState::Enter()
 			pNpc->SetPosY((float)nth->y);
 			pNpc->SetQuest(m_cNpcs.size());
 			pNpc->SetLabel(m_cNpcs.size()-1);
+			pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
 			m_pOM->AddObject(pNpc);
 			pNpc = nullptr;
 			tmp.erase(nth);
@@ -217,6 +220,7 @@ void GamePlayState::Enter()
 				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
 				pEnemy->SetHealth(100);
+				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
 				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
 			}
@@ -251,6 +255,7 @@ void GamePlayState::Enter()
 		pEnemy->SetPosX(600);
 		pEnemy->SetPosY(490);
 		pEnemy->SetHealth(100);
+		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);
 
 		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
@@ -298,6 +303,8 @@ void GamePlayState::Enter()
 
 void GamePlayState::Exit() 
 {
+	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+
 	if( m_pES != nullptr )
 	{
 		m_pES->ClearEvents();
@@ -358,6 +365,8 @@ bool GamePlayState::Input()
 void GamePlayState::Update(float fElapsedTime) 
 {
 	//m_clevel.Update(fElapsedTime);
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
+
 
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
@@ -411,6 +420,7 @@ void GamePlayState::Update(float fElapsedTime)
 			pEnemy->SetPosX(m_cSpawn[i]->GetPosX()+(rand()%20-10));
 			pEnemy->SetPosY(m_cSpawn[i]->GetPosY()+(rand()%20-10));
 			pEnemy->SetHealth(100);
+			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
 			GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 			m_cSpawn[i]->SetSpawn( false );
 		}
@@ -418,6 +428,27 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
 
+	// Quest 2 completion
+	if(GetPlayer()->questCounter == 1)
+	{
+		questFlag = true;
+		if(m_pDI->KeyPressed(DIK_RETURN))
+		{
+			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
+			{
+				GetPlayer()->completedQuest++;
+				GetPlayer()->m_vpActiveQuests.pop_back();
+			}
+			questFlag = false;
+		}
+	}
+	// Total quest completion to win the game
+	if(GetPlayer()->completedQuest == 2)
+	{
+		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
+	}
+
+	// Auto Lose
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
 	{
 		winLose = false;
@@ -435,15 +466,7 @@ void GamePlayState::Render()
 	{
 		m_cBushes[i]->Render();
 	}
-
-	RECT logRect = { 600, 0, 800, 200};
-
-	m_pVM->DrawRect(logRect, 50, 50, 50);
-	m_pVM->GetSprite()->Flush();
-	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
-		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
-
-	m_pVM->GetSprite()->Flush();
+	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 
 	//char szName[100] = {};
@@ -472,7 +495,7 @@ void GamePlayState::Render()
 
 
 
-	m_pHUD->Render();
+	
 
 }
 
@@ -648,6 +671,12 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					break;
 				}
 			}
+			for(unsigned int i = 0; i < self->GetPlayer()->m_vpActiveQuests.size();i++)
+			{
+				if(self->GetPlayer()->m_vpActiveQuests[i]->QuestID == 2)
+					self->GetPlayer()->questCounter++;
+			}		
+
 			self->m_pOM->RemoveObject( enemyc );
 			break;
 		}

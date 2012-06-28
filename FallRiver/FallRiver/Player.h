@@ -36,6 +36,8 @@ private:
 	int m_nState;
 public:
 	int	m_nFontID;
+	int questCounter;
+	int completedQuest;
 	vector<Quest_Struct*> m_vpActiveQuests;
 private:
 	char* m_cName;
@@ -47,6 +49,9 @@ private:
 	int m_nLives;
 	int walkingID;
 	int hitID;
+	bool lightOn;
+	int battery;
+	float batteryTime;
 
 	AnimInfo m_playerAnim;
 

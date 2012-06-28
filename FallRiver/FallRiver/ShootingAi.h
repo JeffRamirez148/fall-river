@@ -10,6 +10,7 @@ class ShootingAi: public Enemy
 private:
 	Weapon* m_pWeapon;
 	DWORD m_dwFireDelay;
+	DWORD m_dwGunReset;
 
 	BaseObject* m_cInTheWay;
 	int hitID;

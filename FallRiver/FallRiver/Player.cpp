@@ -25,10 +25,12 @@ Player::Player()
 	m_bIsHidden = false;
 	m_nScore = 0;
 	m_nState = PSTATE_IDLE;
-	this->SetHealth(100);
+	this->SetHealth(1000);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
+	questCounter = 0;
+	completedQuest = 0;
 	SetDirection(DIRE_UP);
 
 	//AnimInfo startup
@@ -63,6 +65,9 @@ Player::Player()
 	tmpLight.lightDir[1] = 0.0f;
 	tmpLight.lightDir[2] = 1.0f;
 	ViewManager::GetInstance()->RegisterLight(tmpLight);
+	lightOn = false;
+	battery = 100;
+	batteryTime = 0;
 }
 
 Player::~Player()
@@ -122,31 +127,56 @@ void Player::Update(float fElapsedTime)
 
 	}	
 
+	if( pDI->KeyPressed(DIK_F))
+	{
+		lightOn = !lightOn;
+	}
+
 	if( pDI->KeyDown(DIK_RIGHT))
 	{
 		if( pDI->KeyDown(DIK_UP))
+		{
 			SetDirection(DIRE_UPRIGHT);
+			ViewManager::GetInstance()->SetLightDir(1,1,0);
+		}
 		else if(pDI->KeyDown(DIK_DOWN))
+		{
 			SetDirection(DIRE_DOWNRIGHT);
+			ViewManager::GetInstance()->SetLightDir(1,-1,0);
+		}
 		else
-			SetDirection(DIRE_RIGHT);		
+		{
+			SetDirection(DIRE_RIGHT);	
+			ViewManager::GetInstance()->SetLightDir(1,0,0);		
+		}
 	}
 	else if( pDI->KeyDown(DIK_LEFT))
 	{
 		if( pDI->KeyDown(DIK_UP))
+		{
 			SetDirection(DIRE_UPLEFT);
+			ViewManager::GetInstance()->SetLightDir(-1,1,0);
+		}
 		else if(pDI->KeyDown(DIK_DOWN))
+		{
 			SetDirection(DIRE_DOWNLEFT);
+			ViewManager::GetInstance()->SetLightDir(-1,-1,0);
+		}
 		else
+		{
 			SetDirection(DIRE_LEFT);
+			ViewManager::GetInstance()->SetLightDir(-1,0,0);
+		}
 	}
 	else if( pDI->KeyDown(DIK_UP))
 	{
 		SetDirection(DIRE_UP);
+		ViewManager::GetInstance()->SetLightDir(0,1,0);
 	}
 	else if( pDI->KeyDown(DIK_DOWN))
 	{
 		SetDirection(DIRE_DOWN);
+		ViewManager::GetInstance()->SetLightDir(0,-1,0);
 	}
 
 	if( pDI->KeyDown(DIK_RIGHT) )
@@ -290,6 +320,28 @@ void Player::Update(float fElapsedTime)
 		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = thisAnim.frames.size() -1;
 	}
+		
+	if(battery <=0)
+	{
+		battery = 0;
+		lightOn = false;
+	}
+
+	if(lightOn)
+	{
+		ViewManager::GetInstance()->SetLightPos(0,0,0);
+		batteryTime += fElapsedTime;
+		if(batteryTime > .2f)
+		{
+			--battery;
+			batteryTime = 0;
+		}
+	}
+	else
+		ViewManager::GetInstance()->SetLightPos(0,0,-1);
+
+
+
 }
 
 void Player::Render()
