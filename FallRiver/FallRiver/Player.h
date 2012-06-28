@@ -52,7 +52,6 @@ private:
 	bool lightOn;
 	int battery;
 
-	AnimInfo m_playerAnim;
 
 public: 
 	Player();
@@ -85,7 +84,6 @@ public:
 	void AddWeapon(Weapon* pWeapon);
 	void AddLight(Light* pLight);
 
-	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID;}
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define __BaseCharacter_h__
 
 #include "BaseObject.h"
+#include "AnimInfo.h"
 #include <Windows.h>
 
 enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY, CHA_NPC };
@@ -11,6 +12,7 @@ class BaseCharacter: public BaseObject
 {
 protected: 
 	int				m_nCharacterType;
+	AnimInfo m_playerAnim;
 
 private:
 	int				m_nHealth;
@@ -34,6 +36,8 @@ public:
 	void SetDirection(int dir) {m_nDir = dir;}
 
 	void SetHealth(int health) {m_nHealth = health;}
+
+	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID;}
 };
 
 #endif
