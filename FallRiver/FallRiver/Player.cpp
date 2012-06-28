@@ -15,6 +15,8 @@
 #include "Sound.h"
 #include "ViewManager.h"
 #include "Bush.h"
+#include "LoseMenuState.h"
+#include "CGame.h"
 
 Player::Player()
 {
@@ -95,7 +97,7 @@ void Player::Update(float fElapsedTime)
 	}
 	if( this->GetLives() < 0 )
 	{
-
+		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
 	}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
