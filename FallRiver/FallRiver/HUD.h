@@ -25,6 +25,7 @@ public:
 	float m_fFlashlightLife;
 	int m_nAmmo;
 	int m_nClip;
+	int m_nHudID;
 
 public:
 	HUD();

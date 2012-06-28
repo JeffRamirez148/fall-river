@@ -36,9 +36,6 @@ void Level::Update(float fElapsedTime)
 		m_bNoClip = !m_bNoClip;
 	}
 
-	//float time = fElapsedTime;
-	//LONG test = long(100.0f * fElapsedTime);
-
 }
 
 void Level::Render() 
@@ -51,11 +48,12 @@ void Level::Render()
 	CGame* pGame = CGame::GetInstance();
 
 	RECT cull;
-	cull.left = 0;
-	cull.top = 0;
-	cull.right = pGame->GetScreenWidth();
-	cull.bottom = pGame->GetScreenHeight(); 
+	cull.left = cam.x;
+	cull.top = cam.y;
+	cull.right = cam.x+pGame->GetScreenWidth();
+	cull.bottom = cam.y+pGame->GetScreenHeight(); 
 
+	RECT intersect;
 
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
@@ -65,7 +63,7 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 1)
 			{
@@ -83,7 +81,7 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 2)
 			{
@@ -101,7 +99,7 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 3)
 			{
@@ -119,7 +117,7 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 4)
 			{
@@ -137,7 +135,7 @@ void Level::Render()
 		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
 		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
-		//if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
 			if( m_vTiles[i].m_Layer == 5)
 			{

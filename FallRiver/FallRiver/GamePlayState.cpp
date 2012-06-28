@@ -71,6 +71,8 @@ void GamePlayState::Enter()
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 	m_pHUD = new HUD;
+	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
+	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 
@@ -129,7 +131,6 @@ void GamePlayState::Enter()
 	}
 	else
 	{
-		//m_cPlayer = (Player*)m_pOF->CreateObject( _T("Player"));
 		pPlayer = (m_cPlayer);
 		pPlayer->SetHeight(32);
 		pPlayer->SetWidth(32);
