@@ -169,7 +169,7 @@ void GamePlayState::Enter()
 	}
 	pLevel->SetCollision(tmp);
 
-	for(int i = 0; i < 0; i++)
+	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
@@ -178,7 +178,7 @@ void GamePlayState::Enter()
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(float(50*i+200));
+		pEnemy->SetPosX(float(50+200));
 		pEnemy->SetPosY(200);
 		pEnemy->SetHealth(100);
 		m_pOM->AddObject(pEnemy);
@@ -225,17 +225,11 @@ void GamePlayState::Enter()
 
 	}
 
-	//m_pOM->AddObject(pPlayer);
-
-
-
 	m_pMS->InitMessageSystem( &MessageProc );
 
 	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
-
-
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
 	m_pAM->setMusicPos(backGroundID, sound1);
@@ -327,6 +321,15 @@ void GamePlayState::Render()
 	//m_clevel.Render();
 
 	m_pOM->RenderAllObjects();
+
+	RECT logRect = { 600, 0, 800, 200};
+
+	m_pVM->DrawRect(logRect, 50, 50, 50);
+
+	for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
+		m_pVM->DrawFont(GetPlayer()->m_nFontID, (char*)GetPlayer()->m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
+
+
 }
 
 void GamePlayState::MessageProc(IMessage* pMsg)

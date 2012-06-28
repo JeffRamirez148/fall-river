@@ -267,12 +267,12 @@ void Player::Render()
 	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
 
 	
-	RECT logRect = { 600, 0, 800, 200};
+	//RECT logRect = { 600, 0, 800, 200};
 
-	pVM->DrawRect(logRect, 50, 50, 50);
+	//pVM->DrawRect(logRect, 50, 50, 50);
 
-	for(unsigned int i = 0; i < m_vpActiveQuests.size(); i++)
-		pVM->DrawFont(m_nFontID, (char*)m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
+	//for(unsigned int i = 0; i < m_vpActiveQuests.size(); i++)
+//		pVM->DrawFont(m_nFontID, (char*)m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
 
 	//pVM->DrawRect(reRect, 0, 0, 0);
 

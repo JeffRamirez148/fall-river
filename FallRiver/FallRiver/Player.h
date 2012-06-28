@@ -34,14 +34,16 @@ private:
 
 	int m_nScore;
 	int m_nState;
+public:
 	int	m_nFontID;
+	vector<Quest_Struct*> m_vpActiveQuests;
+private:
 	char* m_cName;
 	bool m_bIsAlive;
 	bool m_bIsHidden;
 	bool m_bTalking;
 	int m_nLives;
 	int walkingID;
-	vector<Quest_Struct*> m_vpActiveQuests;
 	int hitID;
 
 	AnimInfo m_playerAnim;

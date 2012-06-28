@@ -274,7 +274,7 @@ bool ChasingAI::CheckCollision(IObjects* pBase)
 {
 	if(Enemy::CheckCollision(pBase))
 	{
-		if(pBase != m_pTarget)
+		if(pBase != m_pTarget && pBase->GetObjectType() != OBJ_BUSH)
 			m_cInTheWay = (BaseObject*)pBase;
 		return true;
 	}
