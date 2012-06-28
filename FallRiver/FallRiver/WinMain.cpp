@@ -14,7 +14,7 @@
 
 const TCHAR* g_szWINDOW_CLASS_NAME	= _T("SGP");			//	Window Class Name.
 
-const TCHAR* g_szWINDOW_TITLE		= _T("Untitled");		//	Window Title.
+const TCHAR* g_szWINDOW_TITLE		= _T("Fall River - I Play Dat");		//	Window Title.
 const int	g_nWINDOW_WIDTH			= 800;							//	Window Width.
 const int	g_nWINDOW_HEIGHT		= 600;							//	Window Height.
 

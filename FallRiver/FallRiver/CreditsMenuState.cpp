@@ -33,6 +33,9 @@ void CreditsMenuState::Enter()
 
 void CreditsMenuState::Exit() 
 {
+	m_pDI = nullptr;
+	m_pVM = nullptr;
+	fontID = -1;
 }
 
 bool CreditsMenuState::Input() 
@@ -58,6 +61,9 @@ bool CreditsMenuState::Input()
 
 void CreditsMenuState::Update(float fElapsedTime) 
 {
+	fTime += fElapsedTime * 20;
+	if( fTime > 800)
+		fTime = 0;
 }
 
 void CreditsMenuState::Render() 
@@ -65,7 +71,8 @@ void CreditsMenuState::Render()
 	m_pVM->GetSprite()->Flush();
 	m_pVM->Clear();
 
-	m_pVM->DrawFont(fontID,"Credits in progress",0,0);
+	m_pVM->DrawFont(fontID,"Credits in progress",250,CGame::GetInstance()->GetScreenHeight() - fTime);
+	m_pVM->DrawFont(fontID,"Shawn Paris\nPatrick Abiney\nJeffery Ramirez\nKamin Johnson\nEric Moll\nIan Alcid\nThanks for playing!",250,(CGame::GetInstance()->GetScreenHeight()+32) - fTime);
 	
 
 }
