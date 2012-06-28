@@ -152,7 +152,7 @@ void GamePlayState::Enter()
 		}
 	}
 	
-	m_pVM->SetAmbientLight( .1f, .1f, .1f);
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 	m_pOM->AddObject(pPlayer);
 
 	vector<leveldata> tmp = pLevel->GetCollision();
@@ -361,7 +361,7 @@ bool GamePlayState::Input()
 void GamePlayState::Update(float fElapsedTime) 
 {
 	//m_clevel.Update(fElapsedTime);
-	m_pVM->SetAmbientLight( .1f, .1f, .1f);
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
 
 	m_pOM->UpdateAllObjects(fElapsedTime);

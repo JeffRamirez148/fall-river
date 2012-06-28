@@ -564,7 +564,7 @@ bool ViewManager::DeviceEnd(void)
 
 	m_lpDirect3DDevice->EndScene();
 
-	if(ambientLight[0] == .1f)
+	if(ambientLight[0] == .0f)
 	{
 		m_lpDirect3DDevice->BeginScene();
 		m_lpSprite->Begin(D3DXSPRITE_ALPHABLEND);
