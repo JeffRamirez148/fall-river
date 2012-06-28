@@ -156,6 +156,7 @@ void CGame::ChangeState(IMenuState* pNewState)
 		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
+	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
 	m_pVM->RemoveLights();
 
@@ -208,6 +209,8 @@ void CGame::RemoveState( void )
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
 
+	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+
 	m_pVM->RemoveLights();
 
 	// Fixing stuff
@@ -243,6 +246,13 @@ void CGame::RemoveState( void )
 }
 void CGame::RemoveState(int state)
 {
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
+		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
+	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
+		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
+
+	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+
 	for(int i = 0; i < state; i++)
 	{
 		m_vStates.back()->Exit();

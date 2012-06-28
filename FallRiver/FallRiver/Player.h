@@ -47,6 +47,7 @@ private:
 	int m_nLives;
 	int walkingID;
 	int hitID;
+	bool lightOn;
 
 	AnimInfo m_playerAnim;
 
