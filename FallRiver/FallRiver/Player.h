@@ -74,6 +74,9 @@ public:
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}
 
+	// If the players flashlight is on
+	bool IsOn() {return lightOn;}
+
 	bool IsTalking() {return m_bTalking;}
 
 	int GetScore() { return m_nScore;}

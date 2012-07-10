@@ -105,6 +105,9 @@ void Player::Update(float fElapsedTime)
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
 
+	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading )
+		m_currWeapon->Reload();
+
 	if(pDI->KeyDown(DIK_SPACE) && 	m_dwGunCount  < GetTickCount() )
 	{
 		if(m_dwGunCount == 0)
@@ -157,20 +160,20 @@ void Player::Update(float fElapsedTime)
 		case 0:		// Flashlight
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
-				ViewManager::GetInstance()->SetColor(.5, .5, .5);
+				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
 				decreaseTime = 1.2f;
 			}
 			break;
 		case 1:		// Mag Light
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
 				ViewManager::GetInstance()->SetInnerCone(.7f);
 				ViewManager::GetInstance()->SetOuterCone(.7f);
-				ViewManager::GetInstance()->SetColor(.5, .5, .5);
+				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
 				decreaseTime = .6f;			
 			}
 			break;
@@ -183,7 +186,7 @@ void Player::Update(float fElapsedTime)
 				if(rand() % flickerRate == 0)
 					ViewManager::GetInstance()->SetColor(1, 0, 0);
 				else
-					ViewManager::GetInstance()->SetColor(1, .6, 0);
+					ViewManager::GetInstance()->SetColor(1, .6f, 0);
 
 				decreaseTime = .8f;			
 			}
@@ -197,7 +200,7 @@ void Player::Update(float fElapsedTime)
 				if(rand() % flickerRate == 0)
 					ViewManager::GetInstance()->SetColor(1, 0, 0);
 				else
-					ViewManager::GetInstance()->SetColor(1, .6, 0);
+					ViewManager::GetInstance()->SetColor(1, .6f, 0);
 				decreaseTime = 1.4f;						
 			}
 			break;
@@ -206,14 +209,14 @@ void Player::Update(float fElapsedTime)
 	else
 		ViewManager::GetInstance()->SetLightPos(0,0,-1);
 
-	if( pDI->KeyDown(DIK_RIGHT))
+	if( pDI->KeyDown(DIK_D))
 	{
-		if( pDI->KeyDown(DIK_UP))
+		if( pDI->KeyDown(DIK_W))
 		{
 			SetDirection(DIRE_UPRIGHT);
 			ViewManager::GetInstance()->SetLightDir(1,1,0);
 		}
-		else if(pDI->KeyDown(DIK_DOWN))
+		else if(pDI->KeyDown(DIK_S))
 		{
 			SetDirection(DIRE_DOWNRIGHT);
 			ViewManager::GetInstance()->SetLightDir(1,-1,0);
@@ -224,14 +227,14 @@ void Player::Update(float fElapsedTime)
 			ViewManager::GetInstance()->SetLightDir(1,0,0);		
 		}
 	}
-	else if( pDI->KeyDown(DIK_LEFT))
+	else if( pDI->KeyDown(DIK_A))
 	{
-		if( pDI->KeyDown(DIK_UP))
+		if( pDI->KeyDown(DIK_W))
 		{
 			SetDirection(DIRE_UPLEFT);
 			ViewManager::GetInstance()->SetLightDir(-1,1,0);
 		}
-		else if(pDI->KeyDown(DIK_DOWN))
+		else if(pDI->KeyDown(DIK_S))
 		{
 			SetDirection(DIRE_DOWNLEFT);
 			ViewManager::GetInstance()->SetLightDir(-1,-1,0);
@@ -242,24 +245,24 @@ void Player::Update(float fElapsedTime)
 			ViewManager::GetInstance()->SetLightDir(-1,0,0);
 		}
 	}
-	else if( pDI->KeyDown(DIK_UP))
+	else if( pDI->KeyDown(DIK_W))
 	{
 		SetDirection(DIRE_UP);
 		ViewManager::GetInstance()->SetLightDir(0,1,0);
 	}
-	else if( pDI->KeyDown(DIK_DOWN))
+	else if( pDI->KeyDown(DIK_S))
 	{
 		SetDirection(DIRE_DOWN);
 		ViewManager::GetInstance()->SetLightDir(0,-1,0);
 	}
 
-	if( pDI->KeyDown(DIK_RIGHT) )
+	if( pDI->KeyDown(DIK_D) )
 	{
 		SetVelX(100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 			AudioManager::GetInstance()->playSound(walkingID);
 	}
-	else if( pDI->KeyDown(DIK_LEFT) )
+	else if( pDI->KeyDown(DIK_A) )
 	{
 		SetVelX(-100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
@@ -270,13 +273,13 @@ void Player::Update(float fElapsedTime)
 		SetVelX(0);
 	}
 
-	if( pDI->KeyDown(DIK_UP) )
+	if( pDI->KeyDown(DIK_W) )
 	{
 		SetVelY(-100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 			AudioManager::GetInstance()->playSound(walkingID);
 	}
-	else if( pDI->KeyDown(DIK_DOWN) )
+	else if( pDI->KeyDown(DIK_S) )
 	{
 		SetVelY(100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))

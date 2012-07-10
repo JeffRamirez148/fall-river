@@ -121,7 +121,7 @@ void GamePlayState::Enter()
 		pWeapon->SetWidth(10);
 		pWeapon->SetImageID(-1);
 		pWeapon->SetOwner(pPlayer);
-		pWeapon->Init(WPN_RIFLE, 100, 10, 0);
+		pWeapon->Init(WPN_SHOTGUN, 100, 0);
 		pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon->SetPosY(pPlayer->GetPosY());
 
@@ -144,7 +144,7 @@ void GamePlayState::Enter()
 		{
 			pWeapon = m_cPlayer->GetWeapons()[i];
 			m_cPlayer->GetWeapons()[i] = (Weapon*)m_pOF->CreateObject( _T("Weapon") );
-			m_cPlayer->GetWeapons()[i]->Init(pWeapon->GetWeaponType(), pWeapon->GetAmmo(), pWeapon->GetDamage(), 0);
+			m_cPlayer->GetWeapons()[i]->Init(pWeapon->GetWeaponType(), pWeapon->GetAmmo(), 0);
 			m_cPlayer->GetWeapons()[i]->SetPosX(pPlayer->GetPosX()+(pPlayer->GetWidth()/2));
 			m_cPlayer->GetWeapons()[i]->SetPosY(pPlayer->GetPosY());
 			m_cPlayer->GetWeapons()[i]->SetOwner(pWeapon->GetOwner());
@@ -263,7 +263,7 @@ void GamePlayState::Enter()
 		eWeapon->SetWidth(10);
 		eWeapon->SetImageID(-1);
 		eWeapon->SetOwner(pEnemy);
-		eWeapon->Init(WPN_RIFLE, 100, 10, 0);
+		eWeapon->Init(WPN_RIFLE, 100, 0);
 		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
 		eWeapon->SetPosY(pEnemy->GetPosY());
 		pEnemy->SetWeapon(eWeapon);
@@ -536,63 +536,182 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
+			bullet->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
 
-			switch(pOwner->GetOwner()->GetDirection())
+			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{
-			case DIRE_UP:
+				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				//bullet 2
+				bullet2->SetImageID( -1 );
+				bullet2->SetHeight(16);
+				bullet2->SetWidth(16);
+				bullet2->SetOwner(pOwner);
+				bullet2->SetPosX(pOwner->GetPosX());
+				bullet2->SetPosY(pOwner->GetPosY());
+				bullet2->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
+				//bullet 3
+				bullet3->SetImageID( -1 );
+				bullet3->SetHeight(16);
+				bullet3->SetWidth(16);
+				bullet3->SetOwner(pOwner);
+				bullet3->SetPosX(pOwner->GetPosX());
+				bullet3->SetPosY(pOwner->GetPosY());
+				bullet3->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
+
+				switch(pOwner->GetOwner()->GetDirection())
 				{
-					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(-300);
-					break;
+				case DIRE_UP:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(-300);
+						bullet2->SetSpeedX(50);
+						bullet2->SetSpeedY(-300);
+						bullet3->SetSpeedX(-50);
+						bullet3->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_LEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(0);
+						bullet2->SetSpeedX(-300);
+						bullet2->SetSpeedY(50);
+						bullet3->SetSpeedX(-300);
+						bullet3->SetSpeedY(-50);
+						break;
+					}
+				case DIRE_RIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(0);
+						bullet2->SetSpeedX(300);
+						bullet2->SetSpeedY(50);
+						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedY(-50);
+						break;
+					}
+				case DIRE_DOWN:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(300);
+						bullet2->SetSpeedX(50);
+						bullet2->SetSpeedY(300);
+						bullet3->SetSpeedX(-50);
+						bullet3->SetSpeedY(300);
+						break;
+					}
+				case DIRE_UPRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(-300);
+						bullet2->SetSpeedX(270);
+						bullet2->SetSpeedY(-300);
+						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedY(-270);
+						break;
+					}
+				case DIRE_UPLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(-300);
+						bullet2->SetSpeedX(-270);
+						bullet2->SetSpeedY(-300);
+						bullet3->SetSpeedX(-300);
+						bullet3->SetSpeedY(-270);
+						break;
+					}
+				case DIRE_DOWNLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(300);
+						bullet2->SetSpeedX(-270);
+						bullet2->SetSpeedY(300);
+						bullet3->SetSpeedX(-300);
+						bullet3->SetSpeedY(270);
+						break;
+					}
+				case DIRE_DOWNRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(300);
+						bullet2->SetSpeedX(270);
+						bullet2->SetSpeedY(300);
+						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedY(270);
+						break;
+					}
 				}
-			case DIRE_LEFT:
+				self->m_pOM->AddObject( bullet );
+				self->m_pOM->AddObject( bullet2 );
+				self->m_pOM->AddObject( bullet3 );
+				bullet->Release();
+				bullet2->Release();
+				bullet3->Release();
+				bullet = nullptr;
+				bullet2 = nullptr;
+				bullet3 = nullptr;
+			}
+			else
+			{
+				switch(pOwner->GetOwner()->GetDirection())
 				{
-					bullet->SetSpeedX(-300);
-					bullet->SetSpeedY(0);
-					break;
+				case DIRE_UP:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_LEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(0);
+						break;
+					}
+				case DIRE_RIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(0);
+						break;
+					}
+				case DIRE_DOWN:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(300);
+						break;
+					}
+				case DIRE_UPRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_UPLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_DOWNLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(300);
+						break;
+					}
+				case DIRE_DOWNRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(300);
+						break;
+					}
 				}
-			case DIRE_RIGHT:
-				{
-					bullet->SetSpeedX(300);
-					bullet->SetSpeedY(0);
-					break;
-				}
-			case DIRE_DOWN:
-				{
-					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(300);
-					break;
-				}
-			case DIRE_UPRIGHT:
-				{
-					bullet->SetSpeedX(300);
-					bullet->SetSpeedY(-300);
-					break;
-				}
-			case DIRE_UPLEFT:
-				{
-					bullet->SetSpeedX(-300);
-					bullet->SetSpeedY(-300);
-					break;
-				}
-			case DIRE_DOWNLEFT:
-				{
-					bullet->SetSpeedX(-300);
-					bullet->SetSpeedY(300);
-					break;
-				}
-			case DIRE_DOWNRIGHT:
-				{
-					bullet->SetSpeedX(300);
-					bullet->SetSpeedY(300);
-					break;
-				}
+				self->m_pOM->AddObject( bullet );
+				bullet->Release();
+				bullet = nullptr;
 			}
 
 			// Add bullet to object manager
-			self->m_pOM->AddObject( bullet );
-			bullet->Release();
-			bullet = nullptr;
+
 
 			break;
 		}
