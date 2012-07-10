@@ -12,7 +12,6 @@ using namespace std;
 #include "GamePlayState.h"
 #include "HighScoresMenuState.h"
 #include "WinMenuState.h"
-#include "DefeatMenuState.h"
 #include "CreditsMenuState.h"
 #include "LoadMenuState.h"
 #include "PauseMenuState.h"
