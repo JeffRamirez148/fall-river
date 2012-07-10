@@ -555,7 +555,7 @@ bool ViewManager::DeviceEnd(void)
 	float tmpInnerCone[6];
 	float tmpOuterCone[6];
 
-	int j = 0;
+	unsigned int j = 0;
 	lightNum = 0;
 	for(; j < lights.size(); ++j)
 	{

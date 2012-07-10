@@ -13,6 +13,10 @@ private:
 	float m_fSpeedX;
 	float m_fSpeedY;
 
+	// For the Range
+	float m_fStartPosX;
+	float m_fStartPosY;
+
 public: 
 	Bullet();
 	virtual ~Bullet();
@@ -22,6 +26,8 @@ public:
 	void Render();
 
 	RECT GetRect();
+
+	void SetStartPos(float x, float y) {m_fStartPosX = x; m_fStartPosY = y;}
 
 	// Get and Set Speed for X
 	float GetSpeedX() {return m_fSpeedX;}
