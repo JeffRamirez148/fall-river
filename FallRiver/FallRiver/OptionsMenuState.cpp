@@ -92,6 +92,7 @@ bool OptionsMenuState::Input()
 {
 	if( m_pDI->KeyPressed(DIK_DOWN) )
 	{
+		m_pAM->playSound(soundID);
 		m_nCursPosY += 25;
 		if(m_nCursPosY == 275)
 			m_nCursPosY += 25;
@@ -100,6 +101,7 @@ bool OptionsMenuState::Input()
 	}
 	else if( m_pDI->KeyPressed(DIK_UP) )
 	{
+		m_pAM->playSound(soundID);
 		m_nCursPosY -= 25;
 		if(m_nCursPosY == 275)
 			m_nCursPosY -= 25;
@@ -112,36 +114,34 @@ bool OptionsMenuState::Input()
 
 	if( m_pDI->KeyPressed(DIK_RIGHT) )
 	{
+		m_pAM->playSound(soundID);
 		if( m_nCursPosY == 200 && sfxVolume < 1.0f)
 		{
 			sfxVolume += 0.05f;
 			if(sfxVolume > 1)
 				sfxVolume = 1;
-			m_pAM->playSound(soundID);
 		}
 		else if( m_nCursPosY == 225 && musicVolume < 1.0f)
 		{
 			musicVolume += 0.05f;
 			if(musicVolume > 1)
 				musicVolume = 1;
-			m_pAM->playSound(soundID);
 		}
 	}
 	else if( m_pDI->KeyPressed(DIK_LEFT) )
 	{
+		m_pAM->playSound(soundID);
 		if( m_nCursPosY == 200 && sfxVolume > 0.0f)
 		{
 			sfxVolume -= 0.05f;
 			if(sfxVolume < 0)
 				sfxVolume = 0;
-			m_pAM->playSound(soundID);
 		}
 		else if( m_nCursPosY == 225 && musicVolume > 0.0f)
 		{
 			musicVolume -= 0.05f;
 			if(musicVolume < 0)
 				musicVolume = 0;
-			m_pAM->playSound(soundID);
 		}
 	}
 
