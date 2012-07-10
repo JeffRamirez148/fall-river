@@ -9,6 +9,7 @@
 #include "GamePlayState.h"
 #include "CreateBullet.h"
 #include "Weapon.h"
+#include "Bullet.h"
 #include "CGame.h"
 #include "AudioManager.h"
 
@@ -334,7 +335,8 @@ void ShootingAi::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			SetHealth(GetHealth()-30);
+			Bullet* pBull = (Bullet*)pEvent->GetParam();
+			SetHealth(GetHealth()-pBull->GetOwner()->GetDamage());
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}

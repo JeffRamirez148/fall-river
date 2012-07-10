@@ -23,6 +23,9 @@ private:
 	string			player[10];
 	AudioManager*	audio;
 	int				fontID;
+	int soundID2;
+	int musicID;
+	int musicID2;
 
 	HighScoresMenuState();
 	~HighScoresMenuState();
@@ -45,6 +48,7 @@ public:
 	void SetEnd(bool end);
 
 	void SetOldAttractMode(bool mode);
+	void ReEnter();
 };
 
 #endif

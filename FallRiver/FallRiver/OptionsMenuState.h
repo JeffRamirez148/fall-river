@@ -22,7 +22,9 @@ private:
 	float musicVolume;
 	bool m_bIsWindowed;
 	int soundID;
+	int soundID2;
 	int musicID;
+	int musicID2;
 
 	int		m_nOptionID;
 	int		m_nFontID;
@@ -40,7 +42,7 @@ public:
 	bool Input();
 	void Update(float aFElapsedTime);
 	void Render();
-
+	void ReEnter();
 };
 
 #endif

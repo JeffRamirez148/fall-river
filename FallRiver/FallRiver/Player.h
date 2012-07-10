@@ -27,6 +27,7 @@ private:
 	vector<Light*> m_vpLights;
 
 	Weapon* m_currWeapon;
+	int m_ncurrWeap;
 	Light* m_currLight;
 
 	DWORD m_dwGunCount;
@@ -36,6 +37,7 @@ private:
 	int m_nState;
 	int flashLightType; // 0 - Flashlight, 1 - Maglight, 2 - Lantern, 3 - Lighter
 	float decreaseTime;
+	int flickerRate;
 public:
 	int	m_nFontID;
 	int questCounter;
@@ -65,15 +67,19 @@ public:
 	Player();
 	~Player();
 
-
 	void Update(float fElapsedTime);
 	void Render();
 	bool CheckCollision(IObjects* pBase);
 	bool CheckLifes();
 	void HandleEvent(Event* aPEvent);
+	
+	int GetLightType() { return flashLightType; }
 
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}
+
+	// If the players flashlight is on
+	bool IsOn() {return lightOn;}
 
 	bool IsTalking() {return m_bTalking;}
 

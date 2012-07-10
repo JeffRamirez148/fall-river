@@ -98,7 +98,6 @@
     <ClCompile Include="CreatePickUp.cpp" />
     <ClCompile Include="CreditsMenuState.cpp" />
     <ClCompile Include="CutScene.cpp" />
-    <ClCompile Include="DefeatMenuState.cpp" />
     <ClCompile Include="DestroyBullet.cpp" />
     <ClCompile Include="DestroyEnemyC.cpp" />
     <ClCompile Include="DestroyEnemyS.cpp" />
@@ -165,7 +164,6 @@
     <ClInclude Include="CreatePickUp.h" />
     <ClInclude Include="CreditsMenuState.h" />
     <ClInclude Include="CutScene.h" />
-    <ClInclude Include="DefeatMenuState.h" />
     <ClInclude Include="DestroyBullet.h" />
     <ClInclude Include="DestroyEnemyC.h" />
     <ClInclude Include="DestroyEnemyS.h" />

@@ -22,6 +22,10 @@ private:
 
 	// For Menu Part
 	int m_nPauseID;
+	int soundID;
+	int soundID2;
+	int musicID;
+	int musicID2;
 
 	PauseMenuState();
 	~PauseMenuState();
@@ -36,6 +40,8 @@ public:
 	bool Input();
 	void Update(float aFElapsedTime);
 	void Render();
+	void ReEnter();
+
 };
 
 #endif

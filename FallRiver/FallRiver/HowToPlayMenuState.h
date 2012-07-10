@@ -12,8 +12,12 @@ class HowToPlayMenuState: public IMenuState
 private: 
 	ViewManager* m_pVM;
 	DirectInput* m_pDI;
+	AudioManager* audio;
 	int		m_nHowToKeyID;
 	int		m_nHowToJoyID;
+	int soundID2;
+	int musicID;
+	int musicID2;
 
 	HowToPlayMenuState();
 	~HowToPlayMenuState();
@@ -32,6 +36,7 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render(void);
+	void ReEnter();
 };
 
 #endif

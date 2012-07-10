@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "ViewManager.h"
 #include "EventSystem.h"
+#include "Bullet.h"
 #include "GamePlayState.h"
 #include "Weapon.h"
 
@@ -158,7 +159,8 @@ void Boss1::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			SetHealth(GetHealth()-30);
+			Bullet* pBull = (Bullet*)pEvent->GetParam();
+			SetHealth(GetHealth()-pBull->GetOwner()->GetDamage());
 		}
 	}
 }

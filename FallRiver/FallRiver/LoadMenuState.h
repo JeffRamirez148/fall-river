@@ -25,6 +25,11 @@ private:
 	int m_nLoadID;
 	int m_nExitID;
 
+	int soundID;
+	int soundID2;
+	int musicID;
+	int musicID2;
+
 	LoadMenuState();
 	~LoadMenuState();
 	LoadMenuState(const LoadMenuState&);
@@ -43,6 +48,7 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render();
+	void ReEnter();
 };
 
 #endif

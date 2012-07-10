@@ -14,11 +14,16 @@ class LoseMenuState :
 private:
 	ViewManager*	pVM;
 	DirectInput*	pDI;
-	AudioManager*	pAM;
+	AudioManager*	audio;
 	int				LMS_ID;
 	int				tempLoseID;
 	int				curPos;
 	float			fTime;
+	int soundID;
+	int soundID2;
+	int musicID;
+	int musicID2;
+
 public:
 	void Enter();
 	void Exit();
@@ -26,5 +31,6 @@ public:
 	void Update(float aFElapsedTime);
 	void Render();
 	static LoseMenuState* GetInstance();
+	void ReEnter();
 };
 

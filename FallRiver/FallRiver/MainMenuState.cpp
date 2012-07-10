@@ -8,6 +8,7 @@
 #include "LoadMenuState.h"
 #include "CreditsMenuState.h"
 #include "CGame.h"
+#include "AudioManager.h"
 
 MainMenuState::MainMenuState()
 {
@@ -24,6 +25,9 @@ MainMenuState::MainMenuState()
 	m_nMenuHighScoresID = -1;
 	m_nMenuCreditsID	= -1;
 	m_nMenuExitID		= -1;
+	musicID = -1;
+	musicID2 = -1;
+	soundID = -1;
 }
 
 MainMenuState::~MainMenuState()
@@ -43,7 +47,42 @@ void MainMenuState::Enter()
 	m_nMenuHighScoresID = m_pVM->RegisterTexture("resource/graphics/main_highScores.png");
 	m_nMenuCreditsID	= m_pVM->RegisterTexture("resource/graphics/main_credits.png");
 	m_nMenuExitID		= m_pVM->RegisterTexture("resource/graphics/main_exit.png");
+	audio = AudioManager::GetInstance();
 
+	FMOD_VECTOR tmp = {0,0,0};
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	audio->SetListenerPos(tmp);
+	soundID = audio->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
+	audio->setSoundPos(soundID, sound1);
+
+	audio->setSoundVel(soundID, tmp);
+	audio->setSoundLooping(soundID, false);
+
+	soundID2 = audio->RegisterSound("resource/Sounds/thunder.wav");
+	audio->setSoundPos(soundID2, sound1);
+
+	audio->setSoundVel(soundID2, tmp);
+	audio->setSoundLooping(soundID2, false);
+
+	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
+	audio->setMusicPos(musicID, sound1);
+
+	audio->setMusicVel(musicID, tmp);
+	audio->setMusicLooping(musicID, true);
+	audio->playMusic(musicID);
+
+	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+	audio->setMusicPos(musicID2, sound1);
+
+	audio->setMusicVel(musicID2, tmp);
+	audio->setMusicLooping(musicID2, true);
+	audio->playMusic(musicID2);
+}
+
+void MainMenuState::ReEnter()
+{
+	audio->playMusic(musicID);
+	audio->playMusic(musicID2);
 }
 
 void MainMenuState::Exit() 
@@ -58,7 +97,6 @@ void MainMenuState::Exit()
 	m_dwFlash2 = 0;
 	m_dwFlash3 = 0;
 	m_dwReset = 0;
-	
 }
 
 bool MainMenuState::Input() 
@@ -68,16 +106,19 @@ bool MainMenuState::Input()
 		m_nCursPosY += 25;
 		if( m_nCursPosY > 300 )
 			m_nCursPosY = 175;
+		audio->playSound(soundID);
 	}
 	else if( m_pDI->KeyPressed(DIK_UPARROW) )
 	{
 		m_nCursPosY -= 25;
 		if( m_nCursPosY < 175 )
 			m_nCursPosY = 300;
+		audio->playSound(soundID);
 	}
 
 	if( m_pDI->KeyPressed(DIK_RETURN) )
 	{
+		audio->playSound(soundID);
 		if( m_nCursPosY == 175 )
 			CGame::GetInstance()->ChangeState(LoadMenuState::GetInstance());
 		else if( m_nCursPosY == 200 )
@@ -96,7 +137,10 @@ bool MainMenuState::Input()
 
 	// Pressing Escape will End the Game
 	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	{
+		audio->playSound(soundID);
 		m_nCursPosY = 300;
+	}
 
 	return true;
 }
@@ -163,7 +207,10 @@ void MainMenuState::Render()
 	m_pVM->DrawStaticTexture(m_nFallRiverID, -50, 10, 0.5f, 0.5f);
 
 	if((m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount()) && m_dwReset == 0)
+	{
+		audio->playSound(soundID2);
 		m_dwReset = GetTickCount() + 200;
+	}
 
 	if(m_dwReset <= GetTickCount())
 	{

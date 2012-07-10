@@ -13,6 +13,8 @@
 Bullet::Bullet()
 {
 	m_nObjectType = OBJ_BULLET;
+	m_fStartPosX = 0;
+	m_fStartPosY = 0;
 }
 
 Bullet::~Bullet()
@@ -21,6 +23,30 @@ Bullet::~Bullet()
 
 void Bullet::Update(float fElapsedTime) 
 {
+	float distx = m_fStartPosX - GetPosX();
+	float disty = m_fStartPosY - GetPosY();
+
+	if( distx < 0 )
+		distx = -distx;
+	if( disty < 0 )
+		disty = -disty;
+
+	float totdist = distx - disty;
+	if(totdist < 0)
+		totdist = -totdist;
+
+	if( (distx > GetOwner()->GetRange() || disty > GetOwner()->GetRange()) && GetOwner()->GetWeaponType() != WPN_SHOTGUN )
+	{
+		DestroyBullet* pMsg = new DestroyBullet(this);
+		MessageSystem::GetInstance()->SendMsg(pMsg);
+		pMsg = nullptr;
+	}
+	else if( totdist > GetOwner()->GetRange() && GetOwner()->GetWeaponType() == WPN_SHOTGUN )
+	{
+		DestroyBullet* pMsg = new DestroyBullet(this);
+		MessageSystem::GetInstance()->SendMsg(pMsg);
+		pMsg = nullptr;
+	}
 
 	DirectInput* pDI = DirectInput::GetInstance();
 
@@ -54,12 +80,15 @@ bool Bullet::CheckCollision(IObjects* pBase)
 		return false;
 	else if(pBase->GetObjectType() == OBJ_CHARACTER && GetOwner()->GetOwner() != pBase)
 	{
-		Player* tmp = (Player*)pBase;
+		BaseCharacter* tmp = (BaseCharacter*)pBase;
+
+		tmp->SetHealth(tmp->GetHealth()-GetOwner()->GetDamage());
 
 		DestroyBullet* pMsg = new DestroyBullet(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
-		EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+		
+		//EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );*/
 
 	}
 	return true;

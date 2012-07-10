@@ -12,8 +12,8 @@ Light::Light()
 	color[0] = 1;
 	color[1] = 1;
 	color[2] = 1;
-	outerCone = .9f;
-	innerCone = .95f;
+	outerCone = .7f;
+	innerCone = .9f;
 }
 
 Light::~Light()

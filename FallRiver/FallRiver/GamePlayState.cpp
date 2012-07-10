@@ -73,6 +73,36 @@ void GamePlayState::Enter()
 	m_pAM = AudioManager::GetInstance();
 	m_pHUD = new HUD;
 	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_01.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_02.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_03.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_04.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_05.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_06.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_07.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_08.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_09.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_10.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_11.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_12.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_13.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_14.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_15.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_16.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_17.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_18.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_19.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_20.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_21.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_22.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_23.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_24.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_25.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_26.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_27.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_28.png.png"));
+
+
 	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
@@ -116,18 +146,42 @@ void GamePlayState::Enter()
 		pPlayer->SetPosX(600);
 		pPlayer->SetPosY(500);
 
+		
+		Weapon* pWeapon2 = nullptr;
+		Weapon* pWeapon3 = nullptr;
+
 		pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 		pWeapon->SetHeight(20);
 		pWeapon->SetWidth(10);
 		pWeapon->SetImageID(-1);
 		pWeapon->SetOwner(pPlayer);
-		pWeapon->Init(WPN_RIFLE, 100, 10, 0);
+		pWeapon->Init(WPN_PISTOL, 100, 0);
 		pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon->SetPosY(pPlayer->GetPosY());
+
+		pWeapon2 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon2->SetHeight(20);
+		pWeapon2->SetWidth(10);
+		pWeapon2->SetImageID(-1);
+		pWeapon2->SetOwner(pPlayer);
+		pWeapon2->Init(WPN_SHOTGUN, 100, 0);
+		pWeapon2->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon2->SetPosY(pPlayer->GetPosY());
+
+		pWeapon3 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon3->SetHeight(20);
+		pWeapon3->SetWidth(10);
+		pWeapon3->SetImageID(-1);
+		pWeapon3->SetOwner(pPlayer);
+		pWeapon3->Init(WPN_RIFLE, 100, 0);
+		pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon3->SetPosY(pPlayer->GetPosY());
 
 		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/TestAnimation.xml"));
 
 		pPlayer->AddWeapon(pWeapon);
+		pPlayer->AddWeapon(pWeapon2);
+		pPlayer->AddWeapon(pWeapon3);
 
 	}
 	else
@@ -144,7 +198,7 @@ void GamePlayState::Enter()
 		{
 			pWeapon = m_cPlayer->GetWeapons()[i];
 			m_cPlayer->GetWeapons()[i] = (Weapon*)m_pOF->CreateObject( _T("Weapon") );
-			m_cPlayer->GetWeapons()[i]->Init(pWeapon->GetWeaponType(), pWeapon->GetAmmo(), pWeapon->GetDamage(), 0);
+			m_cPlayer->GetWeapons()[i]->Init(pWeapon->GetWeaponType(), pWeapon->GetAmmo(), 0);
 			m_cPlayer->GetWeapons()[i]->SetPosX(pPlayer->GetPosX()+(pPlayer->GetWidth()/2));
 			m_cPlayer->GetWeapons()[i]->SetPosY(pPlayer->GetPosY());
 			m_cPlayer->GetWeapons()[i]->SetOwner(pWeapon->GetOwner());
@@ -243,7 +297,7 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
-	for(int i = 0; i < 1; i++)
+	/*for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -263,11 +317,11 @@ void GamePlayState::Enter()
 		eWeapon->SetWidth(10);
 		eWeapon->SetImageID(-1);
 		eWeapon->SetOwner(pEnemy);
-		eWeapon->Init(WPN_RIFLE, 100, 10, 0);
+		eWeapon->Init(WPN_RIFLE, 100, 0);
 		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
 		eWeapon->SetPosY(pEnemy->GetPosY());
 		pEnemy->SetWeapon(eWeapon);
-	}
+	}*/
 
 	//for(int i = 0; i < 1; i++)
 	//{
@@ -299,6 +353,23 @@ void GamePlayState::Enter()
 
 	winLose = true;
 
+	// Example of how to set up a light
+	//Light tmpLight;
+	//tmpLight.lightPos[0] = 0.0f;
+	//tmpLight.lightPos[1] = 0.0f;
+	//tmpLight.lightPos[2] = -1.0f;
+	//tmpLight.lightDir[0] = 0.0f;
+	//tmpLight.lightDir[1] = 0.0f;
+	//tmpLight.lightDir[2] = 1.0f;
+	//tmpLight.color[0] = 1;
+	//tmpLight.color[1] = 1;
+	//tmpLight.color[2] = 1;
+	//ViewManager::GetInstance()->RegisterLight(tmpLight);
+}
+
+void GamePlayState::ReEnter()
+{
+	m_pAM->playMusic(backGroundID);
 }
 
 void GamePlayState::Exit() 
@@ -520,63 +591,182 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetOwner(pOwner);
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
+			bullet->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
 
-			switch(pOwner->GetOwner()->GetDirection())
+			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{
-			case DIRE_UP:
+				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				//bullet 2
+				bullet2->SetImageID( -1 );
+				bullet2->SetHeight(16);
+				bullet2->SetWidth(16);
+				bullet2->SetOwner(pOwner);
+				bullet2->SetPosX(pOwner->GetPosX());
+				bullet2->SetPosY(pOwner->GetPosY());
+				bullet2->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
+				//bullet 3
+				bullet3->SetImageID( -1 );
+				bullet3->SetHeight(16);
+				bullet3->SetWidth(16);
+				bullet3->SetOwner(pOwner);
+				bullet3->SetPosX(pOwner->GetPosX());
+				bullet3->SetPosY(pOwner->GetPosY());
+				bullet3->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
+
+				switch(pOwner->GetOwner()->GetDirection())
 				{
-					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(-300);
-					break;
+				case DIRE_UP:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(-300);
+						bullet2->SetSpeedX(50);
+						bullet2->SetSpeedY(-300);
+						bullet3->SetSpeedX(-50);
+						bullet3->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_LEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(0);
+						bullet2->SetSpeedX(-300);
+						bullet2->SetSpeedY(50);
+						bullet3->SetSpeedX(-300);
+						bullet3->SetSpeedY(-50);
+						break;
+					}
+				case DIRE_RIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(0);
+						bullet2->SetSpeedX(300);
+						bullet2->SetSpeedY(50);
+						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedY(-50);
+						break;
+					}
+				case DIRE_DOWN:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(300);
+						bullet2->SetSpeedX(50);
+						bullet2->SetSpeedY(300);
+						bullet3->SetSpeedX(-50);
+						bullet3->SetSpeedY(300);
+						break;
+					}
+				case DIRE_UPRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(-300);
+						bullet2->SetSpeedX(270);
+						bullet2->SetSpeedY(-300);
+						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedY(-270);
+						break;
+					}
+				case DIRE_UPLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(-300);
+						bullet2->SetSpeedX(-270);
+						bullet2->SetSpeedY(-300);
+						bullet3->SetSpeedX(-300);
+						bullet3->SetSpeedY(-270);
+						break;
+					}
+				case DIRE_DOWNLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(300);
+						bullet2->SetSpeedX(-270);
+						bullet2->SetSpeedY(300);
+						bullet3->SetSpeedX(-300);
+						bullet3->SetSpeedY(270);
+						break;
+					}
+				case DIRE_DOWNRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(300);
+						bullet2->SetSpeedX(270);
+						bullet2->SetSpeedY(300);
+						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedY(270);
+						break;
+					}
 				}
-			case DIRE_LEFT:
+				self->m_pOM->AddObject( bullet );
+				self->m_pOM->AddObject( bullet2 );
+				self->m_pOM->AddObject( bullet3 );
+				bullet->Release();
+				bullet2->Release();
+				bullet3->Release();
+				bullet = nullptr;
+				bullet2 = nullptr;
+				bullet3 = nullptr;
+			}
+			else
+			{
+				switch(pOwner->GetOwner()->GetDirection())
 				{
-					bullet->SetSpeedX(-300);
-					bullet->SetSpeedY(0);
-					break;
+				case DIRE_UP:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_LEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(0);
+						break;
+					}
+				case DIRE_RIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(0);
+						break;
+					}
+				case DIRE_DOWN:
+					{
+						bullet->SetSpeedX(0);
+						bullet->SetSpeedY(300);
+						break;
+					}
+				case DIRE_UPRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_UPLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(-300);
+						break;
+					}
+				case DIRE_DOWNLEFT:
+					{
+						bullet->SetSpeedX(-300);
+						bullet->SetSpeedY(300);
+						break;
+					}
+				case DIRE_DOWNRIGHT:
+					{
+						bullet->SetSpeedX(300);
+						bullet->SetSpeedY(300);
+						break;
+					}
 				}
-			case DIRE_RIGHT:
-				{
-					bullet->SetSpeedX(300);
-					bullet->SetSpeedY(0);
-					break;
-				}
-			case DIRE_DOWN:
-				{
-					bullet->SetSpeedX(0);
-					bullet->SetSpeedY(300);
-					break;
-				}
-			case DIRE_UPRIGHT:
-				{
-					bullet->SetSpeedX(300);
-					bullet->SetSpeedY(-300);
-					break;
-				}
-			case DIRE_UPLEFT:
-				{
-					bullet->SetSpeedX(-300);
-					bullet->SetSpeedY(-300);
-					break;
-				}
-			case DIRE_DOWNLEFT:
-				{
-					bullet->SetSpeedX(-300);
-					bullet->SetSpeedY(300);
-					break;
-				}
-			case DIRE_DOWNRIGHT:
-				{
-					bullet->SetSpeedX(300);
-					bullet->SetSpeedY(300);
-					break;
-				}
+				self->m_pOM->AddObject( bullet );
+				bullet->Release();
+				bullet = nullptr;
 			}
 
 			// Add bullet to object manager
-			self->m_pOM->AddObject( bullet );
-			bullet->Release();
-			bullet = nullptr;
+
 
 			break;
 		}

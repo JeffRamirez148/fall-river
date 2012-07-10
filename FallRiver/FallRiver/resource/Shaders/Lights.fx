@@ -10,16 +10,25 @@ float3 gLightDir2 // Value sent in
 = { 0, 1, 0 };
 
 // Light
-float3 gLightPos = {0,0,-1}; // Value sent in
+float3 gLightPos = {0,0,-.75}; // Value sent in
 float3 gLightPos2 = {0,0,0}; // Value sent in
-float gInnerCone  = 0.95f;
-float gOuterCone  = 0.9f;
-float gInnerCone2  = 0.95f;
-float gOuterCone2  = 0.9f;
+float gInnerCone  = 0.75f;
+float gOuterCone  = 0.7f;
+float gInnerCone2  = 0.75f;
+float gOuterCone2  = 0.7f;
 float gAttenuation = 2.7f;
+float3 lightColor = float3(0.5,0.5,0.5);
 float3 ambientLight;
-// 0 - Default Spotlight, 1 - Flashlight, 2 - Lighter, 3 - Mag light, 4 - Lantern 
-int gSetting;  // Value sent in 
+
+
+// Other Lights
+int gLightNum;
+float3 gLightPos3[6] = {float3(0,0,-1), float3(0,0,-1), float3(0,0,-1), float3(0,0,-1), float3(0,0,-1), float3(0,0,-1)};
+float3 gLightDir3[6] = {float3(0,0,1), float3(0,0,1), float3(0,0,1), float3(0,0,1), float3(0,0,1), float3(0,0,1)};
+float gInnerCone3[6];
+float gOuterCone3[6];
+float3 lightColor3[6];
+
 
 // texture to be used
 Texture2D gDiffuseTexture : DIFFUSE = NULL;
@@ -55,26 +64,9 @@ VS_OUTPUT myVertexShader(VS_INPUT input)
 	float4 worldloc = float4(input.untransformed_pos, 1.0f);
 	float4 worldnrm = float4(input.untransformed_norm, 0.0f);
 	output.transformed_pos = float4(input.untransformed_pos, 1.0f);
-	//worldloc = mul(worldloc, gWorld);
-	//worldnrm = normalize(mul(worldnrm, gWorld));
 	output.world_pos = worldloc.xyz;
    	output.transformed_norm = worldnrm.xyz;
 	output.uv = input.uv;
-	/* if(gSetting == 0)
-	{
-		gInnerCone = ;
-		gOuterCone = ;
-	}
-	else if(gSetting == 2)
-	{
-		gInnerCone = ;
-		gOuterCone = ;
-	}
-	else if(gSetting == 4)
-	{
-		gInnerCone = ;
-		gOuterCone = ;
-	} */
 	return output; 
 }
 
@@ -82,7 +74,7 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 {
 
 	float3 surfacecolor = float3(0,0,0);
-	float3 lightColor = float3(0.5,0.5,0.5);
+
 	float3 final = float3(0,0,0);
 	float3 ldir = float3(0,0,0);
 	float3 lightPos = mul(float4(gLightPos, 1), gWorldInv).xyz;
@@ -102,7 +94,7 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 	else if(spotLightAmount > gOuterCone)
 		lightRatio = 1.0 - saturate((gInnerCone - spotLightAmount)/ (gInnerCone - gOuterCone));
 		
-	final = saturate( (lightRatio *  attenuation * lightColor) + (ambientLight));
+	final = saturate( (lightRatio *  attenuation * lightColor));
 		
 	ldir = normalize(lightPos2 - input.world_pos);
 	attenuation = 1.0 - saturate( abs(ldir)/ gAttenuation);
@@ -114,7 +106,26 @@ float4 myPixelShader(VS_OUTPUT input) : COLOR
 		lightRatio = 1.0 - saturate((gInnerCone2 - spotLightAmount)/ (gInnerCone2 - gOuterCone2));	
 		
 	final += saturate( (lightRatio *  attenuation * lightColor ));
-	final = saturate(final) * surfacecolor;
+	
+	// Other Lights
+	for( int i = 0; i < 6; ++i)
+	{
+		if( i < gLightNum)
+		{
+		lightPos = mul(float4(gLightPos3[i], 1), gWorldInv).xyz;
+		ldir = normalize(lightPos - input.world_pos);
+		attenuation = 1.0 - saturate( abs(ldir)/ gAttenuation);
+		spotLightAmount = saturate( dot(normalize(-gLightDir3[i]), ldir));
+		lightRatio = 0;
+		if(spotLightAmount > gInnerCone3[i])
+			lightRatio = 1;
+		else if(spotLightAmount > gOuterCone3[i])
+			lightRatio = 1.0 - saturate((gInnerCone3[i] - spotLightAmount)/ (gInnerCone3[i] - gOuterCone3[i]));	
+			
+		final += saturate( (lightRatio * attenuation * lightColor3[i] ));
+		}
+	}
+	final = saturate(final  + (ambientLight)) * surfacecolor;
 		
 	return float4(final,1);
 }
