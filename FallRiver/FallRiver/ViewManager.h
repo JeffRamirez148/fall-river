@@ -73,6 +73,7 @@ private:
 	float						innerCone;
 	float						outerCone;
 	float						color[3];
+	int							lightNum;
 	struct VERTUV
 	{
 		D3DXVECTOR3 pos;
@@ -175,6 +176,10 @@ public:
 		color[1] = g;
 		color[2] = b;
 	}
+
+	float GetInnerCone(void) { return innerCone; }
+	float GetOuterCone(void) { return outerCone; }
+
 };
 
 #endif

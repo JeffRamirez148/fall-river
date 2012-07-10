@@ -20,6 +20,8 @@ private:
 	float sfxVolume;
 	float musicVolume;
 	float fTime;
+	int soundID;
+	int musicID;
 
 	// For Flashing effect
 	DWORD	m_dwFlash1;
@@ -57,6 +59,7 @@ public:
 	void Render();
 
 	static MainMenuState* GetInstance();
+	void ReEnter();
 };
 
 #endif

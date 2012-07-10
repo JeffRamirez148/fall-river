@@ -22,6 +22,11 @@ void WinMenuState::Enter()
 	curPos = 250;
 }
 
+void WinMenuState::ReEnter()
+{
+
+}
+
 void WinMenuState::Exit() 
 {
 	pVM = nullptr;

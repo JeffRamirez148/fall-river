@@ -26,5 +26,6 @@ public:
 	void Update(float aFElapsedTime);
 	void Render();
 	static LoseMenuState* GetInstance();
+	void ReEnter();
 };
 

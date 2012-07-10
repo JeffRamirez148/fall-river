@@ -32,6 +32,10 @@ void HowToPlayMenuState::Enter()
 	m_nHowToKeyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_keyboard.png");
 	m_nHowToJoyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_arcade.png");
 }
+void HowToPlayMenuState::ReEnter()
+{
+
+}
 
 void HowToPlayMenuState::Exit() 
 {

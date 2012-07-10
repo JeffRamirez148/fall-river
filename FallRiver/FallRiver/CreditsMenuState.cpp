@@ -33,6 +33,21 @@ void CreditsMenuState::Enter()
 	fontID = m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
 	creditsBGID = m_pVM->RegisterTexture("resource/graphics/bg_credits.png");
 	logoID = m_pVM->RegisterTexture("resource/graphics/logo_game_1024.png");
+
+	FMOD_VECTOR tmp = {0,0,0};
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	audio->SetListenerPos(tmp);
+	musicID = audio->registerMusic("resource/Sounds/background.mp3");
+	audio->setMusicPos(musicID, sound1);
+
+	audio->setMusicVel(musicID, tmp);
+	audio->setMusicLooping(musicID, true);
+	audio->playMusic(musicID);
+}
+
+void CreditsMenuState::ReEnter()
+{
+	audio->playMusic(musicID);
 }
 
 void CreditsMenuState::Exit() 

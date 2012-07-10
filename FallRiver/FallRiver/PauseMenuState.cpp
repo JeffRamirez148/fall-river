@@ -38,6 +38,11 @@ void PauseMenuState::Enter()
 	m_pVM->SetAmbientLight(0,0,.1f);
 }
 
+void PauseMenuState::ReEnter()
+{
+
+}
+
 void PauseMenuState::Exit()
 {
 	m_pVM->SetAmbientLight(1,1,1);

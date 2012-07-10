@@ -58,14 +58,7 @@ Player::Player()
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(hitID, false);
 
-	Light tmpLight;
-	tmpLight.lightPos[0] = 0.0f;
-	tmpLight.lightPos[1] = 0.0f;
-	tmpLight.lightPos[2] = -1.0f;
-	tmpLight.lightDir[0] = 0.0f;
-	tmpLight.lightDir[1] = 0.0f;
-	tmpLight.lightDir[2] = 1.0f;
-	ViewManager::GetInstance()->RegisterLight(tmpLight);
+
 	lightOn = false;
 	battery = 100;
 	batteryTime = 0;
@@ -164,7 +157,7 @@ void Player::Update(float fElapsedTime)
 		case 0:		// Flashlight
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.75);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
 				ViewManager::GetInstance()->SetColor(.5, .5, .5);
@@ -174,8 +167,8 @@ void Player::Update(float fElapsedTime)
 		case 1:		// Mag Light
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.75);
-				ViewManager::GetInstance()->SetInnerCone(.75f);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7);
+				ViewManager::GetInstance()->SetInnerCone(.7f);
 				ViewManager::GetInstance()->SetOuterCone(.7f);
 				ViewManager::GetInstance()->SetColor(.5, .5, .5);
 				decreaseTime = .6f;			
@@ -184,7 +177,7 @@ void Player::Update(float fElapsedTime)
 		case 2:		// Lantern
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, -1);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1.25);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
 				if(rand() % flickerRate == 0)
@@ -198,7 +191,7 @@ void Player::Update(float fElapsedTime)
 		case 3:		// Lighter
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, -1);	
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.25f);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
 				if(rand() % flickerRate == 0)

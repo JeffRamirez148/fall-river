@@ -49,6 +49,11 @@ void LoadMenuState::Enter()
 	m_nCursPosX = 280;
 }
 
+void LoadMenuState::ReEnter()
+{
+
+}
+
 void LoadMenuState::Exit() 
 {
 	m_pDI = nullptr;

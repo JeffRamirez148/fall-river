@@ -299,6 +299,23 @@ void GamePlayState::Enter()
 
 	winLose = true;
 
+	// Example of how to set up a light
+	//Light tmpLight;
+	//tmpLight.lightPos[0] = 0.0f;
+	//tmpLight.lightPos[1] = 0.0f;
+	//tmpLight.lightPos[2] = -1.0f;
+	//tmpLight.lightDir[0] = 0.0f;
+	//tmpLight.lightDir[1] = 0.0f;
+	//tmpLight.lightDir[2] = 1.0f;
+	//tmpLight.color[0] = 1;
+	//tmpLight.color[1] = 1;
+	//tmpLight.color[2] = 1;
+	//ViewManager::GetInstance()->RegisterLight(tmpLight);
+}
+
+void GamePlayState::ReEnter()
+{
+	m_pAM->playMusic(backGroundID);
 }
 
 void GamePlayState::Exit() 

@@ -20,6 +20,7 @@ private:
 	int fontID;
 	int creditsBGID;
 	int logoID;
+	int musicID;
 
 	CreditsMenuState();
 	~CreditsMenuState();
@@ -38,6 +39,8 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render();
+	void ReEnter();
+
 };
 
 #endif

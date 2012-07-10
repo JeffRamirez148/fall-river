@@ -14,6 +14,8 @@ OptionsMenuState::OptionsMenuState()
 	m_bIsWindowed = false;
 	m_nOptionID = -1;
 	musicID = -1;
+	soundID = -1;
+
 }
 
 OptionsMenuState::~OptionsMenuState()
@@ -46,7 +48,7 @@ void OptionsMenuState::Enter()
 	m_pAM->setSoundVel(soundID, tmp);
 	m_pAM->setSoundLooping(soundID, false);
 
-	musicID = m_pAM->registerMusic("resource/Sounds/shot.mp3");
+	musicID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 	m_pAM->setMusicPos(musicID, sound1);
 
 	m_pAM->setMusicVel(musicID, tmp);
@@ -57,6 +59,11 @@ void OptionsMenuState::Enter()
 
 	musicVolume = m_pAM->getMusicVolume();
 	sfxVolume = m_pAM->getSoundVolume();
+}
+
+void OptionsMenuState::ReEnter()
+{
+	m_pAM->playMusic(musicID);
 }
 
 void OptionsMenuState::Exit() 

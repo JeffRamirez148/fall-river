@@ -19,6 +19,11 @@ void DefeatMenuState::Enter()
 {
 }
 
+void DefeatMenuState::ReEnter()
+{
+
+}
+
 void DefeatMenuState::Exit() 
 {
 }

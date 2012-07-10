@@ -43,6 +43,7 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render();
+	void ReEnter();
 };
 
 #endif

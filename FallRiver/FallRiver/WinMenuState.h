@@ -35,6 +35,7 @@ public:
 	void Update(float aFElapsedTime);
 	void Render();
 	static WinMenuState* GetInstance();
+	void ReEnter();
 };
 
 #endif

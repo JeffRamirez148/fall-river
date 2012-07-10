@@ -494,9 +494,10 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	lightPos[2] = 1.0f;
 	spotLightPos[0] = 0.0f;
 	spotLightPos[1] = 0.0f;
-	spotLightPos[2] = -1.0f;
+	spotLightPos[2] = -.7f;
 	innerCone = .95f;
 	outerCone = .9f;
+	lightNum = 0;
 	//	Return success.
 	return true;
 }
@@ -548,6 +549,35 @@ bool ViewManager::DeviceEnd(void)
 	D3DXMatrixInverse(&tmp, 0, &wall);
 	postEffect->Begin(&passes, 0);
 
+
+	D3DXVECTOR3 tmpDir[6];
+	D3DXVECTOR3 tmpPos[6];
+	D3DXVECTOR3 tmpColor[6];
+	float tmpInnerCone[6];
+	float tmpOuterCone[6];
+
+	int j = 0;
+	lightNum = 0;
+	for(; j < lights.size(); ++j)
+	{
+		tmpDir[j] = lights[j]->lightDir;
+		tmpPos[j] = lights[j]->lightPos;
+		tmpColor[j] = lights[j]->color;
+		tmpInnerCone[j] = lights[j]->innerCone;
+		tmpOuterCone[j] = lights[j]->outerCone;
+		++lightNum;
+	}
+
+	for(; j < 6; ++j)
+	{
+		Light* light = new Light();
+		tmpDir[j] = light->lightDir;
+		tmpPos[j] = light->lightPos;
+		tmpColor[j] = light->color;
+		tmpInnerCone[j] = light->innerCone;
+		tmpOuterCone[j] = light->outerCone;
+	}
+
 	for(unsigned i(0); i<passes; ++i)
 	{
 		postEffect->BeginPass(i);
@@ -561,6 +591,14 @@ bool ViewManager::DeviceEnd(void)
 		postEffect->SetFloat("gOuterCone2", outerCone);
 		postEffect->SetFloatArray("lightColor", color, 3);
 		postEffect->SetInt("gSetting", 0);
+
+		postEffect->SetInt("gLightNum", lightNum);
+		postEffect->SetValue("gLightPos3", tmpPos, sizeof(D3DXVECTOR3) * 6);
+		postEffect->SetValue("gLightDir3", tmpDir, sizeof(D3DXVECTOR3) * 6);
+		postEffect->SetValue("lightColor3", tmpColor, sizeof(D3DXVECTOR3) * 6);
+		postEffect->SetValue("gInnerCone3", tmpInnerCone, sizeof(float) * 6);
+		postEffect->SetValue("gOuterCone3", tmpOuterCone, sizeof(float) * 6);
+
 
 		postEffect->CommitChanges();
 		m_lpDirect3DDevice->SetVertexDeclaration(cubedecl);

@@ -31,6 +31,12 @@ void LoseMenuState::Enter()
 	curPos = 250;
 
 }
+
+void LoseMenuState::ReEnter()
+{
+
+}
+
 void LoseMenuState::Exit()
 {
 	pVM	= nullptr;

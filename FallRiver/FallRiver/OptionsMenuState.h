@@ -40,7 +40,7 @@ public:
 	bool Input();
 	void Update(float aFElapsedTime);
 	void Render();
-
+	void ReEnter();
 };
 
 #endif
