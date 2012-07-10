@@ -428,8 +428,8 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
 
-	// Quest 2 completion
-	if(GetPlayer()->questCounter == 1)
+	//// Quest 2 completion
+	if(GetPlayer()->questCounter == 10 )
 	{
 		questFlag = true;
 		if(m_pDI->KeyPressed(DIK_RETURN))
@@ -437,13 +437,14 @@ void GamePlayState::Update(float fElapsedTime)
 			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 			{
 				GetPlayer()->completedQuest++;
+				GetPlayer()->m_vpFinishedQuests.push_back(GetPlayer()->m_vpActiveQuests[i]);
 				GetPlayer()->m_vpActiveQuests.pop_back();
 			}
 			questFlag = false;
 		}
 	}
 	// Total quest completion to win the game
-	if(GetPlayer()->completedQuest == 2)
+	if(GetPlayer()->m_vpFinishedQuests.size() == 2)
 	{
 		questFlag = false;
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());

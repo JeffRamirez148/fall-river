@@ -36,7 +36,7 @@ public:
 	void Render();
 
 	void SetQuest(int q_id);
-
+	bool AllQuestsAvail[10];
 	bool CheckCollision(IObjects* pBase);
 
 	void ShowDialog();

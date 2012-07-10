@@ -41,6 +41,7 @@ public:
 	int questCounter;
 	int completedQuest;
 	vector<Quest_Struct*> m_vpActiveQuests;
+	vector<Quest_Struct*> m_vpFinishedQuests;
 private:
 	char* m_cName;
 	bool m_bIsAlive;
@@ -54,6 +55,7 @@ private:
 	bool lightOn;
 public:
 	int battery;
+	bool questLogToggle;
 private:
 	float batteryTime;
 

@@ -579,17 +579,43 @@ bool ViewManager::DeviceEnd(void)
 
 		GamePlayState::GetInstance()->m_pHUD->Render();
 		Player* tmp = GamePlayState::GetInstance()->GetPlayer();
-		RECT logRect = { 600, 0, 800, 200};
-		DrawRect(logRect, 50, 50, 50);
-		for(unsigned int i = 0; i < tmp->m_vpActiveQuests.size(); i++)
-			DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
 
+		if(tmp->questLogToggle)
+		{
+			// Quest Log Box
+			RECT logRect = { 600, 0, 800, 200};
+			DrawRect(logRect, 50, 50, 50);
+			DrawFont(tmp->m_nFontID,"Active Quests",640.0f,10.0f,0.5f,0.5f);
+			for(unsigned int i = 0; i < tmp->m_vpActiveQuests.size(); i++)
+			{
+				DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+50), 0.5f, 0.5f);
+				if(tmp->m_vpActiveQuests[i]->QuestID == 2)
+				{
+					// TODO : kill counter
+					char buffer[100];
+					_itoa_s(tmp->questCounter,buffer,10);
+					DrawFont(tmp->m_nFontID, buffer, 610.0f, float(i*50+75), 0.5f, 0.5f);
+					DrawFont(tmp->m_nFontID, "/10 killed", 620.0f, float(i*50+75), 0.5f, 0.5f);
+				}
+
+			}
+
+
+
+			// Quest Finished Box
+			RECT finishedLogRect = { 600, 200, 800, 400};
+			DrawRect(finishedLogRect,50,50,50);
+			DrawFont(tmp->m_nFontID,"Finished Quests",640.0f,210.0f,0.5f,0.5f);
+			for(unsigned int i = 0; i < tmp->m_vpFinishedQuests.size(); i++)
+				DrawFont(tmp->m_nFontID, (char*)tmp->m_vpFinishedQuests[i]->QuestTitle.c_str(), 610.0f, float(i*50+250), 0.5f, 0.5f);
+
+		}
 		vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
 		for(unsigned int i = 0; i < tmpNPCs.size(); ++i)
 		{
 			tmpNPCs[i]->RenderQuests();
 		}
-		RECT questBox;
+		/*RECT questBox;
 		questBox.left = 0;
 		questBox.top = CGame::GetInstance()->GetScreenHeight() - 100;
 		questBox.right = CGame::GetInstance()->GetScreenWidth();
@@ -599,7 +625,7 @@ bool ViewManager::DeviceEnd(void)
 		{
 			DrawRect(questBox,255,255,255);
 			DrawFont(tmp->m_nFontID,"You killed enough zombies...for now \n Press enter to continue.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
-		}
+		}*/
 
 		if(ambientLight[2] == .1f)
 		{

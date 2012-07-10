@@ -31,6 +31,7 @@ Player::Player()
 	m_cName = "";
 	questCounter = 0;
 	completedQuest = 0;
+	questLogToggle = true;
 	SetDirection(DIRE_UP);
 
 	//AnimInfo startup
@@ -147,6 +148,13 @@ void Player::Update(float fElapsedTime)
 	if( pDI->KeyPressed(DIK_F))
 	{
 		lightOn = !lightOn;
+	}
+	if(pDI->KeyPressed(DIK_L))
+	{
+		if(questLogToggle == true)
+			questLogToggle = false;
+		else
+			questLogToggle = true;
 	}
 
 	if(lightOn)
