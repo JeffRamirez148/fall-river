@@ -30,7 +30,9 @@ private:
 	SaveMenuState& operator= (const SaveMenuState&);
 
 	int soundID;
+	int soundID2;
 	int musicID;
+	int musicID2;
 
 public:
 

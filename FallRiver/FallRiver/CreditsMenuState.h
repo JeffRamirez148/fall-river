@@ -20,7 +20,10 @@ private:
 	int fontID;
 	int creditsBGID;
 	int logoID;
+
+	int soundID2;
 	int musicID;
+	int musicID2;
 
 	CreditsMenuState();
 	~CreditsMenuState();

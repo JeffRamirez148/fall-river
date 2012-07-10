@@ -15,7 +15,9 @@ private:
 	AudioManager* audio;
 	int		m_nHowToKeyID;
 	int		m_nHowToJoyID;
-	int		musicID;
+	int soundID2;
+	int musicID;
+	int musicID2;
 
 	HowToPlayMenuState();
 	~HowToPlayMenuState();

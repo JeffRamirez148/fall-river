@@ -8,6 +8,7 @@ using namespace std;
 // #include "ViewManager.h"
 #include <tchar.h>
 #include <string.h>
+#include <vector>
 
 class GamePlayState;
 class ViewManager;
@@ -15,7 +16,7 @@ class HUD;
 
 class HUD
 {
-public:
+private:
 	float m_fHealth;
 	int m_nFontID;
 	float m_fTime;
@@ -25,9 +26,13 @@ public:
 	float m_fFlashlightLife;
 	int m_nAmmo;
 	int m_nClip;
-	int m_nHudID;
-
+	float m_fAniSpeed;
+	float m_ftest;
 public:
+	int m_nHudID;
+	vector<int> m_vFrameIDs;
+
+
 	HUD();
 
 	~HUD();

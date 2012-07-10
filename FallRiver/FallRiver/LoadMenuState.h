@@ -26,7 +26,9 @@ private:
 	int m_nExitID;
 
 	int soundID;
+	int soundID2;
 	int musicID;
+	int musicID2;
 
 	LoadMenuState();
 	~LoadMenuState();
