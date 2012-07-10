@@ -24,24 +24,39 @@ void LoseMenuState::Enter()
 {
 	pVM = ViewManager::GetInstance();
 	pDI = DirectInput::GetInstance();
-	pAM = AudioManager::GetInstance();
 
 	LMS_ID =	pVM->RegisterTexture("resource/graphics/youLose.png");
 	tempLoseID = pVM->RegisterTexture("resource/graphics/sprites_pauseMenu.png");
 	curPos = 250;
+	audio = AudioManager::GetInstance();
 
+	FMOD_VECTOR tmp = {0,0,0};
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	audio->SetListenerPos(tmp);
+	soundID = audio->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
+	audio->setSoundPos(soundID, sound1);
+
+	audio->setSoundVel(soundID, tmp);
+	audio->setSoundLooping(soundID, false);
+
+	musicID = audio->registerMusic("resource/Sounds/background.mp3");
+	audio->setMusicPos(musicID, sound1);
+
+	audio->setMusicVel(musicID, tmp);
+	audio->setMusicLooping(musicID, true);
+	audio->playMusic(musicID);
 }
 
 void LoseMenuState::ReEnter()
 {
-
+	audio->playMusic(musicID);
 }
 
 void LoseMenuState::Exit()
 {
 	pVM	= nullptr;
 	pDI	= nullptr;
-	pAM	= nullptr;
+	audio	= nullptr;
 
 	GamePlayState::GetInstance()->SetWinLose(true);
 }
@@ -49,22 +64,28 @@ bool LoseMenuState::Input()
 {
 	if( pDI->KeyPressed(DIK_DOWNARROW) )
 	{
+		audio->playSound(soundID);
 		curPos += 50;
 		if( curPos > 300 )
 			curPos = 250;
 	}
 	else if( pDI->KeyPressed(DIK_UPARROW) )
 	{
+		audio->playSound(soundID);
 		curPos -= 50;
 		if( curPos < 250 )
 			curPos = 300;
 	}
 
 	if(pDI->KeyPressed(DIK_ESCAPE) )
+	{
+		audio->playSound(soundID);
 		curPos = 300;
+	}
 
 	if(pDI->KeyPressed(DIK_RETURN))
 	{
+		audio->playSound(soundID);
 		if( curPos == 250 )
 		{
 			CGame::GetInstance()->RemoveState();

@@ -22,6 +22,8 @@ private:
 
 	// For Menu Part
 	int m_nPauseID;
+	int soundID;
+	int musicID;
 
 	PauseMenuState();
 	~PauseMenuState();

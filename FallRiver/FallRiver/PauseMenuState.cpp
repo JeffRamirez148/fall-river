@@ -36,11 +36,30 @@ void PauseMenuState::Enter()
 
 	m_nPauseID = m_pVM->RegisterTexture("resource/graphics/sprites_pauseMenu.png");
 	m_pVM->SetAmbientLight(0,0,.1f);
+
+	audio = AudioManager::GetInstance();
+
+	FMOD_VECTOR tmp = {0,0,0};
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	audio->SetListenerPos(tmp);
+	soundID = audio->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
+	audio->setSoundPos(soundID, sound1);
+
+	audio->setSoundVel(soundID, tmp);
+	audio->setSoundLooping(soundID, false);
+
+	musicID = audio->registerMusic("resource/Sounds/background.mp3");
+	audio->setMusicPos(musicID, sound1);
+
+	audio->setMusicVel(musicID, tmp);
+	audio->setMusicLooping(musicID, true);
+	audio->playMusic(musicID);
+
 }
 
 void PauseMenuState::ReEnter()
 {
-
+	audio->playMusic(musicID);
 }
 
 void PauseMenuState::Exit()
@@ -59,16 +78,19 @@ bool PauseMenuState::Input()
 		m_nCursPosY += 50;
 		if( m_nCursPosY > 300 )
 			m_nCursPosY = 150;
+		audio->playSound(soundID);
 	}
 	else if( m_pDI->KeyPressed(DIK_UPARROW) )
 	{
 		m_nCursPosY -= 50;
 		if( m_nCursPosY < 150 )
 			m_nCursPosY = 300;
+		audio->playSound(soundID);
 	}
 
 	if(m_pDI->KeyPressed(DIK_RETURN) )
 	{
+		audio->playSound(soundID);
 		if( m_nCursPosY == 150 )
 			CGame::GetInstance()->RemoveState();
 		else if(m_nCursPosY == 200)
@@ -85,7 +107,10 @@ bool PauseMenuState::Input()
 	}
 
 	if(m_pDI->KeyPressed(DIK_ESCAPE) )
+	{
+		audio->playSound(soundID);
 		m_nCursPosY = 300;
+	}
 
 	return true;
 }

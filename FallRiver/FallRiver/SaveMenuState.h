@@ -29,6 +29,9 @@ private:
 	SaveMenuState(const SaveMenuState&);
 	SaveMenuState& operator= (const SaveMenuState&);
 
+	int soundID;
+	int musicID;
+
 public:
 
 	static SaveMenuState* GetInstance();

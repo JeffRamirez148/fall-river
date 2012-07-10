@@ -25,6 +25,9 @@ private:
 	int m_nLoadID;
 	int m_nExitID;
 
+	int soundID;
+	int musicID;
+
 	LoadMenuState();
 	~LoadMenuState();
 	LoadMenuState(const LoadMenuState&);

@@ -12,8 +12,10 @@ class HowToPlayMenuState: public IMenuState
 private: 
 	ViewManager* m_pVM;
 	DirectInput* m_pDI;
+	AudioManager* audio;
 	int		m_nHowToKeyID;
 	int		m_nHowToJoyID;
+	int		musicID;
 
 	HowToPlayMenuState();
 	~HowToPlayMenuState();
