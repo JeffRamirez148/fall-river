@@ -26,6 +26,7 @@ MainMenuState::MainMenuState()
 	m_nMenuCreditsID	= -1;
 	m_nMenuExitID		= -1;
 	musicID = -1;
+	musicID2 = -1;
 	soundID = -1;
 }
 
@@ -57,17 +58,31 @@ void MainMenuState::Enter()
 	audio->setSoundVel(soundID, tmp);
 	audio->setSoundLooping(soundID, false);
 
-	musicID = audio->registerMusic("resource/Sounds/background.mp3");
+	soundID2 = audio->RegisterSound("resource/Sounds/thunder.wav");
+	audio->setSoundPos(soundID2, sound1);
+
+	audio->setSoundVel(soundID2, tmp);
+	audio->setSoundLooping(soundID2, false);
+
+	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
 	audio->setMusicPos(musicID, sound1);
 
 	audio->setMusicVel(musicID, tmp);
 	audio->setMusicLooping(musicID, true);
 	audio->playMusic(musicID);
+
+	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+	audio->setMusicPos(musicID2, sound1);
+
+	audio->setMusicVel(musicID2, tmp);
+	audio->setMusicLooping(musicID2, true);
+	audio->playMusic(musicID2);
 }
 
 void MainMenuState::ReEnter()
 {
 	audio->playMusic(musicID);
+	audio->playMusic(musicID2);
 }
 
 void MainMenuState::Exit() 
@@ -192,7 +207,10 @@ void MainMenuState::Render()
 	m_pVM->DrawStaticTexture(m_nFallRiverID, -50, 10, 0.5f, 0.5f);
 
 	if((m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount()) && m_dwReset == 0)
+	{
+		audio->playSound(soundID2);
 		m_dwReset = GetTickCount() + 200;
+	}
 
 	if(m_dwReset <= GetTickCount())
 	{

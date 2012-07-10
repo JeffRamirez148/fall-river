@@ -86,8 +86,7 @@ void CGame::Render()
 
 
 	// Fixing stuff
-	for(unsigned int i = 0; i < m_vStates.size();i++)
-		m_vStates[i]->Render();
+	m_vStates.back()->Render();
 	// Redirect to the current state
 	/*if( m_pPrevState == GamePlayState::GetInstance() )
 		m_pPrevState->Render();
