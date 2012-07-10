@@ -18,6 +18,7 @@ ChasingAI::ChasingAI()
 	m_pfDestination.x = 0;
 	m_pfDestination.y = 0;
 	m_dwIdleWait = 0;
+	attackDelay = 0;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 
 	AudioManager* m_pAM = AudioManager::GetInstance();
@@ -78,7 +79,14 @@ void ChasingAI::Update(float fElapsedTime)
 		distY = -distY;
 
 	if( (distX < 10 && distY < 10) || (distX-m_pTarget->GetWidth() < 10 && distY - m_pTarget->GetHeight() < 10))
+	{
+		if( attackDelay < GetTickCount() )
+		{
+			m_pTarget->SetHealth(m_pTarget->GetHealth()-10);
+			attackDelay = GetTickCount() + 500;
+		}
 		return;
+	}
 
 	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 300 )
 	{

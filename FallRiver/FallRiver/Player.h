@@ -54,6 +54,10 @@ private:
 	int m_nLives;
 	int walkingID;
 	int hitID;
+	int flashLightID;
+	int weaponChangeID;
+
+
 	bool lightOn;
 public:
 	int battery;

@@ -513,7 +513,7 @@ void HUD::Render()
 	char szName[100] = {}; 
 	
 	TCHAR buffer[ 100 ];
-	float x = GamePlayState::GetInstance()->GetPlayer()->GetHealth() ;
+	int x = GamePlayState::GetInstance()->GetPlayer()->GetHealth() ;
 	if( x > 0 )
 	{
 		_stprintf_s( buffer, 100, _T("%i"), GamePlayState::GetInstance()->GetPlayer()->GetHealth() );
