@@ -80,6 +80,20 @@ void ChasingAI::Update(float fElapsedTime)
 	if( (distX < 10 && distY < 10) || (distX-m_pTarget->GetWidth() < 10 && distY - m_pTarget->GetHeight() < 10))
 		return;
 
+	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 300 )
+	{
+		float targetPosX = m_pTarget->GetPosX();
+		float targetPosY = m_pTarget->GetPosY();
+
+		if( m_pTarget->GetLightType() == 0 )
+		{
+			if( targetPosX < m_nPosX && m_pTarget->GetDirection() == DIRE_RIGHT )
+				m_nState = ESTATE_CHASING;
+			else if( targetPosX > m_nPosX && m_pTarget->GetDirection() == DIRE_LEFT )
+				m_nState = ESTATE_CHASING;
+		}
+	}
+
 	if( (distance >= 200) || m_pTarget->CheckHidden())
 	{
 		if(  m_pTarget->CheckHidden() )

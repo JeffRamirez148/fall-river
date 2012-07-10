@@ -24,6 +24,7 @@ Player::Player()
 	m_bIsAlive = true;
 	m_bIsHidden = false;
 	m_nScore = 0;
+	m_ncurrWeap = 0;
 	m_nState = PSTATE_IDLE;
 	this->SetHealth(100);
 	m_nLives = 3;
@@ -101,6 +102,20 @@ void Player::Update(float fElapsedTime)
 	//{
 	//	CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
 	//}
+
+	if( pDI->KeyPressed( DIK_TAB ) )
+	{
+		if( m_currWeapon == m_vpWeapons.back() )
+		{
+			m_currWeapon = m_vpWeapons.front();
+			m_ncurrWeap = 0;
+		}
+		else
+		{
+			m_ncurrWeap++;
+			m_currWeapon = m_vpWeapons[m_ncurrWeap];
+		}
+	}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
@@ -551,6 +566,7 @@ void Player::AddWeapon(Weapon* pWeapon)
 	pWeapon->SetPosY(GetPosY());
 	m_vpWeapons.push_back(pWeapon);
 	m_currWeapon = pWeapon;
+	m_ncurrWeap = m_vpWeapons.size()-1;
 }
 
 void Player::AddLight(Light* pLight) 

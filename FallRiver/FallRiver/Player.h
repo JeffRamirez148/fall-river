@@ -27,6 +27,7 @@ private:
 	vector<Light*> m_vpLights;
 
 	Weapon* m_currWeapon;
+	int m_ncurrWeap;
 	Light* m_currLight;
 
 	DWORD m_dwGunCount;
@@ -64,12 +65,13 @@ public:
 	Player();
 	~Player();
 
-
 	void Update(float fElapsedTime);
 	void Render();
 	bool CheckCollision(IObjects* pBase);
 	bool CheckLifes();
 	void HandleEvent(Event* aPEvent);
+	
+	int GetLightType() { return flashLightType; }
 
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}

@@ -116,18 +116,42 @@ void GamePlayState::Enter()
 		pPlayer->SetPosX(600);
 		pPlayer->SetPosY(500);
 
+		
+		Weapon* pWeapon2 = nullptr;
+		Weapon* pWeapon3 = nullptr;
+
 		pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 		pWeapon->SetHeight(20);
 		pWeapon->SetWidth(10);
 		pWeapon->SetImageID(-1);
 		pWeapon->SetOwner(pPlayer);
-		pWeapon->Init(WPN_SHOTGUN, 100, 0);
+		pWeapon->Init(WPN_PISTOL, 100, 0);
 		pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon->SetPosY(pPlayer->GetPosY());
+
+		pWeapon2 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon2->SetHeight(20);
+		pWeapon2->SetWidth(10);
+		pWeapon2->SetImageID(-1);
+		pWeapon2->SetOwner(pPlayer);
+		pWeapon2->Init(WPN_SHOTGUN, 100, 0);
+		pWeapon2->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon2->SetPosY(pPlayer->GetPosY());
+
+		pWeapon3 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon3->SetHeight(20);
+		pWeapon3->SetWidth(10);
+		pWeapon3->SetImageID(-1);
+		pWeapon3->SetOwner(pPlayer);
+		pWeapon3->Init(WPN_RIFLE, 100, 0);
+		pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon3->SetPosY(pPlayer->GetPosY());
 
 		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/TestAnimation.xml"));
 
 		pPlayer->AddWeapon(pWeapon);
+		pPlayer->AddWeapon(pWeapon2);
+		pPlayer->AddWeapon(pWeapon3);
 
 	}
 	else
@@ -243,7 +267,7 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
-	for(int i = 0; i < 1; i++)
+	/*for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -267,7 +291,7 @@ void GamePlayState::Enter()
 		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
 		eWeapon->SetPosY(pEnemy->GetPosY());
 		pEnemy->SetWeapon(eWeapon);
-	}
+	}*/
 
 	//for(int i = 0; i < 1; i++)
 	//{
