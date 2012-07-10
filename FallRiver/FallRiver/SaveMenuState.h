@@ -29,6 +29,11 @@ private:
 	SaveMenuState(const SaveMenuState&);
 	SaveMenuState& operator= (const SaveMenuState&);
 
+	int soundID;
+	int soundID2;
+	int musicID;
+	int musicID2;
+
 public:
 
 	static SaveMenuState* GetInstance();
@@ -42,6 +47,7 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render();
+	void ReEnter();
 };
 
 #endif

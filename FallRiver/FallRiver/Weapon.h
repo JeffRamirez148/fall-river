@@ -12,6 +12,7 @@ private:
 	int m_nWeaponType;
 	int m_nAmmo;
 	int m_nClip;
+	int m_nMaxClip;
 	int m_nDamage;
 
 	int swingMissID;
@@ -28,14 +29,17 @@ private:
 	bool m_bMelee;
 
 public: 
+	bool m_bReloading;
+	
 	Weapon();
 	~Weapon();
 
 	void Update(float fElapsedTime);
 
 	void FireWeapon();
+	bool Reload();
 
-	bool Init(int wType, int nAmmo, int nDamage, float currRotation );
+	bool Init(int wType, int nAmmo, float currRotation );
 
 	void SetOwner(BaseCharacter* pOwner) {m_pOwner = pOwner;}
 	BaseCharacter* GetOwner() {return m_pOwner;}
@@ -44,6 +48,7 @@ public:
 	int GetClip() {return m_nClip;}
 	int GetDamage() {return m_nDamage;}
 	float GetFireRate() {return m_fFireRate;}
+	float GetRange() {return m_fFiringRange;}
 
 	void Render();
 

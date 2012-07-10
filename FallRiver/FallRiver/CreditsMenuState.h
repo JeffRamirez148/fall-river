@@ -21,6 +21,10 @@ private:
 	int creditsBGID;
 	int logoID;
 
+	int soundID2;
+	int musicID;
+	int musicID2;
+
 	CreditsMenuState();
 	~CreditsMenuState();
 	CreditsMenuState(const CreditsMenuState&);
@@ -38,6 +42,8 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render();
+	void ReEnter();
+
 };
 
 #endif

@@ -7,14 +7,17 @@
 
 Weapon::Weapon()
 {
-	
+	m_bReloading = false;
+	m_nAmmo = 0;
+	m_nDamage = 0;
+	m_bMelee = false;
 }
 
 Weapon::~Weapon()
 {
 }
 
-bool Weapon::Init(int wType, int nAmmo, int nDamage, float currRotation )
+bool Weapon::Init(int wType, int nAmmo, float currRotation )
 {
 	// Just in case
 	if(wType < WPN_MAX)
@@ -24,7 +27,6 @@ bool Weapon::Init(int wType, int nAmmo, int nDamage, float currRotation )
 
 	// Set up variables
 	m_nAmmo = nAmmo;
-	m_nDamage = nDamage;
 	m_fCurrRotation = currRotation;
 	m_bMelee = false;
 
@@ -34,16 +36,22 @@ bool Weapon::Init(int wType, int nAmmo, int nDamage, float currRotation )
 		m_fFireRate = 500;
 		m_fFiringRange = 128.0f;
 		m_nClip = 10;
+		m_nDamage = 25;
+		m_nMaxClip = 10;
 		break;
 	case WPN_SHOTGUN:
 		m_fFireRate = 1000;
-		m_fFiringRange = 64.0f;
+		m_fFiringRange = 128.0f;
 		m_nClip = 5;
+		m_nDamage = 30;
+		m_nMaxClip = 5;
 		break;
 	case WPN_RIFLE:
 		m_fFireRate = 1000;
 		m_fFiringRange = 288.0f;
 		m_nClip = 8;
+		m_nDamage = 30;
+		m_nMaxClip = 8;
 		break;
 	case WPN_MACHETE:
 		m_bMelee = true;
@@ -90,12 +98,19 @@ void Weapon::Render()
 
 void Weapon::FireWeapon()
 {
+	if( m_nClip == 0 || m_bReloading )
+	{
+		if(!Reload())
+			return;
+		else 
+			m_bReloading = false;
+	}
 	if( m_nWeaponType != WPN_MACHETE && m_nAmmo > 0 )
 	{
 		CreateBullet* pMsg = new CreateBullet( this );
 		MessageSystem::GetInstance()->SendMsg( pMsg );
 		pMsg = nullptr;
-		m_nAmmo--;
+		m_nClip--;
 		if(m_nWeaponType == WPN_SHOTGUN)
 		{
 			for(int i = 0; i < 2; i++)
@@ -109,6 +124,19 @@ void Weapon::FireWeapon()
 	}
 }
 
+bool Weapon::Reload()
+{
+	if( m_nAmmo > 0 && m_nClip < m_nMaxClip)
+	{
+		
+		m_bReloading = true;
+		m_nAmmo--;
+		m_nClip++;
+		return false;
+	}
+	return true;
+
+}
 
 RECT Weapon::GetRect()
 {

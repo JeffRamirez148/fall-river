@@ -3,6 +3,7 @@
 #include "DirectInput.h"
 #include "IMenuState.h"
 #include "CGame.h"
+#include "AudioManager.h"
 
 HowToPlayMenuState::HowToPlayMenuState()
 {
@@ -31,6 +32,37 @@ void HowToPlayMenuState::Enter()
 
 	m_nHowToKeyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_keyboard.png");
 	m_nHowToJoyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_arcade.png");
+	audio = AudioManager::GetInstance();
+
+	FMOD_VECTOR tmp = {0,0,0};
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	audio->SetListenerPos(tmp);
+
+	soundID2 = audio->RegisterSound("resource/Sounds/thunder.wav");
+	audio->setSoundPos(soundID2, sound1);
+
+	audio->setSoundVel(soundID2, tmp);
+	audio->setSoundLooping(soundID2, false);
+
+	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
+	audio->setMusicPos(musicID, sound1);
+
+	audio->setMusicVel(musicID, tmp);
+	audio->setMusicLooping(musicID, true);
+	audio->playMusic(musicID);
+
+	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+	audio->setMusicPos(musicID2, sound1);
+
+	audio->setMusicVel(musicID2, tmp);
+	audio->setMusicLooping(musicID2, true);
+	audio->playMusic(musicID2);
+}
+
+void HowToPlayMenuState::ReEnter()
+{
+	audio->playMusic(musicID);
+	audio->playMusic(musicID2);
 }
 
 void HowToPlayMenuState::Exit() 

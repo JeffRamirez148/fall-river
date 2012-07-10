@@ -86,8 +86,7 @@ void CGame::Render()
 
 
 	// Fixing stuff
-	for(unsigned int i = 0; i < m_vStates.size();i++)
-		m_vStates[i]->Render();
+	m_vStates.back()->Render();
 	// Redirect to the current state
 	/*if( m_pPrevState == GamePlayState::GetInstance() )
 		m_pPrevState->Render();
@@ -152,10 +151,12 @@ void CGame::ShutDown()
 
 void CGame::ChangeState(IMenuState* pNewState) 
 {
+
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
 		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
+	
 	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
 	m_pVM->RemoveLights();
@@ -219,6 +220,7 @@ void CGame::RemoveState( void )
 		m_vStates.back()->Exit();
 		m_vStates.pop_back();		
 	}
+	m_vStates.back()->ReEnter();
 	//// Checking. Just in case
 	//if( m_pCurrState != nullptr )
 	//	m_pCurrState->Exit();
@@ -246,11 +248,12 @@ void CGame::RemoveState( void )
 }
 void CGame::RemoveState(int state)
 {
+	
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
 		AudioManager::GetInstance()->GetMusicChannel(i)->stop();
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
-
+		
 	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
 	for(int i = 0; i < state; i++)
@@ -258,4 +261,5 @@ void CGame::RemoveState(int state)
 		m_vStates.back()->Exit();
 		m_vStates.pop_back();
 	}
+	m_vStates.back()->ReEnter();
 }

@@ -19,6 +19,7 @@ public:
 	virtual bool Input() = 0;
 	virtual void Update(float fElapsedTime) = 0;
 	virtual void Render() = 0;
+	virtual void ReEnter() = 0;
 };
 
 #endif

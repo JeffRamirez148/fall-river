@@ -2,7 +2,6 @@
 #include "PauseMenuState.h"
 #include "MainMenuState.h"
 #include "WinMenuState.h"
-#include "DefeatMenuState.h"
 #include "OptionsMenuState.h"
 #include "GamePlayState.h"
 #include "LoadMenuState.h"
@@ -261,7 +260,7 @@ Player* XMLManager::LoadProgress(const char* szFilename)
 		pWeapon->Attribute("weapon_type", &wpnType); 
 		pWeapon->Attribute("weapon_ammo", &ammo); 
 		pWeapon->Attribute("weapon_damage", &damage);
-		m_cWeapon->Init( wpnType, ammo, damage, 0 );
+		m_cWeapon->Init( wpnType, ammo, 0 );
 
 		m_cPlayer->AddWeapon(m_cWeapon);
 

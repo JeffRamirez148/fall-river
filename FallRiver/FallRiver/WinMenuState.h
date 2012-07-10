@@ -21,11 +21,15 @@ class WinMenuState: public IMenuState
 private: 
 	ViewManager*	pVM;
 	DirectInput*	pDI;
-	AudioManager*	pAM;
+	AudioManager*	audio;
 	int				WMS_ID;
 	int				tempWinID;
 	int				curPos;
 	float			fTime;
+	int soundID;
+	int soundID2;
+	int musicID;
+	int musicID2;
 
 public: 
 
@@ -35,6 +39,7 @@ public:
 	void Update(float aFElapsedTime);
 	void Render();
 	static WinMenuState* GetInstance();
+	void ReEnter();
 };
 
 #endif

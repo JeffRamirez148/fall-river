@@ -4,6 +4,7 @@
 #include "CGame.h"
 #include "GamePlayState.h"
 #include "ViewManager.h"
+#include "AudioManager.h"
 
 SaveMenuState* SaveMenuState::GetInstance()
 {
@@ -37,6 +38,41 @@ void SaveMenuState::Enter()
 
 	m_nCursPosY = 200;
 	m_nCursPosX = 280;
+	audio = AudioManager::GetInstance();
+	FMOD_VECTOR tmp = {0,0,0};
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	audio->SetListenerPos(tmp);
+	soundID = audio->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
+	audio->setSoundPos(soundID, sound1);
+
+	audio->setSoundVel(soundID, tmp);
+	audio->setSoundLooping(soundID, false);
+
+	soundID2 = audio->RegisterSound("resource/Sounds/thunder.wav");
+	audio->setSoundPos(soundID2, sound1);
+
+	audio->setSoundVel(soundID2, tmp);
+	audio->setSoundLooping(soundID2, false);
+
+	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
+	audio->setMusicPos(musicID, sound1);
+
+	audio->setMusicVel(musicID, tmp);
+	audio->setMusicLooping(musicID, true);
+	audio->playMusic(musicID);
+
+	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+	audio->setMusicPos(musicID2, sound1);
+
+	audio->setMusicVel(musicID2, tmp);
+	audio->setMusicLooping(musicID2, true);
+	audio->playMusic(musicID2);
+}
+
+void SaveMenuState::ReEnter()
+{
+	audio->playMusic(musicID);
+	audio->playMusic(musicID2);
 }
 
 void SaveMenuState::Exit()
@@ -58,6 +94,7 @@ bool SaveMenuState::Input()
 			m_nCursPosY = 400;
 		else if( m_nCursPosY > 400 )
 			m_nCursPosY = 200;
+		audio->playSound(soundID);
 	}
 	else if( m_pDI->KeyPressed(DIK_UPARROW) )
 	{
@@ -66,6 +103,7 @@ bool SaveMenuState::Input()
 			m_nCursPosY = 300;
 		else if( m_nCursPosY < 200 )
 			m_nCursPosY = 400;
+		audio->playSound(soundID);
 	}
 
 	if( m_pDI->KeyPressed(DIK_RIGHTARROW) && m_bCheck )
@@ -73,16 +111,19 @@ bool SaveMenuState::Input()
 		m_nCursPosX += 100;
 		if( m_nCursPosX > 380 )
 			m_nCursPosX = 280;
+		audio->playSound(soundID);
 	}
 	else if( m_pDI->KeyPressed(DIK_LEFTARROW) && m_bCheck )
 	{
 		m_nCursPosX -= 100;
 		if( m_nCursPosX < 280 )
 			m_nCursPosX = 380;
+		audio->playSound(soundID);
 	}
 
 	if(m_pDI->KeyPressed(DIK_RETURN) )
 	{
+		audio->playSound(soundID);
 		if(m_bCheck)
 		{
 			if(m_nCursPosX == 280)
@@ -136,7 +177,10 @@ bool SaveMenuState::Input()
 	}
 
 	if(m_pDI->KeyDown(DIK_ESCAPE) && !m_bCheck )
+	{
+		audio->playSound(soundID);
 		CGame::GetInstance()->RemoveState();
+	}
 
 	return true;
 }
