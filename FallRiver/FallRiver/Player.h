@@ -27,6 +27,7 @@ private:
 	vector<Light*> m_vpLights;
 
 	Weapon* m_currWeapon;
+	int m_ncurrWeap;
 	Light* m_currLight;
 
 	DWORD m_dwGunCount;
@@ -42,6 +43,7 @@ public:
 	int questCounter;
 	int completedQuest;
 	vector<Quest_Struct*> m_vpActiveQuests;
+	vector<Quest_Struct*> m_vpFinishedQuests;
 private:
 	char* m_cName;
 	bool m_bIsAlive;
@@ -59,6 +61,7 @@ private:
 	bool lightOn;
 public:
 	int battery;
+	bool questLogToggle;
 private:
 	float batteryTime;
 
@@ -68,12 +71,13 @@ public:
 	Player();
 	~Player();
 
-
 	void Update(float fElapsedTime);
 	void Render();
 	bool CheckCollision(IObjects* pBase);
 	bool CheckLifes();
 	void HandleEvent(Event* aPEvent);
+	
+	int GetLightType() { return flashLightType; }
 
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}

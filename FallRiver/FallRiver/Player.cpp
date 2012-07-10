@@ -24,6 +24,7 @@ Player::Player()
 	m_bIsAlive = true;
 	m_bIsHidden = false;
 	m_nScore = 0;
+	m_ncurrWeap = 0;
 	m_nState = PSTATE_IDLE;
 	this->SetHealth(100);
 	m_nLives = 3;
@@ -31,6 +32,7 @@ Player::Player()
 	m_cName = "";
 	questCounter = 0;
 	completedQuest = 0;
+	questLogToggle = true;
 	SetDirection(DIRE_UP);
 
 	//AnimInfo startup
@@ -42,6 +44,7 @@ Player::Player()
 	m_dwGunCount = 0;
 	m_dwGunReset = 0;
 	flickerRate = 9;
+	
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
@@ -57,8 +60,6 @@ Player::Player()
 	AudioManager::GetInstance()->setSoundLooping(walkingID, true);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(hitID, false);
-
-
 	lightOn = false;
 	battery = 100;
 	batteryTime = 0;
@@ -90,6 +91,36 @@ void Player::Update(float fElapsedTime)
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
+	if( this->GetHealth() < 0 )
+	{
+		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
+		//m_nLives--;
+		//SetHealth(100);
+	}
+	//if( this->GetLives() < 0 )
+	//{
+	//	CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
+	//}
+
+	if( pDI->KeyPressed( DIK_TAB ) )
+	{
+		if( m_currWeapon == m_vpWeapons.back() )
+		{
+			m_currWeapon = m_vpWeapons.front();
+			m_ncurrWeap = 0;
+		}
+		else
+		{
+			m_ncurrWeap++;
+			m_currWeapon = m_vpWeapons[m_ncurrWeap];
+		}
+	}
+
+	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
+		m_nState = PSTATE_IDLE;
+
+	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading )
+		m_currWeapon->Reload();
 
 	if( this->GetHealth() < 0 )
 	{
@@ -145,6 +176,13 @@ void Player::Update(float fElapsedTime)
 	{
 		lightOn = !lightOn;
 	}
+	if(pDI->KeyPressed(DIK_L))
+	{
+		if(questLogToggle == true)
+			questLogToggle = false;
+		else
+			questLogToggle = true;
+	}
 
 	if(lightOn)
 	{
@@ -160,6 +198,10 @@ void Player::Update(float fElapsedTime)
 		case 0:		// Flashlight
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
+				ViewManager::GetInstance()->SetInnerCone(.95f);
+				ViewManager::GetInstance()->SetOuterCone(.9f);
+				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
 				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
@@ -256,6 +298,7 @@ void Player::Update(float fElapsedTime)
 		ViewManager::GetInstance()->SetLightDir(0,-1,0);
 	}
 
+
 	if( pDI->KeyDown(DIK_D) )
 	{
 		SetVelX(100);
@@ -289,6 +332,16 @@ void Player::Update(float fElapsedTime)
 	{
 		SetVelY(0);
 	}
+
+	if(GetVelX() == 0 && GetVelY() == 0)
+	{
+		flickerRate = 9;
+		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+	}
+	else
+		flickerRate = 5;
+
+
 	if(GetVelX() == 0 && GetVelY() == 0)
 	{
 		flickerRate = 9;
@@ -409,9 +462,6 @@ void Player::Update(float fElapsedTime)
 		battery = 0;
 		lightOn = false;
 	}
-
-
-
 
 
 }
@@ -551,6 +601,7 @@ void Player::AddWeapon(Weapon* pWeapon)
 	pWeapon->SetPosY(GetPosY());
 	m_vpWeapons.push_back(pWeapon);
 	m_currWeapon = pWeapon;
+	m_ncurrWeap = m_vpWeapons.size()-1;
 }
 
 void Player::AddLight(Light* pLight) 

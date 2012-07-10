@@ -73,6 +73,36 @@ void GamePlayState::Enter()
 	m_pAM = AudioManager::GetInstance();
 	m_pHUD = new HUD;
 	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_01.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_02.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_03.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_04.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_05.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_06.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_07.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_08.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_09.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_10.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_11.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_12.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_13.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_14.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_15.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_16.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_17.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_18.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_19.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_20.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_21.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_22.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_23.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_24.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_25.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_26.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_27.png.png"));
+	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_28.png.png"));
+
+
 	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
@@ -116,18 +146,42 @@ void GamePlayState::Enter()
 		pPlayer->SetPosX(600);
 		pPlayer->SetPosY(500);
 
+		
+		Weapon* pWeapon2 = nullptr;
+		Weapon* pWeapon3 = nullptr;
+
 		pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 		pWeapon->SetHeight(20);
 		pWeapon->SetWidth(10);
 		pWeapon->SetImageID(-1);
 		pWeapon->SetOwner(pPlayer);
-		pWeapon->Init(WPN_SHOTGUN, 100, 0);
+		pWeapon->Init(WPN_PISTOL, 100, 0);
 		pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon->SetPosY(pPlayer->GetPosY());
+
+		pWeapon2 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon2->SetHeight(20);
+		pWeapon2->SetWidth(10);
+		pWeapon2->SetImageID(-1);
+		pWeapon2->SetOwner(pPlayer);
+		pWeapon2->Init(WPN_SHOTGUN, 100, 0);
+		pWeapon2->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon2->SetPosY(pPlayer->GetPosY());
+
+		pWeapon3 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon3->SetHeight(20);
+		pWeapon3->SetWidth(10);
+		pWeapon3->SetImageID(-1);
+		pWeapon3->SetOwner(pPlayer);
+		pWeapon3->Init(WPN_RIFLE, 100, 0);
+		pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon3->SetPosY(pPlayer->GetPosY());
 
 		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/TestAnimation.xml"));
 
 		pPlayer->AddWeapon(pWeapon);
+		pPlayer->AddWeapon(pWeapon2);
+		pPlayer->AddWeapon(pWeapon3);
 
 	}
 	else
@@ -243,7 +297,7 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
-	for(int i = 0; i < 1; i++)
+	/*for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -267,7 +321,7 @@ void GamePlayState::Enter()
 		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
 		eWeapon->SetPosY(pEnemy->GetPosY());
 		pEnemy->SetWeapon(eWeapon);
-	}
+	}*/
 
 	//for(int i = 0; i < 1; i++)
 	//{
@@ -445,8 +499,8 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
 
-	// Quest 2 completion
-	if(GetPlayer()->questCounter == 1)
+	//// Quest 2 completion
+	if(GetPlayer()->questCounter == 10 )
 	{
 		questFlag = true;
 		if(m_pDI->KeyPressed(DIK_RETURN))
@@ -454,13 +508,14 @@ void GamePlayState::Update(float fElapsedTime)
 			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 			{
 				GetPlayer()->completedQuest++;
+				GetPlayer()->m_vpFinishedQuests.push_back(GetPlayer()->m_vpActiveQuests[i]);
 				GetPlayer()->m_vpActiveQuests.pop_back();
 			}
 			questFlag = false;
 		}
 	}
 	// Total quest completion to win the game
-	if(GetPlayer()->completedQuest == 2)
+	if(GetPlayer()->m_vpFinishedQuests.size() == 2)
 	{
 		questFlag = false;
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
