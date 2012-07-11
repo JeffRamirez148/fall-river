@@ -145,23 +145,6 @@ void Player::Update(float fElapsedTime)
 	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading )
 		m_currWeapon->Reload();
 
-	if( this->GetHealth() < 0 )
-	{
-		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
-		//m_nLives--;
-		//SetHealth(100);
-	}
-	//if( this->GetLives() < 0 )
-	//{
-	//	CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
-	//}
-
-	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
-		m_nState = PSTATE_IDLE;
-
-	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading )
-		m_currWeapon->Reload();
-
 	if(pDI->KeyDown(DIK_SPACE) && 	m_dwGunCount  < GetTickCount() )
 	{
 		if(m_dwGunCount == 0)

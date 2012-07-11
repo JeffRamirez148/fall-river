@@ -52,6 +52,8 @@ GamePlayState::GamePlayState()
 
 	winLose = true;
 	questFlag = false;
+	rainA = -1;
+	rainL = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -72,8 +74,9 @@ void GamePlayState::Enter()
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 
-
-
+	// Rain particles
+	rainL = m_pPM->LoadEmitter("rain.xml");
+	rainA = m_pPM->ActivateEmitter(rainL);
 	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
@@ -253,6 +256,21 @@ void GamePlayState::Enter()
 	}
 	pLevel->SetCollision(tmp);
 
+
+	vector<mapTiles> tmpTiles = pLevel->GetTiles();
+	for(unsigned int i = 0; i < tmpTiles.size(); i++) 
+	{
+		for(unsigned int x = i+1; x < tmpTiles.size(); x++) 
+		{
+			if( tmpTiles[x].m_Layer < tmpTiles[i].m_Layer )
+			{
+				swap(tmpTiles[i],tmpTiles[x]);
+			}
+		}
+	}
+
+
+
 	//for(int i = 0; i < 1; i++)
 	//{
 	//	m_cEnemies.push_back(nullptr);
@@ -268,7 +286,7 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
-	/*for(int i = 0; i < 1; i++)
+	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -292,7 +310,7 @@ void GamePlayState::Enter()
 		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
 		eWeapon->SetPosY(pEnemy->GetPosY());
 		pEnemy->SetWeapon(eWeapon);
-	}*/
+	}
 
 	//for(int i = 0; i < 1; i++)
 	//{
@@ -500,7 +518,7 @@ void GamePlayState::Update(float fElapsedTime)
 	}
 	m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
-
+	m_pPM->Update(fElapsedTime);
 	//// Quest 2 completion
 	if(GetPlayer()->questCounter == 10 )
 	{
@@ -517,7 +535,7 @@ void GamePlayState::Update(float fElapsedTime)
 		}
 	}
 	// Total quest completion to win the game
-	if(GetPlayer()->m_vpFinishedQuests.size() == 2)
+	if(GetPlayer()->m_vpFinishedQuests.size() == 10)
 	{
 		questFlag = false;
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
@@ -541,8 +559,8 @@ void GamePlayState::Render()
 	{
 		m_cBushes[i]->Render();
 	}
-
-
+	m_pPM->Render();
+	
 	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 
