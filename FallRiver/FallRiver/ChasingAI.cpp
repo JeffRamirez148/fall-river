@@ -8,13 +8,14 @@
 #include "EventSystem.h"
 #include "Enemy.h"
 #include "GamePlayState.h"
+#include "Level.h"
 #include "AudioManager.h"
 
 ChasingAI::ChasingAI()
 {
 	m_cInTheWay = nullptr;
 	m_nState = ESTATE_IDLE;
-	
+
 	m_pfDestination.x = 0;
 	m_pfDestination.y = 0;
 	m_dwIdleWait = 0;
@@ -82,13 +83,13 @@ void ChasingAI::Update(float fElapsedTime)
 	{
 		if( attackDelay < GetTickCount() )
 		{
-			m_pTarget->SetHealth(m_pTarget->GetHealth()-10);
-			attackDelay = GetTickCount() + 500;
+			m_pTarget->SetHealth(m_pTarget->GetHealth()-5);
+			attackDelay = GetTickCount() + 1000;
 		}
 		return;
 	}
 
-	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 300 )
+	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 400 )
 	{
 		float targetPosX = m_pTarget->GetPosX();
 		float targetPosY = m_pTarget->GetPosY();
@@ -99,10 +100,13 @@ void ChasingAI::Update(float fElapsedTime)
 				m_nState = ESTATE_CHASING;
 			else if( targetPosX > m_nPosX && m_pTarget->GetDirection() == DIRE_LEFT )
 				m_nState = ESTATE_CHASING;
+			else if( targetPosY < m_nPosY && m_pTarget->GetDirection() == DIRE_DOWN )
+				m_nState = ESTATE_CHASING;
+			else if( targetPosY > m_nPosY && m_pTarget->GetDirection() == DIRE_UP )
+				m_nState = ESTATE_CHASING;
 		}
 	}
-
-	if( (distance >= 200) || m_pTarget->CheckHidden())
+	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() )
 	{
 		if(  m_pTarget->CheckHidden() )
 		{
@@ -137,183 +141,91 @@ void ChasingAI::Update(float fElapsedTime)
 		}
 		if( fDistX  > 10 && fDistY > 10 )
 		{
+			float savex = GetPosX();
+			float savey = GetPosY();
+
 			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
 			if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 				AudioManager::GetInstance()->playSound(zombieWalkingID);
 			BaseCharacter::Update(fElapsedTime);
-		}
-		else
-			AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
-	}
-	else if( m_nState == ESTATE_CHASING)
-	{
-		if( distance < 200 && distance > GetWidth() && !m_cInTheWay )
-		{
-			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
-			if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-				AudioManager::GetInstance()->playSound(zombieWalkingID);
-			BaseCharacter::Update(fElapsedTime);
-		}
-		else if( m_cInTheWay )
-		{
-			if( m_cInTheWay->GetObjectType() == OBJ_CHARACTER )
+
+			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
 			{
-				BaseCharacter* pCH = (BaseCharacter*)m_cInTheWay;
-
-				if(pCH->GetCharacterType() == CHA_ENEMY)
-				{
-					Enemy* pEN = (Enemy*)m_cInTheWay;
-
-					float ourDist = distance;
-					float theirDist = (pEN->GetPosX() + pEN->GetPosY()) - (m_pTarget->GetPosX() + m_pTarget->GetPosY());
-
-					if(ourDist < 0)
-						ourDist = -ourDist;
-					if(theirDist < 0)
-						theirDist = -theirDist;
-
-					if( ourDist < theirDist )
-					{
-						MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50);
-						BaseCharacter::Update(fElapsedTime);
-					}
-					else
-					{
-						pEN->MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50);
-						pEN->BaseCharacter::Update(fElapsedTime);
-					}
-				}
-				else
-				{
-					if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
-					{
-						float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
-						float DistToRight = GetPosX() - m_cInTheWay->GetPosX();
-
-						if(DistToBottom < 0)
-							DistToBottom = -DistToBottom;
-
-						if(DistToBottom > DistToRight)
-						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
-						{
-							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else
-							AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
-					}
-					else if(m_pTarget->GetPosY() > m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().bottom)
-					{
-						float DistToBottom = GetPosY() - m_cInTheWay->GetPosY();
-						float DistToLeft = m_cInTheWay->GetPosX() - GetPosX();
-
-						if(DistToBottom < 0)
-							DistToBottom = -DistToBottom;
-
-						if(DistToBottom > DistToLeft)
-						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().bottom), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
-						{
-							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else
-							AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
-					}
-					else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() > GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
-					{
-						float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
-						float DistToRight = m_cInTheWay->GetPosX() - GetPosX();
-
-						if(DistToTop < 0)
-							DistToTop = -DistToTop;
-
-						if(DistToTop < DistToRight)
-						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else if(m_pTarget->GetPosX() > GetPosX() && m_pTarget->GetPosX() > m_cInTheWay->GetPosX())
-						{
-							MoveTo(float(m_cInTheWay->GetRect().right), GetPosY(), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else
-							AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
-					}
-					else if(m_pTarget->GetPosY() < m_cInTheWay->GetPosY() && m_pTarget->GetPosX() < GetPosX() && GetPosY() < m_cInTheWay->GetRect().top)
-					{
-						float DistToTop = GetPosY() - m_cInTheWay->GetPosY();
-						float DistToLeft = GetPosX() - m_cInTheWay->GetPosX();
-
-						if(DistToTop < 0)
-							DistToTop = -DistToTop;
-
-						if(DistToTop < DistToLeft)
-						{
-							MoveTo(GetPosX(), float(m_cInTheWay->GetRect().top-GetHeight()), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else if(m_pTarget->GetPosX() < GetPosX() && m_pTarget->GetPosX() < m_cInTheWay->GetPosX())
-						{
-							MoveTo(float(m_cInTheWay->GetRect().left-GetWidth()), GetPosY(), 50);
-							if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-								AudioManager::GetInstance()->playSound(zombieWalkingID);
-							BaseCharacter::Update(fElapsedTime);
-						}
-						else
-							AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
-					}
-				}
+				SetPosX(savex);
+				SetPosY(savey);
 			}
 		}
 		else
 			AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
-	}
 
-	if(m_pTarget->GetPosX() > GetPosX()+30)
-	{
-		if(m_pTarget->GetPosY() > GetPosY()+30)
-			SetDirection(DIRE_DOWNRIGHT);
-		else if(m_pTarget->GetPosY() < GetPosY()-30)
-			SetDirection(DIRE_UPRIGHT);
-		else
-			SetDirection(DIRE_RIGHT);
+		if(GetVelX() > 0)
+		{
+			if( GetVelY() < 0 )
+				SetDirection(DIRE_UPRIGHT);
+			else if( GetVelY() > 0 )
+				SetDirection(DIRE_DOWNRIGHT);
+			else
+				SetDirection(DIRE_RIGHT);
+
+			m_playerAnim.curAnimation = -1;
+		}
+		else if(GetVelX() < 0)
+		{
+			if( GetVelY() < 0 )
+				SetDirection(DIRE_UPLEFT);
+			else if( GetVelY() > 0 )
+				SetDirection(DIRE_DOWNLEFT);
+			else
+				SetDirection(DIRE_LEFT);
+		}
+		else if( GetVelY() < 0 )
+			SetDirection(DIRE_UP);
+		else if( GetVelY() > 0 )
+			SetDirection(DIRE_DOWN);
 	}
-	else if(m_pTarget->GetPosX() < GetPosX()-30)
+	else if( m_nState == ESTATE_CHASING)
 	{
-		if(m_pTarget->GetPosY() > GetPosY()+30)
-			SetDirection(DIRE_DOWNLEFT);
-		else if(m_pTarget->GetPosY() < GetPosY()-30)
-			SetDirection(DIRE_UPLEFT);
+		if( distance > GetWidth() && !m_cInTheWay )
+		{
+			float savex = GetPosX();
+			float savey = GetPosY();
+			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+			if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+				AudioManager::GetInstance()->playSound(zombieWalkingID);
+			BaseCharacter::Update(fElapsedTime);
+
+			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+			{
+				SetPosX(savex);
+				SetPosY(savey);
+			}
+		}
 		else
-			SetDirection(DIRE_LEFT);
+			AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+
+		if(m_pTarget->GetPosX() > GetPosX()+30)
+		{
+			if(m_pTarget->GetPosY() > GetPosY()+30)
+				SetDirection(DIRE_DOWNRIGHT);
+			else if(m_pTarget->GetPosY() < GetPosY()-30)
+				SetDirection(DIRE_UPRIGHT);
+			else
+				SetDirection(DIRE_RIGHT);
+		}
+		else if(m_pTarget->GetPosX() < GetPosX()-30)
+		{
+			if(m_pTarget->GetPosY() > GetPosY()+30)
+				SetDirection(DIRE_DOWNLEFT);
+			else if(m_pTarget->GetPosY() < GetPosY()-30)
+				SetDirection(DIRE_UPLEFT);
+			else
+				SetDirection(DIRE_LEFT);
+		}
+		else if(m_pTarget->GetPosY() > GetPosY())
+			SetDirection(DIRE_DOWN);
+		else if(m_pTarget->GetPosY() < GetPosY())
+			SetDirection(DIRE_UP);
 	}
-	else if(m_pTarget->GetPosY() > GetPosY())
-		SetDirection(DIRE_DOWN);
-	else if(m_pTarget->GetPosY() < GetPosY())
-		SetDirection(DIRE_UP);
 
 	if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() == 0)
 	{

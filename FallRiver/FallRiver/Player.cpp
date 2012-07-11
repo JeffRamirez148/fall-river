@@ -91,7 +91,7 @@ void Player::Update(float fElapsedTime)
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
-	if( this->GetHealth() < 0 )
+	if( this->GetHealth() <= 0 )
 	{
 		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
 		//m_nLives--;
@@ -115,23 +115,6 @@ void Player::Update(float fElapsedTime)
 			m_currWeapon = m_vpWeapons[m_ncurrWeap];
 		}
 	}
-
-	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
-		m_nState = PSTATE_IDLE;
-
-	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading )
-		m_currWeapon->Reload();
-
-	if( this->GetHealth() < 0 )
-	{
-		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
-		//m_nLives--;
-		//SetHealth(100);
-	}
-	//if( this->GetLives() < 0 )
-	//{
-	//	CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
-	//}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;

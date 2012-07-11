@@ -80,6 +80,8 @@ public:
 	void SetWinLose(bool wl)	{winLose = wl;}
 	bool GetWinLose()			{return winLose;}
 
+	Level* GetLevel() {return m_clevel; }
+
 	POINTFLOAT GetCamera() {return camera;}
 
 	void Enter();
