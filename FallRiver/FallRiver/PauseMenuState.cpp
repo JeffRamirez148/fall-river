@@ -87,14 +87,14 @@ void PauseMenuState::Exit()
 
 bool PauseMenuState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_DOWNARROW) )
+	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_nCursPosY += 50;
 		if( m_nCursPosY > 300 )
 			m_nCursPosY = 150;
 		audio->playSound(soundID);
 	}
-	else if( m_pDI->KeyPressed(DIK_UPARROW) )
+	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_nCursPosY -= 50;
 		if( m_nCursPosY < 150 )
@@ -102,7 +102,7 @@ bool PauseMenuState::Input()
 		audio->playSound(soundID);
 	}
 
-	if(m_pDI->KeyPressed(DIK_RETURN) )
+	if( m_pDI->KeyPressed(DIK_RETURN)  || m_pDI->JoystickButtonPressed(0,0))
 	{
 		audio->playSound(soundID);
 		if( m_nCursPosY == 150 )
@@ -120,7 +120,7 @@ bool PauseMenuState::Input()
 		return true;
 	}
 
-	if(m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 	{
 		audio->playSound(soundID);
 		m_nCursPosY = 300;

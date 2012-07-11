@@ -128,6 +128,7 @@ void Weapon::FireWeapon()
 				pMsg = nullptr;
 			}
 		}
+		AudioManager::GetInstance()->GetSoundChannel(shotID)->stop();
 		AudioManager::GetInstance()->playSound(shotID);
 	}
 }
@@ -143,7 +144,10 @@ bool Weapon::Reload()
 		return false;
 	}
 	else
+	{
+		AudioManager::GetInstance()->GetSoundChannel(reloadID)->stop();
 		AudioManager::GetInstance()->playSound(reloadID);
+	}
 	return true;
 
 }

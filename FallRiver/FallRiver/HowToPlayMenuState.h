@@ -15,6 +15,7 @@ private:
 	AudioManager* audio;
 	int		m_nHowToKeyID;
 	int		m_nHowToJoyID;
+	int		m_nHowToXboxID;
 	int soundID2;
 	int musicID;
 	int musicID2;

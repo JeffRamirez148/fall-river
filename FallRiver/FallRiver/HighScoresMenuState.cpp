@@ -70,9 +70,9 @@ void HighScoresMenuState::Exit()
 bool HighScoresMenuState::Input() 
 {
 	// Pressing Escape will End the Game
-	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 		CGame::GetInstance()->RemoveState();
-	if(m_pDI->KeyPressed(DIK_RETURN))
+	if(m_pDI->KeyPressed(DIK_RETURN)|| m_pDI->JoystickButtonPressed(0,0))
 	{
 		CGame::GetInstance()->RemoveState();
 		CGame::GetInstance()->ChangeState(CreditsMenuState::GetInstance());

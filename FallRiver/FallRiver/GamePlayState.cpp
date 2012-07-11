@@ -464,7 +464,7 @@ void GamePlayState::Exit()
 
 bool GamePlayState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) )
 		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
 
 	return true;
@@ -542,7 +542,7 @@ void GamePlayState::Update(float fElapsedTime)
 	if(GetPlayer()->questCounter == 10 )
 	{
 		questFlag = true;
-		if(m_pDI->KeyPressed(DIK_RETURN))
+		if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(1,0))
 		{
 			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 			{

@@ -11,6 +11,7 @@ HowToPlayMenuState::HowToPlayMenuState()
 	m_pVM = nullptr;
 	m_nHowToKeyID = -1;
 	m_nHowToJoyID = -1;
+	m_nHowToXboxID = -1;
 }
 
 HowToPlayMenuState::~HowToPlayMenuState()
@@ -32,6 +33,7 @@ void HowToPlayMenuState::Enter()
 
 	m_nHowToKeyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_keyboard.png");
 	m_nHowToJoyID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_arcade.png");
+	m_nHowToXboxID = m_pVM->RegisterTexture("resource/graphics/bg_howTo_xBox.png");
 	audio = AudioManager::GetInstance();
 
 	FMOD_VECTOR tmp = {0,0,0};
@@ -73,7 +75,7 @@ void HowToPlayMenuState::Exit()
 bool HowToPlayMenuState::Input() 
 {
 	// Pressing Escape will End the Game
-	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 		CGame::GetInstance()->RemoveState();
 	return true;
 }
@@ -86,6 +88,10 @@ void HowToPlayMenuState::Render()
 {
 	if(m_pDI->JoystickIsUnplugged(0) )
 		m_pVM->DrawStaticTexture(m_nHowToKeyID, 0, 0, 0.4f, 0.6f);
+	else if (!(m_pDI->JoystickIsUnplugged(0)))
+	{
+		m_pVM->DrawStaticTexture(m_nHowToXboxID, 0, 0, 0.4f, 0.6f);
+	}
 	else
 		m_pVM->DrawStaticTexture(m_nHowToJoyID, 0, 0, 0.4f, 0.6f);
 }

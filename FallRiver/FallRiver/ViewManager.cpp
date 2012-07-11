@@ -647,8 +647,10 @@ bool ViewManager::DeviceEnd(void)
 			DrawRect(finishedLogRect,50,50,50);
 			DrawFont(tmp->m_nFontID,"Finished Quests",640.0f,210.0f,0.5f,0.5f);
 			for(unsigned int i = 0; i < tmp->m_vpFinishedQuests.size(); i++)
-				DrawFont(tmp->m_nFontID, (char*)tmp->m_vpFinishedQuests[i]->QuestTitle.c_str(), 610.0f, float(i*10+220), 0.5f, 0.5f);
-
+			{
+				if(tmp->m_vpFinishedQuests[i]->QuestID % 2 == 0)
+					DrawFont(tmp->m_nFontID, (char*)tmp->m_vpFinishedQuests[i]->QuestTitle.c_str(), 610.0f, float(i*10+220), 0.5f, 0.5f);
+			}
 		}
 		vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
 		for(unsigned int i = 0; i < tmpNPCs.size(); ++i)
