@@ -48,6 +48,7 @@ Player::Player()
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
+	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
 	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.wav");
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
 	
@@ -207,6 +208,10 @@ void Player::Update(float fElapsedTime)
 		case 0:		// Flashlight
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
+				ViewManager::GetInstance()->SetInnerCone(.95f);
+				ViewManager::GetInstance()->SetOuterCone(.9f);
+				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
 				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
@@ -518,8 +523,8 @@ void Player::Render()
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
 
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{

@@ -49,6 +49,7 @@ GamePlayState::GamePlayState()
 
 	backGroundID = -1;
 	swingHitID = -1;
+	SpawnEnemyAniID = -1;
 
 	winLose = true;
 	questFlag = false;
@@ -80,6 +81,7 @@ void GamePlayState::Enter()
 	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
+	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
 
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
@@ -248,7 +250,7 @@ void GamePlayState::Enter()
 				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
 				pEnemy->SetHealth(100);
-				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
+				pEnemy->SetAnimation(SpawnEnemyAniID);
 				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
 			}
@@ -511,12 +513,12 @@ void GamePlayState::Update(float fElapsedTime)
 			pEnemy->SetPosX(m_cSpawn[i]->GetPosX()+(rand()%20-10));
 			pEnemy->SetPosY(m_cSpawn[i]->GetPosY()+(rand()%20-10));
 			pEnemy->SetHealth(100);
-			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
+			pEnemy->SetAnimation(SpawnEnemyAniID);
 			GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 			m_cSpawn[i]->SetSpawn( false );
 		}
 	}
-	m_pHUD->Input();
+	//m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
 	m_pPM->Update(fElapsedTime);
 	//// Quest 2 completion
