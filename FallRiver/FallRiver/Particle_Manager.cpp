@@ -36,6 +36,7 @@ void Particle_Manager::Update(float fElapsedTime)
 	{
 		keepGoing = true;
 		active[i]->SetAge( active[i]->GetAge() + fElapsedTime);
+
 		//Update Existance
 		if(!active[i]->GetLooping())
 		{

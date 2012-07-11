@@ -26,11 +26,6 @@ void Emitter::Update(float fElapsedTime)
 		tmpParticle->SetVel(startVel);
 		tmpParticle->SetScaleX(startScaleX);
         tmpParticle->SetScaleY(startScaleY);
-		D3DXVECTOR3 tmpDir;
-		tmpDir.x = float(((rand() % 3) - 1) >> 1);
-		tmpDir.y = float(((rand() % 3) - 1) >> 1);
-		tmpDir.z = 0.0f;
-		tmpParticle->SetDir(tmpDir);
 		_m_vparticles.push_back(tmpParticle);
 	}
 
@@ -199,8 +194,7 @@ void Emitter::Update(float fElapsedTime)
 			// Update Pos
 
 			D3DXVECTOR3 tmpPos = _m_vparticles[i]->GetPos();
-			D3DXVECTOR3 tmpDir = _m_vparticles[i]->GetDir();
-			tmpPos += tmpVel + tmpDir;
+			tmpPos += tmpVel;
 			_m_vparticles[i]->SetPos(tmpPos);
 			t = 0;
 			}

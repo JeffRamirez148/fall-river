@@ -14,9 +14,6 @@ color = 0;
 imageID = -1;
 scaleX = 1;
 scaleY = 1;
-dir.x = 0;
-dir.y = 0;
-dir.z = 0;
 rot = 0;
 t = 0;
 }

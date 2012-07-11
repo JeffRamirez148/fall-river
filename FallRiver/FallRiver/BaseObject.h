@@ -12,6 +12,7 @@ private:
 	int m_nHeight;
 	int m_nWidth;
 	int m_nImageID;
+	bool shadow;
 	unsigned int	m_unRefCount;
 
 protected:
@@ -22,7 +23,10 @@ protected:
 	int m_nObjectType;
 
 public: 
-
+	BaseObject()
+	{
+		shadow = false;
+	}
 	virtual void AddRef();
 
 	virtual void Release();
@@ -42,6 +46,7 @@ public:
 	int GetWidth()	{return m_nWidth;}
 	int GetImageID(){return m_nImageID;}
 	int GetObjectType() {return m_nObjectType;}
+	bool GetShadow() { return shadow; }
 
 	void SetPosX(float x)	{m_nPosX = x;}
 	void SetPosY(float y) {m_nPosY = y;}
@@ -50,6 +55,7 @@ public:
 	void SetHeight(int height) {m_nHeight = height;}
 	void SetWidth(int width)   {m_nWidth = width;}
 	void SetImageID(int id)	   {m_nImageID = id;}
+	void SetShadow(bool display) { shadow = display; }
 };
 
 #endif

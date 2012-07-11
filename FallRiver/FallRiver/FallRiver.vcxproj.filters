@@ -192,9 +192,6 @@
     <ClCompile Include="Quests.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>Characters</Filter>
-    </ClCompile>
     <ClCompile Include="BaseObject.cpp">
       <Filter>Base Classes</Filter>
     </ClCompile>
@@ -221,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="SpawnPoint.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Base Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

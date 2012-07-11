@@ -130,8 +130,8 @@ bool CGame::Main()
 	if(m_vStates.back() == nullptr)
 		return false;
 
-	Update();
 	Render();
+	Update();
 
 	return true;
 }

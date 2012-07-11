@@ -17,7 +17,6 @@ private:
 	float scaleX;
 	float scaleY;
 	float rot;
-	D3DXVECTOR3 dir;
 	float t;
 	int modeS;
 	int modeD;
@@ -32,7 +31,6 @@ public:
 	void SetImageID(int newID) { imageID = newID; }
 	void SetPos( D3DXVECTOR3 newPos) { pos = newPos; }
 	void SetVel( D3DXVECTOR3 newVel) { vel = newVel; }
-	void SetDir( D3DXVECTOR3 newDir) { dir = newDir; }
 	void SetLifeSpan(float newLifeSpan) { lifeSpan = newLifeSpan;}
 	void SetRotation(float newRot) { rot = newRot;}
 	void SetTime(float time) { t = time;}
@@ -45,7 +43,6 @@ public:
 	int	GetImageID(void) { return imageID; }
 	D3DXVECTOR3 GetPos(void) { return pos; }
 	D3DXVECTOR3 GetVel(void) { return vel; }
-	D3DXVECTOR3 GetDir(void) { return dir; }
 	float GetLifeSpan(void) { return lifeSpan;}
 	float GetRotation(void) { return rot;}
 	float GetTime() { return t; }

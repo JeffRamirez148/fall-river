@@ -75,6 +75,8 @@ private:
 	GamePlayState& operator=(const GamePlayState&);
 
 public:
+	float endX, endY, pX, pY;
+
 	bool questFlag;
 	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}

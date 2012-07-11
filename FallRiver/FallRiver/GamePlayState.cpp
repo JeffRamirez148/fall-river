@@ -55,6 +55,10 @@ GamePlayState::GamePlayState()
 	questFlag = false;
 	rainA = -1;
 	rainL = -1;
+	endX = 0;
+	endY = 0;
+	pX = 0;
+	pY = 0;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -463,6 +467,8 @@ void GamePlayState::Update(float fElapsedTime)
 
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
+	if(m_cPlayer->IsOn())
+		m_pOM->CheckTriangleCollisions();
 	camera.x = float(m_cPlayer->GetPosX() - (CGame::GetInstance()->GetScreenWidth()*0.5));
 	camera.y = float(m_cPlayer->GetPosY() - (CGame::GetInstance()->GetScreenHeight()*0.5));
 	FMOD_VECTOR tmp;
@@ -589,7 +595,8 @@ void GamePlayState::Render()
 	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
 
 
-
+	ViewManager::GetInstance()->GetSprite()->Flush();
+	ViewManager::GetInstance()->DrawLine(pX- GamePlayState::GetInstance()->GetCamera().x + this->GetPlayer()->GetWidth()/2 ,pY- GamePlayState::GetInstance()->GetCamera().y + GetPlayer()->GetHeight()/2 ,endX- GamePlayState::GetInstance()->GetCamera().x + GetPlayer()->GetWidth()/2 , endY- GamePlayState::GetInstance()->GetCamera().y + GetPlayer()->GetHeight()/2 ,255,0,0);
 
 
 	

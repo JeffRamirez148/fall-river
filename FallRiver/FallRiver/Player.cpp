@@ -171,17 +171,17 @@ void Player::Update(float fElapsedTime)
 		AudioManager::GetInstance()->playSound(flashLightID);		
 		++flashLightType;
 		if(flashLightType > 3)
-			flashLightType = 3;
+			flashLightType = 0;
 	}
 	if( pDI->KeyPressed(DIK_Q))
 	{
 		AudioManager::GetInstance()->playSound(flashLightID);		
 		--flashLightType;
 		if(flashLightType < 0)
-			flashLightType = 0;
+			flashLightType = 3;
 	}
 
-	if( pDI->KeyPressed(DIK_F))
+	if(pDI->KeyPressed(DIK_F))
 	{
 		AudioManager::GetInstance()->playSound(flashLightID);		
 		lightOn = !lightOn;
@@ -473,7 +473,7 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.curFrame = thisAnim.frames.size() -1;
 	}
 		
-	if(battery <=0)
+	if(battery <= 0)
 	{
 		battery = 0;
 		lightOn = false;

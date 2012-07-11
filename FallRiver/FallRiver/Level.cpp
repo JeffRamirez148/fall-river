@@ -10,6 +10,7 @@
 #include "EventSystem.h"
 #include "DestroyBullet.h"
 #include "Bullet.h"
+#include "Player.h"
 
 Level::Level() 
 {
@@ -65,10 +66,41 @@ void Level::Render()
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
-		/*	if( m_vTiles[i].m_Layer == 1)
-			{*/
+			if( m_vTiles[i].m_Layer > 1)
+			{
+				Player* tmp = GamePlayState::GetInstance()->GetPlayer();
+				if( tmp->IsOn() && tmp->GetLightType() < 2 )
+				{
+					if(tmp->GetDirection() == 1)
+						pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y - 10, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, (tmp->GetDirection() - 1) * 1.57079f, D3DCOLOR_ARGB( 200, 0, 0, 0));						
+					else if(tmp->GetDirection() < 4 && tmp->GetDirection() != 1)
+						pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, (tmp->GetDirection() - 1) * 1.57079f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					else
+					{
+						switch(tmp->GetDirection())
+						{
+						case 4:
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+							break;
+						case 5:
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+							break;
+						case 6:
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 2.35619f , D3DCOLOR_ARGB( 200, 0, 0, 0));
+							break;
+						case 7:
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -2.35619f , D3DCOLOR_ARGB( 200, 0, 0, 0));
+							break;
+						default:
+							break;
+						}						
+					}
+				}
+				// TODO: FINISH THIS SHIT
+				else if( tmp->IsOn() )
+					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect, 32, 50, 0, D3DCOLOR_ARGB( 200, 0, 0, 0));
+			}
 			pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
-			//}
 		}
 	}
 
