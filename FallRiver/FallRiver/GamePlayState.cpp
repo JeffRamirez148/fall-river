@@ -19,6 +19,7 @@
 #include "Message.h"
 #include "Bullet.h"
 #include "ChasingAI.h"
+#include "CompanionAI.h"
 #include "ShootingAi.h"
 #include "NPC.h"
 #include "PickUp.h"
@@ -44,14 +45,18 @@ GamePlayState::GamePlayState()
 	m_pES = nullptr;
 	m_pPM = nullptr;
 	m_cPlayer = nullptr;
+	m_cBuddy = nullptr;
 
 	m_cWeapon = nullptr;
 
 	backGroundID = -1;
 	swingHitID = -1;
+	SpawnEnemyAniID = -1;
 
 	winLose = true;
 	questFlag = false;
+	rainA = -1;
+	rainL = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -72,11 +77,13 @@ void GamePlayState::Enter()
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 
-
-
+	// Rain particles
+	rainL = m_pPM->LoadEmitter("rain.xml");
+	rainA = m_pPM->ActivateEmitter(rainL);
 	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
+	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
 
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
@@ -87,6 +94,7 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
+	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
@@ -245,13 +253,36 @@ void GamePlayState::Enter()
 				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
 				pEnemy->SetHealth(100);
-				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
+				pEnemy->SetAnimation(SpawnEnemyAniID);
 				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
 			}
 		}
 	}
 	pLevel->SetCollision(tmp);
+
+
+	vector<mapTiles> tmpTiles = pLevel->GetTiles();
+	for(unsigned int i = 0; i < tmpTiles.size(); i++) 
+	{
+		for(unsigned int x = i+1; x < tmpTiles.size(); x++) 
+		{
+			if( tmpTiles[x].m_Layer < tmpTiles[i].m_Layer )
+			{
+				swap(tmpTiles[i],tmpTiles[x]);
+			}
+		}
+	}
+
+	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
+	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
+	pBuddy->SetPosX(200.0f);
+	pBuddy->SetPosY(250.0f);
+	pBuddy->SetHeight(32);
+	pBuddy->SetWidth(32);
+	pBuddy->SetImageID(-1);
+	m_pOM->AddObject(pBuddy);
+
 
 	//for(int i = 0; i < 1; i++)
 	//{
@@ -268,6 +299,8 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
+
+
 	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
@@ -278,7 +311,7 @@ void GamePlayState::Enter()
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
 		pEnemy->SetPosX(600);
-		pEnemy->SetPosY(490);
+		pEnemy->SetPosY(500);
 		pEnemy->SetHealth(100);
 		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);
@@ -493,14 +526,14 @@ void GamePlayState::Update(float fElapsedTime)
 			pEnemy->SetPosX(m_cSpawn[i]->GetPosX()+(rand()%20-10));
 			pEnemy->SetPosY(m_cSpawn[i]->GetPosY()+(rand()%20-10));
 			pEnemy->SetHealth(100);
-			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
+			pEnemy->SetAnimation(SpawnEnemyAniID);
 			GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 			m_cSpawn[i]->SetSpawn( false );
 		}
 	}
-	m_pHUD->Input();
+	//m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
-
+	m_pPM->Update(fElapsedTime);
 	//// Quest 2 completion
 	if(GetPlayer()->questCounter == 10 )
 	{
@@ -541,8 +574,8 @@ void GamePlayState::Render()
 	{
 		m_cBushes[i]->Render();
 	}
-
-
+	m_pPM->Render();
+	
 	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 

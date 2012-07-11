@@ -21,8 +21,6 @@ Enemy::~Enemy()
 
 void Enemy::Update(float fElapsedTime) 
 { 
-	DirectInput* pDI = DirectInput::GetInstance();
-
 	BaseCharacter::Update(fElapsedTime);
 }
 
@@ -37,16 +35,16 @@ void Enemy::MoveTo(float x, float y, float speed)
 {
 	if(GetPosY() == y)
 		SetVelY(0);
-	else if(GetPosY() < y)
+	else if(GetPosY() < y-10)
 		SetVelY(speed);
-	else if(GetPosY() > y+5)
+	else if(GetPosY() > y+10)
 		SetVelY(-speed);
 
 	if(GetPosX() == x)
 		SetVelX(0);
-	else if(GetPosX() < x)
+	else if(GetPosX() < x-10)
 		SetVelX(speed);
-	else if(GetPosX() > x+5)
+	else if(GetPosX() > x+10)
 		SetVelX(-speed);
 }
 

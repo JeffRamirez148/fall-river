@@ -67,6 +67,9 @@ public:
 	vector<leveldata> GetCollision() { return m_vCollisions;};
 	void SetCollision(vector<leveldata> x) { m_vCollisions = x; };
 
+	vector<mapTiles> GetTiles() { return m_vTiles;};
+	//void SetCollision(vector<mapTiles> x) { m_vTiles = x; };
+
 };
 
 #endif

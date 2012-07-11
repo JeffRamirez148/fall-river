@@ -7,11 +7,11 @@
 class ChasingAI: public Enemy
 {
 private:
-	BaseObject* m_cInTheWay;
 	int zombieHitID;
 	int zombieWalkingID;
 	int notifyID;
 	bool notified;
+	bool helped;
 	DWORD attackDelay;
 
 public: 

@@ -25,6 +25,7 @@ class NPC;
 class IMessage;
 class SpawnPoint;
 class Bush;
+class CompanionAI;
 
 
 typedef CObjectFactory< std::wstring, BaseObject> Factory;
@@ -46,13 +47,17 @@ private:
 	// Sound Ids
 	int backGroundID;
 	int swingHitID;
+	int SpawnEnemyAniID;
 
-
+	// Rain particles
+	int rainA;
+	int rainL;
 	// Data Members
 	float fTime;
 
 	// Characters In the world
 	Player*						m_cPlayer;
+	CompanionAI*				m_cBuddy;
 	vector<Enemy*>				m_cEnemies;
 	vector<SpawnPoint*>			m_cSpawn;
 	vector<Bush*>				m_cBushes;
@@ -75,6 +80,7 @@ public:
 	bool questFlag;
 	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}
+	CompanionAI* GetCompanion() {return m_cBuddy;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
 
 	void SetWinLose(bool wl)	{winLose = wl;}

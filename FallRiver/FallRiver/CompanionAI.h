@@ -7,18 +7,27 @@
 
 class Weapon;
 class Event;
-class CompanionAI;
+class Player;
 
 class CompanionAI: public BaseCharacter
 {
 private: 
-	Weapon* m_nWeapon;
+	Player* m_cFriend;
+	Weapon* m_cWeapon;
+	int m_nFontID;
 	int m_nStages;
+	int m_nStep;
+	int m_nNumTimes;
+	bool teaching;
 
 public: 
 
 	CompanionAI();
 	~CompanionAI();
+
+	bool IsTeaching() {return teaching;}
+
+	void NextStep() { m_nStep++; }
 
 	virtual void Update(float fElapsedTime);
 

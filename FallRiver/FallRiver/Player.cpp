@@ -49,6 +49,7 @@ Player::Player()
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
 	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
+	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.wav");
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
 	
 	flashLightID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
@@ -110,7 +111,7 @@ void Player::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
 	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
 	
-	if( this->GetHealth() < 0 )
+	if( this->GetHealth() <= 0 )
 	{
 		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
 		//m_nLives--;
@@ -123,8 +124,6 @@ void Player::Update(float fElapsedTime)
 
 	if( pDI->KeyPressed( DIK_TAB ) )
 	{
-
-
 		if( m_currWeapon == m_vpWeapons.back() )
 		{
 			m_currWeapon = m_vpWeapons.front();
@@ -260,7 +259,13 @@ void Player::Update(float fElapsedTime)
 		}
 	}
 	else
-		ViewManager::GetInstance()->SetLightPos(0,0,-1);
+	{
+		ViewManager::GetInstance()->SetLightPos(0, 0, -1);
+		ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
+		ViewManager::GetInstance()->SetInnerCone(.95f);
+		ViewManager::GetInstance()->SetOuterCone(.9f);
+		ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+	}
 
 	if( pDI->KeyDown(DIK_D))
 	{
@@ -632,7 +637,6 @@ void Player::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			SetHealth(GetHealth()-30);
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}
