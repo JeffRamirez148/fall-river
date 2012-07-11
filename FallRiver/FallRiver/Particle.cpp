@@ -1,5 +1,6 @@
 #include "Particle.h"
 #include "ViewManager.h"
+#include "GamePlayState.h"
 
 Particle::Particle()
 {
@@ -37,13 +38,22 @@ void Particle::Render()
 	view->GetSprite()->Flush();
 	if(imageID != -1)
 	{
-		view->DrawStaticTexture(imageID, pos.x, pos.y, scaleX, scaleY, nullptr, 
-							0.0f, 0.0f, rot, color);
+		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};
+		tmpRect.left -= GamePlayState::GetInstance()->GetCamera().x;
+		tmpRect.right -= GamePlayState::GetInstance()->GetCamera().x;
+		tmpRect.top -= GamePlayState::GetInstance()->GetCamera().y;
+		tmpRect.bottom -= GamePlayState::GetInstance()->GetCamera().y;
+		view->DrawStaticTexture(imageID, pos.x, pos.y, scaleX, scaleY, nullptr,0.0f, 0.0f, rot, color);
 	}
 	else
 	{
 		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};
+		tmpRect.left -= GamePlayState::GetInstance()->GetCamera().x;
+		tmpRect.right -= GamePlayState::GetInstance()->GetCamera().x;
+		tmpRect.top -= GamePlayState::GetInstance()->GetCamera().y;
+		tmpRect.bottom -= GamePlayState::GetInstance()->GetCamera().y;
 		view->DrawRect( tmpRect, (color << 8) >> 24, (color << 16) >> 24, (color << 24) >> 24, color >> 24);
+
 	}
 	view->GetSprite()->Flush();
 	view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmpD);

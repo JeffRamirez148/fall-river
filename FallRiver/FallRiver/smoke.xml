@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <emitter_list>
-  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="255" endGreen="255" endBlue="255" endRot="0" endScaleX="10" endScaleY="10" endVelX="0" endVelY="-1" endVelZ="0" lifeSpan="0.05" lifeTime="1" loopin="1" maxParticles="1" rectL="378" rectT="363" rectR="388" rectB="373" spawnRate="0" startAlpha="255" startRed="192" startGreen="192" startBlue="192" startRot="0" startScaleX="5" startScaleY="5" startVelX="0" startVelY="0" StartVelZ="0" />
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="255" endGreen="255" endBlue="255" endRot="0" endScaleX="3" endScaleY="3" endVelX="0" endVelY="-2" endVelZ="0" lifeSpan="50" lifeTime="10" loopin="1" maxParticles="1" rectL="0" rectT="-10" rectR="-20" rectB="-11" spawnRate="0" startAlpha="255" startRed="192" startGreen="192" startBlue="192" startRot="0" startScaleX="1" startScaleY="1" startVelX="0" startVelY="0" StartVelZ="0" />
 </emitter_list>

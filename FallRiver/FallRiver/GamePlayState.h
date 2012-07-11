@@ -55,6 +55,10 @@ private:
 	// Rain particles
 	int rainA;
 	int rainL;
+	// Smoke particles
+	int smokeA;
+	int smokeL;
+
 	// Data Members
 	float fTime;
 

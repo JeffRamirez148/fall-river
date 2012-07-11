@@ -7,7 +7,7 @@ void Emitter::Update(float fElapsedTime)
 
 	// Spawn particle?
 	spawnTimer += fElapsedTime;
-	if(spawnTimer >= spawnRate)
+	if(spawnTimer >= spawnRate && spawn)
 	{
 		spawnTimer = 0;
 		Particle* tmpParticle = new Particle;
@@ -43,7 +43,7 @@ void Emitter::Update(float fElapsedTime)
 		// Update Existance
 		_m_vparticles[i]->SetLifeSpan((_m_vparticles[i]->GetLifeSpan()) - fElapsedTime);
 		// Is the particle dead?
-		if((_m_vparticles[i]->GetLifeSpan()) <= 0)
+		if((_m_vparticles[i]->GetLifeSpan()) <= 0 || spawn == false)
 		{
 			_m_vparticles.erase( _m_vparticles.begin() + i, _m_vparticles.begin() + i + 1);
 			// Possible memory leak

@@ -4,6 +4,7 @@
 #include "MessageSystem.h"
 #include "ViewManager.h"
 #include "AudioManager.h"
+#include "Particle_Manager.h"
 
 Weapon::Weapon()
 {
@@ -14,6 +15,7 @@ Weapon::Weapon()
 	swingMissID	= -1;
 	shotID		= -1;
 	reloadID	= -1;
+	
 }
 
 Weapon::~Weapon()
@@ -32,6 +34,7 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 	m_nAmmo = nAmmo;
 	m_fCurrRotation = currRotation;
 	m_bMelee = false;
+	
 
 	switch( m_nWeaponType )
 	{
@@ -78,6 +81,7 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 	m_pAM->setSoundPos(shotID, sound1);
 	m_pAM->setSoundPos(reloadID, sound1);
 
+
 	return true;
 }
 
@@ -86,6 +90,7 @@ void Weapon::Update(float fElapsedTime)
 	SetPosX(m_pOwner->GetPosX()+m_pOwner->GetWidth()/2);
 	SetPosY(m_pOwner->GetPosY());
 
+	
 	DirectInput* pDI = DirectInput::GetInstance();
 
 	AudioManager* m_pAM = AudioManager::GetInstance();
@@ -102,6 +107,7 @@ void Weapon::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawRect(GetRect(), 0, 200, 210 );
+	Particle_Manager::GetInstance()->Render();
 }
 
 void Weapon::FireWeapon()
@@ -128,6 +134,7 @@ void Weapon::FireWeapon()
 				pMsg = nullptr;
 			}
 		}
+		
 		AudioManager::GetInstance()->GetSoundChannel(shotID)->stop();
 		AudioManager::GetInstance()->playSound(shotID);
 	}

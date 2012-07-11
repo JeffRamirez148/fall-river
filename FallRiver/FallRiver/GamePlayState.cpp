@@ -55,6 +55,8 @@ GamePlayState::GamePlayState()
 	questFlag = false;
 	rainA = -1;
 	rainL = -1;
+	smokeL = -1;
+	smokeA = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -78,7 +80,8 @@ void GamePlayState::Enter()
 	// Rain particles
 	rainL = m_pPM->LoadEmitter("rain.xml");
 	rainA = m_pPM->ActivateEmitter(rainL);
-	
+	// Smoke particles
+	smokeL = m_pPM->LoadEmitter("smoke.xml");
 	
 
 
@@ -537,7 +540,9 @@ void GamePlayState::Update(float fElapsedTime)
 	}
 	//m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
+
 	m_pPM->Update(fElapsedTime);
+
 	//// Quest 2 completion
 	if(GetPlayer()->questCounter == 10 )
 	{
@@ -631,6 +636,14 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
 			bullet->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
+
+			// Smoke effects
+			RECT temp = {pOwner->GetPosX(),pOwner->GetPosY(),pOwner->GetPosX() + 16,16 + pOwner->GetPosY()};
+			//self->m_pPM->GetLoadedEmitterEmitter(self->smokeL)->SetRect(temp);
+			
+			self->smokeA = Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL);
+			self->m_pPM->GetActiveEmitter(self->smokeA)->SetRect(temp);
+			self->m_pPM->GetActiveEmitter(self->smokeA)->SetLoopin(false);
 
 			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{
