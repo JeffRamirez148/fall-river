@@ -49,6 +49,10 @@ private:
 	int swingHitID;
 	int SpawnEnemyAniID;
 
+	int soundID2;
+	int musicID;
+	
+
 	// Rain particles
 	int rainA;
 	int rainL;

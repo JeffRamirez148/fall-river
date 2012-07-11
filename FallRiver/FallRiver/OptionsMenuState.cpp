@@ -90,7 +90,7 @@ void OptionsMenuState::Exit()
 
 bool OptionsMenuState::Input()
 {
-	if( m_pDI->KeyPressed(DIK_DOWN) )
+	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_pAM->playSound(soundID);
 		m_nCursPosY += 25;
@@ -99,7 +99,7 @@ bool OptionsMenuState::Input()
 		if( m_nCursPosY > 300 )
 			m_nCursPosY = 200;
 	}
-	else if( m_pDI->KeyPressed(DIK_UP) )
+	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_pAM->playSound(soundID);
 		m_nCursPosY -= 25;
@@ -112,7 +112,7 @@ bool OptionsMenuState::Input()
 	sfxVolume = m_pAM->getSoundVolume();
 	musicVolume = m_pAM->getMusicVolume();
 
-	if( m_pDI->KeyPressed(DIK_RIGHT) )
+	if( m_pDI->KeyPressed(DIK_D) || m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0))
 	{
 		m_pAM->playSound(soundID);
 		if( m_nCursPosY == 200 && sfxVolume < 1.0f)
@@ -128,7 +128,7 @@ bool OptionsMenuState::Input()
 				musicVolume = 1;
 		}
 	}
-	else if( m_pDI->KeyPressed(DIK_LEFT) )
+	else if( m_pDI->KeyPressed(DIK_A) || m_pDI->JoystickGetLStickDirPressed(DIR_LEFT,0))
 	{
 		m_pAM->playSound(soundID);
 		if( m_nCursPosY == 200 && sfxVolume > 0.0f)
@@ -149,7 +149,7 @@ bool OptionsMenuState::Input()
 	m_pAM->setSoundVolume(sfxVolume);
 
 
-	if( m_pDI->KeyPressed(DIK_RETURN) )
+	if( m_pDI->KeyPressed(DIK_RETURN)  || m_pDI->JoystickButtonPressed(0,0))
 	{
 		if( m_nCursPosY == 250 )
 		{
@@ -162,7 +162,7 @@ bool OptionsMenuState::Input()
 	}
 
 	// Pressing Escape will End the Game
-	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 		m_nCursPosY = 300;
 
 	return true;
@@ -209,3 +209,9 @@ void OptionsMenuState::Render()
 	m_pVM->DrawFont(m_nFontID, "Exit", 300, 300);
 }
 
+
+
+//pDI->KeyDown(DIK_A) || pDI->JoystickGetLStickDirDown(DIR_LEFT,0))
+//pDI->KeyDown(DIK_D) || pDI->JoystickGetLStickDirDown(DIR_RIGHT,0))
+//pDI->KeyDown(DIK_W) || pDI->JoystickGetLStickDirDown(DIR_UP,0) )
+//pDI->KeyDown(DIK_S) || pDI->JoystickGetLStickDirDown(DIR_DOWN,0))

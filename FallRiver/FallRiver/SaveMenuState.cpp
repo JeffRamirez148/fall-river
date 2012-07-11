@@ -87,7 +87,7 @@ void SaveMenuState::Exit()
 
 bool SaveMenuState::Input()
 {
-	if( m_pDI->KeyPressed(DIK_DOWNARROW) )
+	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_nCursPosY += 50;
 		if( m_nCursPosY == 350 )
@@ -96,7 +96,7 @@ bool SaveMenuState::Input()
 			m_nCursPosY = 200;
 		audio->playSound(soundID);
 	}
-	else if( m_pDI->KeyPressed(DIK_UPARROW) )
+	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_nCursPosY -= 50;
 		if( m_nCursPosY == 350 )
@@ -106,14 +106,14 @@ bool SaveMenuState::Input()
 		audio->playSound(soundID);
 	}
 
-	if( m_pDI->KeyPressed(DIK_RIGHTARROW) && m_bCheck )
+	if( (m_pDI->KeyPressed(DIK_D) && m_bCheck) || (m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0) && m_bCheck) )
 	{
 		m_nCursPosX += 100;
 		if( m_nCursPosX > 380 )
 			m_nCursPosX = 280;
 		audio->playSound(soundID);
 	}
-	else if( m_pDI->KeyPressed(DIK_LEFTARROW) && m_bCheck )
+	else if( (m_pDI->KeyPressed(DIK_A) && m_bCheck) || (m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0) && m_bCheck) )
 	{
 		m_nCursPosX -= 100;
 		if( m_nCursPosX < 280 )
@@ -121,7 +121,7 @@ bool SaveMenuState::Input()
 		audio->playSound(soundID);
 	}
 
-	if(m_pDI->KeyPressed(DIK_RETURN) )
+	if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(0,0))
 	{
 		audio->playSound(soundID);
 		if(m_bCheck)
@@ -176,7 +176,7 @@ bool SaveMenuState::Input()
 		return true;
 	}
 
-	if(m_pDI->KeyDown(DIK_ESCAPE) && !m_bCheck )
+	if((m_pDI->KeyDown(DIK_ESCAPE) && !m_bCheck ) ||  (m_pDI->JoystickButtonPressed(1,0) && !m_bCheck))
 	{
 		audio->playSound(soundID);
 		CGame::GetInstance()->RemoveState();

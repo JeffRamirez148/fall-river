@@ -44,6 +44,15 @@ private:
 	int		m_nMenuCreditsID;
 	int		m_nMenuExitID;
 
+	int		m_nLightMenuPlayID;
+	int		m_nLightMenuHowToID;
+	int		m_nLightMenuOptionsID;
+	int		m_nLightMenuHighScoresID;
+	int		m_nLightMenuCreditsID;
+	int		m_nLightMenuExitID;
+
+	
+
 	MainMenuState();
 	~MainMenuState();
 	MainMenuState(const MainMenuState&);

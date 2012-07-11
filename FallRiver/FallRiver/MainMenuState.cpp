@@ -28,6 +28,12 @@ MainMenuState::MainMenuState()
 	musicID = -1;
 	musicID2 = -1;
 	soundID = -1;
+	m_nLightMenuPlayID = -1;
+	m_nLightMenuHowToID = -1;
+	m_nLightMenuOptionsID = -1;
+	m_nLightMenuHighScoresID = -1;
+	m_nLightMenuCreditsID = -1;
+	m_nLightMenuExitID = -1;
 }
 
 MainMenuState::~MainMenuState()
@@ -47,6 +53,14 @@ void MainMenuState::Enter()
 	m_nMenuHighScoresID = m_pVM->RegisterTexture("resource/graphics/main_highScores.png");
 	m_nMenuCreditsID	= m_pVM->RegisterTexture("resource/graphics/main_credits.png");
 	m_nMenuExitID		= m_pVM->RegisterTexture("resource/graphics/main_exit.png");
+
+	m_nLightMenuPlayID		 = m_pVM->RegisterTexture("resource/graphics/light_main_play.png");
+	m_nLightMenuHowToID		 = m_pVM->RegisterTexture("resource/graphics/light_main_howTo.png");
+	m_nLightMenuOptionsID	 = m_pVM->RegisterTexture("resource/graphics/light_main_options.png");
+	m_nLightMenuHighScoresID = m_pVM->RegisterTexture("resource/graphics/light_main_highScores.png");
+	m_nLightMenuCreditsID	 = m_pVM->RegisterTexture("resource/graphics/light_main_credits.png");
+	m_nLightMenuExitID		 = m_pVM->RegisterTexture("resource/graphics/light_main_exit.png");
+	
 	audio = AudioManager::GetInstance();
 
 	FMOD_VECTOR tmp = {0,0,0};
@@ -101,14 +115,14 @@ void MainMenuState::Exit()
 
 bool MainMenuState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_DOWNARROW) )
+	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_nCursPosY += 25;
 		if( m_nCursPosY > 300 )
 			m_nCursPosY = 175;
 		audio->playSound(soundID);
 	}
-	else if( m_pDI->KeyPressed(DIK_UPARROW) )
+	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_nCursPosY -= 25;
 		if( m_nCursPosY < 175 )
@@ -116,7 +130,7 @@ bool MainMenuState::Input()
 		audio->playSound(soundID);
 	}
 
-	if( m_pDI->KeyPressed(DIK_RETURN) )
+	if( m_pDI->KeyPressed(DIK_RETURN)  || m_pDI->JoystickButtonPressed(0,0))
 	{
 		audio->playSound(soundID);
 		if( m_nCursPosY == 175 )
@@ -136,7 +150,7 @@ bool MainMenuState::Input()
 
 
 	// Pressing Escape will End the Game
-	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 	{
 		audio->playSound(soundID);
 		m_nCursPosY = 300;
@@ -152,54 +166,103 @@ void MainMenuState::Update(float fElapsedTime)
 void MainMenuState::Render() 
 {
 	if(m_dwFlash1 == 0)
-		m_dwFlash1 = GetTickCount() + 3000;
+		m_dwFlash1 = GetTickCount() + 3100;
 
 	if(m_dwFlash2 == 0)
-		m_dwFlash2 = GetTickCount() + 3800;
+		m_dwFlash2 = GetTickCount() + 3300;
 
 	if(m_dwFlash3 == 0)
-		m_dwFlash3 = GetTickCount() + 4000;
+		m_dwFlash3 = GetTickCount() + 3000;
 
 	// Do Rendering Here
+	
+
 	if(m_nCursPosY == 175)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nLightMenuPlayID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));			
+		}
+		else if(m_dwFlash2 <= GetTickCount() ||  m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightMenuPlayID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));			
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 200)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nLightMenuOptionsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightMenuOptionsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255,230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 225)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nLightMenuHowToID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightMenuHowToID, 0, 0,0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 250)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nLightMenuHighScoresID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightMenuHighScoresID, 0, 0,0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 275)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nLightMenuCreditsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightMenuCreditsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 300)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nLightMenuExitID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightMenuExitID, 0, 0,0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(55, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f);
 	}

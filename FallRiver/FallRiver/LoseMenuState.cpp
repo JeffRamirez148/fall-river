@@ -76,14 +76,14 @@ void LoseMenuState::Exit()
 }
 bool LoseMenuState::Input()
 {
-	if( pDI->KeyPressed(DIK_DOWNARROW) )
+	if( pDI->KeyPressed(DIK_S) || pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		audio->playSound(soundID);
 		curPos += 50;
 		if( curPos > 300 )
 			curPos = 250;
 	}
-	else if( pDI->KeyPressed(DIK_UPARROW) )
+	else if( pDI->KeyPressed(DIK_W) || pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		audio->playSound(soundID);
 		curPos -= 50;
@@ -91,13 +91,13 @@ bool LoseMenuState::Input()
 			curPos = 300;
 	}
 
-	if(pDI->KeyPressed(DIK_ESCAPE) )
+	if(pDI->KeyPressed(DIK_ESCAPE) || pDI->JoystickButtonPressed(1,0) )
 	{
 		audio->playSound(soundID);
 		curPos = 300;
 	}
 
-	if(pDI->KeyPressed(DIK_RETURN))
+	if(pDI->KeyPressed(DIK_RETURN) || pDI->JoystickButtonPressed(0,0))
 	{
 		audio->playSound(soundID);
 		if( curPos == 250 )
