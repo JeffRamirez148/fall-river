@@ -48,7 +48,7 @@ Player::Player()
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
-	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
+	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.wav");
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
 	
 	flashLightID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
@@ -123,8 +123,6 @@ void Player::Update(float fElapsedTime)
 
 	if( pDI->KeyPressed( DIK_TAB ) )
 	{
-
-
 		if( m_currWeapon == m_vpWeapons.back() )
 		{
 			m_currWeapon = m_vpWeapons.front();
@@ -230,10 +228,6 @@ void Player::Update(float fElapsedTime)
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
 				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
-				ViewManager::GetInstance()->SetInnerCone(.95f);
-				ViewManager::GetInstance()->SetOuterCone(.9f);
-				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
 				decreaseTime = 1.2f;
 			}
 			break;
@@ -277,7 +271,13 @@ void Player::Update(float fElapsedTime)
 		}
 	}
 	else
-		ViewManager::GetInstance()->SetLightPos(0,0,-1);
+	{
+		ViewManager::GetInstance()->SetLightPos(0, 0, -1);
+		ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
+		ViewManager::GetInstance()->SetInnerCone(.95f);
+		ViewManager::GetInstance()->SetOuterCone(.9f);
+		ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+	}
 
 	if( pDI->KeyDown(DIK_D))
 	{

@@ -547,19 +547,16 @@ void HUD::Render()
 	{
 		m_fAniSpeed = .07f;
 		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
-		AudioManager::GetInstance()->GetSound(healthID)->noise->setMusicSpeed( 1 );
 	}
 	else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 	{
 		m_fAniSpeed = .05f;
 		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
-		AudioManager::GetInstance()->GetSound(healthID)->noise->setMusicSpeed( 2 );
 	}
 	else
 	{
 		m_fAniSpeed = .02f;
 		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
-		AudioManager::GetInstance()->GetSound(healthID)->noise->setMusicSpeed( 4 );
 	}
 	
 
