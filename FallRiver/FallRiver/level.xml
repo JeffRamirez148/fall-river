@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<levels_list Width="40" Height="40">
+<levels_list Width="40" Height="54">
   <Assets TileID="0">default.bmp</Assets>
   <Assets TileID="1">Tree.png</Assets>
   <Tile layer="1">
@@ -9164,7 +9164,7 @@
   </Collision>
   <Collision>
     <Type>NPC</Type>
-    <ScrRect x="2128" y="2128" height="32" width="32" />
+    <ScrRect x="0" y="80" height="32" width="32" />
   </Collision>
   <Collision>
     <Type>Spawn Point</Type>
@@ -9288,6 +9288,30 @@
   </Collision>
   <Collision>
     <Type>NPC</Type>
-    <ScrRect x="1748" y="2132" height="32" width="32" />
+    <ScrRect x="200" y="80" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="465" y="88" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="661" y="98" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="851" y="97" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="1042" y="102" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="1233" y="106" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="1432" y="105" height="32" width="32" />
   </Collision>
 </levels_list>

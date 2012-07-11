@@ -65,15 +65,14 @@ void Level::Render()
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
-			if( m_vTiles[i].m_Layer == 1)
-			{
-
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
-			}
+		/*	if( m_vTiles[i].m_Layer == 1)
+			{*/
+			pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
+			//}
 		}
 	}
 
-	for(unsigned int i = 0; i < m_vTiles.size(); i++)
+	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp;
 		tmp.left = (LONG)m_vTiles[i].m_nWorldPosX;
@@ -144,7 +143,7 @@ void Level::Render()
 			}
 		}
 	}
-
+*/
 	pView->GetSprite()->Flush();
 
 
@@ -353,8 +352,7 @@ bool Level::LoadLevel( const char* szFilename )
 	{
 		return false;
 	}
-	
-	
+
 	return true;
 }
 
