@@ -25,6 +25,7 @@ MainMenuState::MainMenuState()
 	m_nMenuHighScoresID = -1;
 	m_nMenuCreditsID	= -1;
 	m_nMenuExitID		= -1;
+	m_nLightningID = -1;
 	musicID = -1;
 	musicID2 = -1;
 	soundID = -1;
@@ -47,6 +48,7 @@ void MainMenuState::Enter()
 	m_nMenuHighScoresID = m_pVM->RegisterTexture("resource/graphics/main_highScores.png");
 	m_nMenuCreditsID	= m_pVM->RegisterTexture("resource/graphics/main_credits.png");
 	m_nMenuExitID		= m_pVM->RegisterTexture("resource/graphics/main_exit.png");
+	m_nLightningID		= m_pVM->RegisterTexture("resource/graphics/lightning.png");
 	audio = AudioManager::GetInstance();
 
 	FMOD_VECTOR tmp = {0,0,0};
@@ -152,54 +154,103 @@ void MainMenuState::Update(float fElapsedTime)
 void MainMenuState::Render() 
 {
 	if(m_dwFlash1 == 0)
-		m_dwFlash1 = GetTickCount() + 3000;
+		m_dwFlash1 = GetTickCount() + 3100;
 
 	if(m_dwFlash2 == 0)
-		m_dwFlash2 = GetTickCount() + 3800;
+		m_dwFlash2 = GetTickCount() + 3300;
 
 	if(m_dwFlash3 == 0)
-		m_dwFlash3 = GetTickCount() + 4000;
+		m_dwFlash3 = GetTickCount() + 3000;
 
 	// Do Rendering Here
+	
+
 	if(m_nCursPosY == 175)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nLightningID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));			
+		}
+		else if(m_dwFlash2 <= GetTickCount() ||  m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightningID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));			
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuPlayID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 200)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightningID, 0, 0, 1.0f, 1.0f, 0, 0, 0, 0, D3DCOLOR_ARGB(255,230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuOptionsID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 225)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightningID, 0, 0, 1.0f, 1.0f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuHowToID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 250)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightningID, 0, 0, 1.0f, 1.0f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuHighScoresID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 275)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount() )
+		{
+			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightningID, 0, 0, 1.0f, 1.0f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuCreditsID, 0, 0, 0.4f, 0.6f);
 	}
 	else if(m_nCursPosY == 300)
 	{
-		if(m_dwFlash1 <= GetTickCount() || m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
-			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 230, 255, 255));
+		if(m_dwFlash1 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
+			
+		}
+		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
+		{
+			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f);
+			m_pVM->DrawStaticTexture(m_nLightningID, 0, 0, 1.0f, 1.0f, 0, 0, 0, 0, D3DCOLOR_ARGB(55, 230, 254, 254));
+		}
 		else
 			m_pVM->DrawStaticTexture(m_nMenuExitID, 0, 0, 0.4f, 0.6f);
 	}

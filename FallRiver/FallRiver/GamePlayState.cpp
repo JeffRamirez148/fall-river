@@ -79,6 +79,8 @@ void GamePlayState::Enter()
 	rainL = m_pPM->LoadEmitter("rain.xml");
 	rainA = m_pPM->ActivateEmitter(rainL);
 	
+	
+
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
@@ -331,7 +333,7 @@ void GamePlayState::Enter()
 	//}
 
 	m_pMS->InitMessageSystem( &MessageProc );
-
+	// Playing background music and sounds
 	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
@@ -342,6 +344,18 @@ void GamePlayState::Enter()
 	m_pAM->setMusicLooping(backGroundID, true);
 	m_pAM->playMusic(backGroundID);
 
+	soundID2 = m_pAM->RegisterSound("resource/Sounds/thunder.wav");
+	m_pAM->setSoundPos(soundID2, sound1);
+
+	m_pAM->setSoundVel(soundID2, sound1);
+	m_pAM->setSoundLooping(soundID2, false);
+
+	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+	m_pAM->setMusicPos(musicID, sound1);
+
+	m_pAM->setMusicVel(musicID, sound1);
+	m_pAM->setMusicLooping(musicID, true);
+	m_pAM->playMusic(musicID);
 	winLose = true;
 
 	m_pHUD = new HUD;
@@ -392,6 +406,7 @@ void GamePlayState::Enter()
 void GamePlayState::ReEnter()
 {
 	m_pAM->playMusic(backGroundID);
+	m_pAM->playMusic(musicID);
 }
 
 void GamePlayState::Exit() 
@@ -470,6 +485,8 @@ void GamePlayState::Update(float fElapsedTime)
 	tmp.y = m_cPlayer->GetPosY();
 	tmp.z = 0;
 	m_pAM->SetListenerPos(tmp);
+	m_pAM->setSoundPos(soundID2,tmp);
+
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
 

@@ -43,6 +43,7 @@ private:
 	int		m_nMenuHighScoresID;
 	int		m_nMenuCreditsID;
 	int		m_nMenuExitID;
+	int		m_nLightningID;
 
 	MainMenuState();
 	~MainMenuState();
