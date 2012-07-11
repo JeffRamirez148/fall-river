@@ -9203,10 +9203,6 @@
     <ScrRect x="851" y="1687" height="32" width="32" />
   </Collision>
   <Collision>
-    <Type>Spawn Point</Type>
-    <ScrRect x="589" y="2008" height="1" width="1" />
-  </Collision>
-  <Collision>
     <Type>Bush</Type>
     <ScrRect x="1280" y="512" height="64" width="64" />
   </Collision>
@@ -9313,5 +9309,29 @@
   <Collision>
     <Type>NPC</Type>
     <ScrRect x="1432" y="105" height="32" width="32" />
+  </Collision>
+  <Collision>
+    <Type>Pistol Ammo</Type>
+    <ScrRect x="2097" y="816" height="16" width="16" />
+  </Collision>
+  <Collision>
+    <Type>Medicine</Type>
+    <ScrRect x="1760" y="159" height="16" width="16" />
+  </Collision>
+  <Collision>
+    <Type>Shotgun Ammo</Type>
+    <ScrRect x="454" y="717" height="16" width="16" />
+  </Collision>
+  <Collision>
+    <Type>Rifle Ammo</Type>
+    <ScrRect x="1024" y="1984" height="16" width="16" />
+  </Collision>
+  <Collision>
+    <Type>Health</Type>
+    <ScrRect x="1472" y="1536" height="16" width="16" />
+  </Collision>
+  <Collision>
+    <Type>Battery</Type>
+    <ScrRect x="1728" y="1024" height="16" width="16" />
   </Collision>
 </levels_list>

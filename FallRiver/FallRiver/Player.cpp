@@ -26,7 +26,7 @@ Player::Player()
 	m_nScore = 0;
 	m_ncurrWeap = 0;
 	m_nState = PSTATE_IDLE;
-	this->SetHealth(1000);
+	this->SetHealth(100);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -49,7 +49,6 @@ Player::Player()
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
 	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
-	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.wav");
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
 	
 	flashLightID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
@@ -111,19 +110,18 @@ void Player::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
 	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
 	
-	if( this->GetHealth() <= 0 )
+	if( this->GetHealth() < 0 )
 	{
 		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
 		//m_nLives--;
 		//SetHealth(100);
 	}
-	//if( this->GetLives() < 0 )
-	//{
-	//	CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
-	//}
+	
 
-	if( pDI->KeyPressed( DIK_TAB ) || pDI->JoystickButtonPressed(3,0) )
+	if( pDI->KeyPressed( DIK_TAB ) )
 	{
+
+
 		if( m_currWeapon == m_vpWeapons.back() )
 		{
 			m_currWeapon = m_vpWeapons.front();
@@ -135,24 +133,18 @@ void Player::Update(float fElapsedTime)
 			m_currWeapon = m_vpWeapons[m_ncurrWeap];
 		}
 		if(m_ncurrWeap == WPN_MACHETE )
-		{
-			AudioManager::GetInstance()->GetSoundChannel(sheathID)->stop();
-			AudioManager::GetInstance()->playSound(sheathID);	
-		}
+			AudioManager::GetInstance()->playSound(sheathID);		
 		else
-		{
-			AudioManager::GetInstance()->GetSoundChannel(weaponChangeID)->stop();
-			AudioManager::GetInstance()->playSound(weaponChangeID);	
-		}
+			AudioManager::GetInstance()->playSound(weaponChangeID);		
 	}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
 
-	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading || pDI->JoystickButtonPressed(2,0) )
+	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading )
 		m_currWeapon->Reload();
 
-	if((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) )
+	if(pDI->KeyDown(DIK_SPACE) && 	m_dwGunCount  < GetTickCount() )
 	{
 		if(m_dwGunCount == 0)
 		{
@@ -172,28 +164,27 @@ void Player::Update(float fElapsedTime)
 	}	
 
 	// Flashlight
-	
-	if( pDI->KeyPressed(DIK_E) || pDI->JoystickButtonPressed(4,0)) //pDI->JoystickDPadPressed(DIR_LEFT,0) 8 
+	if( pDI->KeyPressed(DIK_E))
 	{
 		AudioManager::GetInstance()->playSound(flashLightID);		
 		++flashLightType;
 		if(flashLightType > 3)
-			flashLightType = 0;
+			flashLightType = 3;
 	}
-	if( pDI->KeyPressed(DIK_Q) || pDI->JoystickButtonPressed(5,0)) //pDI->JoystickDPadPressed(DIR_RIGHT,0) 9
+	if( pDI->KeyPressed(DIK_Q))
 	{
 		AudioManager::GetInstance()->playSound(flashLightID);		
 		--flashLightType;
 		if(flashLightType < 0)
-			flashLightType = 3;
+			flashLightType = 0;
 	}
 
-	if( pDI->KeyPressed(DIK_F) || pDI->JoystickButtonPressed(1,0))
+	if( pDI->KeyPressed(DIK_F))
 	{
 		AudioManager::GetInstance()->playSound(flashLightID);		
 		lightOn = !lightOn;
 	}
-	if(pDI->KeyPressed(DIK_L) ||  pDI->JoystickButtonPressed(6,0))
+	if(pDI->KeyPressed(DIK_L))
 	{
 		if(questLogToggle == true)
 			questLogToggle = false;
@@ -266,43 +257,34 @@ void Player::Update(float fElapsedTime)
 		}
 	}
 	else
-	{
-		ViewManager::GetInstance()->SetLightPos(0, 0, -1);
-		ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
-		ViewManager::GetInstance()->SetInnerCone(.95f);
-		ViewManager::GetInstance()->SetOuterCone(.9f);
-		ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
-	}
+		ViewManager::GetInstance()->SetLightPos(0,0,-1);
 
-	//Player Movement
-	
-	if( pDI->KeyDown(DIK_D) || (pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
+	if( pDI->KeyDown(DIK_D))
 	{
-		if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
+		if( pDI->KeyDown(DIK_W))
 		{
 			SetDirection(DIRE_UPRIGHT);
 			ViewManager::GetInstance()->SetLightDir(1,1,0);
 		}
-		else if(pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
+		else if(pDI->KeyDown(DIK_S))
 		{
 			SetDirection(DIRE_DOWNRIGHT);
 			ViewManager::GetInstance()->SetLightDir(1,-1,0);
 		}
-		else 
+		else
 		{
 			SetDirection(DIRE_RIGHT);	
 			ViewManager::GetInstance()->SetLightDir(1,0,0);		
 		}
 	}
-	else if( pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
+	else if( pDI->KeyDown(DIK_A))
 	{
-		int temp = pDI->JoystickGetLStickXAmount(0);
-		if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
+		if( pDI->KeyDown(DIK_W))
 		{
 			SetDirection(DIRE_UPLEFT);
 			ViewManager::GetInstance()->SetLightDir(-1,1,0);
 		}
-		else if(pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
+		else if(pDI->KeyDown(DIK_S))
 		{
 			SetDirection(DIRE_DOWNLEFT);
 			ViewManager::GetInstance()->SetLightDir(-1,-1,0);
@@ -313,27 +295,26 @@ void Player::Update(float fElapsedTime)
 			ViewManager::GetInstance()->SetLightDir(-1,0,0);
 		}
 	}
-	else if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
+	else if( pDI->KeyDown(DIK_W))
 	{
 		SetDirection(DIRE_UP);
 		ViewManager::GetInstance()->SetLightDir(0,1,0);
 	}
-	else if(pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
+	else if( pDI->KeyDown(DIK_S))
 	{
 		SetDirection(DIRE_DOWN);
 		ViewManager::GetInstance()->SetLightDir(0,-1,0);
 	}
 
 
-	if( pDI->KeyDown(DIK_D) || (pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
+	if( pDI->KeyDown(DIK_D) )
 	{
 		SetVelX(100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 			AudioManager::GetInstance()->playSound(walkingID);
 	}
-	else if( pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
+	else if( pDI->KeyDown(DIK_A) )
 	{
-		int temptemp = pDI->JoystickGetLStickXAmount(0);
 		SetVelX(-100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 			AudioManager::GetInstance()->playSound(walkingID);
@@ -343,13 +324,13 @@ void Player::Update(float fElapsedTime)
 		SetVelX(0);
 	}
 
-	if(pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
+	if( pDI->KeyDown(DIK_W) )
 	{
 		SetVelY(-100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 			AudioManager::GetInstance()->playSound(walkingID);
 	}
-	else if( pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
+	else if( pDI->KeyDown(DIK_S) )
 	{
 		SetVelY(100);
 		if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
@@ -536,11 +517,12 @@ bool Player::CheckCollision(IObjects* pBase)
 {
 	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
-
+	//int x =pBase->GetObjectType();
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{
 		if( pBase->GetObjectType() != OBJ_BUSH )
 		{
+			//int x =pBase->GetObjectType();
 			if(BaseObject::CheckCollision(pBase) == true )
 			{
 				if(pBase->GetObjectType() == OBJ_BULLET)
@@ -648,6 +630,7 @@ void Player::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
+			SetHealth(GetHealth()-30);
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}

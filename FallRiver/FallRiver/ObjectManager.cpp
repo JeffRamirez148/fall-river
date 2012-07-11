@@ -70,6 +70,10 @@ void ObjectManager::UpdateAllObjects( float fElapsedTime )
 {
 	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
 	{
+		if(((*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x > CGame::GetInstance()->GetScreenWidth() || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y > CGame::GetInstance()->GetScreenHeight() ||
+			(*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x + (*iter)->GetWidth() < 0 || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y + (*iter)->GetHeight() < 0) && (*iter)->GetObjectType() != OBJ_LEVEL)
+			continue;
+		else
 		(*iter)->Update(fElapsedTime);
 	}
 }
@@ -92,7 +96,9 @@ void ObjectManager::CheckCollisions( void )
 	{
 		if(((*iter1)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x > CGame::GetInstance()->GetScreenWidth() || (*iter1)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y > CGame::GetInstance()->GetScreenHeight() ||
 			(*iter1)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x + (*iter1)->GetWidth() < 0 || (*iter1)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y + (*iter1)->GetHeight() < 0) && (*iter1)->GetObjectType() != OBJ_LEVEL)
+		{	
 			continue;
+		}
 		for( OListIterator iter2 = m_Objects.begin(); iter2 != m_Objects.end(); ++iter2)
 		{
 			if((*iter1) == (*iter2) )

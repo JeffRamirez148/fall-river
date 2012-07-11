@@ -4,6 +4,8 @@
 #include "BaseObject.h"
 class AudioManager;
 
+enum PICKUPTYPES { PISTOL_AMMO = 0, SHOTGUN_AMMO, RIFLE_AMMO, MEDICINE, BATTERY, HEALTH };
+
 class PickUp : public BaseObject
 {
 
@@ -11,6 +13,7 @@ class PickUp : public BaseObject
 	int batteriesID;
 	int medicineID;
 	int healthID;
+	int m_nPickUpType;
 	AudioManager* audio;
 
 public:
@@ -23,7 +26,10 @@ public:
 
 	RECT GetRect();
 
-	bool CheckCollision(BaseObject* pBase);
+	int GetPickUpType() { return m_nPickUpType; }
+	void SetPickUpType(int x) { m_nPickUpType = x; }
+
+	bool CheckCollision(IObjects* pBase);
 };
 
 #endif

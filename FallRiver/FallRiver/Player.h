@@ -22,8 +22,6 @@ class Player: public BaseCharacter, public IListener
 {
 
 private:
-	char* m_cName;
-	bool m_bIsAlive;
 	float m_fCurrRotation;
 	vector<Weapon*> m_vpWeapons;
 	vector<Light*> m_vpLights;
@@ -40,7 +38,19 @@ private:
 	int flashLightType; // 0 - Flashlight, 1 - Maglight, 2 - Lantern, 3 - Lighter
 	float decreaseTime;
 	int flickerRate;
-
+public:
+	int	m_nFontID;
+	int questCounter;
+	int completedQuest;
+	vector<Quest_Struct*> m_vpActiveQuests;
+	vector<Quest_Struct*> m_vpFinishedQuests;
+private:
+	char* m_cName;
+	bool m_bIsAlive;
+public:
+	bool m_bIsHidden;
+	bool m_bHasMedicine;
+private:
 	bool m_bTalking;
 	int m_nLives;
 	int walkingID;
@@ -50,21 +60,15 @@ private:
 	int sheathID;
 
 	bool lightOn;
-
+public:
+	int battery;
+	bool questLogToggle;
+private:
 	float batteryTime;
 
 	AnimInfo m_playerAnim;
 
-public:
-	int	m_nFontID;
-	int questCounter;
-	int completedQuest;
-	vector<Quest_Struct*> m_vpActiveQuests;
-	vector<Quest_Struct*> m_vpFinishedQuests;
-	bool m_bIsHidden;
-	int battery;
-	bool questLogToggle;
-
+public: 
 	Player();
 	~Player();
 
@@ -81,7 +85,6 @@ public:
 
 	// If the players flashlight is on
 	bool IsOn() {return lightOn;}
-	void SetOn(bool on) {lightOn = on;}
 
 	bool IsTalking() {return m_bTalking;}
 

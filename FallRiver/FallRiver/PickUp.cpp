@@ -2,12 +2,15 @@
 #include "DestroyPickUp.h"
 #include "DirectInput.h"
 #include "AudioManager.h"
+#include "ViewManager.h"
 #include "GamePlayState.h"
+#include "DestroyPickUp.h"
 #include "Player.h"
 
 PickUp::PickUp()
 {
 	m_nObjectType = OBJ_PICKUP;
+	m_nPickUpType = -1;
 	audio = AudioManager::GetInstance();
 	ammoID = audio->RegisterSound("resource/Sounds/reload.wav");
 	batteriesID = audio->RegisterSound("resource/Sounds/PowerUpBattery.wav");
@@ -50,6 +53,41 @@ void PickUp::Update(float fElapsedTime)
 
 void PickUp::Render() 
 {
+	ViewManager::GetInstance()->GetSprite()->Flush();
+
+	
+	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+
+	//pVM->DrawRect(reRect, 255, 0, 255);
+
+	if( GetPickUpType() == 0 )
+	{
+		ViewManager::GetInstance()->DrawRect(reRect,255,0,255);
+	}
+	else if( GetPickUpType() == 1 )
+	{
+		ViewManager::GetInstance()->DrawRect(reRect,255,0,0);
+	}
+	else if( GetPickUpType() == 2 )
+	{
+		ViewManager::GetInstance()->DrawRect(reRect,0,0,255);
+	}
+	else if( GetPickUpType() == 3 )
+	{
+		ViewManager::GetInstance()->DrawRect(reRect,0,255,255);
+	}
+	else if( GetPickUpType() == 4 )
+	{
+		ViewManager::GetInstance()->DrawRect(reRect,0,255,0);
+	}
+	else if( GetPickUpType() == 5 )
+	{
+		ViewManager::GetInstance()->DrawRect(reRect,255,255,0);
+	}
+	else if( GetPickUpType() == 6 )
+	{
+		ViewManager::GetInstance()->DrawRect(reRect,100,100,100);
+	}
 }
 
 RECT PickUp::GetRect()
@@ -58,10 +96,104 @@ RECT PickUp::GetRect()
 	return cRect;
 }
 
-bool PickUp::CheckCollision(BaseObject* pBase)
+bool PickUp::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
+
 	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == false  )
 		return false;
+	else
+	{
+		if( pBase->GetObjectType() == OBJ_CHARACTER )
+		{
+			BaseCharacter* pCh = (BaseCharacter*)pBase;
+			if( pCh->GetCharacterType() == CHA_PLAYER )
+			{
+				switch( GetPickUpType() )
+				{
+				case SHOTGUN_AMMO:
+					{
+						for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetPlayer()->GetWeapons().size(); i++)
+						{
+							if( GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetWeaponType() == WPN_SHOTGUN )
+							{
+								GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->SetAmmo(GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetAmmo() + 2 );
+								DestroyPickUp* pMsg = new DestroyPickUp(this);
+								MessageSystem::GetInstance()->SendMsg(pMsg);
+								pMsg = nullptr;
+								break;
+							}
+						}
+					}
+					break;
+				case RIFLE_AMMO:
+					{
+						for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetPlayer()->GetWeapons().size(); i++)
+						{
+							if( GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetWeaponType() == WPN_RIFLE )
+							{
+								GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->SetAmmo(GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetAmmo() + 12 );
+								DestroyPickUp* pMsg = new DestroyPickUp(this);
+								MessageSystem::GetInstance()->SendMsg(pMsg);
+								pMsg = nullptr;
+								break;
+							}
+						}
+					}
+					break;
+				case PISTOL_AMMO:
+					{
+						for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetPlayer()->GetWeapons().size(); i++)
+						{
+							if( GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetWeaponType() == WPN_PISTOL )
+							{
+								GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->SetAmmo(GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetAmmo() + 8 );
+								DestroyPickUp* pMsg = new DestroyPickUp(this);
+								MessageSystem::GetInstance()->SendMsg(pMsg);
+								pMsg = nullptr;
+								break;
+							}
+						}
+					}
+					break;
+				case MEDICINE:
+					{
+						GamePlayState::GetInstance()->GetPlayer()->m_bHasMedicine = true;
+						DestroyPickUp* pMsg = new DestroyPickUp(this);
+						MessageSystem::GetInstance()->SendMsg(pMsg);
+						pMsg = nullptr;
+
+					}
+					break;
+				case HEALTH:
+					{
+						int x = GamePlayState::GetInstance()->GetPlayer()->GetHealth() + 30 ;
+						if( x > 100 )
+						{
+							x = 100;
+						}
+						GamePlayState::GetInstance()->GetPlayer()->SetHealth(x);
+						DestroyPickUp* pMsg = new DestroyPickUp(this);
+						MessageSystem::GetInstance()->SendMsg(pMsg);
+						pMsg = nullptr;
+					}
+					break;
+				case BATTERY:
+					{
+						int x = GamePlayState::GetInstance()->GetPlayer()->battery + 20;
+						if( x > 100 )
+						{
+							x = 100;
+						}
+						GamePlayState::GetInstance()->GetPlayer()->battery = x;
+						DestroyPickUp* pMsg = new DestroyPickUp(this);
+						MessageSystem::GetInstance()->SendMsg(pMsg);
+						pMsg = nullptr;
+					}
+					break;
+				}
+			}
+		}
+	}
 	return true;
 }
