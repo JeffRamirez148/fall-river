@@ -52,6 +52,8 @@ GamePlayState::GamePlayState()
 
 	winLose = true;
 	questFlag = false;
+	rainA = -1;
+	rainL = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -72,8 +74,9 @@ void GamePlayState::Enter()
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 
-
-
+	// Rain particles
+	rainL = m_pPM->LoadEmitter("rain.xml");
+	rainA = m_pPM->ActivateEmitter(rainL);
 	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
@@ -500,7 +503,7 @@ void GamePlayState::Update(float fElapsedTime)
 	}
 	m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
-
+	m_pPM->Update(fElapsedTime);
 	//// Quest 2 completion
 	if(GetPlayer()->questCounter == 10 )
 	{
@@ -541,8 +544,8 @@ void GamePlayState::Render()
 	{
 		m_cBushes[i]->Render();
 	}
-
-
+	m_pPM->Render();
+	
 	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 

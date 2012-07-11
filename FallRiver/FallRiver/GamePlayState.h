@@ -47,7 +47,9 @@ private:
 	int backGroundID;
 	int swingHitID;
 
-
+	// Rain particles
+	int rainA;
+	int rainL;
 	// Data Members
 	float fTime;
 
