@@ -29,6 +29,8 @@ void HighScoresMenuState::Enter()
 	
 	fontID = m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
 
+	audio = AudioManager::GetInstance();
+
 	FMOD_VECTOR tmp = {0,0,0};
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	audio->SetListenerPos(tmp);

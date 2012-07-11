@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<emitter_list>
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="0" endGreen="0" endBlue="255" endRot="0" endScaleX="20" endScaleY="15" endVelX="0" endVelY="2" endVelZ="0" lifeSpan="1" lifeTime="1" loopin="1" maxParticles="1" rectL="0" rectT="-10" rectR="600" rectB="0" spawnRate="0" startAlpha="255" startRed="0" startGreen="0" startBlue="255" startRot="0" startScaleX="1" startScaleY="15" startVelX="0" startVelY="2" StartVelZ="0" />
+</emitter_list>

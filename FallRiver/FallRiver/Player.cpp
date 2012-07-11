@@ -50,16 +50,31 @@ Player::Player()
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
 	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
+	
+	flashLightID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
+	weaponChangeID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/reload.wav");
+	sheathID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/sheath.wav");
+
 	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(hitID, sound1);
 	AudioManager::GetInstance()->setSoundVel(walkingID, sound1);
+	AudioManager::GetInstance()->setSoundVel(flashLightID, sound1);
+	AudioManager::GetInstance()->setSoundVel(weaponChangeID, sound1);
+	AudioManager::GetInstance()->setSoundVel(sheathID, sound1);
 	sound1.x = m_nPosX;
 	sound1.y = m_nPosY;
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(walkingID, true);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(hitID, false);
+	AudioManager::GetInstance()->setSoundPos(flashLightID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(flashLightID, false);
+	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(weaponChangeID, false);
+	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(sheathID, false);
+
 	lightOn = false;
 	battery = 100;
 	batteryTime = 0;
@@ -91,6 +106,10 @@ void Player::Update(float fElapsedTime)
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
+	AudioManager::GetInstance()->setSoundPos(flashLightID, sound1);
+	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
+	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
+	
 	if( this->GetHealth() < 0 )
 	{
 		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
@@ -104,6 +123,8 @@ void Player::Update(float fElapsedTime)
 
 	if( pDI->KeyPressed( DIK_TAB ) )
 	{
+
+
 		if( m_currWeapon == m_vpWeapons.back() )
 		{
 			m_currWeapon = m_vpWeapons.front();
@@ -114,24 +135,11 @@ void Player::Update(float fElapsedTime)
 			m_ncurrWeap++;
 			m_currWeapon = m_vpWeapons[m_ncurrWeap];
 		}
+		if(m_ncurrWeap == WPN_MACHETE )
+			AudioManager::GetInstance()->playSound(sheathID);		
+		else
+			AudioManager::GetInstance()->playSound(weaponChangeID);		
 	}
-
-	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
-		m_nState = PSTATE_IDLE;
-
-	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading )
-		m_currWeapon->Reload();
-
-	if( this->GetHealth() < 0 )
-	{
-		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
-		//m_nLives--;
-		//SetHealth(100);
-	}
-	//if( this->GetLives() < 0 )
-	//{
-	//	CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
-	//}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;
@@ -161,12 +169,14 @@ void Player::Update(float fElapsedTime)
 	// Flashlight
 	if( pDI->KeyPressed(DIK_E))
 	{
+		AudioManager::GetInstance()->playSound(flashLightID);		
 		++flashLightType;
 		if(flashLightType > 3)
 			flashLightType = 3;
 	}
 	if( pDI->KeyPressed(DIK_Q))
 	{
+		AudioManager::GetInstance()->playSound(flashLightID);		
 		--flashLightType;
 		if(flashLightType < 0)
 			flashLightType = 0;
@@ -174,6 +184,7 @@ void Player::Update(float fElapsedTime)
 
 	if( pDI->KeyPressed(DIK_F))
 	{
+		AudioManager::GetInstance()->playSound(flashLightID);		
 		lightOn = !lightOn;
 	}
 	if(pDI->KeyPressed(DIK_L))

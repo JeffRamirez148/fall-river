@@ -6,6 +6,8 @@
 #include "ViewManager.h"
 #include "Player.h"
 #include "Weapon.h"
+#include "AudioManager.h"
+#include "sound.h"
 
 //#define AniTime .05f
 
@@ -16,6 +18,14 @@ HUD::HUD()
 	m_fTime = 0;
 	m_fAniSpeed = 0;
 	m_ftest = 0;
+	healthID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/ECG.wav");
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	AudioManager::GetInstance()->setSoundVel(healthID, sound1);
+	sound1.x = GamePlayState::GetInstance()->GetPlayer()->GetPosX();
+	sound1.y = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
+	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
+	AudioManager::GetInstance()->setSoundLooping(healthID, false);
+
 }
 
 HUD::~HUD() 
@@ -24,6 +34,9 @@ HUD::~HUD()
 
 void HUD::Update(float aTime)
 {
+	FMOD_VECTOR sound1 = { GamePlayState::GetInstance()->GetPlayer()->GetPosX(), GamePlayState::GetInstance()->GetPlayer()->GetPosY(), 0};
+	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
+
 	m_fTime += aTime;
 	//m_ftest += aTime;
 	/*
@@ -150,6 +163,8 @@ void HUD::Render()
 	}
 	else if( m_fTime > 4*m_fAniSpeed && m_fTime < 5*m_fAniSpeed )
 	{
+				AudioManager::GetInstance()->GetSoundChannel(healthID)->stop();
+		AudioManager::GetInstance()->playSound(healthID);
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
 			pVM->DrawStaticTexture(m_vFrameIDs[4],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
@@ -315,6 +330,8 @@ void HUD::Render()
 	}
 	else if( m_fTime > 15*m_fAniSpeed && m_fTime < 16*m_fAniSpeed )
 	{
+		AudioManager::GetInstance()->GetSoundChannel(healthID)->stop();
+		AudioManager::GetInstance()->playSound(healthID);
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
 			pVM->DrawStaticTexture(m_vFrameIDs[15],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
@@ -513,7 +530,7 @@ void HUD::Render()
 	char szName[100] = {}; 
 	
 	TCHAR buffer[ 100 ];
-	float x = GamePlayState::GetInstance()->GetPlayer()->GetHealth() ;
+	int x = GamePlayState::GetInstance()->GetPlayer()->GetHealth() ;
 	if( x > 0 )
 	{
 		_stprintf_s( buffer, 100, _T("%i"), GamePlayState::GetInstance()->GetPlayer()->GetHealth() );
@@ -530,18 +547,20 @@ void HUD::Render()
 	{
 		m_fAniSpeed = .07f;
 		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+		AudioManager::GetInstance()->GetSound(healthID)->noise->setMusicSpeed( 1 );
 	}
 	else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 	{
 		m_fAniSpeed = .05f;
 		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+		AudioManager::GetInstance()->GetSound(healthID)->noise->setMusicSpeed( 2 );
 	}
 	else
 	{
 		m_fAniSpeed = .02f;
 		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+		AudioManager::GetInstance()->GetSound(healthID)->noise->setMusicSpeed( 4 );
 	}
-
 	
 
 

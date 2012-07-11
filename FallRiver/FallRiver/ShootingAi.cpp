@@ -8,6 +8,7 @@
 #include "DestroyEnemyS.h"
 #include "GamePlayState.h"
 #include "CreateBullet.h"
+#include "Level.h"
 #include "Weapon.h"
 #include "Bullet.h"
 #include "CGame.h"
@@ -127,8 +128,17 @@ void ShootingAi::Update(float fElapsedTime)
 		}
 		if( fDistX  > 10 && fDistY > 10 )
 		{
+			float savex = GetPosX();
+			float savey = GetPosY();
+
 			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
 			BaseCharacter::Update(fElapsedTime);
+
+			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+			{
+				SetPosX(savex);
+				SetPosY(savey);
+			}
 		}
 		else
 			AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();

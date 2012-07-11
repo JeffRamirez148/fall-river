@@ -12,6 +12,8 @@ private:
 	int zombieWalkingID;
 	int notifyID;
 	bool notified;
+	DWORD attackDelay;
+
 public: 
 	ChasingAI();
 	~ChasingAI();

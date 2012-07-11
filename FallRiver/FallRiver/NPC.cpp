@@ -84,7 +84,7 @@ void NPC::Update(float fElapsedTime)
 	if( distance <= 70.0f )
 	{
 		showQuest = true;
-		if(pDI->KeyPressed(DIK_A) )
+		if(pDI->KeyPressed(DIK_T) )
 		{
 			bool questEmpty = true;
 
@@ -108,6 +108,26 @@ void NPC::Update(float fElapsedTime)
 		}
 		if(pDI->KeyPressed(DIK_RETURN))
 		{
+			//bool questEmpty = true;
+
+			//for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
+			//{
+			//	if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel || pGPS->GetPlayer()->m_vpActiveQuests[i] == nullptr )
+			//	{
+			//		questEmpty = false;
+			//		AllQuestsAvail[NPCLabel] = false;
+			//	}
+			//	/*if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel + 1)
+			//	{
+			//	CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
+			//	}*/
+			//}
+			//if(questEmpty)
+			//{
+			//	pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
+			//	AllQuestsAvail[NPCLabel] = false;
+			//}
+
 			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
 			{
 				if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel - 1)
@@ -270,7 +290,7 @@ void NPC::RenderQuests(void)
 			pVM->DrawRect(questBox,255,255,255);
 			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
 		}
-		if(showQuest == true && NPCLabel == 3 && pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == 2)
+		if(showQuest == true && NPCLabel == 3 && pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == 2 && pGPS->GetPlayer()->questCounter == 10)
 		{  
 			pVM->DrawRect(questBox,255,255,255);
 			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
