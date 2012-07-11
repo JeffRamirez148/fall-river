@@ -88,7 +88,7 @@ bool Bullet::CheckCollision(IObjects* pBase)
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
 		
-		//EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );*/
+		EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
 
 	}
 	return true;

@@ -23,10 +23,11 @@ using namespace std;
 #include "Frame.h"
 #include "CGame.h"
 #include "Player.h"
+#include "CompanionAI.h"
 #include "NPC.h"
 
 #ifndef SAFE_RELEASE
-	#define SAFE_RELEASE(p)			if (p) { p->Release(); p = NULL; }
+#define SAFE_RELEASE(p)			if (p) { p->Release(); p = NULL; }
 #endif
 
 ViewManager::ViewManager()
@@ -153,10 +154,10 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 	if(pRoot == nullptr)
 		return false;
 
-		const char* pText = pRoot->GetText();
-		if(pText)
-			strcpy_s(Animate.filepath, 260, pText);
-		
+	const char* pText = pRoot->GetText();
+	if(pText)
+		strcpy_s(Animate.filepath, 260, pText);
+
 	TiXmlElement* pAnimation = pRoot->FirstChildElement("animation");
 	int j = 0;
 	while(pAnimation)
@@ -171,70 +172,70 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 		else
 			Animate.looping.push_back(true);
 
-	//Iterate through the nodes to load player data
-	TiXmlElement* pPlayer = pAnimation->FirstChildElement("frame_info");
+		//Iterate through the nodes to load player data
+		TiXmlElement* pPlayer = pAnimation->FirstChildElement("frame_info");
 
-	while(pPlayer)
-	{
-		Frame info = { };
+		while(pPlayer)
+		{
+			Frame info = { };
 
-		//Read Name
-		pText = pPlayer->GetText();
-		if(pText)
-			strcpy_s(info.eventMsg, 100, pText);
+			//Read Name
+			pText = pPlayer->GetText();
+			if(pText)
+				strcpy_s(info.eventMsg, 100, pText);
 
-		int x = 0;
-		TiXmlElement* pSource = pPlayer->FirstChildElement("source_rect_info");
-		pSource->Attribute("sourceRectLeft", &x);
-		info.sourceRect.left = x;
-		pSource->Attribute("sourceRectRight", &x);
-		info.sourceRect.right = x;
-		pSource->Attribute("sourceRectTop", &x);
-		info.sourceRect.top = x;
-		pSource->Attribute("sourceRectBottom", &x);
-		info.sourceRect.bottom = x;
+			int x = 0;
+			TiXmlElement* pSource = pPlayer->FirstChildElement("source_rect_info");
+			pSource->Attribute("sourceRectLeft", &x);
+			info.sourceRect.left = x;
+			pSource->Attribute("sourceRectRight", &x);
+			info.sourceRect.right = x;
+			pSource->Attribute("sourceRectTop", &x);
+			info.sourceRect.top = x;
+			pSource->Attribute("sourceRectBottom", &x);
+			info.sourceRect.bottom = x;
 
-		TiXmlElement* pCol = pPlayer->FirstChildElement("col_rect_info");
-		pCol->Attribute("colRectLeft", &x);
-		info.colRect.left = x;
-		pCol->Attribute("colRectRight", &x);
-		info.colRect.right = x;
-		pCol->Attribute("colRectTop", &x);
-		info.colRect.top = x;
-		pCol->Attribute("colRectBottom", &x);
-		info.colRect.bottom = x;
+			TiXmlElement* pCol = pPlayer->FirstChildElement("col_rect_info");
+			pCol->Attribute("colRectLeft", &x);
+			info.colRect.left = x;
+			pCol->Attribute("colRectRight", &x);
+			info.colRect.right = x;
+			pCol->Attribute("colRectTop", &x);
+			info.colRect.top = x;
+			pCol->Attribute("colRectBottom", &x);
+			info.colRect.bottom = x;
 
-		TiXmlElement* pAct = pPlayer->FirstChildElement("act_rect_info");
-		pCol->Attribute("actRectLeft", &x);
-		info.activeRect.left = x;
-		pCol->Attribute("actRectRight", &x);
-		info.activeRect.right = x;
-		pCol->Attribute("actRectTop", &x);
-		info.activeRect.top = x;
-		pCol->Attribute("actRectBottom", &x);
-		info.activeRect.bottom = x;
+			TiXmlElement* pAct = pPlayer->FirstChildElement("act_rect_info");
+			pCol->Attribute("actRectLeft", &x);
+			info.activeRect.left = x;
+			pCol->Attribute("actRectRight", &x);
+			info.activeRect.right = x;
+			pCol->Attribute("actRectTop", &x);
+			info.activeRect.top = x;
+			pCol->Attribute("actRectBottom", &x);
+			info.activeRect.bottom = x;
 
-		double y = 0;
-		TiXmlElement* pDur = pPlayer->FirstChildElement("duration_info");
-		pDur->Attribute("duration", &y);
-		info.duration = (float)y;
+			double y = 0;
+			TiXmlElement* pDur = pPlayer->FirstChildElement("duration_info");
+			pDur->Attribute("duration", &y);
+			info.duration = (float)y;
 
-		TiXmlElement* pAnchor = pPlayer->FirstChildElement("anchor_info");
-		pAnchor->Attribute("anchorPointX", &x);
-		info.anchor.x = x;
-		pAnchor->Attribute("anchorPointY", &x);
-		info.anchor.y = x;
+			TiXmlElement* pAnchor = pPlayer->FirstChildElement("anchor_info");
+			pAnchor->Attribute("anchorPointX", &x);
+			info.anchor.x = x;
+			pAnchor->Attribute("anchorPointY", &x);
+			info.anchor.y = x;
 
-		//Save this info the the vector
+			//Save this info the the vector
 
-		TempAnim.push_back(info);
+			TempAnim.push_back(info);
 
-		pPlayer = pPlayer->NextSiblingElement("frame_info");
-	}
+			pPlayer = pPlayer->NextSiblingElement("frame_info");
+		}
 
-	Animate.frames.push_back(TempAnim);
-	j++;
-	pAnimation = pAnimation->NextSiblingElement("animation");
+		Animate.frames.push_back(TempAnim);
+		j++;
+		pAnimation = pAnimation->NextSiblingElement("animation");
 	}
 	char temp[260] = "resource/graphics/";
 	strcat_s(temp, 260, Animate.filepath);
@@ -247,13 +248,13 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 
 int ViewManager::RegisterShader(char* aFilePath)
 {
-	
+
 	return -1;
 }
 
 //For Drawing Animations
 bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, float nPosX, float nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
-							float fRotCenterY, float fRotation, D3DCOLOR color)
+	float fRotCenterY, float fRotation, D3DCOLOR color)
 {
 	assert(aAnimInfo->curAnimID > -1 && aAnimInfo->curAnimID < (int)animations.size() && "Anim ID is out of range");
 	assert(aAnimInfo->curAnimation < (int)animations[aAnimInfo->curAnimID].frames.size() && "Current Animation is out of range");
@@ -267,82 +268,82 @@ bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, float nPosX, float nPosY, f
 	return true;
 }
 
- 
+
 //For Drawing Fonts
 bool ViewManager::DrawFont(int nFontID, char* cString, float nPosX, float nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
-							float fRotCenterY, float fRotation, D3DCOLOR color)
+	float fRotCenterY, float fRotation, D3DCOLOR color)
 {
-		assert(nFontID > -1 && nFontID < (int)textures.size() && "Font ID is out of range");
+	assert(nFontID > -1 && nFontID < (int)textures.size() && "Font ID is out of range");
 
-		//assert(fonts[nFontID].nTextureID <  (int)textures.size() && "Texture ID is out of range");
+	//assert(fonts[nFontID].nTextureID <  (int)textures.size() && "Texture ID is out of range");
 
-		float nX = nPosX;
-		float nColStart = nX;
-		float nY = nPosY;
-		char first;
-		char second;
-		//char newline;
+	float nX = nPosX;
+	float nColStart = nX;
+	float nY = nPosY;
+	char first;
+	char second;
+	//char newline;
 
-		for(int i = 0; cString[i] != '\0'; i++)
+	for(int i = 0; cString[i] != '\0'; i++)
+	{
+		char ch = cString[i];
+		int id = ch - ' ';
+		int find = 0;
+
+		if(i == 0)
+			second = ch;
+		else if(i == 1)
+			first = ch;
+
+		for(unsigned int j = 0; j < fonts.size(); j++)
 		{
-			char ch = cString[i];
-			int id = ch - ' ';
-			int find = 0;
-
-			if(i == 0)
-				second = ch;
-			else if(i == 1)
-				first = ch;
-
-			for(unsigned int j = 0; j < fonts.size(); j++)
+			if( ch == fonts[j].id )
 			{
-				if( ch == fonts[j].id )
+				id = j;
+				break;
+			}
+		}
+
+		if(ch == ' ')
+		{
+			nX += 7;
+			continue;
+		}
+		else if(ch == '\n' )
+		{
+			// move the y down
+			nY += 20 * fScaleY;
+			nX = nColStart;
+			continue;
+		}
+
+		if(i == 1)
+		{
+			for(unsigned int k = 0; k <kerns.size(); k++)
+			{
+				if( first == kerns[k].firstID && second == kerns[k].secondID )
 				{
-					id = j;
+					nX += kerns[k].amount;
 					break;
 				}
 			}
-
-			if(ch == ' ')
-			{
-				nX += 7;
-				continue;
-			}
-			else if(ch == '\n' )
-			{
-				// move the y down
-				nY += 20 * fScaleY;
-				nX = nColStart;
-				continue;
-			}
-
-			if(i == 1)
-			{
-				for(unsigned int k = 0; k <kerns.size(); k++)
-				{
-					if( first == kerns[k].firstID && second == kerns[k].secondID )
-					{
-						nX += kerns[k].amount;
-						break;
-					}
-				}
-			}
-
-			//Draw!
-			RECT srcRect = {fonts[id].x, fonts[id].y, fonts[id].x+fonts[id].width, fonts[id].y+fonts[id].height};
-			DrawStaticTexture(nFontID, nX+fonts[id].xoffset, nY+fonts[id].yoffset, fScaleX, fScaleY, &srcRect, fRotCenterX, fRotCenterY, fRotation, color);
-
-			// Move position to next char
-			nX += int(fonts[id].width * fScaleX)+fonts[id].xoffset;
 		}
 
-		return true;
+		//Draw!
+		RECT srcRect = {fonts[id].x, fonts[id].y, fonts[id].x+fonts[id].width, fonts[id].y+fonts[id].height};
+		DrawStaticTexture(nFontID, nX+fonts[id].xoffset, nY+fonts[id].yoffset, fScaleX, fScaleY, &srcRect, fRotCenterX, fRotCenterY, fRotation, color);
+
+		// Move position to next char
+		nX += int(fonts[id].width * fScaleX)+fonts[id].xoffset;
+	}
+
+	return true;
 }
 
 
 //For Anything Else
 bool ViewManager::DrawStaticTexture(int nTextureID, float nPosX, float nPosY, float fScaleX, float fScaleY, RECT* sourceRect, float fRotCenterX, 
-							float fRotCenterY, float fRotation, D3DCOLOR color)
+	float fRotCenterY, float fRotation, D3DCOLOR color)
 {
 	// Make sure the nID is in range.
 	assert(nTextureID > -1 && nTextureID < (int)textures.size() && "TextureID is out of range");
@@ -446,7 +447,7 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 
 	// Create Render Target
 	D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
-	
+
 	// Wall wa are gonna watch
 	VERTUV tmp[6];
 	int WINDOW_WIDTH = CGame::GetInstance()->GetScreenWidth();
@@ -475,7 +476,7 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	D3DXMatrixLookAtLH(&cam,&eye,&at,&up);
 	float fov = (D3DXToRadian(75)), aspect = (WINDOW_WIDTH/(float)WINDOW_HEIGHT), znear = 0.01f, zfar = 100.0f; 
 	D3DXMatrixPerspectiveFovLH(&proj,fov,aspect,znear,zfar);
-	
+
 	D3DXMatrixIdentity(&wall);
 	D3DXMatrixTranslation(&wall, 0, 0, 0);
 
@@ -605,7 +606,7 @@ bool ViewManager::DeviceEnd(void)
 		m_lpDirect3DDevice->SetStreamSource( 0, wallbuff, 0, sizeof(VERTUV));
 
 		m_lpDirect3DDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, 2);
-		
+
 		postEffect->EndPass();
 	}
 	postEffect->End();
@@ -647,9 +648,18 @@ bool ViewManager::DeviceEnd(void)
 			DrawRect(finishedLogRect,50,50,50);
 			DrawFont(tmp->m_nFontID,"Finished Quests",640.0f,210.0f,0.5f,0.5f);
 			for(unsigned int i = 0; i < tmp->m_vpFinishedQuests.size(); i++)
-				DrawFont(tmp->m_nFontID, (char*)tmp->m_vpFinishedQuests[i]->QuestTitle.c_str(), 610.0f, float(i*10+220), 0.5f, 0.5f);
-
+			{
+				if(tmp->m_vpFinishedQuests[i]->QuestID % 2 == 0)
+					DrawFont(tmp->m_nFontID, (char*)tmp->m_vpFinishedQuests[i]->QuestTitle.c_str(), 610.0f, float(i*10+220), 0.5f, 0.5f);
+			}
 		}
+
+		CompanionAI* pBud = GamePlayState::GetInstance()->GetCompanion();
+		if( pBud && pBud->IsTeaching() )
+		{
+			pBud->SaySomething();
+		}
+
 		vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
 		for(unsigned int i = 0; i < tmpNPCs.size(); ++i)
 		{
@@ -846,17 +856,17 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 		// Get the dimensions of a window that will have a client rect that
 		// will really be the resolution we're looking for.
 		AdjustWindowRectEx(&rWindow, 
-							dwWindowStyleFlags,
-							FALSE, 
-							WS_EX_APPWINDOW);
-		
+			dwWindowStyleFlags,
+			FALSE, 
+			WS_EX_APPWINDOW);
+
 		// Calculate the width/height of that window's dimensions
 		int windowWidth		= rWindow.right - rWindow.left;
 		int windowHeight	= rWindow.bottom - rWindow.top;
 
 		SetWindowPos(m_hWnd, top,	(GetSystemMetrics(SM_CXSCREEN)>>1) - (windowWidth>>1),
-										(GetSystemMetrics(SM_CYSCREEN)>>1) - (windowHeight>>1),
-										windowWidth, windowHeight, SWP_SHOWWINDOW);
+			(GetSystemMetrics(SM_CYSCREEN)>>1) - (windowHeight>>1),
+			windowWidth, windowHeight, SWP_SHOWWINDOW);
 	}
 	else
 	{

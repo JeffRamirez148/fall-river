@@ -39,9 +39,6 @@
     <ClCompile Include="CGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CompanionAI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CreateBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -219,8 +216,13 @@
     <ClCompile Include="SpawnPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="NPC.cpp">
       <Filter>Base Classes</Filter>
+=======
+    <ClCompile Include="CompanionAI.cpp">
+      <Filter>Characters</Filter>
+>>>>>>> 51f9531c0d838e792313c45e1ffc2a20267a7572
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,9 +233,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CompanionAI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CreateBullet.h">
@@ -430,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="SpawnPoint.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CompanionAI.h">
+      <Filter>Characters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

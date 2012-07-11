@@ -13,14 +13,16 @@ int Particle_Manager::LoadEmitter(char * filepath)
 	XMLManager* xml = XMLManager::GetInstance();
 	Emitter* tmp = xml->ParseEmitter(filepath);
 	loaded.push_back(tmp);
-	return loaded.size();
+	return loaded.size() - 1;
 }
 
 int Particle_Manager::ActivateEmitter(int id)
 {
-	loaded[id - 1];
-	active.push_back(loaded[id - 1]);
-	return active.size();
+	loaded[id];
+	active.push_back(loaded[id]);
+	active[active.size() - 1]->spawn = true;
+
+	return active.size() - 1;
 }
 
 void Particle_Manager::Render()
@@ -42,13 +44,15 @@ void Particle_Manager::Update(float fElapsedTime)
 		{
 			if(active[i]->GetAge() >= active[i]->GetLifeTime())
 			{
-				active.erase(active.begin() + i, active.begin() + i);
-				--i;
-				keepGoing = false;
+				active[active.size()-1]->spawn = false;
+				//active.erase(active.begin() + i);
+				////active.erase(active.begin() + i, active.begin() + i);
+				//--i;
+				//keepGoing = false;
 			}
 		}
 		// Update Everything Else
-		if(keepGoing)
+		if(keepGoing )
 			active[i]->Update(fElapsedTime);
 	}
 }

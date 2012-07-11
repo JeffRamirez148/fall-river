@@ -42,13 +42,20 @@ void NPC::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
+	Player* tempPlayer = pGPS->GetPlayer();	
 
+	double playerX = (tempPlayer->GetPosX());
+	double npcX = this->GetPosX();
+	//double playerY = (tempPlayer->GetRect().bottom/2) + tempPlayer->GetRect().top;
+	double playerY = tempPlayer->GetPosY();
+	double npcY = this->GetPosY();
 
+	double distance;
+	distance = sqrt(pow(playerX - npcX,2) + pow(playerY - npcY,2));
 
-
-	Player* tempPlayer = pGPS->GetPlayer();
-
-	if(tempPlayer->GetPosX() > GetPosX()+10)
+	if( distance <= 100 )
+	{
+		if(tempPlayer->GetPosX() > GetPosX())
 	{
 		if(tempPlayer->GetPosY() > GetPosY()+20)
 			SetDirection(DIRE_DOWNRIGHT);
@@ -70,43 +77,13 @@ void NPC::Update(float fElapsedTime)
 		SetDirection(DIRE_DOWN);
 	else if(tempPlayer->GetPosY() < GetPosY())
 		SetDirection(DIRE_UP);
-
-	double playerX = (tempPlayer->GetPosX());
-	double npcX = this->GetPosX();
-	//double playerY = (tempPlayer->GetRect().bottom/2) + tempPlayer->GetRect().top;
-	double playerY = tempPlayer->GetPosY();
-	double npcY = this->GetPosY();
-
-	double distance;
-	distance = sqrt(pow(playerX - npcX,2) + pow(playerY - npcY,2));
+	}
 
 	//if( distance >= 200 && pDI->KeyDown(DIK_A))
 	if( distance <= 70.0f )
 	{
 		showQuest = true;
-		if(pDI->KeyPressed(DIK_T) )
-		{
-			bool questEmpty = true;
-
-			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
-			{
-				if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel || pGPS->GetPlayer()->m_vpActiveQuests[i] == nullptr )
-				{
-					questEmpty = false;
-					AllQuestsAvail[NPCLabel] = false;
-				}
-				/*if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel + 1)
-				{
-				CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
-				}*/
-			}
-			if(questEmpty)
-			{
-				pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
-				AllQuestsAvail[NPCLabel] = false;
-			}
-		}
-		if(pDI->KeyPressed(DIK_RETURN))
+		if(pDI->KeyPressed(DIK_T) || pDI->JoystickButtonPressed(0,0)  )
 		{
 			//bool questEmpty = true;
 
@@ -127,6 +104,28 @@ void NPC::Update(float fElapsedTime)
 			//	pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
 			//	AllQuestsAvail[NPCLabel] = false;
 			//}
+		}
+		if(pDI->KeyPressed(DIK_RETURN) || pDI->JoystickButtonPressed(0,0))
+		{
+			bool questEmpty = true;
+
+			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
+			{
+				if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel || pGPS->GetPlayer()->m_vpActiveQuests[i] == nullptr )
+				{
+					questEmpty = false;
+					AllQuestsAvail[NPCLabel] = false;
+				}
+				/*if(pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == NPCLabel + 1)
+				{
+				CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
+				}*/
+			}
+			if(questEmpty)
+			{
+				pGPS->GetPlayer()->AddQuest(test_quest_obj->AllQuests[NPCLabel]);
+				AllQuestsAvail[NPCLabel] = false;
+			}
 
 			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
 			{

@@ -78,12 +78,12 @@ void CreditsMenuState::Exit()
 
 bool CreditsMenuState::Input() 
 {
-	if(m_pDI->KeyPressed(DIK_ESCAPE) )
+	if(m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 	{
 		CGame::GetInstance()->RemoveState();
 		return false;
 	}
-	if(m_pDI->KeyPressed(DIK_RETURN))
+	if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(0,0))
 	{
 		if(CGame::GetInstance()->m_vStates.size() == 2)
 			CGame::GetInstance()->RemoveState();

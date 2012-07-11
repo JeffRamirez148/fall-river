@@ -345,8 +345,6 @@ void ShootingAi::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			Bullet* pBull = (Bullet*)pEvent->GetParam();
-			SetHealth(GetHealth()-pBull->GetOwner()->GetDamage());
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}

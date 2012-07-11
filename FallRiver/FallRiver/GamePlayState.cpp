@@ -19,6 +19,7 @@
 #include "Message.h"
 #include "Bullet.h"
 #include "ChasingAI.h"
+#include "CompanionAI.h"
 #include "ShootingAi.h"
 #include "NPC.h"
 #include "PickUp.h"
@@ -44,6 +45,7 @@ GamePlayState::GamePlayState()
 	m_pES = nullptr;
 	m_pPM = nullptr;
 	m_cPlayer = nullptr;
+	m_cBuddy = nullptr;
 
 	m_cWeapon = nullptr;
 
@@ -55,10 +57,8 @@ GamePlayState::GamePlayState()
 	questFlag = false;
 	rainA = -1;
 	rainL = -1;
-	endX = 0;
-	endY = 0;
-	pX = 0;
-	pY = 0;
+	smokeL = -1;
+	smokeA = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -82,7 +82,10 @@ void GamePlayState::Enter()
 	// Rain particles
 	rainL = m_pPM->LoadEmitter("rain.xml");
 	rainA = m_pPM->ActivateEmitter(rainL);
+	// Smoke particles
+	smokeL = m_pPM->LoadEmitter("smoke.xml");
 	
+
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
@@ -96,6 +99,7 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
+	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
@@ -275,6 +279,14 @@ void GamePlayState::Enter()
 		}
 	}
 
+	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
+	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
+	pBuddy->SetPosX(200.0f);
+	pBuddy->SetPosY(250.0f);
+	pBuddy->SetHeight(32);
+	pBuddy->SetWidth(32);
+	pBuddy->SetImageID(-1);
+	m_pOM->AddObject(pBuddy);
 
 
 	//for(int i = 0; i < 1; i++)
@@ -292,6 +304,8 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
+
+
 	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
@@ -302,7 +316,7 @@ void GamePlayState::Enter()
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
 		pEnemy->SetPosX(600);
-		pEnemy->SetPosY(490);
+		pEnemy->SetPosY(500);
 		pEnemy->SetHealth(100);
 		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);
@@ -335,7 +349,7 @@ void GamePlayState::Enter()
 	//}
 
 	m_pMS->InitMessageSystem( &MessageProc );
-
+	// Playing background music and sounds
 	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
@@ -346,6 +360,18 @@ void GamePlayState::Enter()
 	m_pAM->setMusicLooping(backGroundID, true);
 	m_pAM->playMusic(backGroundID);
 
+	soundID2 = m_pAM->RegisterSound("resource/Sounds/thunder.wav");
+	m_pAM->setSoundPos(soundID2, sound1);
+
+	m_pAM->setSoundVel(soundID2, sound1);
+	m_pAM->setSoundLooping(soundID2, false);
+
+	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+	m_pAM->setMusicPos(musicID, sound1);
+
+	m_pAM->setMusicVel(musicID, sound1);
+	m_pAM->setMusicLooping(musicID, true);
+	m_pAM->playMusic(musicID);
 	winLose = true;
 
 	m_pHUD = new HUD;
@@ -396,6 +422,7 @@ void GamePlayState::Enter()
 void GamePlayState::ReEnter()
 {
 	m_pAM->playMusic(backGroundID);
+	m_pAM->playMusic(musicID);
 }
 
 void GamePlayState::Exit() 
@@ -453,7 +480,7 @@ void GamePlayState::Exit()
 
 bool GamePlayState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) )
 		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
 
 	return true;
@@ -476,6 +503,8 @@ void GamePlayState::Update(float fElapsedTime)
 	tmp.y = m_cPlayer->GetPosY();
 	tmp.z = 0;
 	m_pAM->SetListenerPos(tmp);
+	m_pAM->setSoundPos(soundID2,tmp);
+
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
 
@@ -526,12 +555,14 @@ void GamePlayState::Update(float fElapsedTime)
 	}
 	//m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
+
 	m_pPM->Update(fElapsedTime);
+
 	//// Quest 2 completion
 	if(GetPlayer()->questCounter == 10 )
 	{
 		questFlag = true;
-		if(m_pDI->KeyPressed(DIK_RETURN))
+		if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(1,0))
 		{
 			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 			{
@@ -595,8 +626,6 @@ void GamePlayState::Render()
 	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
 
 
-	ViewManager::GetInstance()->GetSprite()->Flush();
-	ViewManager::GetInstance()->DrawLine(pX- GamePlayState::GetInstance()->GetCamera().x + this->GetPlayer()->GetWidth()/2 ,pY- GamePlayState::GetInstance()->GetCamera().y + GetPlayer()->GetHeight()/2 ,endX- GamePlayState::GetInstance()->GetCamera().x + GetPlayer()->GetWidth()/2 , endY- GamePlayState::GetInstance()->GetCamera().y + GetPlayer()->GetHeight()/2 ,255,0,0);
 
 
 	
@@ -621,6 +650,14 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
 			bullet->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
+
+			// Smoke effects
+			RECT temp = {pOwner->GetPosX(),pOwner->GetPosY(),pOwner->GetPosX() + 16,16 + pOwner->GetPosY()};
+			//self->m_pPM->GetLoadedEmitterEmitter(self->smokeL)->SetRect(temp);
+			
+			self->smokeA = Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL);
+			self->m_pPM->GetActiveEmitter(self->smokeA)->SetRect(temp);
+			self->m_pPM->GetActiveEmitter(self->smokeA)->SetLoopin(false);
 
 			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{

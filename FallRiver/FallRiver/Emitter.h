@@ -40,10 +40,12 @@ public:
 	void Update(float fElapsedTime);
 	void Render();
 
+	bool spawn;
 	float GetAge(void) { return age; }
 	bool GetLooping(void) { return loopin;}
 	float GetLifeTime(void) { return lifeTime; }
 	RECT GetRect(void) {return rect; }
+	int GetImageID(void) {return imageID; }
 
 	void SetAge(float newAge) { age = newAge; }
 	void SetLifeTime(float newLifeTime) { lifeTime = newLifeTime; }
