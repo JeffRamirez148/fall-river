@@ -515,7 +515,7 @@ void GamePlayState::Update(float fElapsedTime)
 		}
 	}
 	// Total quest completion to win the game
-	if(GetPlayer()->m_vpFinishedQuests.size() == 2)
+	if(GetPlayer()->m_vpFinishedQuests.size() == 10)
 	{
 		questFlag = false;
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
