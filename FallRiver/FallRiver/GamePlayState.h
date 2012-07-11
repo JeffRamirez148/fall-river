@@ -48,7 +48,9 @@ private:
 	int swingHitID;
 	int SpawnEnemyAniID;
 
-
+	// Rain particles
+	int rainA;
+	int rainL;
 	// Data Members
 	float fTime;
 
