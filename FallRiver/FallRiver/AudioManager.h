@@ -74,6 +74,8 @@ public:
 	FMOD_VECTOR getSoundPos(int aSoundID) {return _sfxSound[aSoundID]->pos;}
 	FMOD_VECTOR getSoundVel(int aSoundID) {return _sfxSound[aSoundID]->vel;}
 	vector<sound*>* GetSounds(void) { return &_sfxSound; }
+	sound* GetSound(int id) { return _sfxSound[id]; }
+
 	FMOD::Channel* GetSoundChannel(int aSoundID) { return _sfxSound[aSoundID]->channel;}
 
 	// Music
@@ -101,6 +103,7 @@ public:
 	FMOD_VECTOR GetMusicPos(int aSoundID) { return _musicSound[aSoundID]->pos; }
 	FMOD_VECTOR GetMusicVel(int aSoundID) { return _musicSound[aSoundID]->vel; }
 	vector<sound*>* GetMusic(void) { return &_musicSound; }
+	sound* GetMusic(int id) { return _sfxSound[id]; }
 	FMOD::Channel* GetMusicChannel(int aSoundID) { return _musicSound[aSoundID]->channel;}
 
 	// Listener

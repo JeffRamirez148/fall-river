@@ -12,7 +12,6 @@ Weapon::Weapon()
 	m_nDamage = 0;
 	m_bMelee = false;
 	swingMissID	= -1;
-	sheathID	= -1;
 	shotID		= -1;
 	reloadID	= -1;
 }
@@ -64,8 +63,6 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 	AudioManager* m_pAM = AudioManager::GetInstance();
 	swingMissID = m_pAM->RegisterSound("resource/Sounds/swingMiss.wav");
 	shotID = m_pAM->RegisterSound("resource/Sounds/shot.wav");
-
-	sheathID = m_pAM->RegisterSound("resource/Sounds/sheath.wav");
 	reloadID = m_pAM->RegisterSound("resource/Sounds/reload.wav");
 
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
@@ -73,15 +70,12 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 	m_pAM->setSoundLooping(swingMissID, false);
 	m_pAM->setSoundVel(shotID, sound1);
 	m_pAM->setSoundLooping(shotID, false);
-	m_pAM->setSoundVel(sheathID, sound1);
-	m_pAM->setSoundLooping(sheathID, false);
 	m_pAM->setSoundVel(reloadID, sound1);
 	m_pAM->setSoundLooping(reloadID, false);
 	sound1.x = m_pOwner->GetPosX();
 	sound1.y = m_pOwner->GetPosY();
 	m_pAM->setSoundPos(swingMissID, sound1);
 	m_pAM->setSoundPos(shotID, sound1);
-	m_pAM->setSoundPos(sheathID, sound1);
 	m_pAM->setSoundPos(reloadID, sound1);
 
 	return true;
@@ -100,7 +94,6 @@ void Weapon::Update(float fElapsedTime)
 	sound1.y = m_pOwner->GetPosY();
 	m_pAM->setSoundPos(swingMissID, sound1);
 	m_pAM->setSoundPos(shotID, sound1);
-	m_pAM->setSoundPos(sheathID, sound1);
 	m_pAM->setSoundPos(reloadID, sound1);
 }
 
@@ -149,6 +142,8 @@ bool Weapon::Reload()
 		m_nClip++;
 		return false;
 	}
+	else
+		AudioManager::GetInstance()->playSound(reloadID);
 	return true;
 
 }

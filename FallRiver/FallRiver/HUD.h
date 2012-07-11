@@ -28,6 +28,8 @@ private:
 	int m_nClip;
 	float m_fAniSpeed;
 	float m_ftest;
+
+	int healthID;
 public:
 	int m_nHudID;
 	vector<int> m_vFrameIDs;
