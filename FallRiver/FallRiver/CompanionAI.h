@@ -13,6 +13,7 @@ class CompanionAI: public BaseCharacter
 {
 private: 
 	Weapon* m_nWeapon;
+	int m_nStages;
 
 public: 
 
