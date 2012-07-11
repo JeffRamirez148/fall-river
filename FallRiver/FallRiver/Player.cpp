@@ -518,8 +518,8 @@ void Player::Render()
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
 
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{

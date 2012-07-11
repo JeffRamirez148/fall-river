@@ -83,7 +83,7 @@ void ObjectManager::RenderAllObjects( void )
 	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
 	{
 		if(((*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x > CGame::GetInstance()->GetScreenWidth() || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y > CGame::GetInstance()->GetScreenHeight() ||
-			(*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x + (*iter)->GetWidth() < 0 || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y + (*iter)->GetHeight() < 0) && (*iter)->GetObjectType() != OBJ_LEVEL)
+			(*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x + (*iter)->GetWidth() < 0 || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y + (*iter)->GetHeight() < 0) && (*iter)->GetObjectType() != OBJ_LEVEL || (*iter)->GetObjectType() == OBJ_BUSH)
 			continue;
 		else
 			(*iter)->Render();

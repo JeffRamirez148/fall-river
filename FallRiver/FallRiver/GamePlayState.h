@@ -46,6 +46,7 @@ private:
 	// Sound Ids
 	int backGroundID;
 	int swingHitID;
+	int SpawnEnemyAniID;
 
 
 	// Data Members
