@@ -317,10 +317,8 @@ void NPC::RenderQuests(void)
 
 void NPC::SetQuest(int q_id) 
 {
-
 	sz_QuestTitle = test_quest_obj->AllQuests[q_id - 1]->QuestTitle;
 	sz_QuestBody = test_quest_obj->AllQuests[q_id - 1]->QuestBody;
-
 }
 
 bool NPC::CheckCollision(IObjects* pBase) 

@@ -655,7 +655,7 @@ bool ViewManager::DeviceEnd(void)
 		{
 			tmpNPCs[i]->RenderQuests();
 		}
-		/*RECT questBox;
+		RECT questBox;
 		questBox.left = 0;
 		questBox.top = CGame::GetInstance()->GetScreenHeight() - 100;
 		questBox.right = CGame::GetInstance()->GetScreenWidth();
@@ -665,7 +665,7 @@ bool ViewManager::DeviceEnd(void)
 		{
 			DrawRect(questBox,255,255,255);
 			DrawFont(tmp->m_nFontID,"You killed enough zombies...for now \n Press enter to continue.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
-		}*/
+		}
 
 		if(ambientLight[2] == .1f)
 		{
