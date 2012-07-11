@@ -56,7 +56,7 @@ private:
 	int hitID;
 	int flashLightID;
 	int weaponChangeID;
-
+	int sheathID;
 
 	bool lightOn;
 public:

@@ -33,6 +33,8 @@ void CreditsMenuState::Enter()
 	fontID = m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
 	creditsBGID = m_pVM->RegisterTexture("resource/graphics/bg_credits.png");
 	logoID = m_pVM->RegisterTexture("resource/graphics/logo_game_1024.png");
+	
+	audio = AudioManager::GetInstance();
 
 	FMOD_VECTOR tmp = {0,0,0};
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
