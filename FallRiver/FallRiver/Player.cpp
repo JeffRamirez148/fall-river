@@ -111,7 +111,7 @@ void Player::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
 	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
 	
-	if( this->GetHealth() < 0 )
+	if( this->GetHealth() <= 0 )
 	{
 		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
 		//m_nLives--;
@@ -648,7 +648,6 @@ void Player::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			SetHealth(GetHealth()-30);
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}

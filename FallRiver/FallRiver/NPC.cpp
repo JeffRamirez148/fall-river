@@ -42,13 +42,20 @@ void NPC::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
+	Player* tempPlayer = pGPS->GetPlayer();	
 
+	double playerX = (tempPlayer->GetPosX());
+	double npcX = this->GetPosX();
+	//double playerY = (tempPlayer->GetRect().bottom/2) + tempPlayer->GetRect().top;
+	double playerY = tempPlayer->GetPosY();
+	double npcY = this->GetPosY();
 
+	double distance;
+	distance = sqrt(pow(playerX - npcX,2) + pow(playerY - npcY,2));
 
-
-	Player* tempPlayer = pGPS->GetPlayer();
-
-	if(tempPlayer->GetPosX() > GetPosX()+10)
+	if( distance <= 100 )
+	{
+		if(tempPlayer->GetPosX() > GetPosX())
 	{
 		if(tempPlayer->GetPosY() > GetPosY()+20)
 			SetDirection(DIRE_DOWNRIGHT);
@@ -70,15 +77,7 @@ void NPC::Update(float fElapsedTime)
 		SetDirection(DIRE_DOWN);
 	else if(tempPlayer->GetPosY() < GetPosY())
 		SetDirection(DIRE_UP);
-
-	double playerX = (tempPlayer->GetPosX());
-	double npcX = this->GetPosX();
-	//double playerY = (tempPlayer->GetRect().bottom/2) + tempPlayer->GetRect().top;
-	double playerY = tempPlayer->GetPosY();
-	double npcY = this->GetPosY();
-
-	double distance;
-	distance = sqrt(pow(playerX - npcX,2) + pow(playerY - npcY,2));
+	}
 
 	//if( distance >= 200 && pDI->KeyDown(DIK_A))
 	if( distance <= 70.0f )

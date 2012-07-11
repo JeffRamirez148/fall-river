@@ -39,9 +39,6 @@
     <ClCompile Include="CGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CompanionAI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CreateBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -222,6 +219,9 @@
     <ClCompile Include="SpawnPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CompanionAI.cpp">
+      <Filter>Characters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -231,9 +231,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CompanionAI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CreateBullet.h">
@@ -430,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="SpawnPoint.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CompanionAI.h">
+      <Filter>Characters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

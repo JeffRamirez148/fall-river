@@ -19,6 +19,7 @@
 #include "Message.h"
 #include "Bullet.h"
 #include "ChasingAI.h"
+#include "CompanionAI.h"
 #include "ShootingAi.h"
 #include "NPC.h"
 #include "PickUp.h"
@@ -44,6 +45,7 @@ GamePlayState::GamePlayState()
 	m_pES = nullptr;
 	m_pPM = nullptr;
 	m_cPlayer = nullptr;
+	m_cBuddy = nullptr;
 
 	m_cWeapon = nullptr;
 
@@ -97,6 +99,7 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
+	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
@@ -276,6 +279,14 @@ void GamePlayState::Enter()
 		}
 	}
 
+	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
+	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
+	pBuddy->SetPosX(200.0f);
+	pBuddy->SetPosY(250.0f);
+	pBuddy->SetHeight(32);
+	pBuddy->SetWidth(32);
+	pBuddy->SetImageID(-1);
+	m_pOM->AddObject(pBuddy);
 
 
 	//for(int i = 0; i < 1; i++)
@@ -293,6 +304,8 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
+
+
 	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
@@ -303,7 +316,7 @@ void GamePlayState::Enter()
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
 		pEnemy->SetPosX(600);
-		pEnemy->SetPosY(490);
+		pEnemy->SetPosY(500);
 		pEnemy->SetHealth(100);
 		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);

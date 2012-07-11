@@ -4,6 +4,7 @@
 #include "BaseCharacter.h"
 #include "ViewManager.h"
 #include "Event.h"
+#include "CompanionAI.h"
 #include "CGame.h"
 #include "EventSystem.h"
 #include "Enemy.h"
@@ -13,7 +14,7 @@
 
 ChasingAI::ChasingAI()
 {
-	m_cInTheWay = nullptr;
+	helped = false;
 	m_nState = ESTATE_IDLE;
 
 	m_pfDestination.x = 0;
@@ -96,16 +97,31 @@ void ChasingAI::Update(float fElapsedTime)
 
 		if( m_pTarget->GetLightType() == 0 )
 		{
-			if( targetPosX < m_nPosX && m_pTarget->GetDirection() == DIRE_RIGHT )
+			if( targetPosX < m_nPosX && m_pTarget->GetDirection() == DIRE_RIGHT && distY < 100 )
 				m_nState = ESTATE_CHASING;
-			else if( targetPosX > m_nPosX && m_pTarget->GetDirection() == DIRE_LEFT )
+			else if( targetPosX > m_nPosX && m_pTarget->GetDirection() == DIRE_LEFT && distY < 100 )
 				m_nState = ESTATE_CHASING;
-			else if( targetPosY < m_nPosY && m_pTarget->GetDirection() == DIRE_DOWN )
+			else if( targetPosY < m_nPosY && m_pTarget->GetDirection() == DIRE_DOWN && distX < 100 )
 				m_nState = ESTATE_CHASING;
-			else if( targetPosY > m_nPosY && m_pTarget->GetDirection() == DIRE_UP )
+			else if( targetPosY > m_nPosY && m_pTarget->GetDirection() == DIRE_UP && distX < 100 )
 				m_nState = ESTATE_CHASING;
 		}
 	}
+
+	if( GamePlayState::GetInstance()->GetCompanion() && GamePlayState::GetInstance()->GetCompanion()->IsTeaching() && m_pTarget->IsOn() && !helped && distance < 400 )
+	{
+		float targetPosX = m_pTarget->GetPosX();
+		float targetPosY = m_pTarget->GetPosY();
+
+		if( m_pTarget->GetLightType() == 0 )
+		{
+			helped = true;
+			GamePlayState::GetInstance()->GetCompanion()->NextStep();
+			//m_pTarget->SetOn(false);
+		}
+
+	}
+
 	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() )
 	{
 		if(  m_pTarget->CheckHidden() )
@@ -185,11 +201,46 @@ void ChasingAI::Update(float fElapsedTime)
 	}
 	else if( m_nState == ESTATE_CHASING)
 	{
-		if( distance > GetWidth() && !m_cInTheWay )
+		Enemy colltest = (Enemy)*this;
+
+		double collX = (m_pTarget->GetPosX());
+		double myX = colltest.GetPosX();
+		double collY = m_pTarget->GetPosY();
+		double myY = colltest.GetPosY();
+
+		double collDist;
+		collDist = sqrt(pow(collX - myX,2) + pow(collY - myY,2));
+
+		bool LeaveAlone = false;
+
+		while( collDist > 200 )
+		{
+			colltest.MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 100);
+			colltest.SetPosX(colltest.GetPosX()+colltest.GetVelX());
+			colltest.SetPosY(colltest.GetPosY()+colltest.GetVelY());
+
+			if(GamePlayState::GetInstance()->GetLevel()->CheckCollision(&colltest) )
+			{
+				LeaveAlone = true;
+				m_nState = ESTATE_IDLE;
+				break;
+			}
+
+			collX = (m_pTarget->GetPosX());
+			myX = colltest.GetPosX();
+			collY = m_pTarget->GetPosY();
+			myY = colltest.GetPosY();
+
+			collDist = sqrt(pow(collX - myX,2) + pow(collY - myY,2));
+		}
+
+		if( !LeaveAlone )
+		{
+		if( distance > GetWidth() )
 		{
 			float savex = GetPosX();
 			float savey = GetPosY();
-			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50 );
 			if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 				AudioManager::GetInstance()->playSound(zombieWalkingID);
 			BaseCharacter::Update(fElapsedTime);
@@ -225,6 +276,7 @@ void ChasingAI::Update(float fElapsedTime)
 			SetDirection(DIRE_DOWN);
 		else if(m_pTarget->GetPosY() < GetPosY())
 			SetDirection(DIRE_UP);
+		}
 	}
 
 	if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() == 0)
@@ -311,11 +363,8 @@ bool ChasingAI::CheckCollision(IObjects* pBase)
 {
 	if(Enemy::CheckCollision(pBase))
 	{
-		if(pBase != m_pTarget && pBase->GetObjectType() != OBJ_BUSH)
-			m_cInTheWay = (BaseObject*)pBase;
 		return true;
 	}
-	m_cInTheWay = nullptr;
 	return false;
 }
 
@@ -325,7 +374,6 @@ void ChasingAI::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			SetHealth(GetHealth()-30);
 			AudioManager::GetInstance()->playSound(zombieHitID);
 		}
 	}
