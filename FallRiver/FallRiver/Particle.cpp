@@ -34,14 +34,7 @@ void Particle::Render()
 
 	view->GetSprite()->Flush();
 	if(imageID != -1)
-	{
-		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};
-		tmpRect.left -= (long)GamePlayState::GetInstance()->GetCamera().x;
-		tmpRect.right -= (long)GamePlayState::GetInstance()->GetCamera().x;
-		tmpRect.top -= (long)GamePlayState::GetInstance()->GetCamera().y;
-		tmpRect.bottom -= (long)GamePlayState::GetInstance()->GetCamera().y;
-		view->DrawStaticTexture(imageID, pos.x, pos.y, scaleX, scaleY, nullptr,0.0f, 0.0f, rot, color);
-	}
+		view->DrawStaticTexture(imageID, pos.x - GamePlayState::GetInstance()->GetCamera().x, pos.y - GamePlayState::GetInstance()->GetCamera().y, scaleX, scaleY, nullptr,0.0f, 0.0f, rot, color);
 	else
 	{
 		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};

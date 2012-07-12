@@ -65,7 +65,6 @@ void Particle_Manager::Update(float fElapsedTime)
 			if(tmpActive >= tmpLife)
 				active[i]->spawn = false;
 		}
-		
-			active[i]->Update(fElapsedTime);
+		active[i]->Update(fElapsedTime);
 	}
 }

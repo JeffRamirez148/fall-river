@@ -446,7 +446,7 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	HRESULT hr = D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
 
 	// Create Render Target
-	D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
+	D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
 
 	// Wall wa are gonna watch
 	VERTUV tmp[6];
@@ -507,7 +507,7 @@ bool ViewManager::DeviceBegin(void)
 	// store backbuffer
 	current = 0;
 	output = 0;
-	m_lpDirect3DDevice->GetRenderTarget(0,&current);
+	HRESULT hr = m_lpDirect3DDevice->GetRenderTarget(0,&current);
 	// get texture surface and set render target
 	renderTarget->GetSurfaceLevel(0,&output);
 	m_lpDirect3DDevice->SetRenderTarget(0,output);
@@ -820,17 +820,33 @@ void ViewManager::ShutdownDirect3D(void)
 void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 {
 	// Set the new Presentation Parameters.
+	//m_PresentParams.BackBufferWidth				= nWidth;
+	//m_PresentParams.BackBufferHeight			= nHeight;
+	//m_PresentParams.BackBufferFormat			= D3DFMT_A1R5G5B5;
+	//m_PresentParams.BackBufferCount				= 1;
+	//m_PresentParams.MultiSampleType				= D3DMULTISAMPLE_NONE;
+	//m_PresentParams.MultiSampleQuality			= 0;
+	//m_PresentParams.SwapEffect					= D3DSWAPEFFECT_COPY;
+	//m_PresentParams.hDeviceWindow				= m_hWnd;
+	//m_PresentParams.Windowed					= bWindowed;
+	//m_PresentParams.EnableAutoDepthStencil		= false;
+	//m_PresentParams.Flags						= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+	//m_PresentParams.FullScreen_RefreshRateInHz	= D3DPRESENT_RATE_DEFAULT;
+	//m_PresentParams.PresentationInterval		= (false) ? D3DPRESENT_INTERVAL_DEFAULT : D3DPRESENT_INTERVAL_IMMEDIATE;
+
 	m_PresentParams.BackBufferFormat	= (bWindowed) ? D3DFMT_UNKNOWN : D3DFMT_R5G6B5;
 	m_PresentParams.Windowed			= bWindowed;
 	m_PresentParams.BackBufferWidth		= nWidth;
 	m_PresentParams.BackBufferHeight	= nHeight;
 	
 	// Reset the device.
-	m_lpLine->OnLostDevice();
-	m_lpSprite->OnLostDevice();
-	m_lpDirect3DDevice->Reset(&m_PresentParams);
-	m_lpSprite->OnResetDevice();
-	m_lpLine->OnResetDevice();
+	HRESULT hr;
+	// TODO: release the shader, rendertargets, and textures
+	hr = m_lpLine->OnLostDevice();
+	hr = m_lpSprite->OnLostDevice();
+	hr = m_lpDirect3DDevice->Reset(&m_PresentParams);
+	hr = m_lpSprite->OnResetDevice();
+	hr = m_lpLine->OnResetDevice();
 
 	// Setup window style flags
 	DWORD dwWindowStyleFlags = WS_VISIBLE;
@@ -878,13 +894,18 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	}
 	else
 	{
-
 		// Let windows know the window has changed.
 		SetWindowPos(m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
-
 	}
-	//D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
-
+	// grab the actual display width
+	//IDirect3DSurface9 *bBuffer = 0; 
+	//m_lpDirect3DDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&bBuffer);
+	//bBuffer->GetDesc(&backbuffer);
+	//bBuffer->Release(); // drop ref count
+	// Load Shader
+	hr = D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
+	hr = D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A1R5G5B5 , D3DPOOL_DEFAULT, &renderTarget); 
+	int i = 0;
 }
 
 void ViewManager::RemoveLight(int id)
