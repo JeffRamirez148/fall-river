@@ -101,8 +101,10 @@ void Level::Render()
 					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect, 32, 50, 0, D3DCOLOR_ARGB( 200, 0, 0, 0));
 			}
 			pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
+
 		}
 	}
+
 
 	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{

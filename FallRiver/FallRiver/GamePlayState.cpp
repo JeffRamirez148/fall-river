@@ -18,7 +18,6 @@
 #include "Message.h"
 #include "Bullet.h"
 #include "ChasingAI.h"
-#include "CompanionAI.h"
 #include "ShootingAi.h"
 #include "NPC.h"
 #include "PickUp.h"
@@ -44,7 +43,6 @@ GamePlayState::GamePlayState()
 	m_pES = nullptr;
 	m_pPM = nullptr;
 	m_cPlayer = nullptr;
-	m_cBuddy = nullptr;
 
 	m_cWeapon = nullptr;
 
@@ -84,7 +82,6 @@ void GamePlayState::Enter()
 	smokeL = m_pPM->LoadEmitter("smoke.xml");
 	
 
-
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
 
@@ -95,9 +92,9 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< Weapon		>( _T("Weapon") );
 	m_pOF->RegisterClassType< Bush			>( _T("Bush") );
 	m_pOF->RegisterClassType< NPC			>( _T("NPC") );
+	m_pOF->RegisterClassType< PickUp		>( _T("PickUp") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
-	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
@@ -108,6 +105,7 @@ void GamePlayState::Enter()
 	Level* pLevel = nullptr;
 	Bush* pBush = nullptr;
 	SpawnPoint* pSpawn = nullptr;
+	PickUp* pPickUp = nullptr;
 
 
 	if( pLevel == nullptr )
@@ -190,7 +188,7 @@ void GamePlayState::Enter()
 	}
 	
 	m_pVM->SetAmbientLight( .0f, .0f, .0f);
-	m_pOM->AddObject(pPlayer);
+
 
 	vector<leveldata> tmp = pLevel->GetCollision();
 	for(unsigned int i = 0; i < tmp.size(); i++) 
@@ -209,6 +207,117 @@ void GamePlayState::Enter()
 			pBush->SetImageID(bush);
 			m_pOM->AddObject(pBush);
 			pBush = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Shotgun Ammo") == 0)
+		{
+			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+			pPickUp->SetPosX((float)nth->x);
+			pPickUp->SetPosY((float)nth->y);
+			pPickUp->SetWidth(nth->width);
+			pPickUp->SetHeight(nth->height);
+			pPickUp->SetImageID(-1);
+			pPickUp->SetPickUpType(SHOTGUN_AMMO);
+			m_pOM->AddObject(pPickUp);
+			pPickUp = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
+		{
+			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+			pPickUp->SetPosX((float)nth->x);
+			pPickUp->SetPosY((float)nth->y);
+			pPickUp->SetWidth(nth->width);
+			pPickUp->SetHeight(nth->height);
+			pPickUp->SetImageID(-1);
+			pPickUp->SetPickUpType(RIFLE_AMMO);
+			m_pOM->AddObject(pPickUp);
+			pPickUp = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Pistol Ammo") == 0)
+		{
+			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+			pPickUp->SetPosX((float)nth->x);
+			pPickUp->SetPosY((float)nth->y);
+			pPickUp->SetWidth(nth->width);
+			pPickUp->SetHeight(nth->height);
+			pPickUp->SetImageID(-1);
+			pPickUp->SetPickUpType(PISTOL_AMMO);
+			m_pOM->AddObject(pPickUp);
+			pPickUp = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Medicine") == 0)
+		{
+			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+			pPickUp->SetPosX((float)nth->x);
+			pPickUp->SetPosY((float)nth->y);
+			pPickUp->SetWidth(nth->width);
+			pPickUp->SetHeight(nth->height);
+			pPickUp->SetImageID(-1);
+			pPickUp->SetPickUpType(MEDICINE);
+			m_pOM->AddObject(pPickUp);
+			pPickUp = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Health") == 0)
+		{
+			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+			pPickUp->SetPosX((float)nth->x);
+			pPickUp->SetPosY((float)nth->y);
+			pPickUp->SetWidth(nth->width);
+			pPickUp->SetHeight(nth->height);
+			pPickUp->SetImageID(-1);
+			pPickUp->SetPickUpType(HEALTH);
+			m_pOM->AddObject(pPickUp);
+			pPickUp = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Battery") == 0)
+		{
+			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+			pPickUp->SetPosX((float)nth->x);
+			pPickUp->SetPosY((float)nth->y);
+			pPickUp->SetWidth(nth->width);
+			pPickUp->SetHeight(nth->height);
+			pPickUp->SetImageID(-1);
+			pPickUp->SetPickUpType(BATTERY);
+			m_pOM->AddObject(pPickUp);
+			pPickUp = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Shooting Enemy") == 0)
+		{
+			m_cEnemies.push_back(nullptr);
+			m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+			ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+			pEnemy->SetHeight( nth->height);
+			pEnemy->SetWidth( nth->width);
+			pEnemy->SetImageID(-1);
+			pEnemy->SetTarget(m_cPlayer);
+			pEnemy->SetPosX((float)nth->x);
+			pEnemy->SetPosY((float)nth->y);
+			pEnemy->SetHealth(100);
+			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+			m_pOM->AddObject(pEnemy);
+
+			Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+			eWeapon->SetHeight(20);
+			eWeapon->SetWidth(10);
+			eWeapon->SetImageID(-1);
+			eWeapon->SetOwner(pEnemy);
+			eWeapon->Init(WPN_RIFLE, 100, 0);
+			eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+			eWeapon->SetPosY(pEnemy->GetPosY());
+			pEnemy->SetWeapon(eWeapon);
 			tmp.erase(nth);
 			i--;
 		}
@@ -302,8 +411,6 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
-
-
 	for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
@@ -314,7 +421,7 @@ void GamePlayState::Enter()
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
 		pEnemy->SetPosX(600);
-		pEnemy->SetPosY(500);
+		pEnemy->SetPosY(490);
 		pEnemy->SetHealth(100);
 		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);
@@ -325,7 +432,7 @@ void GamePlayState::Enter()
 		eWeapon->SetImageID(-1);
 		eWeapon->SetOwner(pEnemy);
 		eWeapon->Init(WPN_RIFLE, 100, 0);
-		eWeapon->SetPosX(pEnemy->GetPosX()+pPlayer->GetWidth()/2);
+		eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
 		eWeapon->SetPosY(pEnemy->GetPosY());
 		pEnemy->SetWeapon(eWeapon);
 	}
@@ -346,8 +453,10 @@ void GamePlayState::Enter()
 
 	//}
 
+	m_pOM->AddObject(pPlayer);
+
 	m_pMS->InitMessageSystem( &MessageProc );
-	// Playing background music and sounds
+
 	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
@@ -479,6 +588,7 @@ void GamePlayState::Exit()
 bool GamePlayState::Input() 
 {
 	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) )
+
 		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
 
 	return true;
@@ -502,7 +612,6 @@ void GamePlayState::Update(float fElapsedTime)
 	tmp.z = 0;
 	m_pAM->SetListenerPos(tmp);
 	m_pAM->setSoundPos(soundID2,tmp);
-
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
 	RECT chocolateRain = { camera.x, camera.y, camera.x + CGame::GetInstance()->GetScreenWidth(), camera.y + CGame::GetInstance()->GetScreenHeight()};
@@ -555,14 +664,13 @@ void GamePlayState::Update(float fElapsedTime)
 	}
 	//m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
-
 	m_pPM->Update(fElapsedTime);
-
 	//// Quest 2 completion
 	if(GetPlayer()->questCounter == 10 )
 	{
 		questFlag = true;
 		if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(1,0))
+
 		{
 			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 			{
