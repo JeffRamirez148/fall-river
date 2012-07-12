@@ -1,5 +1,5 @@
 #include <Windows.h>
-using namespace std;
+
 
 #ifndef __HUD_h__
 #define __HUD_h__
@@ -9,6 +9,9 @@ using namespace std;
 #include <tchar.h>
 #include <string.h>
 #include <vector>
+#include "AnimInfo.h"
+
+using namespace std;
 
 class GamePlayState;
 class ViewManager;
@@ -28,10 +31,14 @@ private:
 	int m_nClip;
 	float m_fAniSpeed;
 	float m_ftest;
+	AnimInfo m_aClipAnim;
+	bool m_bShot;
 
 	int healthID;
 public:
 	int m_nHudID;
+	int m_nClipID;
+	//vector<Clip> m_vClip;
 	vector<int> m_vFrameIDs;
 
 

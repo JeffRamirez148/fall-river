@@ -827,6 +827,8 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	// Setup window style flags
 	DWORD dwWindowStyleFlags = WS_VISIBLE;
 
+	
+
 	HWND top;
 	if (bWindowed)
 	{
