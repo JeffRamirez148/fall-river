@@ -17,6 +17,8 @@ private:
 	float m_fStartPosX;
 	float m_fStartPosY;
 
+	// Particles
+	int smokeA;
 public: 
 	Bullet();
 	virtual ~Bullet();
@@ -45,6 +47,9 @@ public:
 	bool CheckCollision(IObjects* pBase);
 
 	void HandleEvent (Event* cEvent);
+	int GetSmokeID() { return smokeA; }
+	void SetSmokeID(int id) { smokeA = id; }
+
 };
 
 #endif

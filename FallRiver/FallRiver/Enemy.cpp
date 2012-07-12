@@ -33,18 +33,21 @@ void Enemy::Render()
 
 void Enemy::MoveTo(float x, float y, float speed) 
 {
-	if(GetPosY() == y)
+	float storey = GetPosY() - y;
+	float storex = GetPosX() - x;
+
+	if(storey >= -10 && storey <= 10)
 		SetVelY(0);
-	else if(GetPosY() < y-10)
+	else if(GetPosY() < y)
 		SetVelY(speed);
-	else if(GetPosY() > y+10)
+	else if(GetPosY() > y)
 		SetVelY(-speed);
 
-	if(GetPosX() == x)
+	if(storex >= -10 && storex <= 10)
 		SetVelX(0);
-	else if(GetPosX() < x-10)
+	else if(GetPosX() < x)
 		SetVelX(speed);
-	else if(GetPosX() > x+10)
+	else if(GetPosX() > x)
 		SetVelX(-speed);
 }
 

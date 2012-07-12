@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <emitter_list>
-  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="0" endGreen="0" endBlue="255" endRot="0" endScaleX="2" endScaleY="10" endVelX="0" endVelY="2" endVelZ="0" lifeSpan="100" lifeTime="1" loopin="1" maxParticles="1" rectL="0" rectT="0" rectR="800" rectB="10" spawnRate="0" startAlpha="255" startRed="0" startGreen="0" startBlue="255" startRot="0" startScaleX="1" startScaleY="5" startVelX="0" startVelY="2" StartVelZ="0" />
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="0" endGreen="0" endBlue="255" endRot="0" endScaleX="2" endScaleY="10" endVelX="0" endVelY="2" endVelZ="0" lifeSpan="100" lifeTime="1" loopin="1" maxParticles="1" rectL="0" rectT="0" rectR="800" rectB="600" spawnRate="0" startAlpha="255" startRed="0" startGreen="0" startBlue="255" startRot="0" startScaleX="1" startScaleY="5" startVelX="0" startVelY="2" StartVelZ="0">rain.png</emitter_info>
 </emitter_list>

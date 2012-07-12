@@ -10,7 +10,7 @@ float3 gLightDir2 // Value sent in
 = { 0, 1, 0 };
 
 // Light
-float3 gLightPos = {0,0,-.75}; // Value sent in
+float3 gLightPos = {0,0,-.5}; // Value sent in
 float3 gLightPos2 = {0,0,0}; // Value sent in
 float gInnerCone  = 0.75f;
 float gOuterCone  = 0.7f;

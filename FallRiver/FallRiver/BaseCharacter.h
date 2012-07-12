@@ -21,7 +21,7 @@ private:
 public:
 	BaseCharacter();
 	virtual ~BaseCharacter();
-
+	AnimInfo* GetAnimation() { return &m_playerAnim; }
 	virtual void Update(float fElapsedTime);
 
 	virtual void Render();

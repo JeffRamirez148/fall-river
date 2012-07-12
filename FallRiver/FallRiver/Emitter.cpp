@@ -26,11 +26,6 @@ void Emitter::Update(float fElapsedTime)
 		tmpParticle->SetVel(startVel);
 		tmpParticle->SetScaleX(startScaleX);
         tmpParticle->SetScaleY(startScaleY);
-		D3DXVECTOR3 tmpDir;
-		tmpDir.x = float(((rand() % 3) - 1) >> 1);
-		tmpDir.y = float(((rand() % 3) - 1) >> 1);
-		tmpDir.z = 0.0f;
-		tmpParticle->SetDir(tmpDir);
 		_m_vparticles.push_back(tmpParticle);
 	}
 
@@ -43,9 +38,9 @@ void Emitter::Update(float fElapsedTime)
 		// Update Existance
 		_m_vparticles[i]->SetLifeSpan((_m_vparticles[i]->GetLifeSpan()) - fElapsedTime);
 		// Is the particle dead?
-		if((_m_vparticles[i]->GetLifeSpan()) <= 0 || spawn == false)
+		if((_m_vparticles[i]->GetLifeSpan()) <= 0)
 		{
-			_m_vparticles.erase( _m_vparticles.begin() + i, _m_vparticles.begin() + i + 1);
+			_m_vparticles.erase( _m_vparticles.begin() + i);
 			// Possible memory leak
 			keepGoing = false;
 			--i;
@@ -120,87 +115,90 @@ void Emitter::Update(float fElapsedTime)
 			}
 			
 			tmpColor = (tmpA << 24) + (tmpR << 16) + (tmpG << 8) + tmpB;
-			_m_vparticles[i]->SetColor(tmpColor);
+			_m_vparticles[i]->SetColor((int)tmpColor);
 
 			// Update Scale
 			float tmpScaleX = _m_vparticles[i]->GetScaleX();
 			float tmpScaleY = _m_vparticles[i]->GetScaleY();
-			if(startScaleX > endScaleX)
-			{
-				tmpScaleX -= fElapsedTime;
-				if(tmpScaleX < endScaleX)
-					tmpScaleX = endScaleX;
-			}
-			else
-			{
-				tmpScaleX += fElapsedTime;
-				if(tmpScaleX > endScaleX)
-					tmpScaleX = endScaleX;
-			}
-			_m_vparticles[i]->SetScaleX(tmpScaleX);
+			if (startScaleX != endScaleX)
+				if(startScaleX > endScaleX)
+				{
+					tmpScaleX -= fElapsedTime;
+					if(tmpScaleX < endScaleX)
+						tmpScaleX = endScaleX;
+				}
+				else
+				{
+					tmpScaleX += fElapsedTime;
+					if(tmpScaleX > endScaleX)
+						tmpScaleX = endScaleX;
+				}
+				_m_vparticles[i]->SetScaleX(tmpScaleX);
 
-			if(startScaleY > endScaleY)
-			{
-				tmpScaleY -= fElapsedTime;
-				if(tmpScaleY < endScaleY)
-					tmpScaleY = endScaleY;
-			}
-			else
-			{
-				tmpScaleY += fElapsedTime;
-				if(tmpScaleY > endScaleY)
-					tmpScaleY = endScaleY;
-			}
-			_m_vparticles[i]->SetScaleY(tmpScaleY);
+			if(startScaleY != endScaleY)
+				if(startScaleY > endScaleY)
+				{
+					tmpScaleY -= fElapsedTime;
+					if(tmpScaleY < endScaleY)
+						tmpScaleY = endScaleY;
+				}
+				else
+				{
+					tmpScaleY += fElapsedTime;
+					if(tmpScaleY > endScaleY)
+						tmpScaleY = endScaleY;
+				}
+				_m_vparticles[i]->SetScaleY(tmpScaleY);
 
 			// Update Vel
 			if(t > .0001f)
 			{
 			D3DXVECTOR3 tmpVel = _m_vparticles[i]->GetVel();
-			if(startVel.x > endVel.x)
-			{
-				tmpVel.x -= fElapsedTime;
-				if(tmpVel.x < endVel.x)
-					tmpVel.x = endVel.x;
-			}
-			else
-			{
-				tmpVel.x += fElapsedTime;
-				if(tmpVel.x > endVel.x)
-					tmpVel.x = endVel.x;
-			}
+			if(startVel.y != endVel.y)
+				if(startVel.x > endVel.x)
+				{
+					tmpVel.x -= fElapsedTime;
+					if(tmpVel.x < endVel.x)
+						tmpVel.x = endVel.x;
+				}
+				else
+				{
+					tmpVel.x += fElapsedTime;
+					if(tmpVel.x > endVel.x)
+						tmpVel.x = endVel.x;
+				}
 
-			if(startVel.y > endVel.y)
-			{
-				tmpVel.y -= fElapsedTime;
-				if(tmpVel.y < endVel.y)
-					tmpVel.y = endVel.y;
-			}
-			else
-			{
-				tmpVel.y += fElapsedTime;
-				if(tmpVel.y > endVel.y)
-					tmpVel.y = endVel.y;
-			}
-
-			if(startVel.z > endVel.z)
-			{
-				tmpVel.z -= fElapsedTime;
-				if(tmpVel.z < endVel.z)
-					tmpVel.z = endVel.z;
-			}
-			else
-			{
-				tmpVel.z += fElapsedTime;
-				if(tmpVel.z > endVel.z)
-					tmpVel.z = endVel.z;
-			}
+			if(startVel.y != endVel.y)
+				if(startVel.y > endVel.y)
+				{
+					tmpVel.y -= fElapsedTime;
+					if(tmpVel.y < endVel.y)
+						tmpVel.y = endVel.y;
+				}
+				else
+				{
+					tmpVel.y += fElapsedTime;
+					if(tmpVel.y > endVel.y)
+						tmpVel.y = endVel.y;
+				}
+				tmpVel.z = 0;
+			//if(startVel.z > endVel.z)
+			//{
+			//	tmpVel.z -= fElapsedTime;
+			//	if(tmpVel.z < endVel.z)
+			//		tmpVel.z = endVel.z;
+			//}
+			//else
+			//{
+			//	tmpVel.z += fElapsedTime;
+			//	if(tmpVel.z > endVel.z)
+			//		tmpVel.z = endVel.z;
+			//}
 			_m_vparticles[i]->SetVel(tmpVel);
 			// Update Pos
 
 			D3DXVECTOR3 tmpPos = _m_vparticles[i]->GetPos();
-			D3DXVECTOR3 tmpDir = _m_vparticles[i]->GetDir();
-			tmpPos += tmpVel + tmpDir;
+			tmpPos += tmpVel;
 			_m_vparticles[i]->SetPos(tmpPos);
 			t = 0;
 			}
@@ -262,4 +260,108 @@ Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxPa
 	endRot = newEndRot;
 	startRot = newStartRot;
 	spawnTimer = 0.0f;
+}
+
+Emitter::Emitter()
+{
+	spawnRate = 0;
+	loopin = 0;
+	rect.bottom = 0;
+	rect.top = -1;
+	rect.left = -1;
+	rect.right = 0;
+
+	maxParticles = 0;
+	endVel.x = 0;
+	endVel.y = 0;
+	endVel.z = 0;
+
+	endScaleX = 0;
+	endScaleY = 0;
+
+	endColor = 0;
+	startVel.x = 0;
+	startVel.y = 0;
+	startVel.z = 0;
+
+	startScaleX = 0;
+	startScaleY = 0;
+
+	startColor = 0;
+	blendModeS = 0;
+	blendModeD = 0;
+
+	imageID = 0;
+	lifeSpan = 0;
+	lifeTime = 0;
+	age = 0;
+	endRot = 0;
+	startRot = 0;
+	spawnTimer = 0.0f;
+}
+
+Emitter::Emitter(const Emitter& emitter)
+{
+	spawnRate = emitter.spawnRate;
+	loopin = emitter.loopin;
+	rect = emitter.rect;
+
+	maxParticles = emitter.maxParticles;
+	endVel = emitter.endVel;
+
+	endScaleX = emitter.endScaleX;
+	endScaleY = emitter.endScaleY;
+
+	endColor = emitter.endColor;
+	startVel = emitter.startVel;
+
+	startScaleX = emitter.startScaleX;
+	startScaleY = emitter.startScaleY;
+
+	startColor = emitter.startColor;
+	blendModeS = emitter.blendModeS;
+	blendModeD = emitter.blendModeD;
+
+	imageID = emitter.imageID;
+	lifeSpan = emitter.lifeSpan;
+	lifeTime = emitter.lifeTime;
+	age = 0;
+	endRot = emitter.endRot;
+	startRot = emitter.startRot;
+	spawnTimer = 0.0f;
+}
+
+Emitter& Emitter::operator=(const Emitter& emitter)
+{
+	if(this != &emitter)
+	{
+		spawnRate = emitter.spawnRate;
+		loopin = emitter.loopin;
+		rect = emitter.rect;
+
+		maxParticles = emitter.maxParticles;
+		endVel = emitter.endVel;
+
+		endScaleX = emitter.endScaleX;
+		endScaleY = emitter.endScaleY;
+
+		endColor = emitter.endColor;
+		startVel = emitter.startVel;
+
+		startScaleX = emitter.startScaleX;
+		startScaleY = emitter.startScaleY;
+
+		startColor = emitter.startColor;
+		blendModeS = emitter.blendModeS;
+		blendModeD = emitter.blendModeD;
+
+		imageID = emitter.imageID;
+		lifeSpan = emitter.lifeSpan;
+		lifeTime = emitter.lifeTime;
+		age = 0;
+		endRot = emitter.endRot;
+		startRot = emitter.startRot;
+		spawnTimer = 0.0f;
+	}
+	return *this;
 }

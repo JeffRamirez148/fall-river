@@ -9,16 +9,16 @@
 #include "IListener.h"
 #include "Player.h"
 
-enum ENEMYSTATES{ ESTATE_IDLE = 0, ESTATE_CHASING, ESTATE_SHOOT, ESTATE_DEAD};
+enum ENEMYSTATES{ ESTATE_IDLE = 0, ESTATE_CHASING, ESTATE_SHOOT, ESTATE_DISTRACTED, ESTATE_DEAD};
 
 class Enemy: public BaseCharacter, public IListener
 {
+
 protected: 
 	int m_nState;
 	POINTFLOAT m_pfDestination;
 	DWORD m_dwIdleWait;
 
-protected: 
 	Player* m_pTarget;
 
 public: 

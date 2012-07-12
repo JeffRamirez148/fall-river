@@ -7,7 +7,6 @@
 #include "BaseCharacter.h"
 #include "CGame.h"
 #include "GamePlayState.h"
-#include "Particle_Manager.h"
 #include "Emitter.h"
 
 Bullet::Bullet()

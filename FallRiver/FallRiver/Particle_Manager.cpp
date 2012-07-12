@@ -18,10 +18,30 @@ int Particle_Manager::LoadEmitter(char * filepath)
 
 int Particle_Manager::ActivateEmitter(int id)
 {
-	loaded[id];
-	active.push_back(loaded[id]);
+	Emitter* tmp = new Emitter();
+	tmp->spawnRate = loaded[id]->spawnRate;
+	tmp->loopin = loaded[id]->loopin;
+	tmp->rect = loaded[id]->rect;
+	tmp->maxParticles = loaded[id]->maxParticles;
+	tmp->endVel = loaded[id]->endVel;
+	tmp->endScaleX = loaded[id]->endScaleX;
+	tmp->endScaleY = loaded[id]->endScaleY;
+	tmp->endColor = loaded[id]->endColor;
+	tmp->startVel = loaded[id]->startVel;
+	tmp->startScaleX = loaded[id]->startScaleX;
+	tmp->startScaleY = loaded[id]->startScaleY;
+	tmp->startColor = loaded[id]->startColor;
+	tmp->blendModeS = loaded[id]->blendModeS;
+	tmp->blendModeD = loaded[id]->blendModeD;
+	tmp->imageID = loaded[id]->imageID;
+	tmp->lifeSpan = loaded[id]->lifeSpan;
+	tmp->lifeTime = loaded[id]->lifeTime;
+	tmp->age = 0;
+	tmp->endRot = loaded[id]->endRot;
+	tmp->startRot = loaded[id]->startRot;
+	tmp->spawnTimer = 0.0f;
+	active.push_back(tmp);
 	active[active.size() - 1]->spawn = true;
-
 	return active.size() - 1;
 }
 
@@ -33,25 +53,18 @@ void Particle_Manager::Render()
 
 void Particle_Manager::Update(float fElapsedTime)
 {
-	bool keepGoing;
 	for( unsigned int i = 0; i < active.size(); ++i)
 	{
-		keepGoing = true;
-		active[i]->SetAge( active[i]->GetAge() + fElapsedTime);
+		active[i]->SetAge( active[i]->GetAge() + fElapsedTime * 10);
+
 		//Update Existance
 		if(!active[i]->GetLooping())
 		{
-			if(active[i]->GetAge() >= active[i]->GetLifeTime())
-			{
-				active[active.size()-1]->spawn = false;
-				//active.erase(active.begin() + i);
-				////active.erase(active.begin() + i, active.begin() + i);
-				//--i;
-				//keepGoing = false;
-			}
+			float tmpActive = active[i]->GetAge();
+			float tmpLife = active[i]->GetLifeTime();
+			if(tmpActive >= tmpLife)
+				active[i]->spawn = false;
 		}
-		// Update Everything Else
-		if(keepGoing )
-			active[i]->Update(fElapsedTime);
+		active[i]->Update(fElapsedTime);
 	}
 }

@@ -57,7 +57,6 @@ private:
 	int rainA;
 	int rainL;
 	// Smoke particles
-	int smokeA;
 	int smokeL;
 
 	// Data Members
@@ -85,6 +84,7 @@ private:
 	GamePlayState& operator=(const GamePlayState&);
 
 public:
+
 	bool questFlag;
 	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}

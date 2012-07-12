@@ -36,6 +36,7 @@ public:
 	void RenderAllObjects();
 
 	void CheckCollisions();
+	void CheckTriangleCollisions();
 
 	static ObjectManager* GetInstance();
 	static void DeleteInstance( void );

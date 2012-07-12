@@ -15,9 +15,6 @@ color = 0;
 imageID = -1;
 scaleX = 1;
 scaleY = 1;
-dir.x = 0;
-dir.y = 0;
-dir.z = 0;
 rot = 0;
 t = 0;
 }
@@ -37,21 +34,14 @@ void Particle::Render()
 
 	view->GetSprite()->Flush();
 	if(imageID != -1)
-	{
-		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};
-		tmpRect.left -= GamePlayState::GetInstance()->GetCamera().x;
-		tmpRect.right -= GamePlayState::GetInstance()->GetCamera().x;
-		tmpRect.top -= GamePlayState::GetInstance()->GetCamera().y;
-		tmpRect.bottom -= GamePlayState::GetInstance()->GetCamera().y;
-		view->DrawStaticTexture(imageID, pos.x, pos.y, scaleX, scaleY, nullptr,0.0f, 0.0f, rot, color);
-	}
+		view->DrawStaticTexture(imageID, pos.x - GamePlayState::GetInstance()->GetCamera().x, pos.y - GamePlayState::GetInstance()->GetCamera().y, scaleX, scaleY, nullptr,0.0f, 0.0f, rot, color);
 	else
 	{
 		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};
-		tmpRect.left -= GamePlayState::GetInstance()->GetCamera().x;
-		tmpRect.right -= GamePlayState::GetInstance()->GetCamera().x;
-		tmpRect.top -= GamePlayState::GetInstance()->GetCamera().y;
-		tmpRect.bottom -= GamePlayState::GetInstance()->GetCamera().y;
+		tmpRect.left -= (long)GamePlayState::GetInstance()->GetCamera().x;
+		tmpRect.right -= (long)GamePlayState::GetInstance()->GetCamera().x;
+		tmpRect.top -= (long)GamePlayState::GetInstance()->GetCamera().y;
+		tmpRect.bottom -= (long)GamePlayState::GetInstance()->GetCamera().y;
 		view->DrawRect( tmpRect, (color << 8) >> 24, (color << 16) >> 24, (color << 24) >> 24, color >> 24);
 
 	}

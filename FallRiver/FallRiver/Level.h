@@ -31,6 +31,7 @@ struct mapTiles
 	float height, width;
 	int m_Layer;
 	int m_nTileID;
+	bool shadow;
 };
 
 struct TwoInts
@@ -68,6 +69,7 @@ public:
 	void SetCollision(vector<leveldata> x) { m_vCollisions = x; };
 
 	vector<mapTiles> GetTiles() { return m_vTiles;};
+	void CheckTriangleCollisions();
 	//void SetCollision(vector<mapTiles> x) { m_vTiles = x; };
 
 };

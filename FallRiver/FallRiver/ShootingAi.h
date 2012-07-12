@@ -18,6 +18,7 @@ private:
 	int notifyID;
 	bool notified;
 
+
 public: 
 	ShootingAi();
 	~ShootingAi();

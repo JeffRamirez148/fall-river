@@ -15,6 +15,7 @@ public:
 	Boss1();
 	~Boss1();
 
+
 	virtual void Update(float fElapsedTime);
 
 	virtual void Render();

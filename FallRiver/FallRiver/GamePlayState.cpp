@@ -13,7 +13,6 @@
 #include "EventSystem.h"
 #include "Player.h"
 #include "Weapon.h"
-#include "Particle_Manager.h"
 #include "HUD.h"
 #include "XMLManager.h"
 #include "Message.h"
@@ -55,6 +54,7 @@ GamePlayState::GamePlayState()
 	questFlag = false;
 	rainA = -1;
 	rainL = -1;
+	smokeL = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -78,6 +78,8 @@ void GamePlayState::Enter()
 	// Rain particles
 	rainL = m_pPM->LoadEmitter("rain.xml");
 	rainA = m_pPM->ActivateEmitter(rainL);
+	// Smoke particles
+	smokeL = m_pPM->LoadEmitter("smoke.xml");
 	
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
@@ -155,7 +157,7 @@ void GamePlayState::Enter()
 		pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon3->SetPosY(pPlayer->GetPosY());
 
-		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/TestAnimation.xml"));
+		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
 		pPlayer->AddWeapon(pWeapon);
 		pPlayer->AddWeapon(pWeapon2);
@@ -384,6 +386,14 @@ void GamePlayState::Enter()
 		}
 	}
 
+	/*m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
+	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
+	pBuddy->SetPosX(200.0f);
+	pBuddy->SetPosY(250.0f);
+	pBuddy->SetHeight(32);
+	pBuddy->SetWidth(32);
+	pBuddy->SetImageID(-1);*/
+	//m_pOM->AddObject(pBuddy);
 
 
 	//for(int i = 0; i < 1; i++)
@@ -457,6 +467,18 @@ void GamePlayState::Enter()
 	m_pAM->setMusicLooping(backGroundID, true);
 	m_pAM->playMusic(backGroundID);
 
+	soundID2 = m_pAM->RegisterSound("resource/Sounds/thunder.wav");
+	m_pAM->setSoundPos(soundID2, sound1);
+
+	m_pAM->setSoundVel(soundID2, sound1);
+	m_pAM->setSoundLooping(soundID2, false);
+
+	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+	m_pAM->setMusicPos(musicID, sound1);
+
+	m_pAM->setMusicVel(musicID, sound1);
+	m_pAM->setMusicLooping(musicID, true);
+	m_pAM->playMusic(musicID);
 	winLose = true;
 
 	m_pHUD = new HUD;
@@ -507,6 +529,7 @@ void GamePlayState::Enter()
 void GamePlayState::ReEnter()
 {
 	m_pAM->playMusic(backGroundID);
+	m_pAM->playMusic(musicID);
 }
 
 void GamePlayState::Exit() 
@@ -564,7 +587,8 @@ void GamePlayState::Exit()
 
 bool GamePlayState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_ESCAPE) )
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) )
+
 		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
 
 	return true;
@@ -578,6 +602,8 @@ void GamePlayState::Update(float fElapsedTime)
 
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
+	if(m_cPlayer->IsOn() && m_cPlayer->GetLightType() < 2)
+		m_pOM->CheckTriangleCollisions();
 	camera.x = float(m_cPlayer->GetPosX() - (CGame::GetInstance()->GetScreenWidth()*0.5));
 	camera.y = float(m_cPlayer->GetPosY() - (CGame::GetInstance()->GetScreenHeight()*0.5));
 	FMOD_VECTOR tmp;
@@ -585,8 +611,11 @@ void GamePlayState::Update(float fElapsedTime)
 	tmp.y = m_cPlayer->GetPosY();
 	tmp.z = 0;
 	m_pAM->SetListenerPos(tmp);
+	m_pAM->setSoundPos(soundID2,tmp);
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
+	RECT chocolateRain = { (long)camera.x, (long)camera.y, (long)camera.x + CGame::GetInstance()->GetScreenWidth(), (long)camera.y + CGame::GetInstance()->GetScreenHeight()};
+	m_pPM->GetActiveEmitter(rainA)->SetRect(chocolateRain);
 
 	bool check = false;
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
@@ -640,7 +669,8 @@ void GamePlayState::Update(float fElapsedTime)
 	if(GetPlayer()->questCounter == 10 )
 	{
 		questFlag = true;
-		if(m_pDI->KeyPressed(DIK_RETURN))
+		if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(1,0))
+
 		{
 			for(unsigned int i = 0; i < GetPlayer()->m_vpActiveQuests.size(); i++)
 			{
@@ -674,6 +704,60 @@ void GamePlayState::Render()
 
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
 	{
+		float x, y;
+		int z;
+		x = m_cBushes[i]->GetPosX();
+		y = m_cBushes[i]->GetPosY();
+		z = m_cBushes[i]->GetImageID();
+		RECT tmp = {0,0,64,64};
+		if(m_cBushes[i]->GetShadow() && m_cPlayer->IsOn())
+		{
+			if(m_cPlayer->GetDirection() < 4)
+				m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, (m_cPlayer->GetDirection() - 1) * 1.57079f,D3DCOLOR_ARGB(200,0,0,0));
+			else
+			{
+				switch(m_cPlayer->GetDirection())
+				{
+				case 4:
+					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -0.78539f,D3DCOLOR_ARGB(200,0,0,0));
+					break;
+				case 5:
+					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 0.78539f,D3DCOLOR_ARGB(200,0,0,0));
+					break;
+				case 6:
+					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -2.35619f,D3DCOLOR_ARGB(200,0,0,0));
+					break;
+				case 7:
+					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 2.35619f,D3DCOLOR_ARGB(200,0,0,0));
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		else if( m_cPlayer->IsOn() && m_cPlayer->GetLightType() > 1)
+		{
+			float angle = 0;
+			if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+				angle = 0.78539f;
+			else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+				angle = -0.78539f;
+			else if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+				angle = -2.35619f;
+			else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+				angle = 2.35619f;
+			else if(m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
+				angle = 0.0f;
+			else if(m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
+				angle = 3.14159f;
+			else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+				angle = -1.57079f;
+			else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+				angle = 1.57079f;
+
+			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
+		
+		}
 		m_cBushes[i]->Render();
 	}
 	m_pPM->Render();
@@ -706,7 +790,6 @@ void GamePlayState::Render()
 
 
 
-
 	
 
 }
@@ -729,6 +812,14 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetPosX(pOwner->GetPosX());
 			bullet->SetPosY(pOwner->GetPosY());
 			bullet->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
+
+			// Smoke effects
+			RECT temp = {(long)pOwner->GetPosX(),(long)pOwner->GetPosY(),(long)pOwner->GetPosX() + (long)16.0f,(long)16.0f + (long)pOwner->GetPosY()};
+			
+			bullet->SetSmokeID(Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL));
+
+			self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetRect(temp);
+			self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetLoopin(false);
 
 			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{
