@@ -16,7 +16,7 @@ class GamePlayState;
 class Weapon;
 #include "Light.h"
 
-enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH};
+enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH, PSTATE_DEAD};
 
 class Player: public BaseCharacter, public IListener
 {
@@ -32,6 +32,7 @@ private:
 
 	DWORD m_dwGunCount;
 	DWORD m_dwGunReset;
+	DWORD m_dwDeathTime;
 
 	int m_nScore;
 	int m_nState;

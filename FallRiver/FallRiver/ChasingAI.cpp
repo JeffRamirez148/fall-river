@@ -90,24 +90,6 @@ void ChasingAI::Update(float fElapsedTime)
 		return;
 	}
 
-	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 400 )
-	{
-		float targetPosX = m_pTarget->GetPosX();
-		float targetPosY = m_pTarget->GetPosY();
-
-		if( m_pTarget->GetLightType() == 0 )
-		{
-			if( targetPosX < m_nPosX && m_pTarget->GetDirection() == DIRE_RIGHT && distY < 100 )
-				m_nState = ESTATE_CHASING;
-			else if( targetPosX > m_nPosX && m_pTarget->GetDirection() == DIRE_LEFT && distY < 100 )
-				m_nState = ESTATE_CHASING;
-			else if( targetPosY < m_nPosY && m_pTarget->GetDirection() == DIRE_DOWN && distX < 100 )
-				m_nState = ESTATE_CHASING;
-			else if( targetPosY > m_nPosY && m_pTarget->GetDirection() == DIRE_UP && distX < 100 )
-				m_nState = ESTATE_CHASING;
-		}
-	}
-
 	if( GamePlayState::GetInstance()->GetCompanion() && GamePlayState::GetInstance()->GetCompanion()->IsTeaching() && m_pTarget->IsOn() && !helped && distance < 400 )
 	{
 		float targetPosX = m_pTarget->GetPosX();
@@ -122,6 +104,16 @@ void ChasingAI::Update(float fElapsedTime)
 
 	}
 
+	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 500 )
+	{
+		float targetPosX = m_pTarget->GetPosX();
+		float targetPosY = m_pTarget->GetPosY();
+
+		if( m_pTarget->GetLightType() == 0 || m_pTarget->GetLightType() == 1 )
+		{
+			m_nState = ESTATE_DISTRACTED;
+		}
+	}
 	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() )
 	{
 		if(  m_pTarget->CheckHidden() )
@@ -131,7 +123,7 @@ void ChasingAI::Update(float fElapsedTime)
 		m_nState = ESTATE_IDLE;
 		notified = true;
 	}
-	else
+	else if( m_nState != ESTATE_DISTRACTED )
 	{
 		if(notified)
 			AudioManager::GetInstance()->playSound(notifyID);		
@@ -173,6 +165,109 @@ void ChasingAI::Update(float fElapsedTime)
 		}
 		else
 			AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+	}
+	else if( m_nState == ESTATE_DISTRACTED )
+	{
+		float targetPosX = m_pTarget->GetPosX();
+		float targetPosY = m_pTarget->GetPosY();
+
+		if( m_pTarget->GetDirection() == DIRE_UPRIGHT )
+		{
+			if( distX < distY )
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX + 300, targetPosY, 50);
+			}
+			else
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX, targetPosY - 300, 50);
+			}
+		}
+		else if( m_pTarget->GetDirection() == DIRE_DOWNRIGHT )
+		{
+			if( distX < distY )
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX + 300, targetPosY, 50);
+			}
+			else
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX, targetPosY + 300, 50);
+			}
+		}
+		if( m_pTarget->GetDirection() == DIRE_UPLEFT )
+		{
+			if( distX < distY )
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX - 300, targetPosY, 50);
+			}
+			else
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX, targetPosY - 300, 50);
+			}
+		}
+		else if( m_pTarget->GetDirection() == DIRE_DOWNLEFT )
+		{
+			if( distX < distY )
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX - 300, targetPosY, 50);
+			}
+			else
+			{
+				if( distY - distX <= 5 )
+					m_nState = ESTATE_CHASING;
+				else
+					MoveTo(targetPosX, targetPosY + 300, 50);
+			}
+		}
+		else if( m_pTarget->GetDirection() == DIRE_RIGHT  )
+		{
+			if( distY <= 10 )
+				m_nState = ESTATE_CHASING;
+			else
+				MoveTo(targetPosX + 300, targetPosY, 50); 
+		}
+		else if( targetPosX > m_nPosX && m_pTarget->GetDirection() == DIRE_LEFT && distY < 100 || m_pTarget->GetDirection() == DIRE_UPLEFT || m_pTarget->GetDirection() == DIRE_DOWNLEFT)
+		{
+			if( distY <= 10 )
+				m_nState = ESTATE_CHASING;
+			else
+				MoveTo(targetPosX - 300, targetPosY, 50);
+		}
+		else if( targetPosY < m_nPosY && m_pTarget->GetDirection() == DIRE_DOWN && distX < 100 )
+		{
+			if( distX <= 10 )
+				m_nState = ESTATE_CHASING;
+			else
+				MoveTo(targetPosX, targetPosY + 300, 50);
+		}
+		else if( targetPosY > m_nPosY && m_pTarget->GetDirection() == DIRE_UP && distX < 100 )
+		{
+			if( distX <= 10 )
+				m_nState = ESTATE_CHASING;
+			else
+				MoveTo(targetPosX, targetPosY - 300, 50);
+		}
+		Enemy::Update(fElapsedTime);
 
 		if(GetVelX() > 0)
 		{
@@ -182,8 +277,6 @@ void ChasingAI::Update(float fElapsedTime)
 				SetDirection(DIRE_DOWNRIGHT);
 			else
 				SetDirection(DIRE_RIGHT);
-
-			m_playerAnim.curAnimation = -1;
 		}
 		else if(GetVelX() < 0)
 		{
@@ -213,7 +306,7 @@ void ChasingAI::Update(float fElapsedTime)
 
 		bool LeaveAlone = false;
 
-		while( collDist > 200 )
+		/*while( collDist > 200 )
 		{
 			colltest.MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 100);
 			colltest.SetPosX(colltest.GetPosX()+colltest.GetVelX());
@@ -232,50 +325,50 @@ void ChasingAI::Update(float fElapsedTime)
 			myY = colltest.GetPosY();
 
 			collDist = sqrt(pow(collX - myX,2) + pow(collY - myY,2));
-		}
+		}*/
 
 		if( !LeaveAlone )
 		{
-		if( distance > GetWidth() )
-		{
-			float savex = GetPosX();
-			float savey = GetPosY();
-			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50 );
-			if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
-				AudioManager::GetInstance()->playSound(zombieWalkingID);
-			BaseCharacter::Update(fElapsedTime);
-
-			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+			if( distance > GetWidth() )
 			{
-				SetPosX(savex);
-				SetPosY(savey);
-			}
-		}
-		else
-			AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+				float savex = GetPosX();
+				float savey = GetPosY();
+				MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50 );
+				if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+					AudioManager::GetInstance()->playSound(zombieWalkingID);
+				BaseCharacter::Update(fElapsedTime);
 
-		if(m_pTarget->GetPosX() > GetPosX()+30)
-		{
-			if(m_pTarget->GetPosY() > GetPosY()+30)
-				SetDirection(DIRE_DOWNRIGHT);
-			else if(m_pTarget->GetPosY() < GetPosY()-30)
-				SetDirection(DIRE_UPRIGHT);
+				if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+				{
+					SetPosX(savex);
+					SetPosY(savey);
+				}
+			}
 			else
-				SetDirection(DIRE_RIGHT);
-		}
-		else if(m_pTarget->GetPosX() < GetPosX()-30)
-		{
-			if(m_pTarget->GetPosY() > GetPosY()+30)
-				SetDirection(DIRE_DOWNLEFT);
-			else if(m_pTarget->GetPosY() < GetPosY()-30)
-				SetDirection(DIRE_UPLEFT);
-			else
-				SetDirection(DIRE_LEFT);
-		}
-		else if(m_pTarget->GetPosY() > GetPosY())
-			SetDirection(DIRE_DOWN);
-		else if(m_pTarget->GetPosY() < GetPosY())
-			SetDirection(DIRE_UP);
+				AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+
+			if(m_pTarget->GetPosX() > GetPosX()+30)
+			{
+				if(m_pTarget->GetPosY() > GetPosY()+30)
+					SetDirection(DIRE_DOWNRIGHT);
+				else if(m_pTarget->GetPosY() < GetPosY()-30)
+					SetDirection(DIRE_UPRIGHT);
+				else
+					SetDirection(DIRE_RIGHT);
+			}
+			else if(m_pTarget->GetPosX() < GetPosX()-30)
+			{
+				if(m_pTarget->GetPosY() > GetPosY()+30)
+					SetDirection(DIRE_DOWNLEFT);
+				else if(m_pTarget->GetPosY() < GetPosY()-30)
+					SetDirection(DIRE_UPLEFT);
+				else
+					SetDirection(DIRE_LEFT);
+			}
+			else if(m_pTarget->GetPosY() > GetPosY())
+				SetDirection(DIRE_DOWN);
+			else if(m_pTarget->GetPosY() < GetPosY())
+				SetDirection(DIRE_UP);
 		}
 	}
 
@@ -364,16 +457,16 @@ void ChasingAI::Render()
 				switch(tmp->GetDirection())
 				{
 				case 4:
-				pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
+					pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
 					break;
 				case 5:
-				pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
+					pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
 					break;
 				case 6:
-				pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
+					pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
 					break;
 				case 7:
-				pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
+					pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
 					break;
 				default:
 					break;
