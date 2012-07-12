@@ -36,7 +36,7 @@ void Level::Update(float fElapsedTime)
 	{
 		m_bNoClip = !m_bNoClip;
 	}
-
+	CheckTriangleCollisions();
 }
 
 void Level::Render() 
@@ -69,41 +69,61 @@ void Level::Render()
 			if( m_vTiles[i].m_Layer > 1)
 			{
 				Player* tmp = GamePlayState::GetInstance()->GetPlayer();
-				if( tmp->IsOn() && tmp->GetLightType() < 2 )
+
+				if( m_vTiles[i].shadow && tmp->IsOn())
 				{
-					if(tmp->GetDirection() == 1)
-						pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y - 10, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, (tmp->GetDirection() - 1) * 1.57079f, D3DCOLOR_ARGB( 200, 0, 0, 0));						
-					else if(tmp->GetDirection() < 4 && tmp->GetDirection() != 1)
+					if(tmp->GetDirection() < 4)
 						pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, (tmp->GetDirection() - 1) * 1.57079f, D3DCOLOR_ARGB( 200, 0, 0, 0));
 					else
 					{
 						switch(tmp->GetDirection())
 						{
 						case 4:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
 							break;
 						case 5:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
 							break;
 						case 6:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 2.35619f , D3DCOLOR_ARGB( 200, 0, 0, 0));
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
 							break;
 						case 7:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -2.35619f , D3DCOLOR_ARGB( 200, 0, 0, 0));
+							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
 							break;
 						default:
 							break;
-						}						
+						}
 					}
 				}
-				// TODO: FINISH THIS SHIT
-				else if( tmp->IsOn() )
-					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect, 32, 50, 0, D3DCOLOR_ARGB( 200, 0, 0, 0));
+				else if( tmp->IsOn() && tmp->GetLightType() > 1)
+				{
+					float angle = 0;
+					if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
+						angle = 0.78539f;
+					else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
+						angle = -0.78539f;
+					else if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
+						angle = -2.35619f;
+					else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
+						angle = 2.35619f;
+					else if(m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
+						angle = 0.0f;
+					else if(m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
+						angle = 3.14159f;
+					else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
+						angle = -1.57079f;
+					else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
+						angle = 1.57079f;
+
+					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+				}
+
 			}
 			pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 
 		}
 	}
+
 
 
 	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
@@ -544,4 +564,153 @@ bool Level::CheckCollision(IObjects* pBase)
 	}
 
 	return false;
+}
+
+void Level::CheckTriangleCollisions()
+{
+	float angleA = ViewManager::GetInstance()->GetInnerCone() * .5f;
+	float angleB = 1.57079f;
+	float angleC = 3.14159f - (angleA + angleB);
+	angleC = (float)sin(double(angleC));
+	angleA = (float)sin(double(angleA));
+	float playerX = GamePlayState::GetInstance()->GetPlayer()->GetPosX();
+	float playerY = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
+	float lightEndX, lightEndY, distanceC, distanceA;
+
+	for(unsigned int i = 0; i < m_vTiles.size(); i++)
+	{
+		bool a, b, c;
+		if(m_vTiles[i].m_Layer == 1)
+			continue;
+		switch(GamePlayState::GetInstance()->GetPlayer()->GetDirection())
+		{
+
+		case 0:
+			{
+				lightEndX = (GamePlayState::GetInstance()->GetCamera().x);
+				lightEndY = playerY;
+			}
+			break;
+		case 1:
+			{
+				lightEndX = playerX;
+				lightEndY = (GamePlayState::GetInstance()->GetCamera().y);
+			}
+			break;
+		case 2:
+			{
+				lightEndX = playerX + (CGame::GetInstance()->GetScreenWidth() >> 1);
+				lightEndY = playerY;
+			}
+			break;
+		case 3:
+			{
+				lightEndX = playerX;
+				lightEndY = playerY + (CGame::GetInstance()->GetScreenHeight() >> 1);
+			}
+			break;
+		case 4:
+			{
+				lightEndX = GamePlayState::GetInstance()->GetCamera().x;
+				lightEndY = GamePlayState::GetInstance()->GetCamera().y;
+			}
+			break;
+		case 5:
+			{
+				lightEndX = GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth();
+				lightEndY = GamePlayState::GetInstance()->GetCamera().y;
+			}
+			break;
+		case 6:
+			{
+				lightEndX = GamePlayState::GetInstance()->GetCamera().x;
+				lightEndY = GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight();
+			}
+			break;
+		case 7:
+			{
+				lightEndX = GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth();
+				lightEndY = GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight();
+			}
+			break;
+		default:
+			break;
+		}
+
+
+		float x2 = (lightEndX - playerX);
+		x2 *= x2;
+		float y2 = (lightEndY - playerY);
+		y2 *= y2;
+		distanceC = (float)sqrt(double(x2 + y2));
+		distanceA = (distanceC/angleC) * angleA;
+
+		// Make final triangle
+		float point1X, point1Y, point2X, point2Y, point3X, point3Y;
+		switch(GamePlayState::GetInstance()->GetPlayer()->GetDirection())
+		{
+		case 0:
+		case 2:
+			point1X = lightEndX;
+			point1Y = lightEndY + distanceA;
+			point2X = lightEndX;
+			point2Y = lightEndY - distanceA;
+			break;
+		case 1:
+		case 3:
+			point1X = lightEndX + distanceA;
+			point1Y = lightEndY;
+			point2X = lightEndX - distanceA;
+			point2Y = lightEndY;
+			break;
+		case 4:
+		case 7:
+			point1X = lightEndX + (distanceA * .5f);
+			point1Y = lightEndY + (distanceA * .5f);
+			point2X = lightEndX - (distanceA * .5f);
+			point2Y = lightEndY - (distanceA * .5f);
+			break;
+		case 5:
+		case 6:
+			point1X = lightEndX - (distanceA * .5f);
+			point1Y = lightEndY + (distanceA * .5f);
+			point2X = lightEndX + (distanceA * .5f);
+			point2Y = lightEndY - (distanceA * .5f);
+			break;
+		default:
+			break;
+		}
+		point3X = playerX;
+		point3Y = playerY;
+
+		RECT tmpRect = { m_vTiles[i].m_nWorldPosX, m_vTiles[i].m_nWorldPosY, m_vTiles[i].m_nWorldPosX + m_vTiles[i].width, m_vTiles[i].m_nWorldPosY + m_vTiles[i].height};
+		// left, top
+		a = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+		if(m_vTiles[i].shadow)
+			continue;
+
+		// left, bottom
+		a = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+		if(m_vTiles[i].shadow)
+			continue;
+
+		// right, top
+		a = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+		if(m_vTiles[i].shadow)
+			continue;
+		
+		// right, bottom;
+		a = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+	}
 }

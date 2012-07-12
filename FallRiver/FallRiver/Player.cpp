@@ -226,11 +226,7 @@ void Player::Update(float fElapsedTime)
 		case 0:		// Flashlight
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
-				ViewManager::GetInstance()->SetInnerCone(.95f);
-				ViewManager::GetInstance()->SetOuterCone(.9f);
-				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
 				ViewManager::GetInstance()->SetInnerCone(.95f);
 				ViewManager::GetInstance()->SetOuterCone(.9f);
 				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
@@ -240,7 +236,7 @@ void Player::Update(float fElapsedTime)
 		case 1:		// Mag Light
 			{
 				ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
+				ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
 				ViewManager::GetInstance()->SetInnerCone(.7f);
 				ViewManager::GetInstance()->SetOuterCone(.7f);
 				ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
@@ -279,7 +275,7 @@ void Player::Update(float fElapsedTime)
 	else
 	{
 		ViewManager::GetInstance()->SetLightPos(0, 0, -1);
-		ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.7f);
+		ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
 		ViewManager::GetInstance()->SetInnerCone(.95f);
 		ViewManager::GetInstance()->SetOuterCone(.9f);
 		ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
