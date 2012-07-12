@@ -535,8 +535,12 @@ bool ViewManager::DeviceEnd(void)
 	// restore backbuffer
 	m_lpDirect3DDevice->SetRenderTarget(0,current);
 	// drop ref counts
-	current->Release();
-	output->Release();
+	if(current != nullptr)
+		current->Release();
+	if(output != nullptr)
+		output->Release();
+
+	QuestLog = RegisterTexture("resource/graphics/PaperThing.png");
 
 	// Post Processing
 	// clear backbuffer
@@ -620,12 +624,15 @@ bool ViewManager::DeviceEnd(void)
 
 		GamePlayState::GetInstance()->m_pHUD->Render();
 		Player* tmp = GamePlayState::GetInstance()->GetPlayer();
+		//Quest Log Rect
+		RECT src_Rect = {0,0,200,200};
 
 		if(tmp->questLogToggle)
 		{
 			// Quest Log Box
 			RECT logRect = { 600, 0, 800, 200};
-			DrawRect(logRect, 50, 50, 50);
+			//DrawRect(logRect, 50, 50, 50);
+			this->DrawStaticTexture(QuestLog,600,0,1.0f,1.0f,&src_Rect);
 			DrawFont(tmp->m_nFontID,"Active Quests",640.0f,10.0f,0.5f,0.5f);
 			for(unsigned int i = 0; i < tmp->m_vpActiveQuests.size(); i++)
 			{
@@ -645,7 +652,8 @@ bool ViewManager::DeviceEnd(void)
 
 			// Quest Finished Box
 			RECT finishedLogRect = { 600, 200, 800, 400};
-			DrawRect(finishedLogRect,50,50,50);
+			//DrawRect(finishedLogRect,50,50,50);
+			this->DrawStaticTexture(QuestLog,600,200,1.0f,1.0f,&src_Rect);
 			DrawFont(tmp->m_nFontID,"Finished Quests",640.0f,210.0f,0.5f,0.5f);
 			for(unsigned int i = 0; i < tmp->m_vpFinishedQuests.size(); i++)
 			{
@@ -671,11 +679,11 @@ bool ViewManager::DeviceEnd(void)
 		questBox.right = CGame::GetInstance()->GetScreenWidth();
 		questBox.bottom = CGame::GetInstance()->GetScreenHeight();
 
-		if(GamePlayState::GetInstance()->questFlag)
+		/*if(GamePlayState::GetInstance()->questFlag)
 		{
 			DrawRect(questBox,255,255,255);
-			DrawFont(tmp->m_nFontID,"You killed enough zombies...for now \n Press enter to continue.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
-		}
+			DrawFont(tmp->m_nFontID,"You killed enough zombies...for now \n Go turn this in now.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
+		}*/
 
 		if(ambientLight[2] == .1f)
 		{

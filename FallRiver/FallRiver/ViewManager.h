@@ -80,6 +80,8 @@ private:
 		D3DXVECTOR2	uv;
 	};
 
+	int QuestLog;
+
 public: 
 	Animation GetAnimation(int AnimID) {return animations[AnimID]; };
 

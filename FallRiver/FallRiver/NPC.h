@@ -22,7 +22,7 @@ private:
 	bool showQuest;
 	GamePlayState* pGPS;
 	ViewManager* pVM;
-
+	int QuestBoxID;
 public:
 	int temp_font_id;
 private:
