@@ -386,13 +386,13 @@ void GamePlayState::Enter()
 		}
 	}
 
-	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
+	/*m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
 	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
 	pBuddy->SetPosX(200.0f);
 	pBuddy->SetPosY(250.0f);
 	pBuddy->SetHeight(32);
 	pBuddy->SetWidth(32);
-	pBuddy->SetImageID(-1);
+	pBuddy->SetImageID(-1);*/
 	//m_pOM->AddObject(pBuddy);
 
 
@@ -614,7 +614,7 @@ void GamePlayState::Update(float fElapsedTime)
 	m_pAM->setSoundPos(soundID2,tmp);
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
-	RECT chocolateRain = { camera.x, camera.y, camera.x + CGame::GetInstance()->GetScreenWidth(), camera.y + CGame::GetInstance()->GetScreenHeight()};
+	RECT chocolateRain = { (long)camera.x, (long)camera.y, (long)camera.x + CGame::GetInstance()->GetScreenWidth(), (long)camera.y + CGame::GetInstance()->GetScreenHeight()};
 	m_pPM->GetActiveEmitter(rainA)->SetRect(chocolateRain);
 
 	bool check = false;
@@ -760,7 +760,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
 
 			// Smoke effects
-			RECT temp = {pOwner->GetPosX(),pOwner->GetPosY(),pOwner->GetPosX() + 16,16 + pOwner->GetPosY()};
+			RECT temp = {(long)pOwner->GetPosX(),(long)pOwner->GetPosY(),(long)pOwner->GetPosX() + (long)16.0f,(long)16.0f + (long)pOwner->GetPosY()};
 			
 			bullet->SetSmokeID(Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL));
 

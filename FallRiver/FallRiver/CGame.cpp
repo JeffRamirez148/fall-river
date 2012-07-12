@@ -20,8 +20,8 @@ CGame::CGame()
 	m_pDI = nullptr;
 	m_pVM = nullptr;
 
-	m_nScreenWidth	= 0;
-	m_nScreenHeight	= 0;
+	m_nScreenWidth	= 800;
+	m_nScreenHeight	= 600;
 	m_bIsWindowed	= true;
 
 	m_pPrevState	= nullptr;

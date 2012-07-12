@@ -74,7 +74,7 @@ void PickUp::Render()
 	}
 	else if( GetPickUpType() == 3 )
 	{
-		ViewManager::GetInstance()->DrawRect(reRect,0,255,255);
+		ViewManager::GetInstance()->DrawRect(reRect,255,255,255);
 	}
 	else if( GetPickUpType() == 4 )
 	{

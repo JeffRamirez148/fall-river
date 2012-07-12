@@ -26,7 +26,7 @@ Player::Player()
 	m_nScore = 0;
 	m_ncurrWeap = 0;
 	m_nState = PSTATE_IDLE;
-	this->SetHealth(100);
+	this->SetHealth(9001);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -148,7 +148,7 @@ void Player::Update(float fElapsedTime)
 
 	}
 
-	}
+	
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 )
 		m_nState = PSTATE_IDLE;

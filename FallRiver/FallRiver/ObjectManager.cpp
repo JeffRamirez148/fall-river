@@ -185,8 +185,8 @@ void ObjectManager::CheckTriangleCollisions()
 	float angleA = ViewManager::GetInstance()->GetInnerCone() * .5f;
 	float angleB = 1.57079f;
 	float angleC = 3.14159f - (angleA + angleB);
-	angleC = sin(double(angleC));
-	angleA = sin(double(angleA));
+	angleC = (float)sin(double(angleC));
+	angleA = (float)sin(double(angleA));
 	float playerX = GamePlayState::GetInstance()->GetPlayer()->GetPosX();
 	float playerY = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
 	float lightEndX, lightEndY, distanceC, distanceA;
@@ -254,7 +254,7 @@ void ObjectManager::CheckTriangleCollisions()
 			x2 *= x2;
 			float y2 = (lightEndY - playerY);
 			y2 *= y2;
-			distanceC = sqrt(double(x2 + y2));
+			distanceC = (float)sqrt(double(x2 + y2));
 			distanceA = (distanceC/angleC) * angleA;
 
 			// Make final triangle
