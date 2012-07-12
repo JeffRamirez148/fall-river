@@ -388,11 +388,11 @@ void GamePlayState::Enter()
 
 	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
 	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
-	pBuddy->SetPosX(200.0f);
-	pBuddy->SetPosY(250.0f);
-	pBuddy->SetHeight(32);
-	pBuddy->SetWidth(32);
-	pBuddy->SetImageID(-1);
+	//pBuddy->SetPosX(200.0f);
+	//pBuddy->SetPosY(250.0f);
+	//pBuddy->SetHeight(32);
+	//pBuddy->SetWidth(32);
+	//pBuddy->SetImageID(-1);
 	//m_pOM->AddObject(pBuddy);
 
 

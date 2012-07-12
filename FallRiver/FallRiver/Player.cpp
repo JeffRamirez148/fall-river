@@ -480,7 +480,7 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-
+	
 	}
 
 

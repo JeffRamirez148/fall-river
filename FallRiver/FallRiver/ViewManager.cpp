@@ -816,7 +816,7 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	m_PresentParams.Windowed			= bWindowed;
 	m_PresentParams.BackBufferWidth		= nWidth;
 	m_PresentParams.BackBufferHeight	= nHeight;
-
+	
 	// Reset the device.
 	m_lpLine->OnLostDevice();
 	m_lpSprite->OnLostDevice();
@@ -875,6 +875,8 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 		SetWindowPos(m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
 
 	}
+	//D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
+
 }
 
 void ViewManager::RemoveLight(int id)
