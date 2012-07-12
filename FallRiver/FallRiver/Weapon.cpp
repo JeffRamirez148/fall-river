@@ -4,7 +4,6 @@
 #include "MessageSystem.h"
 #include "ViewManager.h"
 #include "AudioManager.h"
-#include "Particle_Manager.h"
 
 Weapon::Weapon()
 {
@@ -107,7 +106,6 @@ void Weapon::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawRect(GetRect(), 0, 200, 210 );
-	Particle_Manager::GetInstance()->Render();
 }
 
 void Weapon::FireWeapon()
@@ -144,7 +142,6 @@ bool Weapon::Reload()
 {
 	if( m_nAmmo > 0 && m_nClip < m_nMaxClip)
 	{
-		
 		m_bReloading = true;
 		m_nAmmo--;
 		m_nClip++;

@@ -242,10 +242,6 @@ void ObjectManager::CheckTriangleCollisions()
 				}
 				break;
 			}
-			GamePlayState::GetInstance()->endX = lightEndX;
-			GamePlayState::GetInstance()->endY = lightEndY;
-			GamePlayState::GetInstance()->pX = playerX;
-			GamePlayState::GetInstance()->pY = playerY;
 
 
 			float x2 = (lightEndX - playerX);

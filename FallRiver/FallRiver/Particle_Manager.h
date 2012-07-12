@@ -15,8 +15,8 @@ private:
 	Particle_Manager() { };
 	~Particle_Manager() { };
 public: 
-	Emitter* GetLoadedEmitter(int id) { return loaded[id - 1];}
-	Emitter* GetActiveEmitter(int id) { return active[id - 1];}
+	Emitter* GetLoadedEmitter(int id) { return loaded[id];}
+	Emitter* GetActiveEmitter(int id) { return active[id];}
 	int LoadEmitter(char * filepath);
 	int ActivateEmitter(int id);
 	void Render();

@@ -9,6 +9,7 @@ class Particle;
 
 class Emitter
 {
+	public: 
 	vector<Particle*> _m_vparticles;
 	float spawnRate;
 	bool loopin;
@@ -32,11 +33,14 @@ class Emitter
 	float endRot;
 	float startRot;
 
-public: 
+
 	Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
 			D3DXVECTOR3 newStartVec, D3DXVECTOR3 newEndVec, float newStartScaleX, float newStartScaleY,
 			 float newEndScaleX, float newEndScaleY, int newBlendModeS, int newBlendModeD, int newImageID, float newParticleLifeSpan,
 			 float newEmitterLifeTime, int newStartColor, int newEndColor,  float newStartRot, float newEndRot);
+	Emitter();
+	Emitter& operator=(const Emitter& emitter);
+	Emitter(const Emitter& emitter);
 	void Update(float fElapsedTime);
 	void Render();
 

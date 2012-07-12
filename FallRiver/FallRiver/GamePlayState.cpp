@@ -13,7 +13,6 @@
 #include "EventSystem.h"
 #include "Player.h"
 #include "Weapon.h"
-#include "Particle_Manager.h"
 #include "HUD.h"
 #include "XMLManager.h"
 #include "Message.h"
@@ -58,7 +57,6 @@ GamePlayState::GamePlayState()
 	rainA = -1;
 	rainL = -1;
 	smokeL = -1;
-	smokeA = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -286,7 +284,7 @@ void GamePlayState::Enter()
 	pBuddy->SetHeight(32);
 	pBuddy->SetWidth(32);
 	pBuddy->SetImageID(-1);
-	m_pOM->AddObject(pBuddy);
+	//m_pOM->AddObject(pBuddy);
 
 
 	//for(int i = 0; i < 1; i++)
@@ -507,6 +505,8 @@ void GamePlayState::Update(float fElapsedTime)
 
 	m_pES->ProcessEvents();
 	m_pMS->ProcessMessages();
+	RECT chocolateRain = { camera.x, camera.y, camera.x + CGame::GetInstance()->GetScreenWidth(), camera.y + CGame::GetInstance()->GetScreenHeight()};
+	m_pPM->GetActiveEmitter(rainA)->SetRect(chocolateRain);
 
 	bool check = false;
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
@@ -653,11 +653,11 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 
 			// Smoke effects
 			RECT temp = {pOwner->GetPosX(),pOwner->GetPosY(),pOwner->GetPosX() + 16,16 + pOwner->GetPosY()};
-			//self->m_pPM->GetLoadedEmitterEmitter(self->smokeL)->SetRect(temp);
 			
-			self->smokeA = Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL);
-			self->m_pPM->GetActiveEmitter(self->smokeA)->SetRect(temp);
-			self->m_pPM->GetActiveEmitter(self->smokeA)->SetLoopin(false);
+			bullet->SetSmokeID(Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL));
+
+			self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetRect(temp);
+			self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetLoopin(false);
 
 			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{
