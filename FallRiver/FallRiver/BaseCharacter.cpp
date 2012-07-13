@@ -3,6 +3,7 @@
 #include "GamePlayState.h"
 #include "Particle_Manager.h"
 #include "Emitter.h"
+#include "ViewManager.h"
 #include "Bullet.h"
 
 BaseCharacter::BaseCharacter()
@@ -21,7 +22,7 @@ void BaseCharacter::Update(float fElapsedTime)
 	m_nPosX += m_nVelX * fElapsedTime;
 	m_nPosY += m_nVelY * fElapsedTime;
 
-	if(m_nHealth <= 0 && this->GetCharacterType() != CHA_NPC)
+	if(m_nHealth <= 0 && this->GetCharacterType() != CHA_NPC && this->GetCharacterType() != CHA_COMPANION)
 	{
 		GamePlayState* tmp = GamePlayState::GetInstance();
 		Particle_Manager* m_pPM = Particle_Manager::GetInstance();
@@ -38,7 +39,6 @@ void BaseCharacter::Render()
 
 bool BaseCharacter::CheckCollision(IObjects* pBase)
 {
-	RECT cRect;
 	if( BaseObject::CheckCollision(pBase)  == true )
 	{
 		if(pBase->GetObjectType() == OBJ_BULLET )
@@ -142,6 +142,10 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 RECT BaseCharacter::GetRect()
 {
 	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
-
+	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	//RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 	return cRect;
+	
+	//return thisFrame.colRect;
 }

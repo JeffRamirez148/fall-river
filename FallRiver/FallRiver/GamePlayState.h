@@ -88,6 +88,7 @@ private:
 	vector<NPC*>				m_cNpcs;
 	Boss1*						m_cBoss1;
 	Weapon*						m_cWeapon;
+	vector<int>					fireA;
 
 	// For Everyone else on the screen
 	POINTFLOAT camera;
@@ -112,6 +113,7 @@ public:
 	int GetBloodL6() { return bloodL6;}
 	int GetBloodL7() { return bloodL7;}
 	int GetBloodL8() { return bloodL8;}
+	vector<int> GetFireA(void) { return fireA;}
 
 	bool questFlag;
 	HUD*			m_pHUD;

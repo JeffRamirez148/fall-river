@@ -28,6 +28,8 @@ private:
 
 	int		m_nOptionID;
 	int		m_nFontID;
+	int		m_nOptionSpriteID;
+	int		m_nSelection;
 
 	OptionsMenuState();
 	~OptionsMenuState();

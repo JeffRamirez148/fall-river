@@ -2,9 +2,11 @@
 #include "ObjectFactory.h"
 #include "BaseCharacter.h"
 #include "MessageSystem.h"
-#include "DestroyEnemyC.h"
+#include <tchar.h>
 #include "Enemy.h"
 #include "ViewManager.h"
+#include "ShootingAi.h"
+#include "DestroyEnemy.h"
 #include "EventSystem.h"
 #include "Bullet.h"
 #include "Level.h"
@@ -21,6 +23,8 @@ Boss1::Boss1()
 	m_dwIdleWait = 0;
 	m_nVelX = 0;
 	m_nVelY = 0;
+	m_nMinnions = 0;
+	m_nStages = 0;
 	m_dwFireDelay = 0;
 	m_pWeapon = nullptr;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
@@ -30,6 +34,9 @@ Boss1::Boss1()
 	m_playerAnim.curAnimID = 0;
 	m_playerAnim.curFrame = 0;
 	m_playerAnim.fTime = 0;
+
+	m_pOM = ObjectManager::GetInstance();
+	m_pOF = Factory::GetInstance();
 }
 
 Boss1::~Boss1()
@@ -45,131 +52,137 @@ void Boss1::Update(float fElapsedTime)
 	//AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	if(GetHealth() <= 0)
 	{
-		/*DestroyEnemyS* pMsg = new DestroyEnemyS(this);
+		DestroyEnemy* pMsg = new DestroyEnemy(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
-		pMsg = nullptr;*/
+		pMsg = nullptr;
 	}
-	if(  m_pTarget->CheckHidden() )
-		m_nState = ESTATE_IDLE;
 
 	m_pWeapon->Update(fElapsedTime);
-	
-	if(m_nState == ESTATE_CHASING)
+
+	if( m_nStages == 0 )
 	{
-		if( m_dwFireDelay == 0)
-		{
-			m_dwFireDelay = GetTickCount() + 1000;
-			//m_dwGunReset = GetTickCount() + 100;
-			m_nState = ESTATE_SHOOT;
-		}
-		if( m_dwFireDelay < GetTickCount() && m_nState == ESTATE_CHASING )
-		{
-			m_dwFireDelay = GetTickCount() + 1000;
-			m_pWeapon->FireWeapon();
-			m_nState = ESTATE_SHOOT;
-			//m_dwGunReset = GetTickCount() + 100;
-		}
+		if( m_nMinnions == 0 )
+			Summon();
 	}
-
-	float distanceX = ( m_pTarget->GetPosX() -  GetPosX() );
-	float distanceY = ( m_pTarget->GetPosY() -  GetPosY() );
-
-	if( distanceX < 0)
-		distanceX = -distanceX;
-	if( distanceY < 0)
-		distanceY = -distanceY;
-
-	if( (distanceX + distanceY >= 300) || m_pTarget->CheckHidden() )
+	else if( m_nStages == 1 )
 	{
-		m_nState = ESTATE_IDLE;
-		//notified = true;
-	}
-	else
-	{
-		/*if(notified)
+		if(m_nState == ESTATE_CHASING)
+		{
+			if( m_dwFireDelay == 0)
+			{
+				m_dwFireDelay = GetTickCount() + 1000;
+				//m_dwGunReset = GetTickCount() + 100;
+				m_nState = ESTATE_SHOOT;
+			}
+			if( m_dwFireDelay < GetTickCount() && m_nState == ESTATE_CHASING )
+			{
+				m_dwFireDelay = GetTickCount() + 1000;
+				m_pWeapon->FireWeapon();
+				m_nState = ESTATE_SHOOT;
+				//m_dwGunReset = GetTickCount() + 100;
+			}
+		}
+
+		float distanceX = ( m_pTarget->GetPosX() -  GetPosX() );
+		float distanceY = ( m_pTarget->GetPosY() -  GetPosY() );
+
+		if( distanceX < 0)
+			distanceX = -distanceX;
+		if( distanceY < 0)
+			distanceY = -distanceY;
+
+		if( (distanceX + distanceY >= 300) || m_pTarget->CheckHidden() )
+		{
+			m_nState = ESTATE_IDLE;
+			//notified = true;
+		}
+		else
+		{
+			/*if(notified)
 			AudioManager::GetInstance()->playSound(notifyID);		
-		notified = false;*/
-		m_nState = ESTATE_CHASING;
-	}
-
-	if( m_nState == ESTATE_IDLE )
-	{
-		float fDistX = m_pfDestination.x - GetPosX();
-		float fDistY = m_pfDestination.y - GetPosY();
-
-		if(fDistX < 0)
-			fDistX = -fDistX;
-		if(fDistY < 0)
-			fDistY = -fDistY;
-
-		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
-		{
-			m_pfDestination.x = GetPosX()+rand()%25-12; 
-			m_pfDestination.y = GetPosY()+rand()%25-12;
-			m_dwIdleWait = GetTickCount() + 1000;
+			notified = false;*/
+			m_nState = ESTATE_CHASING;
 		}
-		if( fDistX  > 10 && fDistY > 10 )
+
+		if( m_nState == ESTATE_IDLE )
 		{
-			float savex = GetPosX();
-			float savey = GetPosY();
+			float fDistX = m_pfDestination.x - GetPosX();
+			float fDistY = m_pfDestination.y - GetPosY();
 
-			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
-			BaseCharacter::Update(fElapsedTime);
+			if(fDistX < 0)
+				fDistX = -fDistX;
+			if(fDistY < 0)
+				fDistY = -fDistY;
 
-			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+			if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
 			{
-				SetPosX(savex);
-				SetPosY(savey);
+				m_pfDestination.x = GetPosX()+rand()%25-12; 
+				m_pfDestination.y = GetPosY()+rand()%25-12;
+				m_dwIdleWait = GetTickCount() + 1000;
 			}
-		}
-		//else
-			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
-	}
-	else if( m_nState == ESTATE_CHASING)
-	{
-		if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
-		{
-			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
-			BaseCharacter::Update(fElapsedTime);
-		}
-		else if( distanceY < 50 || distanceX < 50 )
-		{
-			if(m_pTarget->GetPosX() < GetPosX()+5 )
+			if( fDistX  > 10 && fDistY > 10 )
 			{
-				MoveTo(GetPosX()+100, GetPosY(), 80);
-				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-					AudioManager::GetInstance()->playSound(walkingID);*/
-			}
-			else if(m_pTarget->GetPosX() > GetPosX()-5 )
-			{
-				MoveTo(GetPosX() - 100, GetPosY(), 80);
-				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-					AudioManager::GetInstance()->playSound(walkingID);*/
+				float savex = GetPosX();
+				float savey = GetPosY();
+
+				MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
+				BaseCharacter::Update(fElapsedTime);
+
+				if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+				{
+					SetPosX(savex);
+					SetPosY(savey);
+				}
 			}
 			//else
+			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+		}
+		else if( m_nState == ESTATE_CHASING)
+		{
+			if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
+			{
+				MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+				BaseCharacter::Update(fElapsedTime);
+			}
+			else if( distanceY < 50 || distanceX < 50 )
+			{
+				if(m_pTarget->GetPosX() < GetPosX()+5 )
+				{
+					MoveTo(GetPosX()+100, GetPosY(), 80);
+					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);*/
+				}
+				else if(m_pTarget->GetPosX() > GetPosX()-5 )
+				{
+					MoveTo(GetPosX() - 100, GetPosY(), 80);
+					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);*/
+				}
+				//else
 				//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 
-			BaseCharacter::Update(fElapsedTime);
+				BaseCharacter::Update(fElapsedTime);
 
-			if(m_pTarget->GetPosY() < GetPosY()+5 )
-			{
-				MoveTo(GetPosX(), GetPosY()+100, 80);
-				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+				if(m_pTarget->GetPosY() < GetPosY()+5 )
+				{
+					MoveTo(GetPosX(), GetPosY()+100, 80);
+					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 					AudioManager::GetInstance()->playSound(walkingID);*/
-			}
-			else if(m_pTarget->GetPosY() > GetPosY()-5 )
-			{
-				MoveTo(GetPosX(), GetPosY()-100, 80);
-				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+				}
+				else if(m_pTarget->GetPosY() > GetPosY()-5 )
+				{
+					MoveTo(GetPosX(), GetPosY()-100, 80);
+					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 					AudioManager::GetInstance()->playSound(walkingID);*/
-			}
-			/*else
+				}
+				/*else
 				AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();*/
 
-			BaseCharacter::Update(fElapsedTime);
-		}
-		//else
+				BaseCharacter::Update(fElapsedTime);
+			}
+			//else
 			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+		}
 	}
 
 	if(m_pTarget->GetPosX() > GetPosX()+30)
@@ -304,7 +317,7 @@ void Boss1::Render()
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
 
 	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
-	//pVM->DrawRect(reRect, 255, 255, 0);
+	//pVM->DrawRect(reRect, 255, 255, 100);
 }
 
 bool Boss1::CheckCollision(IObjects* pBase)
@@ -321,7 +334,39 @@ void Boss1::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
+			m_nStages =  1;
 		}
+	}
+}
+
+void Boss1::Summon()
+{
+	for(int i = 0; i < 10; i++)
+	{
+		m_cEnemies.push_back(nullptr);
+		m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+		ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+		pEnemy->SetHeight( 32);
+		pEnemy->SetWidth( 32);
+		pEnemy->SetImageID(-1);
+		pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
+		pEnemy->SetPosX(GetPosX() - 200);
+		pEnemy->SetPosY(GetPosY() - 200*i);
+		pEnemy->SetHealth(100);
+		pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+		m_pOM->AddObject(pEnemy);
+
+		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		eWeapon->SetHeight(20);
+		eWeapon->SetWidth(10);
+		eWeapon->SetImageID(-1);
+		eWeapon->SetOwner(pEnemy);
+		eWeapon->Init(WPN_PISTOL, 100, 0);
+		eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+		eWeapon->SetPosY(pEnemy->GetPosY());
+		pEnemy->SetWeapon(eWeapon);
+		
+		m_nMinnions++;
 	}
 }
 

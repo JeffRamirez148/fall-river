@@ -25,6 +25,8 @@ using namespace std;
 #include "Player.h"
 #include "CompanionAI.h"
 #include "NPC.h"
+#include "Particle_Manager.h"
+#include "Emitter.h"
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p)			if (p) { p->Release(); p = NULL; }
@@ -567,13 +569,14 @@ bool ViewManager::DeviceEnd(void)
 
 	unsigned int j = 0;
 	lightNum = 0;
-	for(; j < lights.size(); ++j)
+	CreateOtherLights();
+	for(; j < lightsToRender.size(); ++j)
 	{
-		tmpDir[j] = lights[j]->lightDir;
-		tmpPos[j] = lights[j]->lightPos;
-		tmpColor[j] = lights[j]->color;
-		tmpInnerCone[j] = lights[j]->innerCone;
-		tmpOuterCone[j] = lights[j]->outerCone;
+		tmpDir[j] = lightsToRender[j]->lightDir;
+		tmpPos[j] = lightsToRender[j]->lightPos;
+		tmpColor[j] = lightsToRender[j]->color;
+		tmpInnerCone[j] = lightsToRender[j]->innerCone;
+		tmpOuterCone[j] = lightsToRender[j]->outerCone;
 		++lightNum;
 	}
 
@@ -645,6 +648,8 @@ bool ViewManager::DeviceEnd(void)
 					DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i * 10 + 20), 0.5f, 0.5f);
 				if(tmp->m_vpActiveQuests[i]->QuestID == 2)
 				{
+					if(tmp->questCounter >= 10)
+						tmp->questCounter = 10;
 					char buffer[100];
 					_itoa_s(tmp->questCounter,buffer,10);
 					DrawFont(tmp->m_nFontID, buffer, 610.0f, float(i * 10 + 30), 0.5f, 0.5f);
@@ -856,6 +861,8 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	// Setup window style flags
 	DWORD dwWindowStyleFlags = WS_VISIBLE;
 
+	
+
 	HWND top;
 	if (bWindowed)
 	{
@@ -913,27 +920,42 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	int i = 0;
 }
 
-void ViewManager::RemoveLight(int id)
+void ViewManager::CreateOtherLights(void)
 {
-	lights.erase( lights.begin() + id, lights.begin() + id + 1);
-}
+	lightsToRender.clear();
+	RECT cRect;
+	RECT camRect = { GamePlayState::GetInstance()->GetCamera().x, GamePlayState::GetInstance()->GetCamera().y, GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth(), GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight()};
+	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
+	for( int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
+	{
+		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
+		if(IntersectRect( &cRect, &camRect, &fire ) == TRUE)
+		{
+			Light* tmp = new Light();
+			tmp->innerCone = (.95f);
+			tmp->outerCone = (.9f);
 
-int ViewManager::RegisterLight(Light light)
-{
-	if(lights.size() >39)
-		return -1;
-	Light* tmp = new Light();
-	*tmp = light;
-	lights.push_back(tmp);
-	return lights.size() - 1;
-}
 
-Light* ViewManager::GetLight(int id)
-{
-	return lights[id];
-}
 
-void ViewManager::RemoveLights(void)
-{
-	lights.clear();
+			tmp->lightPos[0] = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )/ (CGame::GetInstance()->GetScreenWidth())) * 2) + .01f;
+			tmp->lightPos[1] = (((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() ) / (CGame::GetInstance()->GetScreenHeight())) * -2) - .01f;
+			tmp->lightPos[2] = -.25f;
+			tmp->lightDir[0] = 0;
+			tmp->lightDir[1] = 0;
+			tmp->lightDir[2] = 1;
+			if(rand() % 9 == 0)
+			{
+				tmp->color[0] = 1;
+				tmp->color[1] = 0;
+				tmp->color[2] = 0;
+			}
+			else
+			{
+				tmp->color[0] = 1;
+				tmp->color[1] = .6f;
+				tmp->color[2] = 0;
+			}
+			lightsToRender.push_back(tmp);
+		}
+	}
 }

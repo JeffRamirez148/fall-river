@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <emitter_list>
-  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="0" endGreen="0" endBlue="0" endRot="0" endScaleX="1" endScaleY="1" endVelX="0" endVelY="-1" endVelZ="0" lifeSpan="0.25" lifeTime="1" loopin="1" maxParticles="1" rectL="183" rectT="524" rectR="203" rectB="544" spawnRate="0" startAlpha="255" startRed="0" startGreen="0" startBlue="0" startRot="0" startScaleX="1" startScaleY="1" startVelX="0" startVelY="0" StartVelZ="0">LetThereBeFire.png</emitter_info>
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="200" endRed="255" endGreen="255" endBlue="255" endRot="0" endScaleX="1" endScaleY="1" endVelX="0" endVelY="-1" endVelZ="0" lifeSpan=".75" lifeTime="1" loopin="1" maxParticles="1" rectL="183" rectT="524" rectR="203" rectB="544" spawnRate="0" startAlpha="200" startRed="255" startGreen="255" startBlue="255" startRot="0" startScaleX="2" startScaleY="2" startVelX="0" startVelY="0" StartVelZ="0">LetThereBeFire.png</emitter_info>
 </emitter_list>

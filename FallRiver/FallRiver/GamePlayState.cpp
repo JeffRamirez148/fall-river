@@ -9,6 +9,7 @@
 #include "Emitter.h"
 #include "CGame.h"
 #include "DirectInput.h"
+#include "DestroyEnemy.h"
 #include "Enemy.h"
 #include "EventSystem.h"
 #include "Player.h"
@@ -255,6 +256,20 @@ void GamePlayState::Enter()
 			tmp.erase(nth);
 			i--;
 		}
+		else if(  _stricmp(nth->m_cType,"Fire") == 0)
+		{
+			int tmp1 = m_pPM->ActivateEmitter(fire1L);
+			m_pPM->GetActiveEmitter(tmp1)->SetRect(tmp[i].m_rCollision);
+			int tmp2 = m_pPM->ActivateEmitter(fire2L);
+			m_pPM->GetActiveEmitter(tmp2)->SetRect(tmp[i].m_rCollision);
+			int tmp3 = m_pPM->ActivateEmitter(fire3L);
+			m_pPM->GetActiveEmitter(tmp3)->SetRect(tmp[i].m_rCollision);
+			fireA.push_back(tmp3);
+			fireA.push_back(tmp2);
+			fireA.push_back(tmp1);
+			tmp.erase(nth);
+			i--;
+		}
 		else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
 		{
 			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
@@ -427,26 +442,26 @@ void GamePlayState::Enter()
 	pBuddy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
 	m_pOM->AddObject(pBuddy);
 
-	m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
-	Boss1* pBoss = (Boss1*)m_cBoss1;
-	pBoss->SetHealth(200);
-	pBoss->SetHeight(32);
-	pBoss->SetWidth(32);
-	pBoss->SetPosX(600);
-	pBoss->SetPosY(700);
-	pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
-	pBoss->SetTarget(pPlayer);
-	m_pOM->AddObject(pBoss);
+	///*m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+	//Boss1* pBoss = (Boss1*)m_cBoss1;
+	//pBoss->SetHealth(200);
+	//pBoss->SetHeight(32);
+	//pBoss->SetWidth(32);
+	//pBoss->SetPosX(m_cPlayer->GetPosX() + 200);
+	//pBoss->SetPosY(m_cPlayer->GetPosY());
+	//pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+	//pBoss->SetTarget(pPlayer);
+	//m_pOM->AddObject(pBoss);*/
 
-	Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
-	eWeapon->SetHeight(20);
-	eWeapon->SetWidth(10);
-	eWeapon->SetImageID(-1);
-	eWeapon->SetOwner(pBoss);
-	eWeapon->Init(WPN_SHOTGUN, 100, 0);
-	eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
-	eWeapon->SetPosY(pBoss->GetPosY());
-	pBoss->SetWeapon(eWeapon);
+	//Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+	//eWeapon->SetHeight(20);
+	//eWeapon->SetWidth(10);
+	//eWeapon->SetImageID(-1);
+	//eWeapon->SetOwner(pBoss);
+	//eWeapon->Init(WPN_SHOTGUN, 100, 0);
+	//eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+	//eWeapon->SetPosY(pBoss->GetPosY());
+	//pBoss->SetWeapon(eWeapon);
 
 
 
@@ -1181,6 +1196,12 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 		{
 			PickUp* pickup = dynamic_cast<DestroyPickUp*>(pMsg)->GetPickUp();
 			self->m_pOM->RemoveObject( pickup );
+			break;
+		}
+	case MSG_DESTROY_ENEMY:
+		{
+			Enemy* pEnemy = dynamic_cast<DestroyEnemy*>(pMsg)->GetEnemy();
+			self->m_pOM->RemoveObject( pEnemy );
 			break;
 		}
 	}

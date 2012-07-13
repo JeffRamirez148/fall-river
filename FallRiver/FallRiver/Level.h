@@ -22,6 +22,9 @@ struct leveldata
 	char m_cType[ 32 ];
 	bool m_bPrevColliding;
 	int test;
+	//int fire1A;
+	//int fire2A;
+	//int fire3A;
 };
 
 struct mapTiles

@@ -772,7 +772,8 @@ bool Player::CheckCollision(IObjects* pBase)
 					//MessageSystem::GetInstance()->SendMsg(pMsg);
 					//pMsg = nullptr;
 				}
-
+				if(pBase->GetObjectType() == OBJ_CHARACTER)
+					
 				if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
 					SetPosX(float(pBase->GetRect().left-GetWidth()));
 				else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
@@ -864,7 +865,7 @@ void Player::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			SetHealth(GetHealth()-30);
-
+			AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}
