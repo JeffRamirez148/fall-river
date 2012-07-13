@@ -9311,6 +9311,10 @@
     <ScrRect x="1432" y="105" height="32" width="32" />
   </Collision>
   <Collision>
+    <Type>NPC</Type>
+    <ScrRect x="1632" y="105" height="32" width="32" />
+  </Collision>
+  <Collision>
     <Type>Pistol Ammo</Type>
     <ScrRect x="2097" y="816" height="16" width="16" />
   </Collision>

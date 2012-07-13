@@ -15,6 +15,8 @@ OptionsMenuState::OptionsMenuState()
 	m_nOptionID = -1;
 	musicID = -1;
 	soundID = -1;
+	m_nOptionSpriteID = -1;
+	m_nSelection = 1;
 
 }
 
@@ -38,6 +40,7 @@ void OptionsMenuState::Enter()
 
 	m_nOptionID = m_pVM->RegisterTexture("resource/graphics/bg_options.png");
 	m_nFontID	= m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
+	m_nOptionSpriteID = m_pVM->RegisterFont("resource/graphics/sprites_options.png");
 
 	FMOD_VECTOR tmp = {0,0,0};
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
@@ -93,20 +96,19 @@ bool OptionsMenuState::Input()
 	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_pAM->playSound(soundID);
-		m_nCursPosY += 25;
-		if(m_nCursPosY == 275)
-			m_nCursPosY += 25;
-		if( m_nCursPosY > 300 )
-			m_nCursPosY = 200;
+		//m_nCursPosY += 25;
+		--m_nSelection;
+		if(m_nSelection < 0)
+			m_nSelection = 3;
+		
 	}
 	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_pAM->playSound(soundID);
-		m_nCursPosY -= 25;
-		if(m_nCursPosY == 275)
-			m_nCursPosY -= 25;
-		if( m_nCursPosY < 200 )
-			m_nCursPosY = 300;
+		//m_nCursPosY -= 25;
+		++m_nSelection;
+		if(m_nSelection > 3)
+			m_nSelection = 0;
 	}
 
 	sfxVolume = m_pAM->getSoundVolume();
@@ -115,13 +117,13 @@ bool OptionsMenuState::Input()
 	if( m_pDI->KeyPressed(DIK_D) || m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0))
 	{
 		m_pAM->playSound(soundID);
-		if( m_nCursPosY == 200 && sfxVolume < 1.0f)
+		if( m_nSelection == 1 && sfxVolume < 1.0f)
 		{
 			sfxVolume += 0.05f;
 			if(sfxVolume > 1)
 				sfxVolume = 1;
 		}
-		else if( m_nCursPosY == 225 && musicVolume < 1.0f)
+		else if(m_nSelection == 2 && musicVolume < 1.0f)
 		{
 			musicVolume += 0.05f;
 			if(musicVolume > 1)
@@ -131,13 +133,13 @@ bool OptionsMenuState::Input()
 	else if( m_pDI->KeyPressed(DIK_A) || m_pDI->JoystickGetLStickDirPressed(DIR_LEFT,0))
 	{
 		m_pAM->playSound(soundID);
-		if( m_nCursPosY == 200 && sfxVolume > 0.0f)
+		if(m_nSelection == 1 && sfxVolume > 0.0f)
 		{
 			sfxVolume -= 0.05f;
 			if(sfxVolume < 0)
 				sfxVolume = 0;
 		}
-		else if( m_nCursPosY == 225 && musicVolume > 0.0f)
+		else if( m_nSelection == 2 && musicVolume > 0.0f)
 		{
 			musicVolume -= 0.05f;
 			if(musicVolume < 0)
@@ -151,19 +153,19 @@ bool OptionsMenuState::Input()
 
 	if( m_pDI->KeyPressed(DIK_RETURN)  || m_pDI->JoystickButtonPressed(0,0))
 	{
-		if( m_nCursPosY == 250 )
+		if( m_nSelection == 3 )
 		{
 			m_bIsWindowed = !m_bIsWindowed;
 			CGame::GetInstance()->SetWindowed(m_bIsWindowed);
 		}
-		else if( m_nCursPosY == 300 )
+		else if( m_nSelection == 0 )
 			CGame::GetInstance()->RemoveState();
 		return true;
 	}
 
 	// Pressing Escape will End the Game
-	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
-		m_nCursPosY = 300;
+	/*if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
+		m_nSelection = 0;*/
 
 	return true;
 }
@@ -176,14 +178,125 @@ void OptionsMenuState::Render()
 {
 	// Do Rendering Here
 
-	//m_pVM->DrawStaticTexture(m_nOptionID, 0, 0,  0.4f, 0.6f);
+	RECT src_NotPressed = {16,40,72,16};
+	RECT src_Pressed = {74,40,110,16};
+	RECT src_PowerNotPressed = {160,55,200,16};
+	RECT src_PowerPressed = {220,55,260,16};
+	RECT src_SFX = {238,93,263,80};
+	RECT src_Music = {225,128,264,115};
+	RECT src_Res = {188,164,264,150};
+	RECT src_Exit = {234,201,262,187};
+	m_pVM->DrawStaticTexture(m_nOptionID, 0, 0,  0.4f, 0.6f);
 
-	m_pVM->GetSprite()->Flush();
-	m_pVM->Clear();
+	// image 1280x1024
+	// screen 800x600
+	// ratio 1.6 : 1.7
 
-	m_pVM->DrawFont(m_nFontID, "OPTIONS", 100, 100, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(255, 255,255));
+	// Exit Buttons
+	if( m_nSelection == 0)
+	{
+		m_pVM->DrawFont(m_nFontID,"Exit",386.5f,200.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+	}
+	
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,402.875f,98.0f,0.7f,0.7f,&src_Exit);
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,400,85.3f,0.6f,0.6f,&src_PowerNotPressed);
 
-	RECT cursRect= { 275, m_nCursPosY, 285, m_nCursPosY+10 };
+	// SFX Buttons
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,352.875f,125,0.7f,0.7f,&src_SFX);
+
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,385,130,0.6f,0.6f,&src_NotPressed,0,0,-(3.14f/2));
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,388,107.5,0.6f,0.6f,&src_NotPressed,0,0,3.14f/2);
+
+	if( m_nSelection == 1)
+	{
+		m_pVM->DrawFont(m_nFontID,"SFX",386.5f,185.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+		char buff[100];
+		_itoa_s(int(sfxVolume*100), buff, 10);
+		m_pVM->DrawFont(m_nFontID, buff, 386.5f, 205.8f);
+
+		
+		if( m_pDI->KeyDown(DIK_A) || m_pDI->JoystickGetLStickDirDown(DIR_LEFT,0))
+		{
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,385,130,0.6f,0.6f,&src_Pressed,0,0,-(3.14f/2));			
+		}
+		else
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,385,130,0.6f,0.6f,&src_NotPressed,0,0,-(3.14f/2));
+
+		if( m_pDI->KeyDown(DIK_D) || m_pDI->JoystickGetLStickDirDown(DIR_RIGHT,0))
+		{
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,388,107.5,0.6f,0.6f,&src_Pressed,0,0,3.14f/2);
+		}
+		else
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,388,107.5,0.6f,0.6f,&src_NotPressed,0,0,3.14f/2);
+		
+		
+	}
+	
+	
+	
+	// Music Buttons
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,402.875f,125,0.7f,0.7f,&src_Music);
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,453,130,0.6f,0.6f,&src_NotPressed,0,0,-(3.14f/2));
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,456,107.5,0.6f,0.6f,&src_NotPressed,0,0,3.14f/2);
+	if( m_nSelection == 2)
+	{
+		m_pVM->DrawFont(m_nFontID,"Music",376.5f,185.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+		char buff[100];
+		_itoa_s(int(musicVolume*100), buff, 10);
+		m_pVM->DrawFont(m_nFontID, buff, 376.5f, 205.8f);
+
+		if( m_pDI->KeyDown(DIK_A) || m_pDI->JoystickGetLStickDirDown(DIR_LEFT,0))
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,453,130,0.6f,0.6f,&src_Pressed,0,0,-(3.14f/2));
+		else
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,453,130,0.6f,0.6f,&src_NotPressed,0,0,-(3.14f/2));
+
+		if( m_pDI->KeyDown(DIK_D) || m_pDI->JoystickGetLStickDirDown(DIR_RIGHT,0))
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,456.555f,107.5,0.6f,0.6f,&src_Pressed,0,0,3.14f/2);
+		else
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,456.555f,107.5,0.6f,0.6f,&src_NotPressed,0,0,3.14f/2);
+	}
+	
+	
+	
+	// Resolution Buttons
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,350.875f,160,0.7f,0.7f,&src_Res);
+
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,419.555f,164.5,0.6f,0.6f,&src_NotPressed,0,0,-(3.14f/2));
+	m_pVM->DrawStaticTexture(m_nOptionSpriteID,420.555f,143,0.6f,0.6f,&src_NotPressed,0,0,3.14f/2);
+
+	if( m_nSelection == 3)
+	{
+		m_pVM->DrawFont(m_nFontID,"Resolution",346.5f,185.8f,0.7f,0.7f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+
+		if(m_bIsWindowed)
+			m_pVM->DrawFont(m_nFontID, "FullScreen Off", 346.5f, 215.8f,0.5f,0.5f);
+		else
+			m_pVM->DrawFont(m_nFontID, "FullScreen On", 346.5f, 215.8f,0.5f,0.5f);
+
+		if( m_pDI->KeyDown(DIK_A) || m_pDI->JoystickGetLStickDirDown(DIR_LEFT,0))
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,419.555f,164.5,0.6f,0.6f,&src_Pressed,0,0,-(3.14f/2));
+		else
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,419.555f,164.5,0.6f,0.6f,&src_NotPressed,0,0,-(3.14f/2));
+
+		if( m_pDI->KeyDown(DIK_D) || m_pDI->JoystickGetLStickDirDown(DIR_RIGHT,0))
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,420.555f,143,0.6f,0.6f,&src_Pressed,0,0,3.14f/2);
+		else
+			m_pVM->DrawStaticTexture(m_nOptionSpriteID,420.555f,143,0.6f,0.6f,&src_NotPressed,0,0,3.14f/2);
+
+	}
+	
+	
+	//m_pVM->DrawStaticTexture(m_nOptionSpriteID,450,105,1.0f,1.0f,&src_Pressed);
+
+	//////m_pVM->DrawFont(m_nFontID, "OPTIONS", 100, 100, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(255, 255,255));
+	//m_pVM->DrawStaticTexture(m_nOptionSpriteID,545,105,1.0f,1.0f,&src_NotPressed);
+	//m_pVM->DrawStaticTexture(m_nOptionSpriteID,450,105,1.0f,1.0f,&src_Pressed);
+	//m_pVM->DrawStaticTexture(m_nOptionSpriteID,545,200,1.0f,1.0f,&src_NotPressed,0,0,3.14f);
+	//m_pVM->DrawStaticTexture(m_nOptionSpriteID,450,200,1.0f,1.0f,&src_Pressed,0,0,3.14f);
+	
+	//m_pVM->DrawStaticTexture(m_nOptionSpriteID,550,150,1.0f,1.0f,&src_PowerPressed);
+
+	/*RECT cursRect= { 275, m_nCursPosY, 285, m_nCursPosY+10 };
 	m_pVM->DrawRect( cursRect, 255, 0, 0 );
 
 	char buff[100];
@@ -206,7 +319,7 @@ void OptionsMenuState::Render()
 		m_pVM->DrawUnfilledRect(check, 0, 200, 255);
 	
 
-	m_pVM->DrawFont(m_nFontID, "Exit", 300, 300);
+	m_pVM->DrawFont(m_nFontID, "Exit", 300, 300);*/
 }
 
 

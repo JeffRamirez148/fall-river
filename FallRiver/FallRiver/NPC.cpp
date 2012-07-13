@@ -135,10 +135,14 @@ void NPC::Update(float fElapsedTime)
 					// temp for first playable
 					// Change this to put in next level and complete the quest 
 					//CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
-					vector<Quest_Struct*>::iterator temp = pGPS->GetPlayer()->m_vpActiveQuests.begin()+i;
+					vector<Quest_Struct*>::iterator temp = pGPS->GetPlayer()->m_vpActiveQuests.begin()+i;					
 					//pGPS->GetPlayer()->completedQuest++;
 					pGPS->GetPlayer()->m_vpFinishedQuests.push_back(pGPS->GetPlayer()->m_vpActiveQuests[i]);
+					if(pGPS->GetPlayer()->m_vpActiveQuests[i+1]->QuestID == pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID + 1)
+						pGPS->GetPlayer()->m_vpFinishedQuests.push_back(pGPS->GetPlayer()->m_vpActiveQuests[i+1]);
+					pGPS->GetPlayer()->m_vpActiveQuests.erase(temp + 1);
 					pGPS->GetPlayer()->m_vpActiveQuests.erase(temp);
+					
 				}
 			}
 		}
