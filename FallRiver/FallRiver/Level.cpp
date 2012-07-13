@@ -702,7 +702,7 @@ void Level::CheckTriangleCollisions()
 		point3X = playerX;
 		point3Y = playerY;
 
-		RECT tmpRect = { m_vTiles[i].m_nWorldPosX, m_vTiles[i].m_nWorldPosY, m_vTiles[i].m_nWorldPosX + m_vTiles[i].width, m_vTiles[i].m_nWorldPosY + m_vTiles[i].height};
+		RECT tmpRect = { (LONG)m_vTiles[i].m_nWorldPosX, (LONG)m_vTiles[i].m_nWorldPosY, LONG(m_vTiles[i].m_nWorldPosX + m_vTiles[i].width), LONG(m_vTiles[i].m_nWorldPosY + m_vTiles[i].height)};
 		// left, top
 		a = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
 		b = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;

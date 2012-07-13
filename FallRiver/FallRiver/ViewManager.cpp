@@ -924,12 +924,12 @@ void ViewManager::CreateOtherLights(void)
 {
 	lightsToRender.clear();
 	RECT cRect;
-	RECT camRect = { GamePlayState::GetInstance()->GetCamera().x, GamePlayState::GetInstance()->GetCamera().y, GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth(), GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight()};
+	RECT camRect = { (LONG)GamePlayState::GetInstance()->GetCamera().x, (LONG)GamePlayState::GetInstance()->GetCamera().y, LONG(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth()), LONG(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight())};
 	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
-	for( int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
 	{
 		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
-		if(IntersectRect( &cRect, &camRect, &fire ) == true && CGame::GetInstance()->GetState() == GamePlayState::GetInstance())
+		if(IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance())
 		{
 			Light* tmp = new Light();
 			tmp->innerCone = (.75f);

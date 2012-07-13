@@ -69,8 +69,8 @@ void MainMenuState::Enter()
 
 	if( XMLManager::GetInstance()->LoadSettings("settings.xml", setting))
 	{
-		audio->setMusicVolume(setting[0]*0.01);
-		audio->setSoundVolume(setting[1]*0.01);
+		audio->setMusicVolume(setting[0]*0.01f);
+		audio->setSoundVolume(setting[1]*0.01f);
 	}
 
 
