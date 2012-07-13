@@ -18,6 +18,9 @@ private:
 	int				m_nHealth;
 	int				m_nDir;
 
+	//Particles
+	int				goreA;
+
 public:
 	BaseCharacter();
 	virtual ~BaseCharacter();

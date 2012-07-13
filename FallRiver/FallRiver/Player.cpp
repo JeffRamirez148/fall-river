@@ -756,7 +756,7 @@ bool Player::CheckCollision(IObjects* pBase)
 		if( pBase->GetObjectType() != OBJ_BUSH )
 		{
 			//int x =pBase->GetObjectType();
-			if(BaseObject::CheckCollision(pBase) == true )
+			if(BaseCharacter::CheckCollision(pBase) == true )
 			{
 				if(pBase->GetObjectType() == OBJ_BULLET)
 				{
@@ -864,6 +864,7 @@ void Player::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			SetHealth(GetHealth()-30);
+
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}

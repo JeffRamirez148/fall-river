@@ -56,6 +56,20 @@ GamePlayState::GamePlayState()
 	rainA = -1;
 	rainL = -1;
 	smokeL = -1;
+
+	fire1L = -1;
+	fire2L = -1;
+	fire3L = -1;
+
+	bloodL1 = -1;
+	bloodL2 = -1;
+	bloodL3 = -1;
+	bloodL4 = -1;
+	bloodL5 = -1;
+	bloodL6 = -1;
+	bloodL7 = -1;
+	bloodL8 = -1;
+	goreL = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -82,6 +96,19 @@ void GamePlayState::Enter()
 	// Smoke particles
 	smokeL = m_pPM->LoadEmitter("smoke.xml");
 	
+	fire1L = m_pPM->LoadEmitter("fire1.xml");
+	fire2L = m_pPM->LoadEmitter("fire2.xml");
+	fire3L = m_pPM->LoadEmitter("fire3.xml");
+
+	bloodL1	= m_pPM->LoadEmitter("blood1.xml");
+	bloodL2 = m_pPM->LoadEmitter("blood2.xml");
+	bloodL3 = m_pPM->LoadEmitter("blood3.xml");
+	bloodL4 = m_pPM->LoadEmitter("blood4.xml");
+	bloodL5 = m_pPM->LoadEmitter("blood5.xml");
+	bloodL6 = m_pPM->LoadEmitter("blood6.xml");
+	bloodL7 = m_pPM->LoadEmitter("blood7.xml");
+	bloodL8 = m_pPM->LoadEmitter("blood8.xml");
+	goreL = m_pPM->LoadEmitter("gore.xml");
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
