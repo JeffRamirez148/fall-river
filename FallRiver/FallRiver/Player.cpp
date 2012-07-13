@@ -309,7 +309,7 @@ void Player::Update(float fElapsedTime)
 			case 2:		// Lantern
 				{
 					ViewManager::GetInstance()->SetLightPos(0, 0, -1);
-					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -1);
+					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.75);
 					ViewManager::GetInstance()->SetInnerCone(.95f);
 					ViewManager::GetInstance()->SetOuterCone(.9f);
 					if(rand() % flickerRate == 0)
