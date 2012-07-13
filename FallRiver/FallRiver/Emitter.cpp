@@ -260,6 +260,7 @@ Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxPa
 	endRot = newEndRot;
 	startRot = newStartRot;
 	spawnTimer = 0.0f;
+	soundID = -1;
 }
 
 Emitter::Emitter()
@@ -298,6 +299,7 @@ Emitter::Emitter()
 	endRot = 0;
 	startRot = 0;
 	spawnTimer = 0.0f;
+	soundID = -1;
 }
 
 Emitter::Emitter(const Emitter& emitter)
@@ -329,6 +331,8 @@ Emitter::Emitter(const Emitter& emitter)
 	endRot = emitter.endRot;
 	startRot = emitter.startRot;
 	spawnTimer = 0.0f;
+	soundID = emitter.soundID;
+
 }
 
 Emitter& Emitter::operator=(const Emitter& emitter)
@@ -362,6 +366,7 @@ Emitter& Emitter::operator=(const Emitter& emitter)
 		endRot = emitter.endRot;
 		startRot = emitter.startRot;
 		spawnTimer = 0.0f;
+		soundID = emitter.soundID;
 	}
 	return *this;
 }
