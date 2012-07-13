@@ -93,7 +93,7 @@ void ObjectManager::RenderAllObjects( void )
 			if((*iter)->GetObjectType() == OBJ_CHARACTER)
 			{
 				BaseCharacter* tmpCharacter = (BaseCharacter*)(*iter);
-				if(tmpCharacter->GetCharacterType() != CHA_PLAYER)
+				if(tmpCharacter->GetCharacterType() != CHA_PLAYER && tmpCharacter->GetCharacterType() != CHA_COMPANION)
 				{
 					Player* tmp = GamePlayState::GetInstance()->GetPlayer();
 					if(tmpCharacter->GetShadow())

@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<emitter_list>
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="128" endGreen="0" endBlue="0" endRot="0" endScaleX="1" endScaleY="1" endVelX="0" endVelY="1" endVelZ="0" lifeSpan="1" lifeTime="10" loopin="0" maxParticles="1" rectL="76" rectT="247" rectR="86" rectB="257" spawnRate="0" startAlpha="255" startRed="255" startGreen="0" startBlue="0" startRot="0" startScaleX="1" startScaleY="1" startVelX="0" startVelY="1" StartVelZ="0">blood.png</emitter_info>
+</emitter_list>

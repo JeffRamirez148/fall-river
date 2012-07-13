@@ -7,7 +7,7 @@
 
 void Boss2::Update(float Time) 
 {
-
+	BaseCharacter::Update(Time);
 }
 
 void Boss2::Render() 

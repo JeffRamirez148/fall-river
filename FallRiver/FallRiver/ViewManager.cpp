@@ -316,6 +316,11 @@ bool ViewManager::DrawFont(int nFontID, char* cString, float nPosX, float nPosY,
 			nX = nColStart;
 			continue;
 		}
+		else if(ch == '\t' )
+		{
+			nX += 50 * fScaleX;
+			continue;
+		}
 
 		if(i == 1)
 		{

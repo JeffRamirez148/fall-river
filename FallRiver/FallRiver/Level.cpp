@@ -201,7 +201,7 @@ void Level::Render()
 	pView->GetSprite()->Flush();
 
 
-	for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
+	/*for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
 	{
 		RECT test = { (LONG)(m_vCollisions[i].m_rCollision.left-GamePlayState::GetInstance()->GetCamera().x),
 			(LONG)(m_vCollisions[i].m_rCollision.top-GamePlayState::GetInstance()->GetCamera().y),
@@ -211,7 +211,7 @@ void Level::Render()
 
 						
 		pView->DrawUnfilledRect(test,0,255,255);
-	}
+	}*/
 
 }
 
