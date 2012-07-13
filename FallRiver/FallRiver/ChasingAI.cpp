@@ -56,6 +56,7 @@ ChasingAI::~ChasingAI()
 void ChasingAI::Update(float fElapsedTime)
 {
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
+
 	sound1.x = m_nPosX;
 	sound1.y = m_nPosY;
 	AudioManager* m_pAM = AudioManager::GetInstance();

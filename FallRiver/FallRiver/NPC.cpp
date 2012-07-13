@@ -334,7 +334,7 @@ void NPC::SetQuest(int q_id)
 
 bool NPC::CheckCollision(IObjects* pBase) 
 {
-	return false;
+	return BaseCharacter::CheckCollision(pBase);
 }
 void NPC::ShowDialog()
 {

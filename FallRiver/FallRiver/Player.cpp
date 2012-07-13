@@ -111,6 +111,8 @@ void Player::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
 	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
 
+
+
 	if( GetHealth() <= 0 )
 	{
 		SetHealth(0);
@@ -771,7 +773,7 @@ bool Player::CheckCollision(IObjects* pBase)
 		if( pBase->GetObjectType() != OBJ_BUSH )
 		{
 			//int x =pBase->GetObjectType();
-			if(BaseObject::CheckCollision(pBase) == true )
+			if(BaseCharacter::CheckCollision(pBase) == true )
 			{
 				if(pBase->GetObjectType() == OBJ_BULLET)
 				{
@@ -879,6 +881,7 @@ void Player::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			SetHealth(GetHealth()-30);
+
 			AudioManager::GetInstance()->playSound(hitID);
 		}
 	}

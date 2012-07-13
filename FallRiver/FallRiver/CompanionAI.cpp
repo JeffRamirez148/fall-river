@@ -24,6 +24,8 @@ CompanionAI::~CompanionAI()
 
 void CompanionAI::Update(float fElapsedTime)
 {
+	BaseCharacter::Update(fElapsedTime);
+
 	switch(m_nStages)
 	{
 		// Using Flashlight
