@@ -161,6 +161,7 @@ void GamePlayState::Enter()
 		
 		Weapon* pWeapon2 = nullptr;
 		Weapon* pWeapon3 = nullptr;
+		Weapon* pWeapon4 = nullptr;
 
 		pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 		pWeapon->SetHeight(20);
@@ -188,12 +189,22 @@ void GamePlayState::Enter()
 		pWeapon3->Init(WPN_RIFLE, 100, 0);
 		pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon3->SetPosY(pPlayer->GetPosY());
+		
+		pWeapon4 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+		pWeapon4->SetHeight(20);
+		pWeapon4->SetWidth(10);
+		pWeapon4->SetImageID(-1);
+		pWeapon4->SetOwner(pPlayer);
+		pWeapon4->Init(WPN_MACHETE, 100, 0);
+		pWeapon4->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+		pWeapon4->SetPosY(pPlayer->GetPosY());
 
 		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
 		pPlayer->AddWeapon(pWeapon2);
 		pPlayer->AddWeapon(pWeapon3);
 		pPlayer->AddWeapon(pWeapon);
+		pPlayer->AddWeapon(pWeapon4);
 
 	}
 	else
@@ -436,7 +447,7 @@ void GamePlayState::Enter()
 		}
 	}
 
-	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
+	/*m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
 	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
 	pBuddy->SetPosX(550);
 	pBuddy->SetPosY(550);
@@ -444,87 +455,45 @@ void GamePlayState::Enter()
 	pBuddy->SetWidth(32);
 	pBuddy->SetImageID(-1);
 	pBuddy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
-	m_pOM->AddObject(pBuddy);
+	m_pOM->AddObject(pBuddy);*/
 
-	///*m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
-	//Boss1* pBoss = (Boss1*)m_cBoss1;
-	//pBoss->SetHealth(200);
-	//pBoss->SetHeight(32);
-	//pBoss->SetWidth(32);
-	//pBoss->SetPosX(m_cPlayer->GetPosX() + 200);
-	//pBoss->SetPosY(m_cPlayer->GetPosY());
-	//pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
-	//pBoss->SetTarget(pPlayer);
-	//m_pOM->AddObject(pBoss);*/
+	/*m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+	Boss1* pBoss = (Boss1*)m_cBoss1;
+	pBoss->SetHealth(200);
+	pBoss->SetHeight(32);
+	pBoss->SetWidth(32);
+	pBoss->SetPosX(m_cPlayer->GetPosX() + 200);
+	pBoss->SetPosY(m_cPlayer->GetPosY());
+	pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+	pBoss->SetTarget(pPlayer);
+	m_pOM->AddObject(pBoss);
 
-	//Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
-	//eWeapon->SetHeight(20);
-	//eWeapon->SetWidth(10);
-	//eWeapon->SetImageID(-1);
-	//eWeapon->SetOwner(pBoss);
-	//eWeapon->Init(WPN_SHOTGUN, 100, 0);
-	//eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
-	//eWeapon->SetPosY(pBoss->GetPosY());
-	//pBoss->SetWeapon(eWeapon);
+	Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+	eWeapon->SetHeight(20);
+	eWeapon->SetWidth(10);
+	eWeapon->SetImageID(-1);
+	eWeapon->SetOwner(pBoss);
+	eWeapon->Init(WPN_SHOTGUN, 100, 0);
+	eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+	eWeapon->SetPosY(pBoss->GetPosY());
+	pBoss->SetWeapon(eWeapon);*/
 
 
-
-	//for(int i = 0; i < 1; i++)
-	//{
-	//	m_cEnemies.push_back(nullptr);
-	//	m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
-	//	ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
-	//	pEnemy->SetHeight(32);
-	//	pEnemy->SetWidth(32);
-	//	pEnemy->SetImageID(-1);
-	//	pEnemy->SetTarget(m_cPlayer);
-	//	pEnemy->SetPosX(float(50+200));
-	//	pEnemy->SetPosY(200);
-	//	pEnemy->SetHealth(100);
-	//	m_pOM->AddObject(pEnemy);
-	//}
 
 	/*for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
-		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
-		ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[i]);
+		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
+		ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
 		pEnemy->SetHeight(32);
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(700);
-		pEnemy->SetPosY(500);
+		pEnemy->SetPosX(float(50+200));
+		pEnemy->SetPosY(200);
 		pEnemy->SetHealth(100);
-		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);
-
-		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
-		eWeapon->SetHeight(20);
-		eWeapon->SetWidth(10);
-		eWeapon->SetImageID(-1);
-		eWeapon->SetOwner(pEnemy);
-		eWeapon->Init(WPN_RIFLE, 100, 0);
-		eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
-		eWeapon->SetPosY(pEnemy->GetPosY());
-		pEnemy->SetWeapon(eWeapon);
 	}*/
-
-	//for(int i = 0; i < 1; i++)
-	//{
-	//	m_cNpcs.push_back(nullptr);
-	//	m_cNpcs[i] = (NPC*)m_pOF->CreateObject( _T("NPC") );
-	//	NPC* pNpc =(NPC*)(m_cNpcs[i]);
-	//	pNpc->SetHeight(32);
-	//	pNpc->SetWidth(32);
-	//	pNpc->SetImageID(-1);
-	//	pNpc->SetPosX(400);
-	//	pNpc->SetPosY(100);
-	//	pNpc->SetQuest(i+1);
-	//	pNpc->SetLabel(i);
-	//	m_pOM->AddObject(pNpc);
-
-	//}
 
 	m_pOM->AddObject(pPlayer);
 

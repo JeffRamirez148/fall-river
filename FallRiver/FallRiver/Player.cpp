@@ -482,9 +482,9 @@ void Player::Update(float fElapsedTime)
 	{
 		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && GetVelY() < 0)
 		{
-			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 0)
+			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 24)
 			{
-				m_playerAnim.curAnimation = 0;
+				m_playerAnim.curAnimation = 24;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
@@ -506,12 +506,18 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
+			/*else
+			{
+				m_playerAnim.curAnimation = 0;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}*/
 		}
 		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && GetVelY() == 0)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE )
 			{
-				m_playerAnim.curAnimation = 0;
+				m_playerAnim.curAnimation = 24;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
@@ -533,12 +539,18 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
+			/*else
+			{
+				m_playerAnim.curAnimation = 0;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}*/
 		}
 		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && GetVelY() > 0)
 		{
-			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 2)
+			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 26)
 			{
-				m_playerAnim.curAnimation = 2;
+				m_playerAnim.curAnimation = 26;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
@@ -565,7 +577,7 @@ void Player::Update(float fElapsedTime)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE )
 			{
-				m_playerAnim.curAnimation = 2;
+				m_playerAnim.curAnimation = 26;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
@@ -590,9 +602,9 @@ void Player::Update(float fElapsedTime)
 		}
 		else if(GetDirection() == DIRE_RIGHT && GetVelX() > 0)
 		{
-			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 3)
+			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 27)
 			{
-				m_playerAnim.curAnimation = 3;
+				m_playerAnim.curAnimation = 27;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
@@ -619,7 +631,7 @@ void Player::Update(float fElapsedTime)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE )
 			{
-				m_playerAnim.curAnimation = 3;
+				m_playerAnim.curAnimation = 27;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
@@ -644,9 +656,9 @@ void Player::Update(float fElapsedTime)
 		}
 		else if(GetDirection() == DIRE_LEFT && GetVelX() < 0)
 		{
-			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 1)
+			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 25)
 			{
-				m_playerAnim.curAnimation = 1;
+				m_playerAnim.curAnimation = 25;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
@@ -673,7 +685,7 @@ void Player::Update(float fElapsedTime)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE )
 			{
-				m_playerAnim.curAnimation = 1;
+				m_playerAnim.curAnimation = 25;
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}

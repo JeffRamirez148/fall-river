@@ -199,8 +199,8 @@ void HUD::Render()
 	}
 
 
-
-	pVM->DrawAnimation(&m_aClipAnim, 20, 152,0.3f,0.3f);
+	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() != WPN_MACHETE)
+		pVM->DrawAnimation(&m_aClipAnim, 20, 152,0.3f,0.3f);
 
 
 	pVM->DrawStaticTexture(m_nHudID,0,0,0.5f,0.5f,&test,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
