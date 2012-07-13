@@ -217,7 +217,7 @@ void NPC::Update(float fElapsedTime)
 		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
 		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
-			m_playerAnim.curFrame = thisAnim.frames.size() -1;
+			m_playerAnim.curFrame--;
 	}
 }
 
