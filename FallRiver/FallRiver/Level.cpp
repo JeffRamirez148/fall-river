@@ -70,50 +70,69 @@ void Level::Render()
 			{
 				Player* tmp = GamePlayState::GetInstance()->GetPlayer();
 
-				if( m_vTiles[i].shadow && tmp->IsOn())
-				{
-					if(tmp->GetDirection() < 4)
-						pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, (tmp->GetDirection() - 1) * 1.57079f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-					else
-					{
-						switch(tmp->GetDirection())
-						{
-						case 4:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-							break;
-						case 5:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-							break;
-						case 6:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-							break;
-						case 7:
-							pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-							break;
-						default:
-							break;
-						}
-					}
-				}
-				else if( tmp->IsOn() && tmp->GetLightType() > 1)
+				//if( m_vTiles[i].shadow && tmp->IsOn())
+				//{
+					//if(tmp->GetDirection() < 4)
+					//	pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, (tmp->GetDirection() - 1) * 1.57079f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					//else
+					//{
+					//	switch(tmp->GetDirection())
+					//	{
+					//	case 4:
+					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					//		break;
+					//	case 5:
+					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					//		break;
+					//	case 6:
+					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					//		break;
+					//	case 7:
+					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					//		break;
+					//	default:
+					//		break;
+					//	}
+					//}
+
+				//}
+				if( tmp->IsOn() &&((tmp->GetLightType() > 1 ) || m_vTiles[i].shadow))
 				{
 					float angle = 0;
-					if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
-						angle = 0.78539f;
-					else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
-						angle = -0.78539f;
-					else if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
-						angle = -2.35619f;
-					else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
-						angle = 2.35619f;
-					else if(m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
-						angle = 0.0f;
-					else if(m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
-						angle = 3.14159f;
-					else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
-						angle = -1.57079f;
-					else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
-						angle = 1.57079f;
+					float x2 = tmp->GetPosX() - m_vTiles[i].m_nWorldPosX;
+					float x = x2;
+					float y2 = tmp->GetPosY() - m_vTiles[i].m_nWorldPosY;
+					float y = y2;
+					x2 *= x2;
+					y2 *= y2;
+					float distance = sqrt(x2 + y2);
+
+					angle = acos(x/distance);
+					if( y < 0)
+						angle *=  -1;
+
+					angle -= 1.57079f;
+
+					//angle -= 3.14159f;
+					//angle = abs(angle);
+					//if(steer > 0)
+					//	angle *=  -1;
+					//if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
+					//	angle = 0.78539f;
+					//else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
+					//	angle = -0.78539f;
+					//else if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
+					//	angle = -2.35619f;
+					//else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
+					//	angle = 2.35619f;
+					//else if(m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
+					//	angle = 0.0f;
+					//else if(m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
+					//	angle = 3.14159f;
+					//else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
+					//	angle = -1.57079f;
+					//else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
+					//	angle = 1.57079f;
 
 					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 				}
@@ -568,7 +587,7 @@ bool Level::CheckCollision(IObjects* pBase)
 
 void Level::CheckTriangleCollisions()
 {
-	float angleA = ViewManager::GetInstance()->GetInnerCone() * .5f;
+	float angleA = acos(ViewManager::GetInstance()->GetOuterCone());
 	float angleB = 1.57079f;
 	float angleC = 3.14159f - (angleA + angleB);
 	angleC = (float)sin(double(angleC));
@@ -695,6 +714,7 @@ void Level::CheckTriangleCollisions()
 		// left, bottom
 		a = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
 		b = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;		
 		m_vTiles[i].shadow = ((a == b) && (b == c));
 		if(m_vTiles[i].shadow)
 			continue;
