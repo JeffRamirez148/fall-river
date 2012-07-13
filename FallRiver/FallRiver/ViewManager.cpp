@@ -920,31 +920,6 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	int i = 0;
 }
 
-void ViewManager::RemoveLight(int id)
-{
-	lights.erase( lights.begin() + id, lights.begin() + id + 1);
-}
-
-int ViewManager::RegisterLight(Light light)
-{
-	if(lights.size() >39)
-		return -1;
-	Light* tmp = new Light();
-	*tmp = light;
-	lights.push_back(tmp);
-	return lights.size() - 1;
-}
-
-Light* ViewManager::GetLight(int id)
-{
-	return lights[id];
-}
-
-void ViewManager::RemoveLights(void)
-{
-	lights.clear();
-}
-
 void ViewManager::CreateOtherLights(void)
 {
 	lightsToRender.clear();
@@ -959,16 +934,11 @@ void ViewManager::CreateOtherLights(void)
 			Light* tmp = new Light();
 			tmp->innerCone = (.95f);
 			tmp->outerCone = (.9f);
-			float x2 = GamePlayState::GetInstance()->GetPlayer()->GetPosX() - (fire.left + fire.right) * .5f;
-			x2 *= x2;
-			float y2 = GamePlayState::GetInstance()->GetPlayer()->GetPosY() - (fire.top + fire.bottom) * .5f;
-			y2 *= y2;
-			float distance = sqrt(x2 + y2);
-			float tmpX = ((GamePlayState::GetInstance()->GetPlayer()->GetPosX() + CGame::GetInstance()->GetScreenWidth()) * .5f);
-			float tmpY = ((GamePlayState::GetInstance()->GetPlayer()->GetPosY() + CGame::GetInstance()->GetScreenHeight()) * .5f);
 
-			tmp->lightPos[0] = ((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )/ (CGame::GetInstance()->GetScreenWidth())) * 2;
-			tmp->lightPos[1] = ((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() ) / (CGame::GetInstance()->GetScreenHeight())) * -2;
+
+
+			tmp->lightPos[0] = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )/ (CGame::GetInstance()->GetScreenWidth())) * 2) + .01f;
+			tmp->lightPos[1] = (((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() ) / (CGame::GetInstance()->GetScreenHeight())) * -2) - .01f;
 			tmp->lightPos[2] = -.25f;
 			tmp->lightDir[0] = 0;
 			tmp->lightDir[1] = 0;

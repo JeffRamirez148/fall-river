@@ -159,7 +159,6 @@ void CGame::ChangeState(IMenuState* pNewState)
 	
 	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
-	m_pVM->RemoveLights();
 
 	// Fixing stuff
 	if(pNewState != nullptr)
@@ -212,7 +211,6 @@ void CGame::RemoveState( void )
 
 	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
-	m_pVM->RemoveLights();
 
 	// Fixing stuff
 	if( m_vStates.back() != nullptr )

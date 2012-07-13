@@ -24,9 +24,9 @@ ChasingAI::ChasingAI()
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 
 	AudioManager* m_pAM = AudioManager::GetInstance();
-	zombieHitID = m_pAM->RegisterSound("resource/Sounds/zombieHit.mp3");
-	zombieWalkingID = m_pAM->RegisterSound("resource/Sounds/zombieWalking.mp3");
-	notifyID = m_pAM->RegisterSound("resource/Sounds/notify.mp3");
+	zombieHitID = m_pAM->RegisterSound("resource/Sounds/zombieHit.wav");
+	zombieWalkingID = m_pAM->RegisterSound("resource/Sounds/zombieWalking.wav");
+	notifyID = m_pAM->RegisterSound("resource/Sounds/notify.wav");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	m_pAM->setSoundVel(zombieHitID, sound1);
 	m_pAM->setSoundVel(zombieWalkingID, sound1);
@@ -86,6 +86,8 @@ void ChasingAI::Update(float fElapsedTime)
 		if( attackDelay < GetTickCount() )
 		{
 			m_pTarget->SetHealth(m_pTarget->GetHealth()-5);
+			AudioManager::GetInstance()->GetSoundChannel(m_pTarget->GetHitID())->stop();
+			AudioManager::GetInstance()->playSound(m_pTarget->GetHitID());
 			attackDelay = GetTickCount() + 1000;
 		}
 		return;
