@@ -253,6 +253,20 @@ void GamePlayState::Enter()
 			tmp.erase(nth);
 			i--;
 		}
+		else if(  _stricmp(nth->m_cType,"Fire") == 0)
+		{
+			int tmp1 = m_pPM->ActivateEmitter(fire1L);
+			m_pPM->GetActiveEmitter(tmp1)->SetRect(tmp[i].m_rCollision);
+			int tmp2 = m_pPM->ActivateEmitter(fire2L);
+			m_pPM->GetActiveEmitter(tmp2)->SetRect(tmp[i].m_rCollision);
+			int tmp3 = m_pPM->ActivateEmitter(fire3L);
+			m_pPM->GetActiveEmitter(tmp3)->SetRect(tmp[i].m_rCollision);
+			fireA.push_back(tmp3);
+			fireA.push_back(tmp2);
+			fireA.push_back(tmp1);
+			tmp.erase(nth);
+			i--;
+		}
 		else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
 		{
 			pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));

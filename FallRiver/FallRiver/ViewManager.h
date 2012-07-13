@@ -42,6 +42,8 @@ private:
 	vector<Font> fonts;
 	vector<Kerning> kerns;
 	vector<Light*> lights;
+	vector<Light*> lightsToRender;
+
 
 	ViewManager();
 	ViewManager(const ViewManager&);
@@ -182,6 +184,7 @@ public:
 	float GetInnerCone(void) { return innerCone; }
 	float GetOuterCone(void) { return outerCone; }
 
+	void CreateOtherLights(void);
 };
 
 #endif
