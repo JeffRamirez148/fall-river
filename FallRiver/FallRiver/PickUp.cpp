@@ -115,6 +115,8 @@ bool PickUp::CheckCollision(IObjects* pBase)
 					{
 						for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetPlayer()->GetWeapons().size(); i++)
 						{
+							audio->GetSoundChannel(ammoID)->stop();
+							audio->playSound(ammoID);
 							if( GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetWeaponType() == WPN_SHOTGUN )
 							{
 								GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->SetAmmo(GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetAmmo() + 2 );
@@ -128,6 +130,8 @@ bool PickUp::CheckCollision(IObjects* pBase)
 					break;
 				case RIFLE_AMMO:
 					{
+						audio->GetSoundChannel(ammoID)->stop();
+						audio->playSound(ammoID);
 						for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetPlayer()->GetWeapons().size(); i++)
 						{
 							if( GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetWeaponType() == WPN_RIFLE )
@@ -143,6 +147,8 @@ bool PickUp::CheckCollision(IObjects* pBase)
 					break;
 				case PISTOL_AMMO:
 					{
+						audio->GetSoundChannel(ammoID)->stop();
+						audio->playSound(ammoID);
 						for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetPlayer()->GetWeapons().size(); i++)
 						{
 							if( GamePlayState::GetInstance()->GetPlayer()->GetWeapons()[i]->GetWeaponType() == WPN_PISTOL )
@@ -158,6 +164,8 @@ bool PickUp::CheckCollision(IObjects* pBase)
 					break;
 				case MEDICINE:
 					{
+						audio->GetSoundChannel(medicineID)->stop();
+						audio->playSound(medicineID);
 						GamePlayState::GetInstance()->GetPlayer()->m_bHasMedicine = true;
 						DestroyPickUp* pMsg = new DestroyPickUp(this);
 						MessageSystem::GetInstance()->SendMsg(pMsg);
@@ -167,6 +175,8 @@ bool PickUp::CheckCollision(IObjects* pBase)
 					break;
 				case HEALTH:
 					{
+						audio->GetSoundChannel(healthID)->stop();
+						audio->playSound(healthID);
 						int x = GamePlayState::GetInstance()->GetPlayer()->GetHealth() + 30 ;
 						if( x > 100 )
 						{
@@ -180,6 +190,8 @@ bool PickUp::CheckCollision(IObjects* pBase)
 					break;
 				case BATTERY:
 					{
+						audio->GetSoundChannel(batteriesID)->stop();
+						audio->playSound(batteriesID);
 						int x = GamePlayState::GetInstance()->GetPlayer()->battery + 20;
 						if( x > 100 )
 						{

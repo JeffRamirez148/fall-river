@@ -80,7 +80,7 @@ public:
 	void HandleEvent(Event* aPEvent);
 	
 	int GetLightType() { return flashLightType; }
-
+	int GetHitID(void) { return hitID;}
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}
 

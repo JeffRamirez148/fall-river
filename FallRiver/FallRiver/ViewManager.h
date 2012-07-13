@@ -41,7 +41,8 @@ private:
 	vector<Texture> textures;
 	vector<Font> fonts;
 	vector<Kerning> kerns;
-	vector<Light*> lights;
+	vector<Light*> lightsToRender;
+
 
 	ViewManager();
 	ViewManager(const ViewManager&);
@@ -135,12 +136,6 @@ public:
 	void ShutdownDirect3D(void);
 
 	// Lights
-	int RegisterLight(Light light);
-	void RemoveLight(int id);
-	void RemoveLights(void);
-	Light* GetLight(int id);
-
-	
 	void SetAmbientLight(float r, float g, float b)
 	{
 		ambientLight[0] = r;
@@ -182,6 +177,7 @@ public:
 	float GetInnerCone(void) { return innerCone; }
 	float GetOuterCone(void) { return outerCone; }
 
+	void CreateOtherLights(void);
 };
 
 #endif
