@@ -18,6 +18,7 @@ private:
 	int m_nStages;
 	int m_nStep;
 	int m_nNumTimes;
+	int talkBox;
 	bool teaching;
 
 public: 
@@ -27,6 +28,8 @@ public:
 
 	bool IsTeaching() {return teaching;}
 
+	int GetStage() {return m_nStages;}
+	int GetStep() {return m_nStep;}
 	void NextStep() { m_nStep++; }
 
 	virtual void Update(float fElapsedTime);

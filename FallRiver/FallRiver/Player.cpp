@@ -6,6 +6,7 @@
 #include "ViewManager.h"
 #include "EventSystem.h"
 #include "DestroyBullet.h"
+#include "CompanionAI.h"
 #include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
@@ -32,7 +33,7 @@ Player::Player()
 	m_cName = "";
 	questCounter = 0;
 	completedQuest = 0;
-	questLogToggle = true;
+	questLogToggle = false;
 	SetDirection(DIRE_UP);
 
 	//AnimInfo startup
@@ -111,7 +112,7 @@ void Player::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
 	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
 
-
+	CompanionAI* pBud = GamePlayState::GetInstance()->GetCompanion();
 
 	if( GetHealth() <= 0 )
 	{
@@ -134,10 +135,11 @@ void Player::Update(float fElapsedTime)
 
 
 	if( pDI->KeyPressed( DIK_TAB ) || pDI->JoystickButtonPressed(3,0) )
-
 	{
-
-
+		if( pBud->IsTeaching() && pBud->GetStage() != 3 )
+		{}
+		else
+		{
 		if( m_currWeapon == m_vpWeapons.back() )
 		{
 			m_currWeapon = m_vpWeapons.front();
@@ -153,79 +155,100 @@ void Player::Update(float fElapsedTime)
 			AudioManager::GetInstance()->GetSoundChannel(sheathID)->stop();
 			AudioManager::GetInstance()->playSound(sheathID);	
 		}
-
 		else
 		{
 			AudioManager::GetInstance()->GetSoundChannel(weaponChangeID)->stop();
 			AudioManager::GetInstance()->playSound(weaponChangeID);	
 		}
-
+		if(pBud->IsTeaching() && pBud->GetStage() == 3 )
+			pBud->NextStep();
+		}
 	}
-
-
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 && m_nState != PSTATE_DEAD )
 		m_nState = PSTATE_IDLE;
 
 	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading || pDI->JoystickButtonPressed(2,0) )
-
 		m_currWeapon->Reload();
 
 	if( ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
-
 	{
-		if(m_dwGunCount == 0)
+		if( pBud->IsTeaching() &&  pBud->GetStage() != 2 )
+		{}
+		else
 		{
-			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
-			m_nState = PSTATE_SHOOT;
-			m_currWeapon->FireWeapon();
-			m_dwGunReset = GetTickCount() + 500;
+			if(m_dwGunCount == 0)
+			{
+				m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
+				m_nState = PSTATE_SHOOT;
+				m_currWeapon->FireWeapon();
+				m_dwGunReset = GetTickCount() + 500;
+			}
+			else if( m_dwGunCount < GetTickCount() )
+			{
+				m_nState = PSTATE_SHOOT;
+				m_currWeapon->FireWeapon();
+				m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
+				m_dwGunReset = GetTickCount() + 500;
+			}
+			if( pBud->IsTeaching() )
+				pBud->NextStep();
 		}
-		else if( m_dwGunCount < GetTickCount() )
-		{
-			m_nState = PSTATE_SHOOT;
-			m_currWeapon->FireWeapon();
-			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
-			m_dwGunReset = GetTickCount() + 500;
-		}
-
 	}	
 
 	if( m_nState != PSTATE_DEAD )
 	{
 		// Flashlight
 		if( pDI->KeyPressed(DIK_E) || pDI->JoystickButtonPressed(4,0)) //pDI->JoystickDPadPressed(DIR_LEFT,0) 8 
-
 		{
-			AudioManager::GetInstance()->playSound(flashLightID);		
-			++flashLightType;
-			if(flashLightType > 3)
-				flashLightType = 0;
-
+			if( (pBud->IsTeaching() && pBud->GetStage() != 1) || !IsOn() )
+			{}
+			else
+			{
+				AudioManager::GetInstance()->playSound(flashLightID);		
+				++flashLightType;
+				if(flashLightType > 3)
+					flashLightType = 0;
+				if( pBud->GetStage() == 1 && pBud->IsTeaching() &&  pBud->GetStep() < 4 )
+					pBud->NextStep();
+			}
 		}
+
 		if( pDI->KeyPressed(DIK_Q) || pDI->JoystickButtonPressed(5,0)) //pDI->JoystickDPadPressed(DIR_RIGHT,0) 9
-
 		{
-			AudioManager::GetInstance()->playSound(flashLightID);		
-			--flashLightType;
-			if(flashLightType < 0)
-				flashLightType = 3;
-
+			if( (pBud->IsTeaching() && pBud->GetStage() != 1 ) || !IsOn() || pBud->GetStep() < 4)
+			{}
+			else
+			{
+				AudioManager::GetInstance()->playSound(flashLightID);		
+				--flashLightType;
+				if(flashLightType < 0)
+					flashLightType = 3;
+				if( pBud->GetStage() == 1 && pBud->IsTeaching() && pBud->GetStep() == 4 )
+					pBud->NextStep();
+			}
 		}
 
 		if( pDI->KeyPressed(DIK_F) || pDI->JoystickButtonPressed(1,0))
-
 		{
+			if( pBud && pBud->IsTeaching() && pBud->GetStage() == 0 )
+				pBud->NextStep();
 			AudioManager::GetInstance()->playSound(flashLightID);		
 			lightOn = !lightOn;
 		}
 		if(pDI->KeyPressed(DIK_L) ||  pDI->JoystickButtonPressed(6,0))
-
 		{
+			if( pBud->IsTeaching() && pBud->GetStage() != 4 )
+			{}
+			else
+			{
 			if(questLogToggle == true)
 				questLogToggle = false;
 			else
 				questLogToggle = true;
+			if( pBud->IsTeaching() && pBud->GetStage() == 4 )
+				pBud->NextStep();
+			}
 		}
 
 		if(lightOn)
@@ -299,16 +322,13 @@ void Player::Update(float fElapsedTime)
 
 
 		if( pDI->KeyDown(DIK_D) || (pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
-
 		{
 			if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
-
 			{
 				SetDirection(DIRE_UPRIGHT);
 				ViewManager::GetInstance()->SetLightDir(1,1,0);
 			}
 			else if(pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
-
 			{
 				SetDirection(DIRE_DOWNRIGHT);
 				ViewManager::GetInstance()->SetLightDir(1,-1,0);
@@ -320,17 +340,14 @@ void Player::Update(float fElapsedTime)
 			}
 		}
 		else if( pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
-
 		{
 			int temp = pDI->JoystickGetLStickXAmount(0);
 			if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
-
 			{
 				SetDirection(DIRE_UPLEFT);
 				ViewManager::GetInstance()->SetLightDir(-1,1,0);
 			}
 			else if(pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
-
 			{
 				SetDirection(DIRE_DOWNLEFT);
 				ViewManager::GetInstance()->SetLightDir(-1,-1,0);
@@ -342,13 +359,11 @@ void Player::Update(float fElapsedTime)
 			}
 		}
 		else if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
-
 		{
 			SetDirection(DIRE_UP);
 			ViewManager::GetInstance()->SetLightDir(0,1,0);
 		}
 		else if(pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
-
 		{
 			SetDirection(DIRE_DOWN);
 			ViewManager::GetInstance()->SetLightDir(0,-1,0);
@@ -356,14 +371,12 @@ void Player::Update(float fElapsedTime)
 
 
 		if( pDI->KeyDown(DIK_D) || (pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
-
 		{
 			SetVelX(100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
 		}
 		else if( pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
-
 		{
 			int temptemp = pDI->JoystickGetLStickXAmount(0);
 			SetVelX(-100);
@@ -376,14 +389,12 @@ void Player::Update(float fElapsedTime)
 		}
 
 		if(pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
-
 		{
 			SetVelY(-100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
 		}
 		else if( pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
-
 		{
 			SetVelY(100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
@@ -553,7 +564,7 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.fTime = 0;
 			}
 		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 2 && GetVelX() > 0)
+		else if(GetDirection() == DIRE_RIGHT && GetVelX() > 0)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 3)
 			{
@@ -580,7 +591,7 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.fTime = 0;
 			}
 		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 7 && GetVelX() == 0)
+		else if(GetDirection() == DIRE_RIGHT && GetVelX() == 0)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE )
 			{
@@ -607,7 +618,7 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.fTime = 0;
 			}
 		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 3 && GetVelX() < 0)
+		else if(GetDirection() == DIRE_LEFT && GetVelX() < 0)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE && m_playerAnim.curAnimation != 1)
 			{
@@ -634,7 +645,7 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.fTime = 0;
 			}
 		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 6 && GetVelX() == 0)
+		else if(GetDirection() == DIRE_LEFT && GetVelX() == 0)
 		{
 			if(m_currWeapon->GetWeaponType() == WPN_MACHETE )
 			{
@@ -663,34 +674,6 @@ void Player::Update(float fElapsedTime)
 		}
 
 	}
-	/*else if(m_nState == PSTATE_SHOOT)
-	{
-		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 8)
-		{
-			m_playerAnim.curAnimation = 8;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 9)
-		{
-			m_playerAnim.curAnimation = 9;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 10)
-		{
-			m_playerAnim.curAnimation = 10;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 11)
-		{
-			m_playerAnim.curAnimation = 11;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-
-	}*/
 
 
 	for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
