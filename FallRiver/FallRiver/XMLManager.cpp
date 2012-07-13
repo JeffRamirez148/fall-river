@@ -352,3 +352,110 @@ bool XMLManager::LoadFont( char* szFilename,  vector<Font>&fonts, vector<Kerning
 	return true;
 }
 
+				
+void XMLManager::GeneratePlayers( vector< tHighscore >& vHighscore )
+{
+	vHighscore.clear();
+
+	for( int i = 5; i > 0; i-- )
+	{
+		tHighscore p1 = {"Default", i };
+		vHighscore.push_back(p1);
+	}
+}
+
+bool XMLManager::LoadHighScores( const char* szFilename, vector< tHighscore >& vHighscore )
+{
+	TiXmlDocument doc;
+	if( doc.LoadFile( szFilename ) == false )
+		return false;
+	TiXmlElement* pRoot = doc.RootElement();
+	if( pRoot == nullptr )
+		return false;
+	vHighscore.clear();
+	TiXmlElement* pHighscore = pRoot->FirstChildElement();
+	while( pHighscore != nullptr )
+	{
+		tHighscore info = {};
+		const char* pText = pHighscore->GetText();
+		if( pText != nullptr )
+			strcpy_s( info.szName, 32, pText );
+		pHighscore->Attribute( "score", &info.nScore );
+		vHighscore.push_back( info );
+		pHighscore = pHighscore->NextSiblingElement();
+	}
+	return true;
+}
+
+void XMLManager::SaveHighScores( const char* szFilename, const vector<tHighscore>& vHighscore)
+{
+	TiXmlDocument doc;
+
+	TiXmlDeclaration* pDec = new TiXmlDeclaration( "1.0","utf-8", "" );
+
+	doc.LinkEndChild( pDec );
+	TiXmlElement* pRoot = new TiXmlElement( "Highscore" );
+
+	doc.LinkEndChild( pRoot );
+	vector< tHighscore>::const_iterator iter;
+	for(unsigned int i = 0; i < vHighscore.size(); i++)
+	{
+		TiXmlElement* pHighscore = new TiXmlElement( "Highscore_info");
+		pHighscore->SetAttribute( "score", vHighscore[i].nScore );
+		TiXmlText* pText = new TiXmlText( vHighscore[i].szName );
+		pHighscore->LinkEndChild( pText );
+		pRoot->LinkEndChild( pHighscore );
+	}
+	doc.SaveFile( szFilename );
+}
+
+bool XMLManager::LoadSettings( const char* szFilename, vector< int >& vSettings )
+{
+	TiXmlDocument doc;
+	if( doc.LoadFile( szFilename ) == false )
+		return false;
+	TiXmlElement* pRoot = doc.RootElement();
+	if( pRoot == nullptr )
+		return false;
+	vSettings.clear();
+	TiXmlElement* pSetting = pRoot->FirstChildElement();
+
+	if( pSetting != nullptr )
+	{
+		int info;
+		pSetting->Attribute( "Music:", &info );
+		vSettings.push_back( info );
+		pSetting = pSetting->NextSiblingElement();
+		pSetting->Attribute( "SFX:", &info );
+		vSettings.push_back( info );
+		pSetting = pSetting->NextSiblingElement();
+		pSetting->Attribute( "Resolution:", &info );
+		vSettings.push_back( info );
+		pSetting = pSetting->NextSiblingElement();
+	}
+
+	return true;
+}
+void XMLManager::SaveSettings( const char* szFilename, const vector<int>& vSettings)
+{
+	TiXmlDocument doc;
+	TiXmlDeclaration* pDec = new TiXmlDeclaration( "1.0","utf-8", "" );
+	doc.LinkEndChild( pDec );
+	TiXmlElement* pRoot = new TiXmlElement( "Setting" );
+	doc.LinkEndChild( pRoot );
+	if( !vSettings.empty() )
+	{
+		TiXmlElement* pSetting = new TiXmlElement( "setting_info");
+		pSetting->SetAttribute( "Music:", vSettings[0] );
+		pRoot->LinkEndChild( pSetting );
+		pSetting = new TiXmlElement( "setting_info");
+		pSetting->SetAttribute( "SFX:", vSettings[1] );
+		pRoot->LinkEndChild( pSetting );
+		pSetting = new TiXmlElement( "setting_info");
+		pSetting->SetAttribute( "Resolution:", vSettings[2] );
+		pRoot->LinkEndChild( pSetting );
+	}
+	doc.SaveFile( szFilename );
+
+}
+

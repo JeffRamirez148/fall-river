@@ -16,6 +16,13 @@ class Player;
 #include "tinystr.h"
 #include "tinyxml.h"
 
+struct tHighscore
+{
+	char	szName[ 32 ];
+	int		nScore;
+};
+
+
 class XMLManager
 {
 
@@ -30,6 +37,13 @@ public:
 	void SaveProgress( const char* szFilename, Player &player);
 	bool CheckSlot( const char* szFilename );
 	Player* LoadProgress(const char* szFilename);
+
+	void GeneratePlayers( vector< tHighscore >& vHighscore );
+	bool LoadHighScores( const char* szFilename, vector< tHighscore >& vHighscore );
+	void SaveHighScores( const char* szFilename, const vector<tHighscore>& vHighscore);
+
+	bool LoadSettings( const char* szFilename, vector< int >& vSettings );
+	void SaveSettings( const char* szFilename, const vector<int>& vSettings);
 
 	// Loading Fonts
 	bool LoadFont( char* szFilename,  vector<Font>&fonts, vector<Kerning>&kerns);
