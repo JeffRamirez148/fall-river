@@ -63,72 +63,72 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL1());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL7());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL3());
-				tmpRect1.left += (this->GetRect().right - this->GetRect().left);
-				tmpRect1.right += (this->GetRect().right - this->GetRect().left);
-				tmpRect1.top += (this->GetRect().bottom - this->GetRect().top);
-				tmpRect1.bottom += (this->GetRect().bottom - this->GetRect().top);
+				tmpRect1.left += (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.right += (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.top += (this->GetRect2().bottom - this->GetRect2().top);
+				tmpRect1.bottom += (this->GetRect2().bottom - this->GetRect2().top);
 			}
 			else if( tmpVel.x > 0 && tmpVel.y < 0)
 			{
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL2());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL8());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL3());
-				tmpRect1.left += (this->GetRect().right - this->GetRect().left);
-				tmpRect1.right += (this->GetRect().right - this->GetRect().left);
-				tmpRect1.top -= (this->GetRect().bottom - this->GetRect().top);
-				tmpRect1.bottom -= (this->GetRect().bottom - this->GetRect().top);
+				tmpRect1.left += (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.right += (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.top -= (this->GetRect2().bottom - this->GetRect2().top);
+				tmpRect1.bottom -= (this->GetRect2().bottom - this->GetRect2().top);
 			}
 			else if(tmpVel.x > 0 && tmpVel.y == 0)
 			{
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL3());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL2());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL1());
-				tmpRect1.left += (this->GetRect().right - this->GetRect().left);
-				tmpRect1.right += (this->GetRect().right - this->GetRect().left);
+				tmpRect1.left += (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.right += (this->GetRect2().right - this->GetRect2().left);
 			}
 			else if(tmpVel.x < 0 && tmpVel.y == 0)
 			{
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL4());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL5());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL6());
-				tmpRect1.left -= (this->GetRect().right - this->GetRect().left);
-				tmpRect1.right -= (this->GetRect().right - this->GetRect().left);
+				tmpRect1.left -= (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.right -= (this->GetRect2().right - this->GetRect2().left);
 			}
 			else if(tmpVel.x < 0 && tmpVel.y < 0)
 			{
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL5());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL4());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL8());
-				tmpRect1.left -= (this->GetRect().right - this->GetRect().left);
-				tmpRect1.right -= (this->GetRect().right - this->GetRect().left);
-				tmpRect1.top -= (this->GetRect().bottom - this->GetRect().top);
-				tmpRect1.bottom -= (this->GetRect().bottom - this->GetRect().top);
+				tmpRect1.left -= (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.right -= (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.top -= (this->GetRect2().bottom - this->GetRect2().top);
+				tmpRect1.bottom -= (this->GetRect2().bottom - this->GetRect2().top);
 			}
 			else if(tmpVel.x < 0 && tmpVel.y > 0)
 			{
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL6());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL4());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL7());
-				tmpRect1.left -= (this->GetRect().right - this->GetRect().left);
-				tmpRect1.right -= (this->GetRect().right - this->GetRect().left);
-				tmpRect1.top += (this->GetRect().bottom - this->GetRect().top);
-				tmpRect1.bottom += (this->GetRect().bottom - this->GetRect().top);
+				tmpRect1.left -= (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.right -= (this->GetRect2().right - this->GetRect2().left);
+				tmpRect1.top += (this->GetRect2().bottom - this->GetRect2().top);
+				tmpRect1.bottom += (this->GetRect2().bottom - this->GetRect2().top);
 			}
 			else if(tmpVel.x == 0 && tmpVel.y > 0)
 			{
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL7());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL6());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL1());
-				tmpRect1.top += (this->GetRect().bottom - this->GetRect().top);
-				tmpRect1.bottom += (this->GetRect().bottom - this->GetRect().top);
+				tmpRect1.top += (this->GetRect2().bottom - this->GetRect2().top);
+				tmpRect1.bottom += (this->GetRect2().bottom - this->GetRect2().top);
 			}
 			else if(tmpVel.x == 0 && tmpVel.y < 0)
 			{
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL8());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL5());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL2());
-				tmpRect1.top -= (this->GetRect().bottom - this->GetRect().top);
-				tmpRect1.bottom -= (this->GetRect().bottom - this->GetRect().top);
+				tmpRect1.top -= (this->GetRect2().bottom - this->GetRect2().top);
+				tmpRect1.bottom -= (this->GetRect2().bottom - this->GetRect2().top);
 			}
 			m_pPM->GetActiveEmitter(bloodA1)->SetRect(tmpRect1);
 			m_pPM->GetActiveEmitter(bloodA2)->SetRect(tmpRect1);
@@ -141,11 +141,19 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 
 RECT BaseCharacter::GetRect()
 {
-	//RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
+	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
+	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	//RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
+	return cRect;
+	
+	//return thisFrame.colRect;
+}
+
+RECT BaseCharacter::GetRect2()
+{
 	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
 	RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 	return cRect;
-	
-	//return thisFrame.colRect;
 }
