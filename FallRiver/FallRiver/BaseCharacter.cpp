@@ -21,7 +21,7 @@ void BaseCharacter::Update(float fElapsedTime)
 	m_nPosX += m_nVelX * fElapsedTime;
 	m_nPosY += m_nVelY * fElapsedTime;
 
-	if(m_nHealth <= 0 && this->GetCharacterType() != CHA_NPC)
+	if(m_nHealth <= 0 && this->GetCharacterType() != CHA_NPC && this->GetCharacterType() != CHA_COMPANION)
 	{
 		GamePlayState* tmp = GamePlayState::GetInstance();
 		Particle_Manager* m_pPM = Particle_Manager::GetInstance();
