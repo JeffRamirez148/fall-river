@@ -164,8 +164,8 @@ bool OptionsMenuState::Input()
 	}
 
 	// Pressing Escape will End the Game
-	/*if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
-		m_nSelection = 0;*/
+	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
+		m_nSelection = 0;
 
 	return true;
 }
