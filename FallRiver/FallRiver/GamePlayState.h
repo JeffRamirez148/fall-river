@@ -26,6 +26,7 @@ class IMessage;
 class SpawnPoint;
 class Bush;
 class CompanionAI;
+class Boss1;
 
 
 typedef CObjectFactory< std::wstring, BaseObject> Factory;
@@ -85,6 +86,7 @@ private:
 	vector<SpawnPoint*>			m_cSpawn;
 	vector<Bush*>				m_cBushes;
 	vector<NPC*>				m_cNpcs;
+	Boss1*						m_cBoss1;
 	Weapon*						m_cWeapon;
 	vector<int>					fireA;
 

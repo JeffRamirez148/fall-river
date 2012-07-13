@@ -196,7 +196,7 @@ void CGame::ChangeState(IMenuState* pNewState)
 
 ///////////////////////////
 // Get the current State //
-IMenuState* CGame::GetState( void )				{return m_pCurrState;}
+IMenuState* CGame::GetState( void )				{return  m_vStates.back();}
 
 //////////////////////////////
 // Get the previous State	//

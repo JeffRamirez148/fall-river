@@ -99,6 +99,7 @@
     <ClCompile Include="CreditsMenuState.cpp" />
     <ClCompile Include="CutScene.cpp" />
     <ClCompile Include="DestroyBullet.cpp" />
+    <ClCompile Include="DestroyEnemy.cpp" />
     <ClCompile Include="DestroyEnemyC.cpp" />
     <ClCompile Include="DestroyEnemyS.cpp" />
     <ClCompile Include="DestroyNPC.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="CreditsMenuState.h" />
     <ClInclude Include="CutScene.h" />
     <ClInclude Include="DestroyBullet.h" />
+    <ClInclude Include="DestroyEnemy.h" />
     <ClInclude Include="DestroyEnemyC.h" />
     <ClInclude Include="DestroyEnemyS.h" />
     <ClInclude Include="DestroyNPC.h" />

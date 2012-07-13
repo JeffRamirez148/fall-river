@@ -18,6 +18,12 @@ CompanionAI::CompanionAI()
 	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
 	talkBox = ViewManager::GetInstance()->RegisterTexture("resource/graphics/Paperthingy.png");
 	teaching = true;
+
+	//AnimInfo startup
+	m_playerAnim.curAnimation = 0;
+	m_playerAnim.curAnimID = 0;
+	m_playerAnim.curFrame = 0;
+	m_playerAnim.fTime = 0;
 }
 
 CompanionAI::~CompanionAI()
@@ -158,11 +164,11 @@ void CompanionAI::SaySomething()
 			else
 			{
 				if( m_nStep == 0 )
-					pVM->DrawFont(m_nFontID, "Alright let me teach me a few things before you run off.\n Turn your flashlight on and off by pressing \"B\"", 12, 500, 0.7f, 0.7f);
+					pVM->DrawFont(m_nFontID, "Alright let me teach me a few things before you run off.\n Turn your flashlight on and off by pressing    \"B\" \n    Turn on your Flashlight now.", 12, 500, 0.7f, 0.7f);
 				else if( m_nStep == 1 )
 					pVM->DrawFont(m_nFontID, "Ok now turn your flashlight off", 12, 500, 0.7f, 0.7f);
 				else
-					pVM->DrawFont(m_nFontID, "Ok turn your flashlight back on so I can teach you about your different lights.", 12, 500, 0.7f, 0.7f);
+					pVM->DrawFont(m_nFontID, "Ok turn your flashlight back on\n so I can teach you about your different lights.", 12, 500, 0.7f, 0.7f);
 			}
 			break;
 		}
@@ -187,15 +193,15 @@ void CompanionAI::SaySomething()
 			else
 			{
 				if( m_nStep == 0 )
-					pVM->DrawFont(m_nFontID, "Thie is your Flashlight.\n It allows you to see far away far away distances\n while only attracting a little attention. \n\n\tPress \"RB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+					pVM->DrawFont(m_nFontID, "Thie is your Flashlight.\n It allows you to see far away far away distances\n while only attracting a little attention. \n\n\tPress \"LB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
 				else if( m_nStep == 1 )
-					pVM->DrawFont(m_nFontID, "This is your MagLight. \nIt will let you see much farther than your flashlight would\n but you'll definitely attract more attention. \n\n\tPress \"RB\" to select your next light source.", 12, 500, 0.6f, 0.7f);
+					pVM->DrawFont(m_nFontID, "This is your MagLight. \nIt will let you see much farther than your flashlight would\n but you'll definitely attract more attention. \n\n\tPress \"LB\" to select your next light source.", 12, 500, 0.6f, 0.7f);
 				else if( m_nStep == 2 )
-					pVM->DrawFont(m_nFontID, "This is your Lantern.\n It allows you to see very far\n but will make everyone in the area aware of where you are. \n\n\tPress \"RB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+					pVM->DrawFont(m_nFontID, "This is your Lantern.\n It allows you to see very far\n but will make everyone in the area aware of where you are. \n\n\tPress \"LB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
 				else if( m_nStep == 3 )
-					pVM->DrawFont(m_nFontID, "This is your lighter.\n You can barely see at all with it\n however you'll be virtually invisable. \n\n\tPress \"RB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+					pVM->DrawFont(m_nFontID, "This is your lighter.\n You can barely see at all with it\n however you'll be virtually invisable. \n\n\tPress \"LB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
 				else if( m_nStep == 4 )
-					pVM->DrawFont(m_nFontID, "Press \"LB\" to select your previous light source. ", 12, 500, 0.7f, 0.7f);
+					pVM->DrawFont(m_nFontID, "Press \"RB\" to select your previous light source. ", 12, 500, 0.7f, 0.7f);
 				else
 					pVM->DrawFont(m_nFontID, "Now equip your flashlight again!", 12, 500, 0.7f, 0.7f);
 			}
@@ -218,7 +224,7 @@ void CompanionAI::SaySomething()
 			}
 			else
 			{
-				pVM->DrawFont(m_nFontID, "Ok now its time to learn how to defend yourself\n if you ever get into trouble. \n\n\tPress or Hold \"A\" to shoot. \n\tShoot ", 12, 500, 0.7f, 0.7f);
+				pVM->DrawFont(m_nFontID, "Ok now its time to learn how to defend yourself\n if you ever get into trouble. \n\n\tPress or Hold \"RT\" to shoot. \n\tShoot ", 12, 500, 0.7f, 0.7f);
 				pVM->DrawFont(m_nFontID, (char*)buffer, 130, 555, 0.7f, 0.7f);
 				pVM->DrawFont(m_nFontID, "time(s)", 150, 555, 0.7f, 0.7f);
 			}

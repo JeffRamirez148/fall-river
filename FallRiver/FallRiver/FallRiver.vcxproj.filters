@@ -222,6 +222,9 @@
     <ClCompile Include="CompanionAI.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
+    <ClCompile Include="DestroyEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="CompanionAI.h">
       <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="DestroyEnemy.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

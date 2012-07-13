@@ -929,7 +929,7 @@ void ViewManager::CreateOtherLights(void)
 	for( int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
 	{
 		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
-		if(IntersectRect( &cRect, &camRect, &fire ) == true)
+		if(IntersectRect( &cRect, &camRect, &fire ) == true && CGame::GetInstance()->GetState() == GamePlayState::GetInstance())
 		{
 			Light* tmp = new Light();
 			tmp->innerCone = (.95f);

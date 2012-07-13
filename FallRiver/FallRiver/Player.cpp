@@ -142,7 +142,7 @@ void Player::Update(float fElapsedTime)
 
 	if( pDI->KeyPressed( DIK_TAB ) || pDI->JoystickButtonPressed(3,0) )
 	{
-		if( pBud->IsTeaching() && pBud->GetStage() != 3 )
+		if( pBud && pBud->IsTeaching() && pBud->GetStage() != 3 )
 		{}
 		else
 		{
@@ -166,7 +166,7 @@ void Player::Update(float fElapsedTime)
 			AudioManager::GetInstance()->GetSoundChannel(weaponChangeID)->stop();
 			AudioManager::GetInstance()->playSound(weaponChangeID);	
 		}
-		if(pBud->IsTeaching() && pBud->GetStage() == 3 )
+		if( pBud && pBud->IsTeaching() && pBud->GetStage() == 3 )
 			pBud->NextStep();
 		}
 	}
@@ -179,7 +179,7 @@ void Player::Update(float fElapsedTime)
 
 	if( ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
 	{
-		if( pBud->IsTeaching() &&  pBud->GetStage() != 2 )
+		if( pBud && pBud->IsTeaching() &&  pBud->GetStage() != 2 )
 		{}
 		else
 		{
@@ -197,7 +197,7 @@ void Player::Update(float fElapsedTime)
 				m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 				m_dwGunReset = GetTickCount() + 500;
 			}
-			if( pBud->IsTeaching() )
+			if( pBud && pBud->IsTeaching() )
 				pBud->NextStep();
 
 			if( m_bIsHidden == true )
@@ -225,7 +225,7 @@ void Player::Update(float fElapsedTime)
 		// Flashlight
 		if( pDI->KeyPressed(DIK_E) || pDI->JoystickButtonPressed(4,0)) //pDI->JoystickDPadPressed(DIR_LEFT,0) 8 
 		{
-			if( (pBud->IsTeaching() && pBud->GetStage() != 1) || !IsOn() )
+			if( pBud && (pBud->IsTeaching() && pBud->GetStage() != 1) || !IsOn() )
 			{}
 			else
 			{
@@ -233,14 +233,14 @@ void Player::Update(float fElapsedTime)
 				++flashLightType;
 				if(flashLightType > 3)
 					flashLightType = 0;
-				if( pBud->GetStage() == 1 && pBud->IsTeaching() &&  pBud->GetStep() < 4 )
+				if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() &&  pBud->GetStep() < 4 )
 					pBud->NextStep();
 			}
 		}
 
 		if( pDI->KeyPressed(DIK_Q) || pDI->JoystickButtonPressed(5,0)) //pDI->JoystickDPadPressed(DIR_RIGHT,0) 9
 		{
-			if( (pBud->IsTeaching() && pBud->GetStage() != 1 ) || !IsOn() || pBud->GetStep() < 4)
+			if( pBud && (pBud->IsTeaching() && pBud->GetStage() != 1 ) || !IsOn() || pBud->GetStep() < 4)
 			{}
 			else
 			{
@@ -248,7 +248,7 @@ void Player::Update(float fElapsedTime)
 				--flashLightType;
 				if(flashLightType < 0)
 					flashLightType = 3;
-				if( pBud->GetStage() == 1 && pBud->IsTeaching() && pBud->GetStep() == 4 )
+				if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() && pBud->GetStep() == 4 )
 					pBud->NextStep();
 			}
 		}
@@ -262,7 +262,7 @@ void Player::Update(float fElapsedTime)
 		}
 		if(pDI->KeyPressed(DIK_L) ||  pDI->JoystickButtonPressed(6,0))
 		{
-			if( pBud->IsTeaching() && pBud->GetStage() != 4 )
+			if( pBud &&  pBud->IsTeaching() && pBud->GetStage() != 4 )
 			{}
 			else
 			{
@@ -270,7 +270,7 @@ void Player::Update(float fElapsedTime)
 				questLogToggle = false;
 			else
 				questLogToggle = true;
-			if( pBud->IsTeaching() && pBud->GetStage() == 4 )
+			if( pBud && pBud->IsTeaching() && pBud->GetStage() == 4 )
 				pBud->NextStep();
 			}
 		}
