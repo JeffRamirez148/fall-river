@@ -32,6 +32,7 @@ class Emitter
 	float age;
 	float endRot;
 	float startRot;
+	int soundID;
 
 
 	Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 
@@ -50,6 +51,7 @@ class Emitter
 	float GetLifeTime(void) { return lifeTime; }
 	RECT GetRect(void) {return rect; }
 	int GetImageID(void) {return imageID; }
+	int GetSoundID(void) {return soundID; }
 
 	void SetAge(float newAge) { age = newAge; }
 	void SetLifeTime(float newLifeTime) { lifeTime = newLifeTime; }
@@ -69,6 +71,7 @@ class Emitter
 	void SetStartRotation(float newRot) { startRot = newRot; }
 	void SetEndRotation(float newRot) { endRot = newRot; }                   
 	void SetRect(RECT newRect) { rect = newRect;}
+	void SetSOundID( int id) { soundID = id; }
 };
 
 #endif
