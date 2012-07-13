@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<emitter_list>
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="0" endGreen="0" endBlue="0" endRot="0" endScaleX="1" endScaleY="1" endVelX="1" endVelY="-1" endVelZ="0" lifeSpan="0.25" lifeTime="1" loopin="1" maxParticles="1" rectL="184" rectT="525" rectR="204" rectB="545" spawnRate="0" startAlpha="255" startRed="0" startGreen="0" startBlue="0" startRot="0" startScaleX="2" startScaleY="2" startVelX="-1" startVelY="0" StartVelZ="0">LetThereBeFire.png</emitter_info>
+</emitter_list>

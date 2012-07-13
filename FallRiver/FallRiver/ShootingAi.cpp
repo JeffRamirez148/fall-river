@@ -58,6 +58,7 @@ ShootingAi::~ShootingAi()
 
 void ShootingAi::Update(float fElapsedTime) 
 {
+	BaseCharacter::Update(fElapsedTime);
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
@@ -309,7 +310,7 @@ void ShootingAi::Update(float fElapsedTime)
 		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
 		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
-			m_playerAnim.curFrame = thisAnim.frames.size() -1;
+			m_playerAnim.curFrame--;
 	}
 }
 

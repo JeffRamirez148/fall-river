@@ -56,6 +56,7 @@ ChasingAI::~ChasingAI()
 void ChasingAI::Update(float fElapsedTime)
 {
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
+
 	sound1.x = m_nPosX;
 	sound1.y = m_nPosY;
 	AudioManager* m_pAM = AudioManager::GetInstance();
@@ -88,20 +89,6 @@ void ChasingAI::Update(float fElapsedTime)
 			attackDelay = GetTickCount() + 1000;
 		}
 		return;
-	}
-
-	if( GamePlayState::GetInstance()->GetCompanion() && GamePlayState::GetInstance()->GetCompanion()->IsTeaching() && m_pTarget->IsOn() && !helped && distance < 400 )
-	{
-		float targetPosX = m_pTarget->GetPosX();
-		float targetPosY = m_pTarget->GetPosY();
-
-		if( m_pTarget->GetLightType() == 0 )
-		{
-			helped = true;
-			GamePlayState::GetInstance()->GetCompanion()->NextStep();
-			//m_pTarget->SetOn(false);
-		}
-
 	}
 
 	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 500 )
@@ -175,14 +162,14 @@ void ChasingAI::Update(float fElapsedTime)
 		{
 			if( distX < distY )
 			{
-				if( distY - distX <= 5 )
+				if( distY - distX <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX + 300, targetPosY, 50);
 			}
 			else
 			{
-				if( distY - distX <= 5 )
+				if( distY - distX <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX, targetPosY - 300, 50);
@@ -192,14 +179,14 @@ void ChasingAI::Update(float fElapsedTime)
 		{
 			if( distX < distY )
 			{
-				if( distY - distX <= 5 )
+				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX + 300, targetPosY, 50);
 			}
 			else
 			{
-				if( distY - distX <= 5 )
+				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX, targetPosY + 300, 50);
@@ -209,14 +196,14 @@ void ChasingAI::Update(float fElapsedTime)
 		{
 			if( distX < distY )
 			{
-				if( distY - distX <= 5 )
+				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX - 300, targetPosY, 50);
 			}
 			else
 			{
-				if( distY - distX <= 5 )
+				if( distY <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX, targetPosY - 300, 50);
@@ -226,14 +213,14 @@ void ChasingAI::Update(float fElapsedTime)
 		{
 			if( distX < distY )
 			{
-				if( distY - distX <= 5 )
+				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX - 300, targetPosY, 50);
 			}
 			else
 			{
-				if( distY - distX <= 5 )
+				if( distY <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
 					MoveTo(targetPosX, targetPosY + 300, 50);

@@ -59,6 +59,22 @@ private:
 	// Smoke particles
 	int smokeL;
 
+	// Fire Particles
+	int fire1L;
+	int fire2L;
+	int fire3L;
+	// Blood Particles
+	int bloodL1;
+	int bloodL2;
+	int bloodL3;
+	int bloodL4;
+	int bloodL5;
+	int bloodL6;
+	int bloodL7;
+	int bloodL8;
+
+	int goreL;
+
 	// Data Members
 	float fTime;
 
@@ -84,6 +100,16 @@ private:
 	GamePlayState& operator=(const GamePlayState&);
 
 public:
+
+	int	GetGoreL() { return goreL; }
+	int GetBloodL1() { return bloodL1;}
+	int GetBloodL2() { return bloodL2;}
+	int GetBloodL3() { return bloodL3;}
+	int GetBloodL4() { return bloodL4;}
+	int GetBloodL5() { return bloodL5;}
+	int GetBloodL6() { return bloodL6;}
+	int GetBloodL7() { return bloodL7;}
+	int GetBloodL8() { return bloodL8;}
 
 	bool questFlag;
 	HUD*			m_pHUD;

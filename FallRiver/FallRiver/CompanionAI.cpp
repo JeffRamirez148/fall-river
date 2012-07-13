@@ -5,15 +5,18 @@
 #include "Player.h"
 #include "CGame.h"
 #include "ViewManager.h"
+#include "DirectInput.h"
 
 CompanionAI::CompanionAI()
 {
+	m_nCharacterType = CHA_COMPANION;
 	SetVelX(0);
 	SetVelY(0);
 	m_nStages = 0;
 	m_nStep = 0;
 	m_nNumTimes = 0;
 	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
+	talkBox = ViewManager::GetInstance()->RegisterTexture("resource/graphics/Paperthingy.png");
 	teaching = true;
 }
 
@@ -24,23 +27,48 @@ CompanionAI::~CompanionAI()
 
 void CompanionAI::Update(float fElapsedTime)
 {
+	BaseCharacter::Update(fElapsedTime);
+
 	switch(m_nStages)
 	{
 		// Using Flashlight
 	case 0:
 		{
 			if( m_nNumTimes == 0 )
-				m_nNumTimes = 5;
+				m_nNumTimes = 3;
 
 			if( m_nNumTimes <= m_nStep )
 			{
 				m_nStages++;
 				m_nStep = 0;
+				m_nNumTimes = 5;
 			}
 			break;
 		}
-		// Attracting a zombies attention
+		// Switching lights
 	case 1:
+		{
+			if( m_nStep >= 5 && GamePlayState::GetInstance()->GetPlayer()->GetLightType() == 0 )
+			{
+				m_nStages++;
+				m_nStep = 0;
+				m_nNumTimes = 10;
+			}
+			break;
+		}
+		// Shooting enemies
+	case 2:
+		{
+			if( m_nNumTimes <= m_nStep )
+			{
+				m_nStages++;
+				m_nStep = 0;
+				m_nNumTimes = 1;
+			}
+			break;
+		}
+		// Switching Guns
+	case 3:
 		{
 			if( m_nNumTimes <= m_nStep )
 			{
@@ -49,11 +77,13 @@ void CompanionAI::Update(float fElapsedTime)
 			}
 			break;
 		}
-		// Firing guns
-	case 2:
+		// Hiding in bushes
+	case 4:
 		{
 			if( m_nNumTimes <= m_nStep )
 			{
+				m_nStages++;
+				m_nStep = 0;
 				teaching = false;
 			}
 			break;
@@ -90,52 +120,135 @@ void CompanionAI::SaySomething()
 	Player* tempPlayer = GamePlayState::GetInstance()->GetPlayer();	
 
 	double playerX = (tempPlayer->GetPosX());
-	double npcX = this->GetPosX();
-	//double playerY = (tempPlayer->GetRect().bottom/2) + tempPlayer->GetRect().top;
+	double myX = GetPosX();
 	double playerY = tempPlayer->GetPosY();
-	double npcY = this->GetPosY();
+	double myY = GetPosY();
 
 	double distance;
-	distance = sqrt(pow(playerX - npcX,2) + pow(playerY - npcY,2));
+	distance = sqrt(pow(playerX - myX,2) + pow(playerY - myY,2));
 
 	if( distance > 100 )
 		return;
 
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	RECT questBox;
-	questBox.left = 0;
-	questBox.top = CGame::GetInstance()->GetScreenHeight() - 100;
-	questBox.right = CGame::GetInstance()->GetScreenWidth();
-	questBox.bottom = CGame::GetInstance()->GetScreenHeight();
-	pVM->DrawRect(questBox, 100, 100, 100);
+	RECT talkRect;
+	talkRect.left = 0;
+	talkRect.top = CGame::GetInstance()->GetScreenHeight() - 100;
+	talkRect.right = CGame::GetInstance()->GetScreenWidth();
+	talkRect.bottom = CGame::GetInstance()->GetScreenHeight();
+
+	RECT src_Rect = {0,200,800,300};
+	pVM->DrawStaticTexture(talkBox,0,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
 
 	switch(m_nStages)
 	{
 		// Using Flashlight
 	case 0:
 		{
-			if( m_nStep == 0 )
-				pVM->DrawFont(m_nFontID, "Alright I need you to shine your flashlight over there so I can see the zombies", 10, 500, 0.6f, 0.6f);
-			else if( m_nStep == 1)
-				pVM->DrawFont(m_nFontID, "Keep it up!", 10, 500, 0.6f, 0.6f);
-			else if( m_nStep == 2 )
-				pVM->DrawFont(m_nFontID, "Come on we can do this!", 10, 500, 0.6f, 0.6f);
-			else if( m_nStep == 3 )
-				pVM->DrawFont(m_nFontID, "Alright one more!", 10, 500, 0.6f, 0.6f);
+			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
+			{
+				if( m_nStep == 0 )
+					pVM->DrawFont(m_nFontID, "Alright let me teach me a few things before you run off.\n Turn your flashlight on and off by pressing    \"F\" \n    Turn on your Flashlight now.", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 1 )
+					pVM->DrawFont(m_nFontID, "Ok now turn your flashlight off", 12, 500, 0.7f, 0.7f);
+				else
+					pVM->DrawFont(m_nFontID, "Ok turn your flashlight back on\n so I can teach you about your different lights.", 12, 500, 0.7f, 0.7f);
+			}
+			else
+			{
+				if( m_nStep == 0 )
+					pVM->DrawFont(m_nFontID, "Alright let me teach me a few things before you run off.\n Turn your flashlight on and off by pressing \"B\"", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 1 )
+					pVM->DrawFont(m_nFontID, "Ok now turn your flashlight off", 12, 500, 0.7f, 0.7f);
+				else
+					pVM->DrawFont(m_nFontID, "Ok turn your flashlight back on so I can teach you about your different lights.", 12, 500, 0.7f, 0.7f);
+			}
 			break;
 		}
-		// Attracting a zombies attention
+		// Switching Lights
 	case 1:
 		{
-				pVM->DrawFont(m_nFontID, "Hey see if you can attract draw them over to that tree with your flashlight!\n I could get a clear shot over there if you do it right! \n Shine your flashlight at the tree!", 10, 500, 0.6f, 0.6f);
-
+			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
+			{
+				if( m_nStep == 0 )
+					pVM->DrawFont(m_nFontID, "Thie is your Flashlight.\n It allows you to see far away far away distances\n while only attracting a little attention. \n\n\tPress \"E\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 1 )
+					pVM->DrawFont(m_nFontID, "This is your MagLight. \nIt will let you see much farther than your flashlight would\n but you'll definitely attract more attention. \n\n\tPress \"E\" to select your next light source.", 12, 500, 0.6f, 0.7f);
+				else if( m_nStep == 2 )
+					pVM->DrawFont(m_nFontID, "This is your Lantern.\n It allows you to see very far\n but will make everyone in the area aware of where you are. \n\n\tPress \"E\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 3 )
+					pVM->DrawFont(m_nFontID, "This is your lighter.\n You can barely see at all with it\n however you'll be virtually invisable. \n\n\tPress \"E\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 4 )
+					pVM->DrawFont(m_nFontID, "Press \"Q\" to select your previous light source. ", 12, 500, 0.7f, 0.7f);
+				else
+					pVM->DrawFont(m_nFontID, "Now equip your flashlight again!", 12, 500, 0.7f, 0.7f);
+			}
+			else
+			{
+				if( m_nStep == 0 )
+					pVM->DrawFont(m_nFontID, "Thie is your Flashlight.\n It allows you to see far away far away distances\n while only attracting a little attention. \n\n\tPress \"RB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 1 )
+					pVM->DrawFont(m_nFontID, "This is your MagLight. \nIt will let you see much farther than your flashlight would\n but you'll definitely attract more attention. \n\n\tPress \"RB\" to select your next light source.", 12, 500, 0.6f, 0.7f);
+				else if( m_nStep == 2 )
+					pVM->DrawFont(m_nFontID, "This is your Lantern.\n It allows you to see very far\n but will make everyone in the area aware of where you are. \n\n\tPress \"RB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 3 )
+					pVM->DrawFont(m_nFontID, "This is your lighter.\n You can barely see at all with it\n however you'll be virtually invisable. \n\n\tPress \"RB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
+				else if( m_nStep == 4 )
+					pVM->DrawFont(m_nFontID, "Press \"LB\" to select your previous light source. ", 12, 500, 0.7f, 0.7f);
+				else
+					pVM->DrawFont(m_nFontID, "Now equip your flashlight again!", 12, 500, 0.7f, 0.7f);
+			}
 			break;
 		}
 		// Firing guns
 	case 2:
 		{
+			//TCHAR buffer[200];
+			//_stprintf_s( buffer, 200, _T("Ok now its time to learn how to defend yourself\n if you ever get into trouble. \n\n\tPress or Hold \"Spacebar\" to shoot. \n\tShoot %i times"), 10-m_nStep);
+			char buffer[100];
+			_itoa_s(m_nNumTimes - m_nStep, buffer, 10);
+			//string info = "Ok now its time to learn how to defend yourself\n if you ever get into trouble. \n\n\tPress or Hold \"Spacebar\" to shoot. \n\tShoot ";
+
+			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
+			{
+				pVM->DrawFont(m_nFontID, "Ok now its time to learn how to defend yourself\n if you ever get into trouble. \n\n\tPress or Hold \"Spacebar\" to shoot. \n\tShoot ", 12, 500, 0.7f, 0.7f);
+				pVM->DrawFont(m_nFontID, (char*)buffer, 130, 560, 0.7f, 0.7f);
+				pVM->DrawFont(m_nFontID, "time(s)", 150, 560, 0.7f, 0.7f);
+			}
+			else
+			{
+				pVM->DrawFont(m_nFontID, "Ok now its time to learn how to defend yourself\n if you ever get into trouble. \n\n\tPress or Hold \"A\" to shoot. \n\tShoot ", 12, 500, 0.7f, 0.7f);
+				pVM->DrawFont(m_nFontID, (char*)buffer, 130, 555, 0.7f, 0.7f);
+				pVM->DrawFont(m_nFontID, "time(s)", 150, 555, 0.7f, 0.7f);
+			}
 			break;
+		}
+		// Switching weapons
+	case 3:
+		{
+			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
+			{
+				pVM->DrawFont(m_nFontID, "Like Lights you also have several weapons you can choose from.\n\n\tPress \"TAB\" To select the next weapon in your inventory", 12, 500, 0.7f, 0.7f);
+			}
+			else
+			{
+				pVM->DrawFont(m_nFontID, "Like Lights you also have several weapons you can choose from.\n\n\tPress \"Y\" To select the next weapon in your inventory", 12, 500, 0.7f, 0.7f);
+
+			}
+			break;
+		}
+	case 4:
+		{
+			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
+			{
+				pVM->DrawFont(m_nFontID, "Last but not least Press \"L\" to see/hide your mission log.\n\n Your mission log displays any current tasks you must complete", 12, 500, 0.7f, 0.7f);
+			}
+			else
+			{
+				pVM->DrawFont(m_nFontID, "Last but not least Press \"BACK\" to see/hide your mission log.\n\n Your mission log displays any current tasks you must complete", 12, 500, 0.7f, 0.7f);
+
+			}
 		}
 	}
 }

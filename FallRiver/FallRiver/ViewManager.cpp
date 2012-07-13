@@ -316,6 +316,11 @@ bool ViewManager::DrawFont(int nFontID, char* cString, float nPosX, float nPosY,
 			nX = nColStart;
 			continue;
 		}
+		else if(ch == '\t' )
+		{
+			nX += 50 * fScaleX;
+			continue;
+		}
 
 		if(i == 1)
 		{
@@ -640,6 +645,8 @@ bool ViewManager::DeviceEnd(void)
 					DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f, float(i * 10 + 20), 0.5f, 0.5f);
 				if(tmp->m_vpActiveQuests[i]->QuestID == 2)
 				{
+					if(tmp->questCounter >= 10)
+						tmp->questCounter = 10;
 					char buffer[100];
 					_itoa_s(tmp->questCounter,buffer,10);
 					DrawFont(tmp->m_nFontID, buffer, 610.0f, float(i * 10 + 30), 0.5f, 0.5f);

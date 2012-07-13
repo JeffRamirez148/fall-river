@@ -12,6 +12,7 @@
 #include "Enemy.h"
 #include "EventSystem.h"
 #include "Player.h"
+#include "CompanionAI.h"
 #include "Weapon.h"
 #include "HUD.h"
 #include "XMLManager.h"
@@ -55,6 +56,20 @@ GamePlayState::GamePlayState()
 	rainA = -1;
 	rainL = -1;
 	smokeL = -1;
+
+	fire1L = -1;
+	fire2L = -1;
+	fire3L = -1;
+
+	bloodL1 = -1;
+	bloodL2 = -1;
+	bloodL3 = -1;
+	bloodL4 = -1;
+	bloodL5 = -1;
+	bloodL6 = -1;
+	bloodL7 = -1;
+	bloodL8 = -1;
+	goreL = -1;
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -81,6 +96,19 @@ void GamePlayState::Enter()
 	// Smoke particles
 	smokeL = m_pPM->LoadEmitter("smoke.xml");
 	
+	fire1L = m_pPM->LoadEmitter("fire1.xml");
+	fire2L = m_pPM->LoadEmitter("fire2.xml");
+	fire3L = m_pPM->LoadEmitter("fire3.xml");
+
+	bloodL1	= m_pPM->LoadEmitter("blood1.xml");
+	bloodL2 = m_pPM->LoadEmitter("blood2.xml");
+	bloodL3 = m_pPM->LoadEmitter("blood3.xml");
+	bloodL4 = m_pPM->LoadEmitter("blood4.xml");
+	bloodL5 = m_pPM->LoadEmitter("blood5.xml");
+	bloodL6 = m_pPM->LoadEmitter("blood6.xml");
+	bloodL7 = m_pPM->LoadEmitter("blood7.xml");
+	bloodL8 = m_pPM->LoadEmitter("blood8.xml");
+	goreL = m_pPM->LoadEmitter("gore.xml");
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
@@ -95,6 +123,7 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< PickUp		>( _T("PickUp") );
 	m_pOF->RegisterClassType< Enemy			>( _T("Enemy") );
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
+	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
@@ -159,9 +188,9 @@ void GamePlayState::Enter()
 
 		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
-		pPlayer->AddWeapon(pWeapon);
 		pPlayer->AddWeapon(pWeapon2);
 		pPlayer->AddWeapon(pWeapon3);
+		pPlayer->AddWeapon(pWeapon);
 
 	}
 	else
@@ -314,7 +343,7 @@ void GamePlayState::Enter()
 			eWeapon->SetWidth(10);
 			eWeapon->SetImageID(-1);
 			eWeapon->SetOwner(pEnemy);
-			eWeapon->Init(WPN_RIFLE, 100, 0);
+			eWeapon->Init(WPN_PISTOL, 100, 0);
 			eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
 			eWeapon->SetPosY(pEnemy->GetPosY());
 			pEnemy->SetWeapon(eWeapon);
@@ -386,14 +415,14 @@ void GamePlayState::Enter()
 		}
 	}
 
-	/*m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
+	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
 	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
-	pBuddy->SetPosX(200.0f);
-	pBuddy->SetPosY(250.0f);
+	pBuddy->SetPosX(550);
+	pBuddy->SetPosY(550);
 	pBuddy->SetHeight(32);
 	pBuddy->SetWidth(32);
-	pBuddy->SetImageID(-1);*/
-	//m_pOM->AddObject(pBuddy);
+	pBuddy->SetImageID(-1);
+	m_pOM->AddObject(pBuddy);
 
 
 	//for(int i = 0; i < 1; i++)
@@ -411,7 +440,7 @@ void GamePlayState::Enter()
 	//	m_pOM->AddObject(pEnemy);
 	//}
 
-	for(int i = 0; i < 1; i++)
+	/*for(int i = 0; i < 1; i++)
 	{
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies[i] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -420,8 +449,8 @@ void GamePlayState::Enter()
 		pEnemy->SetWidth(32);
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(600);
-		pEnemy->SetPosY(490);
+		pEnemy->SetPosX(700);
+		pEnemy->SetPosY(500);
 		pEnemy->SetHealth(100);
 		pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
 		m_pOM->AddObject(pEnemy);
@@ -435,7 +464,7 @@ void GamePlayState::Enter()
 		eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
 		eWeapon->SetPosY(pEnemy->GetPosY());
 		pEnemy->SetWeapon(eWeapon);
-	}
+	}*/
 
 	//for(int i = 0; i < 1; i++)
 	//{
