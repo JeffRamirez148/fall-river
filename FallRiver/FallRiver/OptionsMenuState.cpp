@@ -162,8 +162,8 @@ bool OptionsMenuState::Input()
 		else if( m_nSelection == 0 )
 		{
 			vector<int> volume;
-			volume.push_back(musicVolume*100.0f);
-			volume.push_back(sfxVolume*100.0f);
+			volume.push_back(int(musicVolume*100.0f));
+			volume.push_back(int(sfxVolume*100.0f));
 			if( CGame::GetInstance()->IsWindowed() == true )
 			{
 				volume.push_back(1);
