@@ -19,7 +19,9 @@ HUD::HUD()
 	m_fTime = 0;
 	m_fAniSpeed = 0;
 	m_ftest = 0;
+	m_fRotation = 0;
 	m_bShot = false;
+	m_pTarget = nullptr;
 	healthID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/ECG.wav");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(healthID, sound1);
@@ -32,13 +34,23 @@ HUD::HUD()
 	m_aClipAnim.curAnimID    = ViewManager::GetInstance()->RegisterAnimation("resource/graphics/AmmoClip.xml");
 	m_aClipAnim.curFrame     = 0;
 	m_aClipAnim.fTime        = 0;
-
-
-
 }
 
 HUD::~HUD() 
 {
+	SetTarget(nullptr);
+}
+
+void HUD::SetTarget( BaseCharacter* target )
+{
+		
+	if( m_pTarget != nullptr )
+		m_pTarget->Release();
+
+	m_pTarget = target;
+
+	if( m_pTarget != nullptr )
+		m_pTarget->AddRef();
 }
 
 void HUD::Update(float aTime)
@@ -48,6 +60,20 @@ void HUD::Update(float aTime)
 
 	m_fTime += aTime;
 
+
+	float x2 = m_pTarget->GetPosX() - GamePlayState::GetInstance()->GetPlayer()->GetPosX();
+	float x3 = x2;
+	float y2 = m_pTarget->GetPosY() - GamePlayState::GetInstance()->GetPlayer()->GetPosY();
+	float y = y2;
+	x2 *= x2;
+	y2 *= y2;
+	float distance = sqrt(x2 + y2);
+
+	m_fRotation = acos(x3/distance); 
+	if( m_pTarget->GetPosX() - GamePlayState::GetInstance()->GetPlayer()->GetPosX() < 0 )
+	{
+		m_fRotation = -m_fRotation;
+	}
 	
 
 	if( m_fTime > 29*m_fAniSpeed )
@@ -92,9 +118,9 @@ void HUD::Render()
 
 	
 	RECT test;
-	test.top = 16;
-	test.right = 270;
-	test.left = 18;
+	test.top = 14;
+	test.right = 588;
+	test.left = 318;
 	test.bottom = 264;
 
 	RECT test1;
@@ -147,6 +173,9 @@ void HUD::Render()
 	Shotgun.left = 230;
 	Shotgun.right = Shotgun.left+140;
 	Shotgun.bottom = Shotgun.top+56;
+
+
+
 
 	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_RIFLE)
 	{
@@ -694,6 +723,20 @@ void HUD::Render()
 	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 
 	//pVM->DrawFont(m_nFontID,szName,0,80);
+
+	RECT rArrow = { 0, 0, 69, 108 };
+	float tmpY = ((test.bottom - test.top)/2.0f)/2.0f;
+	float tmpX = ((test.right - test.left)/2.0f)/2.0f;
+
+	float offsetY = ((rArrow.bottom - rArrow.top)/2.0f)/2.0f;
+	float offsetX = ((rArrow.right - rArrow.left)/2.0f)/2.0f;
+
+
+	
+	pVM->DrawStaticTexture(m_nArrowID,tmpX-22.5f,tmpY-offsetY,0.5f,0.5f,&rArrow,34.5f,54,m_fRotation,D3DCOLOR_ARGB(180,255,255,255));
+
+
+
 
 }
 

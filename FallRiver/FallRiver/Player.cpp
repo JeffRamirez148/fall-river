@@ -24,6 +24,8 @@ Player::Player()
 	m_nCharacterType = CHA_PLAYER;
 	m_bIsAlive = true;
 	m_bIsHidden = false;
+	m_bShotBush = false;
+	m_fshotTimer = 0;
 	m_nScore = 0;
 	m_ncurrWeap = 0;
 	m_nState = PSTATE_IDLE;
@@ -114,6 +116,8 @@ void Player::Update(float fElapsedTime)
 
 	CompanionAI* pBud = GamePlayState::GetInstance()->GetCompanion();
 
+	m_fshotTimer += fElapsedTime;
+
 	if( GetHealth() <= 0 )
 	{
 		SetHealth(0);
@@ -125,6 +129,8 @@ void Player::Update(float fElapsedTime)
 			SetVelY(0);
 		}
 	}
+
+	
 
 	if( m_dwDeathTime <= GetTickCount() && m_nState == PSTATE_DEAD )
 	{
@@ -193,8 +199,26 @@ void Player::Update(float fElapsedTime)
 			}
 			if( pBud->IsTeaching() )
 				pBud->NextStep();
+
+			if( m_bIsHidden == true )
+			{
+				m_bShotBush = true;
+				m_fshotTimer = 0;
+			}
+
 		}
 	}	
+
+	if( m_bShotBush == true && m_fshotTimer < 5 )
+	{
+		m_bIsHidden = false;
+	}
+	else if( m_bShotBush == true && m_fshotTimer > 5 )
+	{
+		m_bIsHidden = true;
+		m_bShotBush = false;
+		m_fshotTimer = 0;
+	}
 
 	if( m_nState != PSTATE_DEAD )
 	{

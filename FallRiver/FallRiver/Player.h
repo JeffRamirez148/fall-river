@@ -51,6 +51,8 @@ private:
 public:
 	bool m_bIsHidden;
 	bool m_bHasMedicine;
+	bool m_bShotBush;
+	float m_fshotTimer;
 private:
 	bool m_bTalking;
 	int m_nLives;

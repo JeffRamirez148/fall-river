@@ -10,12 +10,15 @@
 #include <string.h>
 #include <vector>
 #include "AnimInfo.h"
+#include "BaseCharacter.h"
 
 using namespace std;
 
 class GamePlayState;
 class ViewManager;
 class HUD;
+
+
 
 class HUD
 {
@@ -31,12 +34,14 @@ private:
 	int m_nClip;
 	float m_fAniSpeed;
 	float m_ftest;
+	float m_fRotation;
 	AnimInfo m_aClipAnim;
 	bool m_bShot;
-
+	BaseCharacter* m_pTarget;
 	int healthID;
 public:
 	int m_nHudID;
+	int m_nArrowID;
 	int m_nClipID;
 	//vector<Clip> m_vClip;
 	vector<int> m_vFrameIDs;
@@ -45,6 +50,7 @@ public:
 	HUD();
 
 	~HUD();
+	void SetTarget( BaseCharacter* target );
 
 	void Update(float time);
 
