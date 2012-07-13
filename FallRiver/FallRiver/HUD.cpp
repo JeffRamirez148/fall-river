@@ -15,9 +15,11 @@ HUD::HUD()
 {
 	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
 	m_nHudID = -1;
+	m_nClipID = ViewManager::GetInstance()->RegisterTexture("resource//graphics//sprites_mags.png");
 	m_fTime = 0;
 	m_fAniSpeed = 0;
 	m_ftest = 0;
+	m_bShot = false;
 	healthID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/ECG.wav");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(healthID, sound1);
@@ -25,6 +27,13 @@ HUD::HUD()
 	sound1.y = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
 	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(healthID, false);
+
+	m_aClipAnim.curAnimation = 0;
+	m_aClipAnim.curAnimID    = ViewManager::GetInstance()->RegisterAnimation("resource/graphics/AmmoClip.xml");
+	m_aClipAnim.curFrame     = 0;
+	m_aClipAnim.fTime        = 0;
+
+
 
 }
 
@@ -38,16 +47,40 @@ void HUD::Update(float aTime)
 	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
 
 	m_fTime += aTime;
-	//m_ftest += aTime;
-	/*
-	if( m_ftest > 10 )
-	{
-		m_ftest = 0;
-	}
-	*/
+
+	
+
 	if( m_fTime > 29*m_fAniSpeed )
 	{
 		m_fTime = 0;
+	}
+
+	int x = 10 - GamePlayState::GetInstance()->GetPlayer()->GetClip();
+
+	if( m_aClipAnim.curAnimation != x )
+	{
+		m_bShot = true;
+	}
+
+	if( m_bShot == true )
+	{
+		Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_aClipAnim.curAnimID);
+		m_aClipAnim.fTime += aTime;
+
+		if(m_aClipAnim.fTime >= thisAnim.frames[m_aClipAnim.curAnimation][m_aClipAnim.curFrame].duration-0.1f)
+		{
+			m_aClipAnim.fTime -= thisAnim.frames[m_aClipAnim.curAnimation][m_aClipAnim.curFrame].duration-0.1f;
+			m_aClipAnim.curFrame++;
+			if((m_aClipAnim.curFrame == thisAnim.frames[m_aClipAnim.curAnimation].size()) && thisAnim.looping[m_aClipAnim.curAnimation])
+				m_aClipAnim.curFrame = 0;
+			else if(m_aClipAnim.curFrame == thisAnim.frames[m_aClipAnim.curAnimation].size() && !thisAnim.looping[m_aClipAnim.curAnimation])
+			{
+				m_aClipAnim.curFrame = 0;
+				m_aClipAnim.curAnimation = 10 - GamePlayState::GetInstance()->GetPlayer()->GetClip();
+				m_aClipAnim.fTime = 0;
+				m_bShot = false;
+			}
+		}
 	}
 }
 
@@ -89,14 +122,64 @@ void HUD::Render()
 	test4.bottom = 417;
 
 
+	RECT Rifle;
+	Rifle.top = 560;
+	Rifle.left = 12;
+	Rifle.right = Rifle.left+160;
+	Rifle.bottom = Rifle.top+52;
+
+	RECT Machete;
+	Machete.top = 770;
+	Machete.left = 17;
+	Machete.right = Machete.left+82;
+	Machete.bottom = Machete.top+108;
+
+
+	RECT Pistol;
+	Pistol.top = 556;
+	Pistol.left = 275;
+	Pistol.right = Pistol.left+98;
+	Pistol.bottom = Pistol.top+64;
+
+
+	RECT Shotgun;
+	Shotgun.top = 665;
+	Shotgun.left = 230;
+	Shotgun.right = Shotgun.left+140;
+	Shotgun.bottom = Shotgun.top+56;
+
+	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_RIFLE)
+	{
+		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Rifle,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+
+	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_PISTOL)
+	{
+		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Pistol,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+
+
+	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_SHOTGUN)
+	{
+		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Shotgun,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+
+	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_MACHETE)
+	{
+		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Machete,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+
+
+
+	pVM->DrawAnimation(&m_aClipAnim, 20, 152,0.3f,0.3f);
+
+
 	pVM->DrawStaticTexture(m_nHudID,0,0,0.5f,0.5f,&test,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
-	pVM->DrawStaticTexture(m_nHudID,125,65,0.5f,0.5f,&test1,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
-	//pVM->DrawStaticTexture(m_nHudID,270,0,0.5f,0.5f,&test1,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	//pVM->DrawStaticTexture(m_nHudID,125,65,0.5f,0.5f,&test1,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	pVM->DrawStaticTexture(m_nHudID,270,0,0.5f,0.5f,&test1,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 
 	//pVM->DrawStaticTexture(m_nHudID,155,94,0.5f,0.5f,&test4,80,50,GamePlayState::GetInstance()->GetPlayer()->battery*0.021f,D3DCOLOR_ARGB(180,255,255,255));
-	pVM->DrawStaticTexture(m_nHudID,155,94,0.5f,0.5f,&test4,80,50,GamePlayState::GetInstance()->GetPlayer()->battery*0.021f,D3DCOLOR_ARGB(180,255,255,255));
-
-	//pVM->DrawStaticTexture(m_nHudID,400,400,0.5f,0.5f,&test4,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	pVM->DrawStaticTexture(m_nHudID,300,29,0.5f,0.5f,&test4,80,50,GamePlayState::GetInstance()->GetPlayer()->battery*0.021f,D3DCOLOR_ARGB(180,255,255,255));
 
 	pVM->DrawStaticTexture(m_nHudID,125,0,0.5f,0.5f,&test2,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 
@@ -540,6 +623,25 @@ void HUD::Render()
 		_stprintf_s( buffer, 100, _T("%i"), 0);
 	}
 
+	int y = GamePlayState::GetInstance()->GetPlayer()->GetLightType() ;
+	if( y == 0 )
+	{
+		pVM->DrawFont(m_nFontID,"Flash",355,2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+	else if( y == 1)
+	{
+		pVM->DrawFont(m_nFontID,"MAG",355,2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+	else if( y == 2)
+	{
+		pVM->DrawFont(m_nFontID,"Lantern",355,2,0.40f,0.40f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+	else if( y == 3)
+	{
+		pVM->DrawFont(m_nFontID,"Lighter",355,2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	}
+
+
 
 	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 	
@@ -559,7 +661,39 @@ void HUD::Render()
 		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 	}
 	
+	//char szName[100] = {};
+	
+	//TCHAR buffer[ 100 ];
+	//int playerScore = 15;
+	//_stprintf_s( buffer, 100, _T("Health - %i"), GamePlayState::GetInstance()->GetPlayer()->GetHealth() );
 
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+	//
+	//pVM->DrawFont(m_nFontID,szName,0,0);
+
+	//_stprintf_s( buffer, 100, _T("Lives - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetLives() );
+
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	//pVM->DrawFont(m_nFontID,szName,0,20);
+
+	//_stprintf_s( buffer, 100, _T("Clip - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetClip() );
+
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	//pVM->DrawFont(m_nFontID,szName,0,40);
+
+	_stprintf_s( buffer, 100, _T("Ammo / %i"),  GamePlayState::GetInstance()->GetPlayer()->GetAmmo() );
+
+	wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	pVM->DrawFont(m_nFontID,szName,50,160,0.5f,0.5f);
+
+	//_stprintf_s( buffer, 100, _T("Weapon - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() );
+
+	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
+
+	//pVM->DrawFont(m_nFontID,szName,0,80);
 
 }
 
