@@ -7,7 +7,9 @@
 #include "ViewManager.h"
 #include "EventSystem.h"
 #include "Bullet.h"
+#include "Level.h"
 #include "GamePlayState.h"
+#include "AudioManager.h"
 #include "Weapon.h"
 
 Boss1::Boss1()
@@ -22,6 +24,12 @@ Boss1::Boss1()
 	m_dwFireDelay = 0;
 	m_pWeapon = nullptr;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
+
+	//AnimInfo startup
+	m_playerAnim.curAnimation = 0;
+	m_playerAnim.curAnimID = 0;
+	m_playerAnim.curFrame = 0;
+	m_playerAnim.fTime = 0;
 }
 
 Boss1::~Boss1()
@@ -31,23 +39,35 @@ Boss1::~Boss1()
 
 void Boss1::Update(float fElapsedTime)
 {
+	BaseCharacter::Update(fElapsedTime);
+	//FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
+	//AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
+	//AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	if(GetHealth() <= 0)
 	{
 		/*DestroyEnemyS* pMsg = new DestroyEnemyS(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;*/
 	}
+	if(  m_pTarget->CheckHidden() )
+		m_nState = ESTATE_IDLE;
 
 	m_pWeapon->Update(fElapsedTime);
 	
 	if(m_nState == ESTATE_CHASING)
 	{
 		if( m_dwFireDelay == 0)
+		{
 			m_dwFireDelay = GetTickCount() + 1000;
+			//m_dwGunReset = GetTickCount() + 100;
+			m_nState = ESTATE_SHOOT;
+		}
 		if( m_dwFireDelay < GetTickCount() && m_nState == ESTATE_CHASING )
 		{
 			m_dwFireDelay = GetTickCount() + 1000;
 			m_pWeapon->FireWeapon();
+			m_nState = ESTATE_SHOOT;
+			//m_dwGunReset = GetTickCount() + 100;
 		}
 	}
 
@@ -59,10 +79,18 @@ void Boss1::Update(float fElapsedTime)
 	if( distanceY < 0)
 		distanceY = -distanceY;
 
-	if( (distanceX + distanceY >= 300) )
+	if( (distanceX + distanceY >= 300) || m_pTarget->CheckHidden() )
+	{
 		m_nState = ESTATE_IDLE;
+		//notified = true;
+	}
 	else
+	{
+		/*if(notified)
+			AudioManager::GetInstance()->playSound(notifyID);		
+		notified = false;*/
 		m_nState = ESTATE_CHASING;
+	}
 
 	if( m_nState == ESTATE_IDLE )
 	{
@@ -76,15 +104,26 @@ void Boss1::Update(float fElapsedTime)
 
 		if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
 		{
-			m_pfDestination.x = GetPosX()+rand()%200-100; 
-			m_pfDestination.y = GetPosY()+rand()%200-100;
+			m_pfDestination.x = GetPosX()+rand()%25-12; 
+			m_pfDestination.y = GetPosY()+rand()%25-12;
 			m_dwIdleWait = GetTickCount() + 1000;
 		}
 		if( fDistX  > 10 && fDistY > 10 )
 		{
+			float savex = GetPosX();
+			float savey = GetPosY();
+
 			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
 			BaseCharacter::Update(fElapsedTime);
+
+			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+			{
+				SetPosX(savex);
+				SetPosY(savey);
+			}
 		}
+		//else
+			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
 	else if( m_nState == ESTATE_CHASING)
 	{
@@ -96,34 +135,57 @@ void Boss1::Update(float fElapsedTime)
 		else if( distanceY < 50 || distanceX < 50 )
 		{
 			if(m_pTarget->GetPosX() < GetPosX()+5 )
+			{
 				MoveTo(GetPosX()+100, GetPosY(), 80);
+				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);*/
+			}
 			else if(m_pTarget->GetPosX() > GetPosX()-5 )
+			{
 				MoveTo(GetPosX() - 100, GetPosY(), 80);
+				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);*/
+			}
+			//else
+				//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+
 			BaseCharacter::Update(fElapsedTime);
 
 			if(m_pTarget->GetPosY() < GetPosY()+5 )
+			{
 				MoveTo(GetPosX(), GetPosY()+100, 80);
+				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);*/
+			}
 			else if(m_pTarget->GetPosY() > GetPosY()-5 )
+			{
 				MoveTo(GetPosX(), GetPosY()-100, 80);
+				/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
+					AudioManager::GetInstance()->playSound(walkingID);*/
+			}
+			/*else
+				AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();*/
 
 			BaseCharacter::Update(fElapsedTime);
 		}
+		//else
+			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 	}
 
-	if(m_pTarget->GetPosX() > GetPosX()+10)
+	if(m_pTarget->GetPosX() > GetPosX()+30)
 	{
-		if(m_pTarget->GetPosY() > GetPosY()+10)
+		if(m_pTarget->GetPosY() > GetPosY()+30)
 			SetDirection(DIRE_DOWNRIGHT);
-		else if(m_pTarget->GetPosY() < GetPosY()-10)
+		else if(m_pTarget->GetPosY() < GetPosY()-30)
 			SetDirection(DIRE_UPRIGHT);
 		else
 			SetDirection(DIRE_RIGHT);
 	}
-	else if(m_pTarget->GetPosX() < GetPosX()-10)
+	else if(m_pTarget->GetPosX() < GetPosX()-30)
 	{
-		if(m_pTarget->GetPosY() > GetPosY()+10)
+		if(m_pTarget->GetPosY() > GetPosY()+30)
 			SetDirection(DIRE_DOWNLEFT);
-		else if(m_pTarget->GetPosY() < GetPosY()-10)
+		else if(m_pTarget->GetPosY() < GetPosY()-30)
 			SetDirection(DIRE_UPLEFT);
 		else
 			SetDirection(DIRE_LEFT);
@@ -132,6 +194,105 @@ void Boss1::Update(float fElapsedTime)
 		SetDirection(DIRE_DOWN);
 	else if(m_pTarget->GetPosY() < GetPosY())
 		SetDirection(DIRE_UP);
+
+	if(m_nState == PSTATE_SHOOT)
+	{
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 8)
+		{
+			m_playerAnim.curAnimation = 8;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 9)
+		{
+			m_playerAnim.curAnimation = 9;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 11)
+		{
+			m_playerAnim.curAnimation = 11;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 10)
+		{
+			m_playerAnim.curAnimation = 10;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+
+	}
+	else
+	{
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() == 0)
+		{
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 4 && GetVelY() < 0)
+		{
+			m_playerAnim.curAnimation = 4;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 1 && GetVelY() == 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 5 && GetVelY() > 0)
+		{
+			m_playerAnim.curAnimation = 5;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 3 && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 3;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 7 && GetVelX() > 0)
+		{
+			m_playerAnim.curAnimation = 7;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 2 && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 2;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 6 && GetVelX() < 0)
+		{
+			m_playerAnim.curAnimation = 6;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+	}
+
+	//Updating the ShootingAi's frame and timer for animations
+	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	m_playerAnim.fTime += fElapsedTime;
+
+	if(m_playerAnim.fTime >= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
+	{
+		m_playerAnim.fTime -= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
+		m_playerAnim.curFrame++;
+		if(m_playerAnim.curFrame < (int)thisAnim.frames[m_playerAnim.curAnimation].size())
+		{
+			if(strcmp(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
+				EventSystem::GetInstance()->SendEvent(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
+		}
+		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame = 0;
+		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame--;
+	}
 }
 
 void Boss1::Render()
@@ -140,8 +301,10 @@ void Boss1::Render()
 
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
-	pVM->DrawRect(reRect, 255, 255, 0);
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
+
+	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	//pVM->DrawRect(reRect, 255, 255, 0);
 }
 
 bool Boss1::CheckCollision(IObjects* pBase)
@@ -158,8 +321,6 @@ void Boss1::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			Bullet* pBull = (Bullet*)pEvent->GetParam();
-			SetHealth(GetHealth()-pBull->GetOwner()->GetDamage());
 		}
 	}
 }

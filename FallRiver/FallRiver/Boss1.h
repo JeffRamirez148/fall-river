@@ -11,10 +11,14 @@ class Boss1: public Enemy
 	Weapon* m_pWeapon;
 	BaseObject* m_cInTheWay;
 
+	int m_nStages;
+	int m_nMinnions;
+
 public: 
 	Boss1();
 	~Boss1();
 
+	void SetWeapon(Weapon* pWeapon) {m_pWeapon = pWeapon;}
 
 	virtual void Update(float fElapsedTime);
 
