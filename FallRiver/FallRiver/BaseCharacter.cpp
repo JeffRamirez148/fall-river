@@ -141,10 +141,10 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 
 RECT BaseCharacter::GetRect()
 {
-	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
-	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
-	//RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
+	//RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
+	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 	return cRect;
 	
 	//return thisFrame.colRect;

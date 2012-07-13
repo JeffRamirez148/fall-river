@@ -67,7 +67,6 @@ public:
 private:
 	float batteryTime;
 
-	AnimInfo m_playerAnim;
 
 public: 
 	Player();
