@@ -9,6 +9,7 @@
 #include "Emitter.h"
 #include "CGame.h"
 #include "DirectInput.h"
+#include "DestroyEnemy.h"
 #include "Enemy.h"
 #include "EventSystem.h"
 #include "Player.h"
@@ -19,6 +20,7 @@
 #include "Message.h"
 #include "Bullet.h"
 #include "ChasingAI.h"
+#include "Boss1.h"
 #include "ShootingAi.h"
 #include "NPC.h"
 #include "PickUp.h"
@@ -44,7 +46,7 @@ GamePlayState::GamePlayState()
 	m_pES = nullptr;
 	m_pPM = nullptr;
 	m_cPlayer = nullptr;
-
+	m_cBoss1 = nullptr;
 	m_cWeapon = nullptr;
 
 	backGroundID = -1;
@@ -125,6 +127,7 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< ShootingAi	>( _T("ShootingAi") );
 	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
+	m_pOF->RegisterClassType< Boss1			>( _T("Boss1") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
 
@@ -436,7 +439,30 @@ void GamePlayState::Enter()
 	pBuddy->SetHeight(32);
 	pBuddy->SetWidth(32);
 	pBuddy->SetImageID(-1);
+	pBuddy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
 	m_pOM->AddObject(pBuddy);
+
+	///*m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+	//Boss1* pBoss = (Boss1*)m_cBoss1;
+	//pBoss->SetHealth(200);
+	//pBoss->SetHeight(32);
+	//pBoss->SetWidth(32);
+	//pBoss->SetPosX(m_cPlayer->GetPosX() + 200);
+	//pBoss->SetPosY(m_cPlayer->GetPosY());
+	//pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+	//pBoss->SetTarget(pPlayer);
+	//m_pOM->AddObject(pBoss);*/
+
+	//Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+	//eWeapon->SetHeight(20);
+	//eWeapon->SetWidth(10);
+	//eWeapon->SetImageID(-1);
+	//eWeapon->SetOwner(pBoss);
+	//eWeapon->Init(WPN_SHOTGUN, 100, 0);
+	//eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+	//eWeapon->SetPosY(pBoss->GetPosY());
+	//pBoss->SetWeapon(eWeapon);
+
 
 
 	//for(int i = 0; i < 1; i++)
@@ -1170,6 +1196,12 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 		{
 			PickUp* pickup = dynamic_cast<DestroyPickUp*>(pMsg)->GetPickUp();
 			self->m_pOM->RemoveObject( pickup );
+			break;
+		}
+	case MSG_DESTROY_ENEMY:
+		{
+			Enemy* pEnemy = dynamic_cast<DestroyEnemy*>(pMsg)->GetEnemy();
+			self->m_pOM->RemoveObject( pEnemy );
 			break;
 		}
 	}
