@@ -4,6 +4,7 @@
 #include "DirectInput.h"
 #include "CGame.h"
 #include "CreditsMenuState.h"
+#include "XMLManager.h"
 
 HighScoresMenuState::HighScoresMenuState()
 {
@@ -55,6 +56,17 @@ void HighScoresMenuState::Enter()
 	audio->setMusicLooping(musicID2, true);
 	audio->playMusic(musicID2);
 
+	
+
+	if( XMLManager::GetInstance()->LoadHighScores("highscore.xml",m_vHighscore) == false )
+	{
+		XMLManager::GetInstance()->GeneratePlayers(m_vHighscore);
+		XMLManager::GetInstance()->SaveHighScores("highscore.xml",m_vHighscore);
+	}
+	
+
+
+
 }
 
 void HighScoresMenuState::ReEnter()
@@ -91,6 +103,26 @@ void HighScoresMenuState::Render()
 	m_pVM->Clear();
 
 	m_pVM->DrawFont(fontID,"High Scores in progress",0,0);
+
+	
+	for( int i = 0; i < m_vHighscore.size(); i++ )
+	{
+
+		//TCHAR buffer[100];
+
+		TCHAR sBuffer[10] = {};
+		char vBuffer[10] = {};
+
+		_stprintf_s( sBuffer, 10, _T("%i"), m_vHighscore[i].nScore);
+		wcstombs_s( nullptr, vBuffer, 10, sBuffer, _TRUNCATE );
+		//mbstowcs_s( nullptr, buffer, 100, m_vPlayer[i].szName, _TRUNCATE );
+
+		m_pVM->DrawFont(fontID,m_vHighscore[i].szName,75,70+10+10*i*2,0.5f,0.5f,0,0,0, D3DCOLOR_XRGB(255,255,255));
+		m_pVM->DrawFont(fontID,"Score",75+200,70+10+10*i*2,0.5f,0.5f,0,0,0,D3DCOLOR_XRGB(255,255,255));
+		m_pVM->DrawFont(fontID,vBuffer,75+300,70+10+10*i*2,0.5f,0.5f,0,0,0, D3DCOLOR_XRGB(255,255,255));
+	}
+
+
 	
 }
 

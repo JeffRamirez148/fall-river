@@ -4,6 +4,7 @@
 #include "CGame.h"
 #include "ViewManager.h"
 #include "IMenuState.h"
+#include "XMLManager.h"
 
 OptionsMenuState::OptionsMenuState()
 {
@@ -159,7 +160,22 @@ bool OptionsMenuState::Input()
 			CGame::GetInstance()->SetWindowed(m_bIsWindowed);
 		}
 		else if( m_nSelection == 0 )
+		{
+			vector<int> volume;
+			volume.push_back(musicVolume*100.0f);
+			volume.push_back(sfxVolume*100.0f);
+			if( CGame::GetInstance()->IsWindowed() == true )
+			{
+				volume.push_back(1);
+			}
+			else
+			{
+				volume.push_back(0);
+			}
+
+			XMLManager::GetInstance()->SaveSettings( "settings.xml", volume);
 			CGame::GetInstance()->RemoveState();
+		}
 		return true;
 	}
 

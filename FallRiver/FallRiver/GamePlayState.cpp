@@ -218,7 +218,7 @@ void GamePlayState::Enter()
 			m_cPlayer->GetWeapons()[i]->SetWidth(pWeapon->GetWidth());
 		}
 	}
-	
+	m_pHUD = new HUD;
 	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
 
@@ -380,6 +380,10 @@ void GamePlayState::Enter()
 			pNpc->SetQuest(m_cNpcs.size());
 			pNpc->SetLabel(m_cNpcs.size()-1);
 			pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
+			if( m_cNpcs.size() == 2 )
+			{
+				m_pHUD->SetTarget(pNpc);
+			}
 			m_pOM->AddObject(pNpc);
 			pNpc = nullptr;
 			tmp.erase(nth);
@@ -550,8 +554,9 @@ void GamePlayState::Enter()
 	m_pAM->playMusic(musicID);
 	winLose = true;
 
-	m_pHUD = new HUD;
+	
 	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
+	m_pHUD->m_nArrowID = m_pVM->RegisterTexture("resource//graphics//Arrow.png");
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_01.png.png"));
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_02.png.png"));
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_03.png.png"));
@@ -751,11 +756,12 @@ void GamePlayState::Update(float fElapsedTime)
 		}
 	}
 	// Total quest completion to win the game
-	if(GetPlayer()->m_vpFinishedQuests.size() == 10)
+	if(GetPlayer()->m_vpFinishedQuests.size() == 2)
 	{
 		questFlag = false;
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
 	}
+	
 
 	// Auto Lose
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )

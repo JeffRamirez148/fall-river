@@ -6,6 +6,7 @@ using namespace std;
 #define __HighScoresMenuState_h__
 
 #include "IMenuState.h"
+#include "XMLManager.h"
 
 class ViewManager;
 class AudioManager;
@@ -21,6 +22,7 @@ private:
 	bool			end;
 	int				scores[10];
 	string			player[10];
+	vector<tHighscore> m_vHighscore;
 	AudioManager*	audio;
 	int				fontID;
 	int soundID2;

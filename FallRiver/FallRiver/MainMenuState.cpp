@@ -9,6 +9,7 @@
 #include "CreditsMenuState.h"
 #include "CGame.h"
 #include "AudioManager.h"
+#include "XMLManager.h"
 
 MainMenuState::MainMenuState()
 {
@@ -63,6 +64,17 @@ void MainMenuState::Enter()
 	
 	audio = AudioManager::GetInstance();
 
+	vector<int> setting;
+
+
+	if( XMLManager::GetInstance()->LoadSettings("settings.xml", setting))
+	{
+		audio->setMusicVolume(setting[0]*0.01);
+		audio->setSoundVolume(setting[1]*0.01);
+	}
+
+
+
 	FMOD_VECTOR tmp = {0,0,0};
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	audio->SetListenerPos(tmp);
@@ -91,6 +103,8 @@ void MainMenuState::Enter()
 	audio->setMusicVel(musicID2, tmp);
 	audio->setMusicLooping(musicID2, true);
 	audio->playMusic(musicID2);
+
+	
 }
 
 void MainMenuState::ReEnter()
