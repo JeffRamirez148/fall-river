@@ -932,14 +932,14 @@ void ViewManager::CreateOtherLights(void)
 		if(IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance())
 		{
 			Light* tmp = new Light();
-			tmp->innerCone = (.95f);
-			tmp->outerCone = (.9f);
+			tmp->innerCone = (.75f);
+			tmp->outerCone = (.7f);
 
 
 
 			tmp->lightPos[0] = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )/ (CGame::GetInstance()->GetScreenWidth())) * 2) + .01f;
 			tmp->lightPos[1] = (((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() ) / (CGame::GetInstance()->GetScreenHeight())) * -2) - .01f;
-			tmp->lightPos[2] = -.25f;
+			tmp->lightPos[2] = -.75;
 			tmp->lightDir[0] = 0;
 			tmp->lightDir[1] = 0;
 			tmp->lightDir[2] = 1;
