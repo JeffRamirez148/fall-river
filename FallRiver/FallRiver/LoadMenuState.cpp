@@ -97,7 +97,7 @@ void LoadMenuState::Exit()
 
 bool LoadMenuState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
+	if( m_pDI->KeyPressed(DIK_DOWN) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		if(!m_bIsLoading)
 			m_nCursPosY += 100;
@@ -110,7 +110,7 @@ bool LoadMenuState::Input()
 
 		audio->playSound(soundID);
 	}
-	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
+	else if( m_pDI->KeyPressed(DIK_UP) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		if(!m_bIsLoading)
 			m_nCursPosY -= 100;

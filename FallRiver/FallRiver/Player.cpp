@@ -130,7 +130,7 @@ void Player::Update(float fElapsedTime)
 		}
 	}
 
-	
+
 
 	if( m_dwDeathTime <= GetTickCount() && m_nState == PSTATE_DEAD )
 	{
@@ -142,10 +142,6 @@ void Player::Update(float fElapsedTime)
 
 	if( pDI->KeyPressed( DIK_TAB ) || pDI->JoystickButtonPressed(3,0) )
 	{
-		if( pBud && pBud->IsTeaching() && pBud->GetStage() != 3 )
-		{}
-		else
-		{
 		if( m_currWeapon == m_vpWeapons.back() )
 		{
 			m_currWeapon = m_vpWeapons.front();
@@ -168,7 +164,6 @@ void Player::Update(float fElapsedTime)
 		}
 		if( pBud && pBud->IsTeaching() && pBud->GetStage() == 3 )
 			pBud->NextStep();
-		}
 	}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 && m_nState != PSTATE_DEAD )
@@ -179,33 +174,27 @@ void Player::Update(float fElapsedTime)
 
 	if( ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
 	{
-		if( pBud && pBud->IsTeaching() &&  pBud->GetStage() != 2 )
-		{}
-		else
+		if(m_dwGunCount == 0)
 		{
-			if(m_dwGunCount == 0)
-			{
-				m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
-				m_nState = PSTATE_SHOOT;
-				m_currWeapon->FireWeapon();
-				m_dwGunReset = GetTickCount() + 500;
-			}
-			else if( m_dwGunCount < GetTickCount() )
-			{
-				m_nState = PSTATE_SHOOT;
-				m_currWeapon->FireWeapon();
-				m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
-				m_dwGunReset = GetTickCount() + 500;
-			}
-			if( pBud && pBud->IsTeaching() )
-				pBud->NextStep();
+			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
+			m_nState = PSTATE_SHOOT;
+			m_currWeapon->FireWeapon();
+			m_dwGunReset = GetTickCount() + 500;
+		}
+		else if( m_dwGunCount < GetTickCount() )
+		{
+			m_nState = PSTATE_SHOOT;
+			m_currWeapon->FireWeapon();
+			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
+			m_dwGunReset = GetTickCount() + 500;
+		}
+		if( pBud && pBud->IsTeaching() )
+			pBud->NextStep();
 
-			if( m_bIsHidden == true )
-			{
-				m_bShotBush = true;
-				m_fshotTimer = 0;
-			}
-
+		if( m_bIsHidden == true )
+		{
+			m_bShotBush = true;
+			m_fshotTimer = 0;
 		}
 	}	
 
@@ -225,32 +214,22 @@ void Player::Update(float fElapsedTime)
 		// Flashlight
 		if( pDI->KeyPressed(DIK_E) || pDI->JoystickButtonPressed(4,0)) //pDI->JoystickDPadPressed(DIR_LEFT,0) 8 
 		{
-			if( pBud && (pBud->IsTeaching() && pBud->GetStage() != 1) || !IsOn() )
-			{}
-			else
-			{
-				AudioManager::GetInstance()->playSound(flashLightID);		
-				++flashLightType;
-				if(flashLightType > 3)
-					flashLightType = 0;
-				if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() &&  pBud->GetStep() < 4 )
-					pBud->NextStep();
-			}
+			AudioManager::GetInstance()->playSound(flashLightID);		
+			++flashLightType;
+			if(flashLightType > 3)
+				flashLightType = 0;
+			if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() &&  pBud->GetStep() < 4 )
+				pBud->NextStep();
 		}
 
 		if( pDI->KeyPressed(DIK_Q) || pDI->JoystickButtonPressed(5,0)) //pDI->JoystickDPadPressed(DIR_RIGHT,0) 9
 		{
-			if( pBud && (pBud->IsTeaching() && pBud->GetStage() != 1 ) || !IsOn() || pBud->GetStep() < 4)
-			{}
-			else
-			{
-				AudioManager::GetInstance()->playSound(flashLightID);		
-				--flashLightType;
-				if(flashLightType < 0)
-					flashLightType = 3;
-				if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() && pBud->GetStep() == 4 )
-					pBud->NextStep();
-			}
+			AudioManager::GetInstance()->playSound(flashLightID);		
+			--flashLightType;
+			if(flashLightType < 0)
+				flashLightType = 3;
+			if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() && pBud->GetStep() == 4 )
+				pBud->NextStep();
 		}
 
 		if( pDI->KeyPressed(DIK_F) || pDI->JoystickButtonPressed(1,0))
@@ -266,12 +245,12 @@ void Player::Update(float fElapsedTime)
 			{}
 			else
 			{
-			if(questLogToggle == true)
-				questLogToggle = false;
-			else
-				questLogToggle = true;
-			if( pBud && pBud->IsTeaching() && pBud->GetStage() == 4 )
-				pBud->NextStep();
+				if(questLogToggle == true)
+					questLogToggle = false;
+				else
+					questLogToggle = true;
+				if( pBud && pBud->IsTeaching() && pBud->GetStage() == 4 )
+					pBud->NextStep();
 			}
 		}
 
@@ -508,9 +487,9 @@ void Player::Update(float fElapsedTime)
 			}
 			/*else
 			{
-				m_playerAnim.curAnimation = 0;
-				m_playerAnim.curFrame = 0;
-				m_playerAnim.fTime = 0;
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
 			}*/
 		}
 		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && GetVelY() == 0)
@@ -541,9 +520,9 @@ void Player::Update(float fElapsedTime)
 			}
 			/*else
 			{
-				m_playerAnim.curAnimation = 0;
-				m_playerAnim.curFrame = 0;
-				m_playerAnim.fTime = 0;
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
 			}*/
 		}
 		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && GetVelY() > 0)
@@ -809,15 +788,15 @@ bool Player::CheckCollision(IObjects* pBase)
 					//pMsg = nullptr;
 				}
 				if(pBase->GetObjectType() == OBJ_CHARACTER)
-					
-				if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-					SetPosX(float(pBase->GetRect().left-GetWidth()));
-				else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-					SetPosX(float(pBase->GetRect().right));
-				else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-					SetPosY(float(pBase->GetRect().top-GetHeight()));
-				else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
-					SetPosY(float(pBase->GetRect().bottom));
+
+					if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
+						SetPosX(float(pBase->GetRect().left-GetWidth()));
+					else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
+						SetPosX(float(pBase->GetRect().right));
+					else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
+						SetPosY(float(pBase->GetRect().top-GetHeight()));
+					else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
+						SetPosY(float(pBase->GetRect().bottom));
 			}
 
 		}

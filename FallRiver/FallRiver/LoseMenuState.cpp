@@ -76,14 +76,14 @@ void LoseMenuState::Exit()
 }
 bool LoseMenuState::Input()
 {
-	if( pDI->KeyPressed(DIK_S) || pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
+	if( pDI->KeyPressed(DIK_DOWN) || pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		audio->playSound(soundID);
 		curPos += 50;
 		if( curPos > 300 )
 			curPos = 250;
 	}
-	else if( pDI->KeyPressed(DIK_W) || pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
+	else if( pDI->KeyPressed(DIK_UP) || pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		audio->playSound(soundID);
 		curPos -= 50;

@@ -94,7 +94,7 @@ void OptionsMenuState::Exit()
 
 bool OptionsMenuState::Input()
 {
-	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
+	if( m_pDI->KeyPressed(DIK_DOWN) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_pAM->playSound(soundID);
 		//m_nCursPosY += 25;
@@ -103,7 +103,7 @@ bool OptionsMenuState::Input()
 			m_nSelection = 3;
 		
 	}
-	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
+	else if( m_pDI->KeyPressed(DIK_UP) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_pAM->playSound(soundID);
 		//m_nCursPosY -= 25;
@@ -115,7 +115,7 @@ bool OptionsMenuState::Input()
 	sfxVolume = m_pAM->getSoundVolume();
 	musicVolume = m_pAM->getMusicVolume();
 
-	if( m_pDI->KeyPressed(DIK_D) || m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0))
+	if( m_pDI->KeyPressed(DIK_RIGHT) || m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0))
 	{
 		m_pAM->playSound(soundID);
 		if( m_nSelection == 1 && sfxVolume < 1.0f)
@@ -131,7 +131,7 @@ bool OptionsMenuState::Input()
 				musicVolume = 1;
 		}
 	}
-	else if( m_pDI->KeyPressed(DIK_A) || m_pDI->JoystickGetLStickDirPressed(DIR_LEFT,0))
+	else if( m_pDI->KeyPressed(DIK_LEFT) || m_pDI->JoystickGetLStickDirPressed(DIR_LEFT,0))
 	{
 		m_pAM->playSound(soundID);
 		if(m_nSelection == 1 && sfxVolume > 0.0f)

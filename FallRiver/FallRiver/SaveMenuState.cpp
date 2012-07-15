@@ -87,7 +87,7 @@ void SaveMenuState::Exit()
 
 bool SaveMenuState::Input()
 {
-	if( m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
+	if( m_pDI->KeyPressed(DIK_DOWN) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_nCursPosY += 50;
 		if( m_nCursPosY == 350 )
@@ -96,7 +96,7 @@ bool SaveMenuState::Input()
 			m_nCursPosY = 200;
 		audio->playSound(soundID);
 	}
-	else if( m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
+	else if( m_pDI->KeyPressed(DIK_UP) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_nCursPosY -= 50;
 		if( m_nCursPosY == 350 )
@@ -106,14 +106,14 @@ bool SaveMenuState::Input()
 		audio->playSound(soundID);
 	}
 
-	if( (m_pDI->KeyPressed(DIK_D) && m_bCheck) || (m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0) && m_bCheck) )
+	if( (m_pDI->KeyPressed(DIK_RIGHT) && m_bCheck) || (m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0) && m_bCheck) )
 	{
 		m_nCursPosX += 100;
 		if( m_nCursPosX > 380 )
 			m_nCursPosX = 280;
 		audio->playSound(soundID);
 	}
-	else if( (m_pDI->KeyPressed(DIK_A) && m_bCheck) || (m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0) && m_bCheck) )
+	else if( (m_pDI->KeyPressed(DIK_LEFT) && m_bCheck) || (m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0) && m_bCheck) )
 	{
 		m_nCursPosX -= 100;
 		if( m_nCursPosX < 280 )
