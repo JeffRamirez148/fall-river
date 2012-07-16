@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<emitter_list>
+  <emitter_info blendModeS="12" blendModeD="15" endAlpha="255" endRed="255" endGreen="255" endBlue="255" endRot="0" endScaleX="1" endScaleY="1" endVelX="1" endVelY="0" endVelZ="0" lifeSpan="1" lifeTime="10" loopin="0" maxParticles="1" rectL="76" rectT="247" rectR="86" rectB="257" spawnRate="0.5" startAlpha="255" startRed="255" startGreen="255" startBlue="255" startRot="0" startScaleX="1" startScaleY="1" startVelX="1" startVelY="0" StartVelZ="0">gore2.png</emitter_info>
+</emitter_list>
