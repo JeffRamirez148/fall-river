@@ -61,7 +61,7 @@ void Bush::Render()
 		y = GetPosY();
 		z = GetImageID();
 		RECT tmp = {0,0,64,64};
-		pView->DrawStaticTexture(z,x-GamePlayState::GetInstance()->GetCamera().x,y-GamePlayState::GetInstance()->GetCamera().y,1.0f,1.0f,&tmp,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pView->DrawStaticTexture(z,x-GamePlayState::GetInstance()->GetCamera().x,y-GamePlayState::GetInstance()->GetCamera().y,1.0f,1.0f,&tmp,0,0,0,D3DCOLOR_ARGB(130,255,255,255));
 	}
 }
 
