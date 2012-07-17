@@ -106,7 +106,7 @@ void GamePlayState::Enter()
 	rainA = m_pPM->ActivateEmitter(rainL);
 	// Smoke particles
 	smokeL = m_pPM->LoadEmitter("smoke.xml");
-	
+
 	fire1L = m_pPM->LoadEmitter("fire1.xml");
 	fire2L = m_pPM->LoadEmitter("fire2.xml");
 	fire3L = m_pPM->LoadEmitter("fire3.xml");
@@ -176,7 +176,7 @@ void GamePlayState::Enter()
 		pPlayer->SetPosX(600);
 		pPlayer->SetPosY(500);
 
-		
+
 		Weapon* pWeapon2 = nullptr;
 		Weapon* pWeapon3 = nullptr;
 		Weapon* pWeapon4 = nullptr;
@@ -207,7 +207,7 @@ void GamePlayState::Enter()
 		pWeapon3->Init(WPN_RIFLE, 100, 0);
 		pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon3->SetPosY(pPlayer->GetPosY());
-		
+
 		pWeapon4 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 		pWeapon4->SetHeight(20);
 		pWeapon4->SetWidth(10);
@@ -382,7 +382,7 @@ void GamePlayState::Enter()
 			pEnemy->SetPosX((float)nth->x);
 			pEnemy->SetPosY((float)nth->y);
 			pEnemy->SetHealth(100);
-			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 			m_pOM->AddObject(pEnemy);
 
 			Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
@@ -393,6 +393,7 @@ void GamePlayState::Enter()
 			eWeapon->Init(WPN_PISTOL, 100, 0);
 			eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
 			eWeapon->SetPosY(pEnemy->GetPosY());
+			eWeapon->SetDamage(10);
 			pEnemy->SetWeapon(eWeapon);
 			tmp.erase(nth);
 			i--;
@@ -527,17 +528,17 @@ void GamePlayState::Enter()
 
 	/*for(int i = 0; i < 1; i++)
 	{
-		m_cEnemies.push_back(nullptr);
-		m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
-		ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
-		pEnemy->SetHeight(32);
-		pEnemy->SetWidth(32);
-		pEnemy->SetImageID(-1);
-		pEnemy->SetTarget(m_cPlayer);
-		pEnemy->SetPosX(float(50+200));
-		pEnemy->SetPosY(200);
-		pEnemy->SetHealth(100);
-		m_pOM->AddObject(pEnemy);
+	m_cEnemies.push_back(nullptr);
+	m_cEnemies[i] = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
+	ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[i]);
+	pEnemy->SetHeight(32);
+	pEnemy->SetWidth(32);
+	pEnemy->SetImageID(-1);
+	pEnemy->SetTarget(m_cPlayer);
+	pEnemy->SetPosX(float(50+200));
+	pEnemy->SetPosY(200);
+	pEnemy->SetHealth(100);
+	m_pOM->AddObject(pEnemy);
 	}*/
 
 	m_pOM->AddObject(pPlayer);
@@ -568,7 +569,7 @@ void GamePlayState::Enter()
 	m_pAM->playMusic(musicID);
 	winLose = true;
 
-	
+
 	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
 	m_pHUD->m_nArrowID = m_pVM->RegisterTexture("resource//graphics//Arrow.png");
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_01.png.png"));
@@ -675,9 +676,14 @@ void GamePlayState::Exit()
 
 bool GamePlayState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) )
-
+	if( ( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) )  )
 		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
+
+	if( m_pDI->KeyDown(DIK_LALT) || m_pDI->KeyDown(DIK_RALT) )
+	{
+		if(m_pDI->KeyDown(DIK_TAB) )
+			CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
+	}
 
 	return true;
 }
@@ -777,7 +783,7 @@ void GamePlayState::Update(float fElapsedTime)
 		questFlag = false;
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
 	}
-	
+
 
 	// Auto Lose
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
@@ -797,8 +803,8 @@ void GamePlayState::Render()
 	for( unsigned int i = 0; i < fireA.size(); ++i)
 	{
 		float tmpx, tmpy;
-		tmpx = m_pPM->GetActiveEmitter(fireA[i])->rect.left;
-		tmpy = m_pPM->GetActiveEmitter(fireA[i])->rect.top;
+		tmpx = float(m_pPM->GetActiveEmitter(fireA[i])->rect.left);
+		tmpy = float(m_pPM->GetActiveEmitter(fireA[i])->rect.top);
 		RECT tmp = {0,0,32,32};
 		m_pVM->DrawStaticTexture(logID,tmpx-GetCamera().x - 16,tmpy-GetCamera().y - 16,2.0f,2.0f, &tmp);
 	}
@@ -877,12 +883,12 @@ void GamePlayState::Render()
 			z = m_cBushes[i]->GetImageID();
 
 			m_pVM->DrawStaticTexture(z,xP-GetCamera().x,yP-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
-		
+
 		}
 		m_cBushes[i]->Render();
 	}
 	m_pPM->Render();
-	
+
 	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 
@@ -911,7 +917,7 @@ void GamePlayState::Render()
 
 
 
-	
+
 
 }
 
@@ -935,12 +941,12 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			bullet->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
 
 			// Smoke effects
-			RECT temp = {(long)pOwner->GetPosX(),(long)pOwner->GetPosY(),(long)pOwner->GetPosX() + (long)16.0f,(long)16.0f + (long)pOwner->GetPosY()};
-			
-			bullet->SetSmokeID(Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL));
+			RECT temp = {(long)pOwner->GetPosX(),(long)pOwner->GetPosY()-5,(long)pOwner->GetPosX() + (long)16.0f,(long)16.0f + (long)pOwner->GetPosY()};
 
-			self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetRect(temp);
-			self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetLoopin(false);
+			/*bullet->SetSmokeID(Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL));*/
+
+			/*self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetRect(temp);
+			self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetLoopin(false);*/
 
 			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{
@@ -967,6 +973,13 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				{
 				case DIRE_UP:
 					{
+						bullet->SetPosY(pOwner->GetPosY()-30);
+						bullet2->SetPosY(bullet->GetPosY());
+						bullet3->SetPosY(bullet->GetPosY());
+
+						temp.top = bullet->GetPosY();
+						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
+
 						bullet->SetSpeedX(0);
 						bullet->SetSpeedY(-300);
 						bullet2->SetSpeedX(50);
@@ -977,6 +990,13 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_LEFT:
 					{
+						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
+						bullet2->SetPosX(bullet->GetPosX());
+						bullet3->SetPosX(bullet->GetPosX());
+
+						temp.left = bullet->GetPosX();
+						temp.right = (long)16.0f + temp.left;
+
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(0);
 						bullet2->SetSpeedX(-300);
@@ -987,6 +1007,13 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_RIGHT:
 					{
+						bullet->SetPosX((float)pOwner->GetPosX()+30);
+						bullet2->SetPosX(bullet->GetPosX());
+						bullet3->SetPosX(bullet->GetPosX());
+						
+						temp.left = bullet->GetPosX();
+						temp.right = (long)16.0f + temp.left;
+
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(0);
 						bullet2->SetSpeedX(300);
@@ -997,6 +1024,16 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_DOWN:
 					{
+						bullet->SetPosY(pOwner->GetPosY()+20);
+						bullet->SetPosX(pOwner->GetPosX()-20);
+						bullet2->SetPosY(bullet->GetPosY());
+						bullet2->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
+						bullet3->SetPosX(bullet->GetPosX());
+
+						temp.top = bullet->GetPosY();
+						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
+
 						bullet->SetSpeedX(0);
 						bullet->SetSpeedY(300);
 						bullet2->SetSpeedX(50);
@@ -1007,45 +1044,79 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_UPRIGHT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()-20);
+						bullet->SetPosX(pOwner->GetPosX()+20);
+
+						bullet2->SetPosY(bullet->GetPosY());
+
+						bullet3->SetPosX(bullet->GetPosX());
+
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(-300);
-						bullet2->SetSpeedX(270);
-						bullet2->SetSpeedY(-300);
-						bullet3->SetSpeedX(300);
-						bullet3->SetSpeedY(-270);
+						bullet2->SetSpeedX(300);
+						bullet2->SetSpeedY(-350);
+						bullet3->SetSpeedX(350);
+						bullet3->SetSpeedY(-300);
 						break;
 					}
 				case DIRE_UPLEFT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()-20);
+						bullet->SetPosX(pOwner->GetPosX()-20);
+
+						bullet2->SetPosY(bullet->GetPosY());
+
+						bullet3->SetPosX(bullet->GetPosX());
+
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(-300);
-						bullet2->SetSpeedX(-270);
-						bullet2->SetSpeedY(-300);
-						bullet3->SetSpeedX(-300);
-						bullet3->SetSpeedY(-270);
+						bullet2->SetSpeedX(-300);
+						bullet2->SetSpeedY(-350);
+						bullet3->SetSpeedX(-350);
+						bullet3->SetSpeedY(-300);
 						break;
 					}
 				case DIRE_DOWNLEFT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()+20);
+						bullet->SetPosX(pOwner->GetPosX()-20);
+
+						bullet2->SetPosY(bullet->GetPosY());
+
+						bullet3->SetPosX(bullet->GetPosX());
+
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(300);
-						bullet2->SetSpeedX(-270);
-						bullet2->SetSpeedY(300);
-						bullet3->SetSpeedX(-300);
-						bullet3->SetSpeedY(270);
+						bullet2->SetSpeedX(-300);
+						bullet2->SetSpeedY(350);
+						bullet3->SetSpeedX(-350);
+						bullet3->SetSpeedY(300);
 						break;
 					}
 				case DIRE_DOWNRIGHT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()+20);
+						bullet->SetPosX(pOwner->GetPosX()+20);
+
+						bullet2->SetPosY(bullet->GetPosY());
+
+						bullet3->SetPosX(bullet->GetPosX());
+
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(300);
-						bullet2->SetSpeedX(270);
-						bullet2->SetSpeedY(300);
-						bullet3->SetSpeedX(300);
-						bullet3->SetSpeedY(270);
+						bullet2->SetSpeedX(300);
+						bullet2->SetSpeedY(350);
+						bullet3->SetSpeedX(350);
+						bullet3->SetSpeedY(300);
 						break;
 					}
 				}
+
+				bullet->SetSmokeID(Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL));
+
+				self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetRect(temp);
+				self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetLoopin(false);
+
 				self->m_pOM->AddObject( bullet );
 				self->m_pOM->AddObject( bullet2 );
 				self->m_pOM->AddObject( bullet3 );
@@ -1062,60 +1133,76 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				{
 				case DIRE_UP:
 					{
+						bullet->SetPosY(pOwner->GetPosY()-30);
 						bullet->SetSpeedX(0);
 						bullet->SetSpeedY(-300);
 						break;
 					}
 				case DIRE_LEFT:
 					{
+						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(0);
 						break;
 					}
 				case DIRE_RIGHT:
 					{
+						bullet->SetPosX((float)pOwner->GetPosX()+30);
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(0);
 						break;
 					}
 				case DIRE_DOWN:
 					{
+						bullet->SetPosY(pOwner->GetPosY()+20);
+						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet->SetSpeedX(0);
 						bullet->SetSpeedY(300);
 						break;
 					}
 				case DIRE_UPRIGHT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()-20);
+						bullet->SetPosX(pOwner->GetPosX()+20);
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(-300);
 						break;
 					}
 				case DIRE_UPLEFT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()-20);
+						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(-300);
 						break;
 					}
 				case DIRE_DOWNLEFT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()+20);
+						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(300);
 						break;
 					}
 				case DIRE_DOWNRIGHT:
 					{
+						bullet->SetPosY(pOwner->GetPosY()+20);
+						bullet->SetPosX(pOwner->GetPosX()+20);
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(300);
 						break;
 					}
 				}
+
+				bullet->SetSmokeID(Particle_Manager::GetInstance()->ActivateEmitter(self->smokeL));
+
+				self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetRect(temp);
+				self->m_pPM->GetActiveEmitter(bullet->GetSmokeID())->SetLoopin(false);
+
 				self->m_pOM->AddObject( bullet );
 				bullet->Release();
 				bullet = nullptr;
 			}
-
-			// Add bullet to object manager
-
 
 			break;
 		}

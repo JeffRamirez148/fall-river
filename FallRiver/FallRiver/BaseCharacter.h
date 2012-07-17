@@ -15,12 +15,12 @@ class BaseCharacter: public BaseObject
 protected: 
 	int			m_nCharacterType;
 	AnimInfo	m_playerAnim;
+	vector<int>		bloodA;
 	//Animation	thisAnim;
 
 private:
 	int				m_nHealth;
 	int				m_nDir;
-	vector<int>		bloodA;
 	bool			died;
 	float			goreTime;
 public:

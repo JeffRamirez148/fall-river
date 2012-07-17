@@ -113,10 +113,6 @@ void ChasingAI::Update(float fElapsedTime)
 	}
 	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() )
 	{
-		if(  m_pTarget->CheckHidden() )
-		{
-			m_nState = ESTATE_IDLE;
-		}
 		m_nState = ESTATE_IDLE;
 		notified = true;
 	}
@@ -149,7 +145,7 @@ void ChasingAI::Update(float fElapsedTime)
 			float savex = GetPosX();
 			float savey = GetPosY();
 
-			MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
+			MoveTo(m_pfDestination.x, m_pfDestination.y, 90);
 			if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 				AudioManager::GetInstance()->playSound(zombieWalkingID);
 			BaseCharacter::Update(fElapsedTime);
@@ -175,14 +171,14 @@ void ChasingAI::Update(float fElapsedTime)
 				if( distY - distX <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX + 300, targetPosY, 50);
+					MoveTo(targetPosX + 300, targetPosY, 90);
 			}
 			else
 			{
 				if( distY - distX <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX, targetPosY - 300, 50);
+					MoveTo(targetPosX, targetPosY - 300, 90);
 			}
 		}
 		else if( m_pTarget->GetDirection() == DIRE_DOWNRIGHT )
@@ -192,14 +188,14 @@ void ChasingAI::Update(float fElapsedTime)
 				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX + 300, targetPosY, 50);
+					MoveTo(targetPosX + 300, targetPosY, 90);
 			}
 			else
 			{
 				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX, targetPosY + 300, 50);
+					MoveTo(targetPosX, targetPosY + 300, 90);
 			}
 		}
 		if( m_pTarget->GetDirection() == DIRE_UPLEFT )
@@ -209,14 +205,14 @@ void ChasingAI::Update(float fElapsedTime)
 				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX - 300, targetPosY, 50);
+					MoveTo(targetPosX - 300, targetPosY, 90);
 			}
 			else
 			{
 				if( distY <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX, targetPosY - 300, 50);
+					MoveTo(targetPosX, targetPosY - 300, 90);
 			}
 		}
 		else if( m_pTarget->GetDirection() == DIRE_DOWNLEFT )
@@ -226,14 +222,14 @@ void ChasingAI::Update(float fElapsedTime)
 				if( distY  <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX - 300, targetPosY, 50);
+					MoveTo(targetPosX - 300, targetPosY, 90);
 			}
 			else
 			{
 				if( distY <= 10 )
 					m_nState = ESTATE_CHASING;
 				else
-					MoveTo(targetPosX, targetPosY + 300, 50);
+					MoveTo(targetPosX, targetPosY + 300, 90);
 			}
 		}
 		else if( m_pTarget->GetDirection() == DIRE_RIGHT  )
@@ -241,28 +237,28 @@ void ChasingAI::Update(float fElapsedTime)
 			if( distY <= 10 )
 				m_nState = ESTATE_CHASING;
 			else
-				MoveTo(targetPosX + 300, targetPosY, 50); 
+				MoveTo(targetPosX + 300, targetPosY, 90); 
 		}
 		else if( targetPosX > m_nPosX && m_pTarget->GetDirection() == DIRE_LEFT && distY < 100 || m_pTarget->GetDirection() == DIRE_UPLEFT || m_pTarget->GetDirection() == DIRE_DOWNLEFT)
 		{
 			if( distY <= 10 )
 				m_nState = ESTATE_CHASING;
 			else
-				MoveTo(targetPosX - 300, targetPosY, 50);
+				MoveTo(targetPosX - 300, targetPosY, 90);
 		}
 		else if( targetPosY < m_nPosY && m_pTarget->GetDirection() == DIRE_DOWN && distX < 100 )
 		{
 			if( distX <= 10 )
 				m_nState = ESTATE_CHASING;
 			else
-				MoveTo(targetPosX, targetPosY + 300, 50);
+				MoveTo(targetPosX, targetPosY + 300, 90);
 		}
 		else if( targetPosY > m_nPosY && m_pTarget->GetDirection() == DIRE_UP && distX < 100 )
 		{
 			if( distX <= 10 )
 				m_nState = ESTATE_CHASING;
 			else
-				MoveTo(targetPosX, targetPosY - 300, 50);
+				MoveTo(targetPosX, targetPosY - 300, 90);
 		}
 		Enemy::Update(fElapsedTime);
 
@@ -330,7 +326,7 @@ void ChasingAI::Update(float fElapsedTime)
 			{
 				float savex = GetPosX();
 				float savey = GetPosY();
-				MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 50 );
+				MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 90 );
 				if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
 					AudioManager::GetInstance()->playSound(zombieWalkingID);
 				BaseCharacter::Update(fElapsedTime);
@@ -419,22 +415,22 @@ void ChasingAI::Update(float fElapsedTime)
 	}
 
 	//Updating the ChasingAI's frame and timer for animations
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	m_playerAnim.fTime += fElapsedTime;
 
-	if(m_playerAnim.fTime >= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
+	if(m_playerAnim.fTime >= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
 	{
-		m_playerAnim.fTime -= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
+		m_playerAnim.fTime -= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
 		m_playerAnim.curFrame++;
-		if(m_playerAnim.curFrame < (int)thisAnim.frames[m_playerAnim.curAnimation].size())
+		if(m_playerAnim.curFrame < (int)thisAnim->frames[m_playerAnim.curAnimation].size())
 		{
-			if(strcmp(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
-				EventSystem::GetInstance()->SendEvent(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
+			if(strcmp(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
+				EventSystem::GetInstance()->SendEvent(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
 		}
-		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
+		if((m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
-		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
-			m_playerAnim.curFrame = thisAnim.frames.size() -1;
+		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame = thisAnim->frames.size() -1;
 	}
 }
 
@@ -496,6 +492,7 @@ void ChasingAI::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			AudioManager::GetInstance()->playSound(zombieHitID);
+			m_nState = ESTATE_CHASING;
 		}
 	}
 }

@@ -124,16 +124,16 @@ void HUD::Update(float aTime)
 
 		if( m_bShot == true )
 		{
-			Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_aClipAnim.curAnimID);
+			Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_aClipAnim.curAnimID);
 			m_aClipAnim.fTime += aTime;
 
-			if(m_aClipAnim.fTime >= thisAnim.frames[m_aClipAnim.curAnimation][m_aClipAnim.curFrame].duration-0.1f)
+			if(m_aClipAnim.fTime >= thisAnim->frames[m_aClipAnim.curAnimation][m_aClipAnim.curFrame].duration-0.1f)
 			{
-				m_aClipAnim.fTime -= thisAnim.frames[m_aClipAnim.curAnimation][m_aClipAnim.curFrame].duration-0.1f;
+				m_aClipAnim.fTime -= thisAnim->frames[m_aClipAnim.curAnimation][m_aClipAnim.curFrame].duration-0.1f;
 				m_aClipAnim.curFrame++;
-				if((m_aClipAnim.curFrame == thisAnim.frames[m_aClipAnim.curAnimation].size()) && thisAnim.looping[m_aClipAnim.curAnimation])
+				if((m_aClipAnim.curFrame == thisAnim->frames[m_aClipAnim.curAnimation].size()) && thisAnim->looping[m_aClipAnim.curAnimation])
 					m_aClipAnim.curFrame = 0;
-				else if(m_aClipAnim.curFrame == thisAnim.frames[m_aClipAnim.curAnimation].size() && !thisAnim.looping[m_aClipAnim.curAnimation])
+				else if(m_aClipAnim.curFrame == thisAnim->frames[m_aClipAnim.curAnimation].size() && !thisAnim->looping[m_aClipAnim.curAnimation])
 				{
 					m_aClipAnim.curFrame = 0;
 					m_aClipAnim.curAnimation = 10 - GamePlayState::GetInstance()->GetPlayer()->GetClip();

@@ -39,6 +39,9 @@ bool CGame::Input()
 	// Refresh Devices
 	m_pDI->ReadDevices();
 
+	if( ( m_pDI->KeyDown(DIK_LALT) || m_pDI->KeyDown(DIK_RALT) ) && m_pDI->KeyDown(DIK_F4) )
+		return false;
+
 	// Just in case
 	if(m_vStates.size() > 0)
 		return m_vStates.back()->Input();
