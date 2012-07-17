@@ -261,6 +261,12 @@ void Player::Update(float fElapsedTime)
 			}
 		}
 
+		if(battery <= 0)
+		{
+			battery = 0;
+			lightOn = false;
+		}
+
 		if(lightOn)
 		{
 			ViewManager::GetInstance()->SetLightPos(0,0,0);
@@ -275,20 +281,20 @@ void Player::Update(float fElapsedTime)
 			case 0:		// Flashlight
 				{
 					ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 					ViewManager::GetInstance()->SetInnerCone(.95f);
 					ViewManager::GetInstance()->SetOuterCone(.9f);
-					ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+					ViewManager::GetInstance()->SetColor(.3f, .3f, .3f);
 					decreaseTime = 1.2f;
 				}
 				break;
 			case 1:		// Mag Light
 				{
 					ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 					ViewManager::GetInstance()->SetInnerCone(.7f);
 					ViewManager::GetInstance()->SetOuterCone(.7f);
-					ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+					ViewManager::GetInstance()->SetColor(.3f, .3f, .3f);
 					decreaseTime = .6f;			
 				}
 				break;
@@ -324,10 +330,10 @@ void Player::Update(float fElapsedTime)
 		else
 		{
 			ViewManager::GetInstance()->SetLightPos(0, 0, -1);
-			ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+			ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 			ViewManager::GetInstance()->SetInnerCone(.95f);
 			ViewManager::GetInstance()->SetOuterCone(.9f);
-			ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+			ViewManager::GetInstance()->SetColor(.3f, .3f, .3f);
 		}
 
 
@@ -740,11 +746,7 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.curFrame--;
 	}
 
-	if(battery <= 0)
-	{
-		battery = 0;
-		lightOn = false;
-	}
+	
 
 
 }
@@ -771,7 +773,7 @@ void Player::Render()
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	/*Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
 
 	if( m_nState == PSTATE_SWING )
@@ -783,7 +785,7 @@ bool Player::CheckCollision(IObjects* pBase)
 			tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
 			EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
 		}
-	}
+	}*/
 	//int x =pBase->GetObjectType();
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{
@@ -898,7 +900,6 @@ void Player::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			SetHealth(GetHealth()-30);
 			AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
 			AudioManager::GetInstance()->playSound(hitID);
 		}

@@ -49,6 +49,7 @@ public:
 
 	int GetClip() {return m_nClip;}
 	int GetDamage() {return m_nDamage;}
+	void SetDamage(int damage) {m_nDamage = damage;}
 	float GetFireRate() {return m_fFireRate;}
 	float GetRange() {return m_fFiringRange;}
 

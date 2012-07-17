@@ -129,14 +129,14 @@ void MainMenuState::Exit()
 
 bool MainMenuState::Input() 
 {
-	if( m_pDI->KeyPressed(DIK_DOWN) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
+	if( m_pDI->KeyPressed(DIK_DOWN) || m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_nCursPosY += 25;
 		if( m_nCursPosY > 300 )
 			m_nCursPosY = 175;
 		audio->playSound(soundID);
 	}
-	else if( m_pDI->KeyPressed(DIK_UP) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
+	else if( m_pDI->KeyPressed(DIK_UP) || m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_nCursPosY -= 25;
 		if( m_nCursPosY < 175 )

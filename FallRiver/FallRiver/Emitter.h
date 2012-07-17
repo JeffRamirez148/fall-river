@@ -4,6 +4,7 @@
 using namespace std;
 #include <D3DX9.h>
 #pragma comment(lib, "D3DX9.lib")
+#include "AudioManager.h"
 
 class Particle;
 
@@ -71,7 +72,12 @@ class Emitter
 	void SetStartRotation(float newRot) { startRot = newRot; }
 	void SetEndRotation(float newRot) { endRot = newRot; }                   
 	void SetRect(RECT newRect) { rect = newRect;}
-	void SetSOundID( int id) { soundID = id; }
+	void SetSoundID( int id)
+	{ 
+		soundID = id;
+		AudioManager::GetInstance()->setSoundLooping( soundID, true);
+		AudioManager::GetInstance()->playSound(soundID);
+	}
 };
 
 #endif

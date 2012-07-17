@@ -94,7 +94,7 @@ void OptionsMenuState::Exit()
 
 bool OptionsMenuState::Input()
 {
-	if( m_pDI->KeyPressed(DIK_DOWN) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
+	if( m_pDI->KeyPressed(DIK_DOWN) || m_pDI->KeyPressed(DIK_S) || m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
 	{
 		m_pAM->playSound(soundID);
 		//m_nCursPosY += 25;
@@ -103,7 +103,7 @@ bool OptionsMenuState::Input()
 			m_nSelection = 3;
 		
 	}
-	else if( m_pDI->KeyPressed(DIK_UP) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
+	else if( m_pDI->KeyPressed(DIK_UP) || m_pDI->KeyPressed(DIK_W) || m_pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		m_pAM->playSound(soundID);
 		//m_nCursPosY -= 25;
@@ -115,7 +115,7 @@ bool OptionsMenuState::Input()
 	sfxVolume = m_pAM->getSoundVolume();
 	musicVolume = m_pAM->getMusicVolume();
 
-	if( m_pDI->KeyPressed(DIK_RIGHT) || m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0))
+	if( m_pDI->KeyPressed(DIK_RIGHT) || m_pDI->KeyPressed(DIK_D) || m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0))
 	{
 		m_pAM->playSound(soundID);
 		if( m_nSelection == 1 && sfxVolume < 1.0f)
@@ -131,7 +131,7 @@ bool OptionsMenuState::Input()
 				musicVolume = 1;
 		}
 	}
-	else if( m_pDI->KeyPressed(DIK_LEFT) || m_pDI->JoystickGetLStickDirPressed(DIR_LEFT,0))
+	else if( m_pDI->KeyPressed(DIK_LEFT) || m_pDI->KeyPressed(DIK_A) || m_pDI->JoystickGetLStickDirPressed(DIR_LEFT,0))
 	{
 		m_pAM->playSound(soundID);
 		if(m_nSelection == 1 && sfxVolume > 0.0f)
@@ -211,7 +211,7 @@ void OptionsMenuState::Render()
 	// Exit Buttons
 	if( m_nSelection == 0)
 	{
-		m_pVM->DrawFont(m_nFontID,"Exit",386.5f,200.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+		m_pVM->DrawFont(m_nFontID,"Exit",386.5f,200.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,255,0,0));
 	}
 	
 	m_pVM->DrawStaticTexture(m_nOptionSpriteID,402.875f,98.0f,0.7f,0.7f,&src_Exit);
@@ -225,7 +225,7 @@ void OptionsMenuState::Render()
 
 	if( m_nSelection == 1)
 	{
-		m_pVM->DrawFont(m_nFontID,"SFX",386.5f,185.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+		m_pVM->DrawFont(m_nFontID,"SFX",386.5f,185.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,255,0,0));
 		char buff[100];
 		_itoa_s(int(sfxVolume*100), buff, 10);
 		m_pVM->DrawFont(m_nFontID, buff, 386.5f, 205.8f);
@@ -256,7 +256,7 @@ void OptionsMenuState::Render()
 	m_pVM->DrawStaticTexture(m_nOptionSpriteID,456,107.5,0.6f,0.6f,&src_NotPressed,0,0,3.14f/2);
 	if( m_nSelection == 2)
 	{
-		m_pVM->DrawFont(m_nFontID,"Music",376.5f,185.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+		m_pVM->DrawFont(m_nFontID,"Music",376.5f,185.8f,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(255,255,0,0));
 		char buff[100];
 		_itoa_s(int(musicVolume*100), buff, 10);
 		m_pVM->DrawFont(m_nFontID, buff, 376.5f, 205.8f);
@@ -282,7 +282,7 @@ void OptionsMenuState::Render()
 
 	if( m_nSelection == 3)
 	{
-		m_pVM->DrawFont(m_nFontID,"Resolution",346.5f,185.8f,0.7f,0.7f,0,0,0,D3DCOLOR_ARGB(255,0,255,0));
+		m_pVM->DrawFont(m_nFontID,"Resolution",346.5f,185.8f,0.7f,0.7f,0,0,0,D3DCOLOR_ARGB(255,255,0,0));
 
 		if(m_bIsWindowed)
 			m_pVM->DrawFont(m_nFontID, "FullScreen Off", 346.5f, 215.8f,0.5f,0.5f);
