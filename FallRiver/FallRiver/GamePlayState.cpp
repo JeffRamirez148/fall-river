@@ -393,7 +393,7 @@ void GamePlayState::Enter()
 			pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
 			if( m_cNpcs.size() == 2 )
 			{
-				m_pHUD->SetTarget(pNpc);
+				m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
 			}
 			m_pOM->AddObject(pNpc);
 			pNpc = nullptr;
@@ -435,7 +435,7 @@ void GamePlayState::Enter()
 	pLevel->SetCollision(tmp);
 
 
-	vector<mapTiles> tmpTiles = pLevel->GetTiles();
+	/*vector<mapTiles> tmpTiles = pLevel->GetTiles();
 	for(unsigned int i = 0; i < tmpTiles.size(); i++) 
 	{
 		for(unsigned int x = i+1; x < tmpTiles.size(); x++) 
@@ -446,7 +446,7 @@ void GamePlayState::Enter()
 			}
 		}
 	}
-
+*/
 	/*m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
 	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
 	pBuddy->SetPosX(550);

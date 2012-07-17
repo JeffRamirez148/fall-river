@@ -18,6 +18,10 @@ class GamePlayState;
 class ViewManager;
 class HUD;
 
+struct tLocation
+{
+	float x,y;
+};
 
 
 class HUD
@@ -37,7 +41,7 @@ private:
 	float m_fRotation;
 	AnimInfo m_aClipAnim;
 	bool m_bShot;
-	BaseCharacter* m_pTarget;
+	tLocation m_pTarget;
 	int healthID;
 public:
 	int m_nHudID;
@@ -50,7 +54,7 @@ public:
 	HUD();
 
 	~HUD();
-	void SetTarget( BaseCharacter* target );
+	void SetTarget( float x, float y);
 
 	void Update(float time);
 

@@ -32,10 +32,10 @@ void Level::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
-	/*if(pDI->KeyPressed(DIK_P) )
+	if(pDI->KeyPressed(DIK_P) )
 	{
 		m_bNoClip = !m_bNoClip;
-	}*/
+	}
 	CheckTriangleCollisions();
 }
 
