@@ -194,6 +194,7 @@ void Player::Update(float fElapsedTime)
 		if( m_bIsHidden == true )
 		{
 			m_bShotBush = true;
+			m_bIsHidden = false;
 			m_fshotTimer = 0;
 		}
 	}	

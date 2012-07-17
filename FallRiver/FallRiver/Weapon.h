@@ -27,7 +27,6 @@ private:
 
 	BaseCharacter* m_pOwner;
 
-	bool m_bMelee;
 
 public: 
 	bool m_bReloading;
