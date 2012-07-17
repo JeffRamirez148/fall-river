@@ -23,7 +23,7 @@ void LoseMenuState::Enter()
 
 	LMS_ID =	pVM->RegisterTexture("resource/graphics/youLose.png");
 	tempLoseID = pVM->RegisterTexture("resource/graphics/sprites_pauseMenu.png");
-	curPos = 300;
+	curPos = 400;
 	audio = AudioManager::GetInstance();
 
 	FMOD_VECTOR tmp = {0,0,0};
@@ -76,34 +76,34 @@ bool LoseMenuState::Input()
 	{
 		audio->playSound(soundID);
 		curPos += 100;
-		if( curPos > 400 )
-			curPos = 300;
+		if( curPos > 500 )
+			curPos = 400;
 	}
 	else if( pDI->KeyPressed(DIK_UP) || pDI->KeyPressed(DIK_W) || pDI->JoystickGetLStickDirPressed(DIR_UP,0) )
 	{
 		audio->playSound(soundID);
 		curPos -= 100;
-		if( curPos < 300 )
-			curPos = 400;
+		if( curPos < 400 )
+			curPos = 500;
 	}
 
 	if(pDI->KeyPressed(DIK_ESCAPE) || pDI->JoystickButtonPressed(1,0) )
 	{
 		audio->playSound(soundID);
-		curPos = 400;
+		curPos = 500;
 	}
 
 	if(pDI->KeyPressed(DIK_RETURN) || pDI->JoystickButtonPressed(0,0))
 	{
 		audio->playSound(soundID);
-		if( curPos == 300 )
+		if( curPos == 400 )
 		{
 			CGame::GetInstance()->RemoveState();
 			CGame::GetInstance()->RemoveState();
 			CGame::GetInstance()->ChangeState(LoadMenuState::GetInstance());
 			//CGame::GetInstance()->ChangeState(LoadMenuState::GetInstance());
 		}
-		else if( curPos == 400 )
+		else if( curPos == 500 )
 		{
 			CGame::GetInstance()->RemoveState();
 			CGame::GetInstance()->RemoveState();
@@ -147,9 +147,9 @@ void LoseMenuState::Render()
 	RECT ExitRect = {1219, 223, ExitRect.left+287, ExitRect.top+44};
 	RECT BloodRect = { 343, 789, BloodRect.left+526, BloodRect.top+144};
 
-	if(curPos == 300)
+	if(curPos == 400)
 	{resumeRect.left = 1535; resumeRect.right = resumeRect.left+287;}
-	else if(curPos == 400)
+	else if(curPos == 500)
 	{ExitRect.left = 1535; ExitRect.right = ExitRect.left+287;}
 
 	pVM->DrawStaticTexture(tempLoseID, 170, curPos-50, 1.0f, 1.0f, &BloodRect);

@@ -10,9 +10,11 @@
 #include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
+#include "Emitter.h"
 #include "EventSystem.h"
 #include "Level.h"
 #include "AudioManager.h"
+#include "Particle_Manager.h"
 #include "Sound.h"
 #include "ViewManager.h"
 #include "Bush.h"
@@ -779,11 +781,77 @@ bool Player::CheckCollision(IObjects* pBase)
 	if( m_nState == PSTATE_SWING )
 	{
 		RECT cRect;
-		if( IntersectRect(&cRect, &thisFrame.activeRect, &pBase->GetRect() ) )
+		RECT collRect = {thisFrame.activeRect.left+GetPosX(), thisFrame.activeRect.top+GetPosY(), thisFrame.activeRect.right+GetPosX(), thisFrame.activeRect.bottom+GetPosY()};
+		if( IntersectRect(&cRect, &collRect, &pBase->GetRect() ) && m_playerAnim.curFrame == 1 )
 		{
 			BaseCharacter* tmp = (BaseCharacter*)pBase;
 			tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
 			EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+
+			GamePlayState* gameState = GamePlayState::GetInstance();
+			Particle_Manager* m_pPM = Particle_Manager::GetInstance();
+			int bloodA1;
+			int bloodA2;
+			int bloodA3;
+
+			RECT tmpRect1 = collRect;
+			//RECT tmpRect1 = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
+
+
+			if( GetDirection() == DIRE_DOWNRIGHT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL1());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL7());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL3());
+			}
+			else if( GetDirection() == DIRE_UPRIGHT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL2());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL8());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL3());
+			}
+			else if( GetDirection() == DIRE_RIGHT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL3());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL2());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL1());
+			}
+			else if( GetDirection() == DIRE_LEFT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL4());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL5());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL6());
+			}
+			else if( GetDirection() == DIRE_UPLEFT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL5());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL4());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL8());
+			}
+			else if(GetDirection() == DIRE_DOWNLEFT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL6());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL4());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL7());
+			}
+			else if( GetDirection() == DIRE_DOWN)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL7());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL6());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL1());
+			}
+			else if(GetDirection() == DIRE_UP)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL8());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL5());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL2());
+			}
+			m_pPM->GetActiveEmitter(bloodA1)->SetRect(tmpRect1);
+			m_pPM->GetActiveEmitter(bloodA2)->SetRect(tmpRect1);
+			m_pPM->GetActiveEmitter(bloodA3)->SetRect(tmpRect1);
+			bloodA.push_back(bloodA1);
+			bloodA.push_back(bloodA2);
+			bloodA.push_back(bloodA3);
 		}
 	}
 	//int x =pBase->GetObjectType();

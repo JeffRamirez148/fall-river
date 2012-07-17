@@ -64,7 +64,7 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 		m_fFireRate = 500;
 		m_fFiringRange = 128.0f;
 		m_nClip = 10;
-		m_nDamage = 25;
+		m_nDamage = 10;
 		m_nMaxClip = 10;
 		break;
 	}

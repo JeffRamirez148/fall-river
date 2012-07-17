@@ -208,13 +208,13 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 			info.colRect.bottom = x;
 
 			TiXmlElement* pAct = pPlayer->FirstChildElement("act_rect_info");
-			pCol->Attribute("actRectLeft", &x);
+			pAct->Attribute("actRectLeft", &x);
 			info.activeRect.left = x;
-			pCol->Attribute("actRectRight", &x);
+			pAct->Attribute("actRectRight", &x);
 			info.activeRect.right = x;
-			pCol->Attribute("actRectTop", &x);
+			pAct->Attribute("actRectTop", &x);
 			info.activeRect.top = x;
-			pCol->Attribute("actRectBottom", &x);
+			pAct->Attribute("actRectBottom", &x);
 			info.activeRect.bottom = x;
 
 			double y = 0;

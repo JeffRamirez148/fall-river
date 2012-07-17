@@ -650,8 +650,14 @@ void GamePlayState::Exit()
 
 bool GamePlayState::Input() 
 {
-	if( ( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) ) || ( ( m_pDI->KeyDown(DIK_LALT) || m_pDI->KeyDown(DIK_RALT) ) && m_pDI->KeyDown(DIK_TAB) ) )
+	if( ( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(7,0) )  )
 		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
+
+	if( m_pDI->KeyDown(DIK_LALT) || m_pDI->KeyDown(DIK_RALT) )
+	{
+		if(m_pDI->KeyDown(DIK_TAB) )
+			CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
+	}
 
 	return true;
 }
@@ -956,7 +962,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_LEFT:
 					{
-						bullet->SetPosX((float)pOwner->GetOwner()->GetRect2().left);
+						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
 						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
 
@@ -1106,7 +1112,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_LEFT:
 					{
-						bullet->SetPosX((float)pOwner->GetOwner()->GetRect2().left);
+						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(0);
 						break;
