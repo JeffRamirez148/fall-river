@@ -20,10 +20,9 @@ protected:
 private:
 	int				m_nHealth;
 	int				m_nDir;
-
-	//Particles
-	int				goreA;
-
+	vector<int>		bloodA;
+	bool			died;
+	float			goreTime;
 public:
 	BaseCharacter();
 	virtual ~BaseCharacter();

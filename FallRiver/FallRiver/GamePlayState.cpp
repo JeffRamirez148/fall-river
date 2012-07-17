@@ -52,6 +52,7 @@ GamePlayState::GamePlayState()
 	backGroundID = -1;
 	swingHitID = -1;
 	SpawnEnemyAniID = -1;
+	logID = -1;
 
 	winLose = true;
 	questFlag = false;
@@ -71,7 +72,15 @@ GamePlayState::GamePlayState()
 	bloodL6 = -1;
 	bloodL7 = -1;
 	bloodL8 = -1;
-	goreL = -1;
+	goreL1 = -1;
+	goreL2 = -1;
+	goreL3 = -1;
+	goreL4 = -1;
+	goreL5 = -1;
+	goreL6 = -1;
+	goreL7 = -1;
+	goreL8 = -1;
+
 }
 
 GamePlayState* GamePlayState::GetInstance() 
@@ -110,11 +119,20 @@ void GamePlayState::Enter()
 	bloodL6 = m_pPM->LoadEmitter("blood6.xml");
 	bloodL7 = m_pPM->LoadEmitter("blood7.xml");
 	bloodL8 = m_pPM->LoadEmitter("blood8.xml");
-	goreL = m_pPM->LoadEmitter("gore.xml");
+	goreL1 = m_pPM->LoadEmitter("gore1.xml");
+	goreL2 = m_pPM->LoadEmitter("gore2.xml");
+	goreL3 = m_pPM->LoadEmitter("gore3.xml");
+	goreL4 = m_pPM->LoadEmitter("gore4.xml");
+	goreL5 = m_pPM->LoadEmitter("gore5.xml");
+	goreL6 = m_pPM->LoadEmitter("gore6.xml");
+	goreL7 = m_pPM->LoadEmitter("gore7.xml");
+	goreL8 = m_pPM->LoadEmitter("gore8.xml");
+
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
 
+	logID = m_pVM->RegisterTexture("resource/graphics/logs.png");
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Level			>( _T("Level") );
@@ -278,6 +296,7 @@ void GamePlayState::Enter()
 			fireA.push_back(tmp3);
 			fireA.push_back(tmp2);
 			fireA.push_back(tmp1);
+			m_pPM->GetActiveEmitter(tmp1)->SetSoundID( m_pAM->RegisterSound("resource/Sounds/fire.wav"));
 			tmp.erase(nth);
 			i--;
 		}
@@ -744,62 +763,92 @@ void GamePlayState::Render()
 	m_pVM->GetSprite()->Flush();
 	//m_clevel.Render();
 
+
 	m_pOM->RenderAllObjects();
+	
+	for( unsigned int i = 0; i < fireA.size(); ++i)
+	{
+		float tmpx, tmpy;
+		tmpx = m_pPM->GetActiveEmitter(fireA[i])->rect.left;
+		tmpy = m_pPM->GetActiveEmitter(fireA[i])->rect.top;
+		RECT tmp = {0,0,32,32};
+		m_pVM->DrawStaticTexture(logID,tmpx-GetCamera().x - 16,tmpy-GetCamera().y - 16,2.0f,2.0f, &tmp);
+	}
 
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
 	{
-		float x, y;
-		int z;
-		x = m_cBushes[i]->GetPosX();
-		y = m_cBushes[i]->GetPosY();
-		z = m_cBushes[i]->GetImageID();
-		RECT tmp = {0,0,64,64};
-		if(m_cBushes[i]->GetShadow() && m_cPlayer->IsOn())
-		{
-			if(m_cPlayer->GetDirection() < 4)
-				m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, (m_cPlayer->GetDirection() - 1) * 1.57079f,D3DCOLOR_ARGB(200,0,0,0));
-			else
-			{
-				switch(m_cPlayer->GetDirection())
-				{
-				case 4:
-					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -0.78539f,D3DCOLOR_ARGB(200,0,0,0));
-					break;
-				case 5:
-					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 0.78539f,D3DCOLOR_ARGB(200,0,0,0));
-					break;
-				case 6:
-					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -2.35619f,D3DCOLOR_ARGB(200,0,0,0));
-					break;
-				case 7:
-					m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 2.35619f,D3DCOLOR_ARGB(200,0,0,0));
-					break;
-				default:
-					break;
-				}
-			}
-		}
-		else if( m_cPlayer->IsOn() && m_cPlayer->GetLightType() > 1)
-		{
-			float angle = 0;
-			if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-				angle = 0.78539f;
-			else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-				angle = -0.78539f;
-			else if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-				angle = -2.35619f;
-			else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-				angle = 2.35619f;
-			else if(m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-				angle = 0.0f;
-			else if(m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-				angle = 3.14159f;
-			else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-				angle = -1.57079f;
-			else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-				angle = 1.57079f;
 
-			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
+
+		//if(m_cBushes[i]->GetShadow() && m_cPlayer->IsOn())
+		//{
+		//	if(m_cPlayer->GetDirection() < 4)
+		//		m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, (m_cPlayer->GetDirection() - 1) * 1.57079f,D3DCOLOR_ARGB(200,0,0,0));
+		//	else
+		//	{
+		//		switch(m_cPlayer->GetDirection())
+		//		{
+		//		case 4:
+		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -0.78539f,D3DCOLOR_ARGB(200,0,0,0));
+		//			break;
+		//		case 5:
+		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 0.78539f,D3DCOLOR_ARGB(200,0,0,0));
+		//			break;
+		//		case 6:
+		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -2.35619f,D3DCOLOR_ARGB(200,0,0,0));
+		//			break;
+		//		case 7:
+		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 2.35619f,D3DCOLOR_ARGB(200,0,0,0));
+		//			break;
+		//		default:
+		//			break;
+		//		}
+		//	}
+		//}
+		//else
+		if( m_cPlayer->IsOn() && (m_cPlayer->GetLightType() > 1 || m_cBushes[i]->GetShadow()))
+		{
+			//float angle = 0;
+			//if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+			//	angle = 0.78539f;
+			//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+			//	angle = -0.78539f;
+			//else if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+			//	angle = -2.35619f;
+			//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+			//	angle = 2.35619f;
+			//else if(m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
+			//	angle = 0.0f;
+			//else if(m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
+			//	angle = 3.14159f;
+			//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+			//	angle = -1.57079f;
+			//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+			//	angle = 1.57079f;
+
+			RECT tmp = {0,0,64,64};
+
+			float angle = 0;
+			float x2 = m_cPlayer->GetPosX() - m_cBushes[i]->GetPosX();
+			float x = x2;
+			float y2 = m_cPlayer->GetPosY() - m_cBushes[i]->GetPosY();
+			float y = y2;
+			x2 *= x2;
+			y2 *= y2;
+			float distance = sqrt(x2 + y2);
+
+			angle = acos(x/distance);
+			if( y < 0)
+				angle *=  -1;
+
+			angle -= 1.57079f;
+
+			float xP, yP;
+			int z;
+			xP = m_cBushes[i]->GetPosX();
+			yP = m_cBushes[i]->GetPosY();
+			z = m_cBushes[i]->GetImageID();
+
+			m_pVM->DrawStaticTexture(z,xP-GetCamera().x,yP-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
 		
 		}
 		m_cBushes[i]->Render();
