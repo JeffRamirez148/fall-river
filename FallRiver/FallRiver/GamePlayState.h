@@ -52,7 +52,7 @@ private:
 
 	int soundID2;
 	int musicID;
-	
+	int logID;
 
 	// Rain particles
 	int rainA;
@@ -74,7 +74,14 @@ private:
 	int bloodL7;
 	int bloodL8;
 
-	int goreL;
+	int goreL1;
+	int goreL2;
+	int goreL3;
+	int goreL4;
+	int goreL5;
+	int goreL6;
+	int goreL7;
+	int goreL8;
 
 	// Data Members
 	float fTime;
@@ -104,7 +111,15 @@ private:
 
 public:
 
-	int	GetGoreL() { return goreL; }
+	int GetGoreL1() { return goreL1;}
+	int GetGoreL2() { return goreL2;}
+	int GetGoreL3() { return goreL3;}
+	int GetGoreL4() { return goreL4;}
+	int GetGoreL5() { return goreL5;}
+	int GetGoreL6() { return goreL6;}
+	int GetGoreL7() { return goreL7;}
+	int GetGoreL8() { return goreL8;}
+
 	int GetBloodL1() { return bloodL1;}
 	int GetBloodL2() { return bloodL2;}
 	int GetBloodL3() { return bloodL3;}

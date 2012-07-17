@@ -84,7 +84,7 @@ private:
 	int QuestLog;
 
 public: 
-	Animation GetAnimation(int AnimID) {return animations[AnimID]; };
+	Animation* GetAnimation(int AnimID) {return &animations[AnimID]; };
 
 	static ViewManager* GetInstance();
 	//Initializing the manager

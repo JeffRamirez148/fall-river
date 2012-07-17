@@ -274,20 +274,20 @@ void Player::Update(float fElapsedTime)
 			case 0:		// Flashlight
 				{
 					ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 					ViewManager::GetInstance()->SetInnerCone(.95f);
 					ViewManager::GetInstance()->SetOuterCone(.9f);
-					ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+					ViewManager::GetInstance()->SetColor(.3f, .3f, .3f);
 					decreaseTime = 1.2f;
 				}
 				break;
 			case 1:		// Mag Light
 				{
 					ViewManager::GetInstance()->SetLightPos(0, 0, 0);
-					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 					ViewManager::GetInstance()->SetInnerCone(.7f);
 					ViewManager::GetInstance()->SetOuterCone(.7f);
-					ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+					ViewManager::GetInstance()->SetColor(.3f, .3f, .3f);
 					decreaseTime = .6f;			
 				}
 				break;
@@ -323,10 +323,10 @@ void Player::Update(float fElapsedTime)
 		else
 		{
 			ViewManager::GetInstance()->SetLightPos(0, 0, -1);
-			ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.5f);
+			ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 			ViewManager::GetInstance()->SetInnerCone(.95f);
 			ViewManager::GetInstance()->SetOuterCone(.9f);
-			ViewManager::GetInstance()->SetColor(.5f, .5f, .5f);
+			ViewManager::GetInstance()->SetColor(.3f, .3f, .3f);
 		}
 
 
@@ -701,21 +701,21 @@ void Player::Update(float fElapsedTime)
 		m_vpWeapons[i]->Update(fElapsedTime);
 
 	//Updating the player's frame and timer for animations
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	m_playerAnim.fTime += fElapsedTime;
 
-	if(m_playerAnim.fTime >= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
+	if(m_playerAnim.fTime >= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
 	{
-		m_playerAnim.fTime -= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
+		m_playerAnim.fTime -= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
 		m_playerAnim.curFrame++;
-		if(m_playerAnim.curFrame < (int)thisAnim.frames[m_playerAnim.curAnimation].size())
+		if(m_playerAnim.curFrame < (int)thisAnim->frames[m_playerAnim.curAnimation].size())
 		{
-			if(strcmp(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
-				EventSystem::GetInstance()->SendEvent(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
+			if(strcmp(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
+				EventSystem::GetInstance()->SendEvent(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
 		}
-		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
+		if((m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
-		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
+		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame--;
 	}
 

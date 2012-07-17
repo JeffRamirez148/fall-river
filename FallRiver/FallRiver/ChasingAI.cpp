@@ -46,6 +46,7 @@ ChasingAI::ChasingAI()
 	m_playerAnim.curAnimID = 0;
 	m_playerAnim.curFrame = 0;
 	m_playerAnim.fTime = 0;
+	cryTimer = 0;
 }
 
 ChasingAI::~ChasingAI()
@@ -56,7 +57,7 @@ ChasingAI::~ChasingAI()
 void ChasingAI::Update(float fElapsedTime)
 {
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
-
+	cryTimer += fElapsedTime;
 	sound1.x = m_nPosX;
 	sound1.y = m_nPosY;
 	AudioManager* m_pAM = AudioManager::GetInstance();
@@ -80,6 +81,13 @@ void ChasingAI::Update(float fElapsedTime)
 		distX = -distX;
 	if( distY < 0)
 		distY = -distY;
+	cryTimer += fElapsedTime;
+	if(cryTimer > .5f)
+	{
+		//AudioManager::GetInstance()->playSound(notifyID);
+		AudioManager::GetInstance()->playSound(notifyID);	
+		cryTimer = 0;
+	}
 
 	if( (distX < 10 && distY < 10) || (distX-m_pTarget->GetWidth() < 10 && distY - m_pTarget->GetHeight() < 10))
 	{
@@ -411,22 +419,22 @@ void ChasingAI::Update(float fElapsedTime)
 	}
 
 	//Updating the ChasingAI's frame and timer for animations
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	m_playerAnim.fTime += fElapsedTime;
 
-	if(m_playerAnim.fTime >= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
+	if(m_playerAnim.fTime >= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
 	{
-		m_playerAnim.fTime -= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
+		m_playerAnim.fTime -= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
 		m_playerAnim.curFrame++;
-		if(m_playerAnim.curFrame < (int)thisAnim.frames[m_playerAnim.curAnimation].size())
+		if(m_playerAnim.curFrame < (int)thisAnim->frames[m_playerAnim.curAnimation].size())
 		{
-			if(strcmp(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
-				EventSystem::GetInstance()->SendEvent(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
+			if(strcmp(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
+				EventSystem::GetInstance()->SendEvent(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
 		}
-		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
+		if((m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
-		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
-			m_playerAnim.curFrame = thisAnim.frames.size() -1;
+		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
+			m_playerAnim.curFrame = thisAnim->frames.size() -1;
 	}
 }
 

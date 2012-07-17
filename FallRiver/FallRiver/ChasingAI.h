@@ -13,6 +13,7 @@ private:
 	bool notified;
 	bool helped;
 	DWORD attackDelay;
+	float cryTimer;
 
 public: 
 	ChasingAI();

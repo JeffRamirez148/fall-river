@@ -2,9 +2,19 @@
 #include "Particle_Manager.h"
 #include "Particle.h"
 #include "ViewManager.h"
+#include "GamePlayState.h"
 void Emitter::Update(float fElapsedTime) 
 {
-
+	if(soundID > 0)
+	{
+		FMOD_VECTOR tmp = { 0, 0, 0 };
+		AudioManager::GetInstance()->setSoundVel(soundID, tmp);
+		tmp.x = (float)rect.left;//-GamePlayState::GetInstance()->GetCamera().x;
+		tmp.y = (float)rect.top;//-GamePlayState::GetInstance()->GetCamera().y;
+		tmp.z = 0;
+		AudioManager::GetInstance()->setSoundPos(soundID, tmp);
+		AudioManager::GetInstance()->setSoundLooping( soundID, true);
+	}
 	// Spawn particle?
 	spawnTimer += fElapsedTime;
 	if(spawnTimer >= spawnRate && spawn)
@@ -332,7 +342,7 @@ Emitter::Emitter(const Emitter& emitter)
 	startRot = emitter.startRot;
 	spawnTimer = 0.0f;
 	soundID = emitter.soundID;
-
+	AudioManager::GetInstance()->playSound(soundID);
 }
 
 Emitter& Emitter::operator=(const Emitter& emitter)
@@ -367,6 +377,7 @@ Emitter& Emitter::operator=(const Emitter& emitter)
 		startRot = emitter.startRot;
 		spawnTimer = 0.0f;
 		soundID = emitter.soundID;
+		AudioManager::GetInstance()->playSound(soundID);
 	}
 	return *this;
 }
