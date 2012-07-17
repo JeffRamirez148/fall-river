@@ -42,6 +42,8 @@ private:
 	AnimInfo m_aClipAnim;
 	bool m_bShot;
 	tLocation m_pTarget;
+	float ScreenOffsetX;
+	float ScreenOffsetY;
 	int healthID;
 public:
 	int m_nHudID;

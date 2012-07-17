@@ -3,6 +3,7 @@
 
 #include "HUD.h"
 #include "GamePlayState.h"
+#include "CGame.h"
 #include "ViewManager.h"
 #include "Player.h"
 #include "Weapon.h"
@@ -23,6 +24,8 @@ HUD::HUD()
 	m_bShot = false;
 	m_pTarget.x = 0;
 	m_pTarget.y = 0;
+	ScreenOffsetX =float(CGame::GetInstance()->GetScreenWidth())*0.05f;
+	ScreenOffsetY =float(CGame::GetInstance()->GetScreenHeight())*0.05f;
 	healthID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/ECG.wav");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(healthID, sound1);
@@ -149,6 +152,8 @@ void HUD::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	
+	
+	
 	RECT test;
 	test.top = 14;
 	test.right = 588;
@@ -211,40 +216,40 @@ void HUD::Render()
 
 	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_RIFLE)
 	{
-		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Rifle,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+50,ScreenOffsetY+132,0.5f,0.5f,&Rifle,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 
 	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_PISTOL)
 	{
-		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Pistol,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+50,ScreenOffsetY+132,0.5f,0.5f,&Pistol,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 
 
 	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_SHOTGUN)
 	{
-		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Shotgun,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+50,ScreenOffsetY+132,0.5f,0.5f,&Shotgun,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 
 	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() == WPN_MACHETE)
 	{
-		pVM->DrawStaticTexture(m_nHudID,50,132,0.5f,0.5f,&Machete,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+50,ScreenOffsetY+132,0.5f,0.5f,&Machete,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 
 
 	
-	pVM->DrawStaticTexture(m_nHudID,0,0,0.5f,0.5f,&test,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+0,ScreenOffsetY+0,0.5f,0.5f,&test,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	//pVM->DrawStaticTexture(m_nHudID,125,65,0.5f,0.5f,&test1,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
-	pVM->DrawStaticTexture(m_nHudID,270,0,0.5f,0.5f,&test1,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+270,ScreenOffsetY+0,0.5f,0.5f,&test1,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 
 	//pVM->DrawStaticTexture(m_nHudID,155,94,0.5f,0.5f,&test4,80,50,GamePlayState::GetInstance()->GetPlayer()->battery*0.021f,D3DCOLOR_ARGB(180,255,255,255));
-	pVM->DrawStaticTexture(m_nHudID,300,29,0.5f,0.5f,&test4,80,50,GamePlayState::GetInstance()->GetPlayer()->battery*0.021f,D3DCOLOR_ARGB(180,255,255,255));
+	pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+300,ScreenOffsetY+29,0.5f,0.5f,&test4,80,50,GamePlayState::GetInstance()->GetPlayer()->battery*0.021f,D3DCOLOR_ARGB(180,255,255,255));
 
-	pVM->DrawStaticTexture(m_nHudID,125,0,0.5f,0.5f,&test2,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+	pVM->DrawStaticTexture(m_nHudID,ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test2,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 
 	if( GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() != WPN_MACHETE)
 	{
 
-		pVM->DrawAnimation(&m_aClipAnim, 20, 152,0.3f,0.3f);
+		pVM->DrawAnimation(&m_aClipAnim, ScreenOffsetX+20, ScreenOffsetY+152,0.3f,0.3f);
 
 	}
 
@@ -252,60 +257,60 @@ void HUD::Render()
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[0],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[0],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[0],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[0],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[0],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[0],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 1*m_fAniSpeed && m_fTime < 2*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[1],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[1],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[1],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[1],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[1],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[1],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 2*m_fAniSpeed && m_fTime < 3*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[2],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[2],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[2],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[2],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[2],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[2],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 3*m_fAniSpeed && m_fTime < 4*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[3],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[3],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[3],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[3],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[3],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[3],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 4*m_fAniSpeed && m_fTime < 5*m_fAniSpeed )
@@ -314,165 +319,165 @@ void HUD::Render()
 		AudioManager::GetInstance()->playSound(healthID);
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[4],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[4],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[4],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[4],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[4],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[4],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 5*m_fAniSpeed && m_fTime < 6*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[5],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[5],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[5],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[5],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[5],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[5],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 6*m_fAniSpeed && m_fTime < 7*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[6],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[6],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[6],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[6],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[6],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[6],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 7*m_fAniSpeed && m_fTime < 8*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[7],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[7],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[7],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[7],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[7],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[7],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 8*m_fAniSpeed && m_fTime < 9*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[8],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[8],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[8],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[8],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[8],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[8],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 9*m_fAniSpeed && m_fTime < 10*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[9],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[9],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[9],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[9],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[9],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[9],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 10*m_fAniSpeed && m_fTime < 11*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[10],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[10],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[10],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[10],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[10],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[10],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 11*m_fAniSpeed && m_fTime < 12*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[11],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[11],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[11],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[11],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[11],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[11],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 12*m_fAniSpeed && m_fTime < 13*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[12],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[12],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[12],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[12],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[12],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[12],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 13*m_fAniSpeed && m_fTime < 14*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[13],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[13],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[13],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[13],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[13],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[13],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 14*m_fAniSpeed && m_fTime < 15*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[14],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[14],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[14],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[14],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[14],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[14],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 15*m_fAniSpeed && m_fTime < 16*m_fAniSpeed )
@@ -481,195 +486,195 @@ void HUD::Render()
 		AudioManager::GetInstance()->playSound(healthID);
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[15],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[15],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[15],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[15],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[15],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[15],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 16*m_fAniSpeed && m_fTime < 17*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[16],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[16],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[16],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[16],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[16],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[16],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 17*m_fAniSpeed && m_fTime < 18*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[17],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[17],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[17],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[17],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[17],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[17],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 18*m_fAniSpeed && m_fTime < 19*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[18],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[18],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[18],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[18],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[18],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[18],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 19*m_fAniSpeed && m_fTime < 20*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[19],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[19],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[19],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[19],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[19],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[19],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 20*m_fAniSpeed && m_fTime < 21*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[20],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[20],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[20],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[20],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[20],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[20],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 21*m_fAniSpeed && m_fTime < 22*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[21],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[21],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[21],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[21],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[21],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[21],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 22*m_fAniSpeed && m_fTime < 23*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[22],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[22],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[22],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[22],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[22],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[22],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 23*m_fAniSpeed && m_fTime < 24*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[23],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[23],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[23],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[23],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[23],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[23],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 24*m_fAniSpeed && m_fTime < 25*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[24],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[24],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[24],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[24],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[24],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[24],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 25*m_fAniSpeed && m_fTime < 26*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[25],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[25],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[25],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[25],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[25],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[25],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 26*m_fAniSpeed && m_fTime < 27*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[26],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[26],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[26],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[26],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[26],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[26],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 	else if( m_fTime > 27*m_fAniSpeed && m_fTime < 28*m_fAniSpeed )
 	{
 		if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[27],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[27],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 		}
 		else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[27],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[27],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 		}
 		else
 		{
-			pVM->DrawStaticTexture(m_vFrameIDs[27],125,0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+			pVM->DrawStaticTexture(m_vFrameIDs[27],ScreenOffsetX+125,ScreenOffsetY+0,0.5f,0.5f,&test3,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 		}
 	}
 
@@ -690,19 +695,19 @@ void HUD::Render()
 	int y = GamePlayState::GetInstance()->GetPlayer()->GetLightType() ;
 	if( y == 0 )
 	{
-		pVM->DrawFont(m_nFontID,"Flash",355,2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawFont(m_nFontID,"Flash",ScreenOffsetX+355,ScreenOffsetY+2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 	else if( y == 1)
 	{
-		pVM->DrawFont(m_nFontID,"MAG",355,2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawFont(m_nFontID,"MAG",ScreenOffsetX+355,ScreenOffsetY+2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 	else if( y == 2)
 	{
-		pVM->DrawFont(m_nFontID,"Lantern",355,2,0.40f,0.40f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawFont(m_nFontID,"Lantern",ScreenOffsetX+355,ScreenOffsetY+2,0.40f,0.40f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 	else if( y == 3)
 	{
-		pVM->DrawFont(m_nFontID,"Lighter",355,2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
+		pVM->DrawFont(m_nFontID,"Lighter",ScreenOffsetX+355,ScreenOffsetY+2,0.45f,0.45f,0,0,0,D3DCOLOR_ARGB(180,255,255,255));
 	}
 
 
@@ -712,17 +717,17 @@ void HUD::Render()
 	if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 50 )
 	{
 		m_fAniSpeed = .07f;
-		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
+		pVM->DrawFont(m_nFontID,szName,ScreenOffsetX+210,ScreenOffsetY+0,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(180,0,255,0));
 	}
 	else if( GamePlayState::GetInstance()->GetPlayer()->GetHealth() > 25 )
 	{
 		m_fAniSpeed = .05f;
-		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
+		pVM->DrawFont(m_nFontID,szName,ScreenOffsetX+210,ScreenOffsetY+0,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(180,255,255,0));
 	}
 	else
 	{
 		m_fAniSpeed = .02f;
-		pVM->DrawFont(m_nFontID,szName,210,0,1,1,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
+		pVM->DrawFont(m_nFontID,szName,ScreenOffsetX+210,ScreenOffsetY+0,0.8f,0.8f,0,0,0,D3DCOLOR_ARGB(180,255,0,0));
 	}
 	
 	//char szName[100] = {};
@@ -751,7 +756,7 @@ void HUD::Render()
 	{
 		_stprintf_s( buffer, 100, _T("Ammo / %i"),  GamePlayState::GetInstance()->GetPlayer()->GetAmmo() );
 		wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-		pVM->DrawFont(m_nFontID,szName,50,160,0.5f,0.5f);
+		pVM->DrawFont(m_nFontID,szName,ScreenOffsetX+50,ScreenOffsetY+160,0.5f,0.5f);
 	}
 
 	//_stprintf_s( buffer, 100, _T("Weapon - %i"),  GamePlayState::GetInstance()->GetPlayer()->GetWeaponType() );
@@ -769,7 +774,7 @@ void HUD::Render()
 
 
 	
-	pVM->DrawStaticTexture(m_nArrowID,tmpX-22.5f,tmpY-offsetY,0.5f,0.5f,&rArrow,34.5f,54,m_fRotation,D3DCOLOR_ARGB(180,255,255,255));
+	pVM->DrawStaticTexture(m_nArrowID,ScreenOffsetX+tmpX-22.5f,ScreenOffsetY+tmpY-offsetY,0.5f,0.5f,&rArrow,34.5f,54,m_fRotation,D3DCOLOR_ARGB(180,255,255,255));
 
 
 
