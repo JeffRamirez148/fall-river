@@ -254,6 +254,12 @@ void Player::Update(float fElapsedTime)
 			}
 		}
 
+		if(battery <= 0)
+		{
+			battery = 0;
+			lightOn = false;
+		}
+
 		if(lightOn)
 		{
 			ViewManager::GetInstance()->SetLightPos(0,0,0);
@@ -713,11 +719,7 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.curFrame--;
 	}
 
-	if(battery <= 0)
-	{
-		battery = 0;
-		lightOn = false;
-	}
+	
 
 
 }
