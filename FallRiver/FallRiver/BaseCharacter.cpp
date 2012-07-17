@@ -25,7 +25,7 @@ void BaseCharacter::Update(float fElapsedTime)
 	m_nPosY += m_nVelY * fElapsedTime;
 	goreTime += fElapsedTime;
 
-	for(int i = 0; i < bloodA.size(); ++i)
+	for(unsigned int i = 0; i < bloodA.size(); ++i)
 	{
 		Particle_Manager::GetInstance()->GetActiveEmitter( bloodA[i] )->loopin = !Particle_Manager::GetInstance()->GetActiveEmitter( bloodA[i] )->loopin;
 	}
@@ -207,8 +207,8 @@ RECT BaseCharacter::GetRect()
 
 RECT BaseCharacter::GetRect2()
 {
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
 	RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 	return cRect;
 }

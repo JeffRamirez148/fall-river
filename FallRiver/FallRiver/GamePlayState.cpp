@@ -769,8 +769,8 @@ void GamePlayState::Render()
 	for( unsigned int i = 0; i < fireA.size(); ++i)
 	{
 		float tmpx, tmpy;
-		tmpx = m_pPM->GetActiveEmitter(fireA[i])->rect.left;
-		tmpy = m_pPM->GetActiveEmitter(fireA[i])->rect.top;
+		tmpx = float(m_pPM->GetActiveEmitter(fireA[i])->rect.left);
+		tmpy = float(m_pPM->GetActiveEmitter(fireA[i])->rect.top);
 		RECT tmp = {0,0,32,32};
 		m_pVM->DrawStaticTexture(logID,tmpx-GetCamera().x - 16,tmpy-GetCamera().y - 16,2.0f,2.0f, &tmp);
 	}

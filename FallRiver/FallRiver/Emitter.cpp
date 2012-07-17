@@ -9,8 +9,8 @@ void Emitter::Update(float fElapsedTime)
 	{
 		FMOD_VECTOR tmp = { 0, 0, 0 };
 		AudioManager::GetInstance()->setSoundVel(soundID, tmp);
-		tmp.x = rect.left;//-GamePlayState::GetInstance()->GetCamera().x;
-		tmp.y = rect.top;//-GamePlayState::GetInstance()->GetCamera().y;
+		tmp.x = (float)rect.left;//-GamePlayState::GetInstance()->GetCamera().x;
+		tmp.y = (float)rect.top;//-GamePlayState::GetInstance()->GetCamera().y;
 		tmp.z = 0;
 		AudioManager::GetInstance()->setSoundPos(soundID, tmp);
 		AudioManager::GetInstance()->setSoundLooping( soundID, true);
