@@ -158,6 +158,10 @@ public:
 
 	static void MessageProc(IMessage* pMsg);
 	vector<NPC*>* GetNPCs(void) { return &m_cNpcs; }
+
+	int GetSpawnEnemyID() { return SpawnEnemyAniID; }
+	void AddEnemy(Enemy* enemy) { m_cEnemies.push_back(enemy); }
+	vector<Enemy*> GetEnemies() {return m_cEnemies;}
 };
 
 #endif

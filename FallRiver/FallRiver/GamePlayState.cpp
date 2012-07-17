@@ -449,6 +449,32 @@ void GamePlayState::Enter()
 				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
 			}
+		} 
+		else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
+		{
+			m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+			Boss1* pBoss = (Boss1*)m_cBoss1;
+			pBoss->SetHealth(200);
+			pBoss->SetHeight(nth->height);
+			pBoss->SetWidth(nth->width);
+			pBoss->SetPosX( (float)nth->x );
+			pBoss->SetPosY( (float)nth->y );
+			pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+			pBoss->SetTarget(pPlayer);
+			m_pOM->AddObject(pBoss);
+
+			Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+			eWeapon->SetHeight(20);
+			eWeapon->SetWidth(10);
+			eWeapon->SetImageID(-1);
+			eWeapon->SetOwner(pBoss);
+			eWeapon->Init(WPN_SHOTGUN, 100, 0);
+			eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+			pBoss->SetWeapon(eWeapon);
+
+			pSpawn = nullptr;
+			tmp.erase(nth);
+			i--;
 		}
 	}
 	pLevel->SetCollision(tmp);
@@ -724,6 +750,8 @@ void GamePlayState::Update(float fElapsedTime)
 			m_cSpawn[i]->SetSpawn( false );
 		}
 	}
+
+
 	//m_pHUD->Input();
 	m_pHUD->Update(fElapsedTime);
 	m_pPM->Update(fElapsedTime);
@@ -1203,11 +1231,15 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				if( enemys == self->m_cEnemies[i] )
 				{
 					vector<Enemy*>::iterator nth = self->m_cEnemies.begin() + i;
+					if(enemys->GetBossBool())
+						--(self->m_cBoss1->enemies);
+					self->m_cEnemies[i] = nullptr;
 					self->m_cEnemies.erase(nth);
 					break;
 				}
 			}
 			self->m_pOM->RemoveObject( enemys );
+
 			break;
 		}
 	case MSG_DESTROY_NPC:

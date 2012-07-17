@@ -13,6 +13,10 @@
 #include "GamePlayState.h"
 #include "AudioManager.h"
 #include "Weapon.h"
+#include "GamePlayState.h"
+#include "ChasingAI.h"
+#include "ShootingAi.h"
+
 
 Boss1::Boss1()
 {
@@ -23,7 +27,7 @@ Boss1::Boss1()
 	m_dwIdleWait = 0;
 	m_nVelX = 0;
 	m_nVelY = 0;
-	m_nMinnions = 0;
+	m_nSpawnCounter = 0;
 	m_nStages = 0;
 	m_dwFireDelay = 0;
 	m_pWeapon = nullptr;
@@ -34,7 +38,9 @@ Boss1::Boss1()
 	m_playerAnim.curAnimID = 0;
 	m_playerAnim.curFrame = 0;
 	m_playerAnim.fTime = 0;
-
+	m_fSpawnTime = 0;
+	oldSize = 0;
+	enemies = 0;
 	m_pOM = ObjectManager::GetInstance();
 	m_pOF = Factory::GetInstance();
 }
@@ -58,13 +64,98 @@ void Boss1::Update(float fElapsedTime)
 	}
 
 	m_pWeapon->Update(fElapsedTime);
+	m_fSpawnTime += fElapsedTime;
+
+	//if(oldSize > GamePlayState::GetInstance()->GetEnemies().size())
+	//	for( int i = 0; i < oldSize - GamePlayState::GetInstance()->GetEnemies().size(); ++i)
+	//			m_cEnemies.erase(m_cEnemies.begin());
 
 	if( m_nStages == 0 )
 	{
-		if( m_nMinnions == 0 )
-			Summon();
+		if( m_fSpawnTime > 3 )
+		{
+			if( m_nSpawnCounter < 1 )
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight(GetHeight());
+				pEnemy->SetWidth(GetWidth());
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
+				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
+				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
+				pEnemy->SetHealth(100);
+				pEnemy->SetBossBool(true);
+				pEnemy->SetAnimation(GamePlayState::GetInstance()->GetSpawnEnemyID());
+				m_pOM->AddObject(pEnemy);
+				GamePlayState::GetInstance()->AddEnemy(m_cEnemies[m_cEnemies.size()-1]);
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pEnemy);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+				eWeapon->SetPosY(pEnemy->GetPosY());
+				pEnemy->SetWeapon(eWeapon);
+				oldSize = GamePlayState::GetInstance()->GetEnemies().size();
+				m_fSpawnTime = 0;
+				m_nSpawnCounter++;
+				enemies++;
+			}
+			else if(enemies <= 0)
+			{
+				m_nStages = 1;
+				m_nSpawnCounter = 0;
+				m_fSpawnTime = 0;
+			}
+		}
 	}
 	else if( m_nStages == 1 )
+	{
+		if( m_fSpawnTime > 3 )
+		{
+			if( m_nSpawnCounter < 1 )
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight(GetHeight());
+				pEnemy->SetWidth(GetWidth());
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
+				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
+				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
+				pEnemy->SetHealth(100);
+				pEnemy->SetBossBool(true);
+				pEnemy->SetAnimation(GamePlayState::GetInstance()->GetSpawnEnemyID());
+				m_pOM->AddObject(pEnemy);
+				GamePlayState::GetInstance()->AddEnemy(m_cEnemies[m_cEnemies.size()-1]);
+				GamePlayState::GetInstance()->AddEnemy(m_cEnemies[m_cEnemies.size()-1]);
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pEnemy);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+				eWeapon->SetPosY(pEnemy->GetPosY());
+				pEnemy->SetWeapon(eWeapon);
+
+				m_fSpawnTime = 0;
+				m_nSpawnCounter++;
+				enemies++;
+			}
+			else if(enemies <= 0)
+			{
+				m_nStages = 2;
+				m_nSpawnCounter = 0;
+				m_fSpawnTime = 0;
+			}
+		}
+	}
+	else if( m_nStages == 2 )
 	{
 		if(m_nState == ESTATE_CHASING)
 		{
@@ -104,40 +195,7 @@ void Boss1::Update(float fElapsedTime)
 			m_nState = ESTATE_CHASING;
 		}
 
-		if( m_nState == ESTATE_IDLE )
-		{
-			float fDistX = m_pfDestination.x - GetPosX();
-			float fDistY = m_pfDestination.y - GetPosY();
-
-			if(fDistX < 0)
-				fDistX = -fDistX;
-			if(fDistY < 0)
-				fDistY = -fDistY;
-
-			if( ((m_pfDestination.x == 0 && m_pfDestination.y == 0) || (fDistX  <= 10 || fDistY <= 10)) && m_dwIdleWait < GetTickCount()  )
-			{
-				m_pfDestination.x = GetPosX()+rand()%25-12; 
-				m_pfDestination.y = GetPosY()+rand()%25-12;
-				m_dwIdleWait = GetTickCount() + 1000;
-			}
-			if( fDistX  > 10 && fDistY > 10 )
-			{
-				float savex = GetPosX();
-				float savey = GetPosY();
-
-				MoveTo(m_pfDestination.x, m_pfDestination.y, 50);
-				BaseCharacter::Update(fElapsedTime);
-
-				if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
-				{
-					SetPosX(savex);
-					SetPosY(savey);
-				}
-			}
-			//else
-			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
-		}
-		else if( m_nState == ESTATE_CHASING)
+		if( m_nState == ESTATE_CHASING)
 		{
 			if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
 			{
@@ -334,39 +392,8 @@ void Boss1::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			m_nStages =  1;
+			//m_nStages =  1;
 		}
-	}
-}
-
-void Boss1::Summon()
-{
-	for(int i = 0; i < 10; i++)
-	{
-		m_cEnemies.push_back(nullptr);
-		m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
-		ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
-		pEnemy->SetHeight( 32);
-		pEnemy->SetWidth( 32);
-		pEnemy->SetImageID(-1);
-		pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
-		pEnemy->SetPosX(GetPosX() - 200);
-		pEnemy->SetPosY(GetPosY() - 200*i);
-		pEnemy->SetHealth(100);
-		pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
-		m_pOM->AddObject(pEnemy);
-
-		Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
-		eWeapon->SetHeight(20);
-		eWeapon->SetWidth(10);
-		eWeapon->SetImageID(-1);
-		eWeapon->SetOwner(pEnemy);
-		eWeapon->Init(WPN_PISTOL, 100, 0);
-		eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
-		eWeapon->SetPosY(pEnemy->GetPosY());
-		pEnemy->SetWeapon(eWeapon);
-		
-		m_nMinnions++;
 	}
 }
 

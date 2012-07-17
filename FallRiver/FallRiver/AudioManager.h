@@ -61,7 +61,12 @@ public:
 		else
 			_sfxSound[soundID]->noise->setMode(FMOD_LOOP_OFF);
 	}
-	void setSoundPos(int aSoundID, FMOD_VECTOR aPosition) { _sfxSound[aSoundID]->pos = aPosition; }
+	void setSoundPos(int aSoundID, FMOD_VECTOR aPosition)
+	{ 
+		int tmp = _sfxSound.size();
+		if(aSoundID < tmp)
+			_sfxSound[aSoundID]->pos = aPosition;
+	}
 	void setSoundVel(int aSoundID, FMOD_VECTOR aVelocity) { _sfxSound[aSoundID]->vel = aVelocity; }
 	bool isSoundPlaying(int aSoundID)
 	{

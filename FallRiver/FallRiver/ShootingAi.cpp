@@ -43,7 +43,7 @@ ShootingAi::ShootingAi()
 	AudioManager::GetInstance()->setSoundPos(notifyID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(notifyID, false);
 	notified = false;
-
+	boss = false;
 	//AnimInfo startup
 	m_playerAnim.curAnimation = 0;
 	m_playerAnim.curAnimID = 0;
