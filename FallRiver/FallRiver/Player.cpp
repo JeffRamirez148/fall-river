@@ -29,7 +29,7 @@ Player::Player()
 	m_nScore = 0;
 	m_ncurrWeap = 0;
 	m_nState = PSTATE_IDLE;
-	SetHealth(200);
+	SetHealth(100);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -773,8 +773,8 @@ void Player::Render()
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	/*Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
 
 	if( m_nState == PSTATE_SWING )
 	{
@@ -785,7 +785,7 @@ bool Player::CheckCollision(IObjects* pBase)
 			tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
 			EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
 		}
-	}*/
+	}
 	//int x =pBase->GetObjectType();
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{
