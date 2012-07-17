@@ -206,21 +206,21 @@ void NPC::Update(float fElapsedTime)
 	}
 
 	//Updating the NPC's frame and timer for animations
-	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	m_playerAnim.fTime += fElapsedTime;
 
-	if(m_playerAnim.fTime >= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
+	if(m_playerAnim.fTime >= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration)
 	{
-		m_playerAnim.fTime -= thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
+		m_playerAnim.fTime -= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
 		m_playerAnim.curFrame++;
-		if(m_playerAnim.curFrame < (int)thisAnim.frames[m_playerAnim.curAnimation].size())
+		if(m_playerAnim.curFrame < (int)thisAnim->frames[m_playerAnim.curAnimation].size())
 		{
-			if(strcmp(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
-				EventSystem::GetInstance()->SendEvent(thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
+			if(strcmp(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
+				EventSystem::GetInstance()->SendEvent(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
 		}
-		if((m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size()) && thisAnim.looping[m_playerAnim.curAnimation])
+		if((m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
-		else if(m_playerAnim.curFrame == thisAnim.frames[m_playerAnim.curAnimation].size() && !thisAnim.looping[m_playerAnim.curAnimation])
+		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame--;
 	}
 }
@@ -263,32 +263,32 @@ void NPC::RenderQuests(void)
 	if(showQuest == true && NPCLabel == 0 && AllQuestsAvail[0] == true )
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 	if(showQuest == true && NPCLabel == 2 && AllQuestsAvail[2] == true)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 	if(showQuest == true && NPCLabel == 4 && AllQuestsAvail[4] == true)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 	if(showQuest == true && NPCLabel == 6 && AllQuestsAvail[6] == true)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 	if(showQuest == true && NPCLabel == 8 && AllQuestsAvail[8] == true)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 	
 	// Quest ends
@@ -298,32 +298,32 @@ void NPC::RenderQuests(void)
 		if(showQuest == true && NPCLabel == 1 && pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == 0)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 		if(showQuest == true && NPCLabel == 3 && pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == 2 && pGPS->GetPlayer()->questCounter == 10)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 		if(showQuest == true && NPCLabel == 5 && pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == 4)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 		if(showQuest == true && NPCLabel == 7 && pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == 6)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 		if(showQuest == true && NPCLabel == 9 && pGPS->GetPlayer()->m_vpActiveQuests[i]->QuestID == 8 && pGPS->GetPlayer()->m_bHasMedicine == true)
 		{  
 			//pVM->DrawRect(questBox,255,255,255);
-			pVM->DrawStaticTexture(QuestBoxID,-15.0f,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
-			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(255,0,0));
+			pVM->DrawStaticTexture(QuestBoxID,(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+0,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f),0.9f,1.0f,&src_Rect);
+			pVM->DrawFont(temp_font_id,(char*)test_quest_obj->AllQuests[NPCLabel]->QuestBody.c_str(),(float(CGame::GetInstance()->GetScreenWidth())*0.05f)+20,(CGame::GetInstance()->GetScreenHeight() - 100.0f)-(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+20,0.6f,0.6f,0,0,0,D3DCOLOR_XRGB(255,0,0));
 		}
 		
 		

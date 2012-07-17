@@ -128,6 +128,7 @@ public:
 	int GetBloodL6() { return bloodL6;}
 	int GetBloodL7() { return bloodL7;}
 	int GetBloodL8() { return bloodL8;}
+	int GetNumEnemies() {return m_cEnemies.size(); }
 	vector<int> GetFireA(void) { return fireA;}
 
 	bool questFlag;
