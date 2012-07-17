@@ -177,13 +177,19 @@ void Player::Update(float fElapsedTime)
 		if(m_dwGunCount == 0)
 		{
 			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
-			m_nState = PSTATE_SHOOT;
+			if( m_currWeapon->GetWeaponType() != WPN_MACHETE )
+				m_nState = PSTATE_SHOOT;
+			else
+				m_nState = PSTATE_SWING;
 			m_currWeapon->FireWeapon();
 			m_dwGunReset = GetTickCount() + 500;
 		}
 		else if( m_dwGunCount < GetTickCount() )
 		{
-			m_nState = PSTATE_SHOOT;
+			if( m_currWeapon->GetWeaponType() != WPN_MACHETE )
+				m_nState = PSTATE_SHOOT;
+			else
+				m_nState = PSTATE_SWING;
 			m_currWeapon->FireWeapon();
 			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 			m_dwGunReset = GetTickCount() + 500;
@@ -519,12 +525,6 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
-			/*else
-			{
-			m_playerAnim.curAnimation = 0;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-			}*/
 		}
 		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && GetVelY() > 0)
 		{
@@ -688,7 +688,33 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.fTime = 0;
 			}
 		}
-
+	}
+	else if( m_nState == PSTATE_SWING )
+	{
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 16)
+		{
+			m_playerAnim.curAnimation = 16;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 18)
+		{
+			m_playerAnim.curAnimation = 18;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if( GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 19 )
+		{
+			m_playerAnim.curAnimation = 19;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if( GetDirection() == DIRE_LEFT && m_playerAnim.curAnimation != 17 )
+		{
+			m_playerAnim.curAnimation = 17;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
 	}
 
 
@@ -741,31 +767,23 @@ void Player::Render()
 	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
 	//pVM->GetSprite()->Flush();
 	//pVM->DrawTextW("hello",0,0,0,255,255);
-
-	////m_pVM->DrawText(szName,0,0,255,255,255);
-	//pVM->DrawFont(m_nFontID,szName,0,50);
-
-
-	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
-
-
-	//RECT logRect = { 600, 0, 800, 200};
-
-	//pVM->DrawRect(logRect, 50, 50, 50);
-
-	//for(unsigned int i = 0; i < m_vpActiveQuests.size(); i++)
-	//		pVM->DrawFont(m_nFontID, (char*)m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
-
-	//pVM->DrawRect(reRect, 0, 0, 0);
-
-	/*for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
-	m_vpWeapons[i]->Render();*/
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+
+	if( m_nState == PSTATE_SWING )
+	{
+		RECT cRect;
+		if( IntersectRect(&cRect, &thisFrame.activeRect, &pBase->GetRect() ) )
+		{
+			BaseCharacter* tmp = (BaseCharacter*)pBase;
+			tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
+			EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+		}
+	}
 	//int x =pBase->GetObjectType();
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{
