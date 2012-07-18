@@ -87,7 +87,7 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
 				pEnemy->SetHealth(100);
 				pEnemy->SetBossBool(true);
-				pEnemy->SetAnimation(GamePlayState::GetInstance()->GetSpawnEnemyID());
+				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
 				GamePlayState::GetInstance()->AddEnemy(m_cEnemies[m_cEnemies.size()-1]);
 				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
@@ -387,7 +387,7 @@ void Boss1::Render()
 
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.0f, 1.0f);
 
 	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 	//pVM->DrawRect(reRect, 255, 255, 100);

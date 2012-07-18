@@ -3,6 +3,7 @@
 #include "AudioManager.h"
 #include "ObjectManager.h"
 #include "OptionsMenuState.h"
+#include "LoadingScreen.h"
 #include "PauseMenuState.h"
 #include "Level.h"
 #include "Particle_Manager.h"
@@ -93,6 +94,8 @@ GamePlayState* GamePlayState::GetInstance()
 
 void GamePlayState::Enter()
 {
+	LoadingScreen* loading = new LoadingScreen();
+
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
 	m_pOF = Factory::GetInstance();
@@ -101,6 +104,8 @@ void GamePlayState::Enter()
 	m_pMS = MessageSystem::GetInstance();
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
+
+	loading->Render();
 
 	// Rain particles
 	rainL = m_pPM->LoadEmitter("rain.xml");
@@ -129,6 +134,8 @@ void GamePlayState::Enter()
 	goreL7 = m_pPM->LoadEmitter("gore7.xml");
 	goreL8 = m_pPM->LoadEmitter("gore8.xml");
 
+	loading->Update();
+	loading->Render();
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
@@ -151,6 +158,8 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
 
+	loading->Update();
+	loading->Render();
 
 	Player* pPlayer = nullptr;
 	Weapon* pWeapon = nullptr;
@@ -252,8 +261,10 @@ void GamePlayState::Enter()
 		}
 	}
 	m_pHUD = new HUD;
-	m_pVM->SetAmbientLight( .0f, .0f, .0f);
+	//m_pVM->SetAmbientLight( .0f, .0f, .0f);*/
 
+	loading->Update();
+	loading->Render();
 
 	vector<leveldata> tmp = pLevel->GetCollision();
 	for(unsigned int i = 0; i < tmp.size(); i++) 
@@ -458,6 +469,7 @@ void GamePlayState::Enter()
 		else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
 		{
 			m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+
 			Boss1* pBoss = (Boss1*)m_cBoss1;
 			pBoss->SetHealth(200);
 			pBoss->SetHeight(nth->height);
@@ -506,8 +518,10 @@ void GamePlayState::Enter()
 
 			pSpawn = nullptr;
 			tmp.erase(nth);
-			i--;
+			i--;*/
 		}
+		loading->Update();
+		loading->Render();
 	}
 	pLevel->SetCollision(tmp);
 
@@ -600,6 +614,10 @@ void GamePlayState::Enter()
 	m_pAM->playMusic(musicID);
 	winLose = true;
 
+	loading->Update();
+	loading->Render();
+
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
 	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
 	m_pHUD->m_nArrowID = m_pVM->RegisterTexture("resource//graphics//Arrow.png");
@@ -632,6 +650,8 @@ void GamePlayState::Enter()
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_27.png.png"));
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_28.png.png"));
 
+	loading->Update();
+	loading->Render();
 	// Example of how to set up a light
 	//Light tmpLight;
 	//tmpLight.lightPos[0] = 0.0f;
@@ -1018,7 +1038,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
 
-						temp.left = bullet->GetPosX();
+						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
 						bullet->SetSpeedX(-300);
