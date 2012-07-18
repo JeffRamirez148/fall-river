@@ -18,7 +18,7 @@ private:
 	int notifyID;
 	bool notified;
 	bool boss;
-
+	float autoBotsRollOut;
 
 public: 
 	ShootingAi();

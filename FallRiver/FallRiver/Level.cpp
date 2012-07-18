@@ -460,15 +460,9 @@ bool Level::CheckCollision(IObjects* pBase)
 				else if(pBase->GetObjectType() == OBJ_CHARACTER)
 				{
 					BaseCharacter* pCh = (BaseCharacter*)pBase;
-					/*	if(pCh->GetCharacterType() == CHA_ENEMY)
-					{
 
-					Enemy* pEn = (Enemy*)pCh;
-					pEn->CheckCollision(this);
-
-					}
-					else if( pCh->GetCharacterType() == CHA_PLAYER)
-					{*/
+					//else if( pCh->GetCharacterType() == CHA_PLAYER)
+					//{
 					//Player* pPlayer = (Player*)pCh;
 
 					if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
@@ -569,6 +563,10 @@ bool Level::CheckCollision(IObjects* pBase)
 					if(_stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
 					{
 						EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
+					}
+					if(pCh->GetCharacterType() == CHA_BOSS2)
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "bossWall_hit", pBase );
 					}
 				}
 

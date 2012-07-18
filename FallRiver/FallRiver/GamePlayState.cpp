@@ -21,6 +21,7 @@
 #include "Bullet.h"
 #include "ChasingAI.h"
 #include "Boss1.h"
+#include "Boss2.h"
 #include "ShootingAi.h"
 #include "NPC.h"
 #include "PickUp.h"
@@ -146,6 +147,7 @@ void GamePlayState::Enter()
 	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Boss1			>( _T("Boss1") );
+	m_pOF->RegisterClassType< Boss2			>( _T("Boss2") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 	m_pOF->RegisterClassType< SpawnPoint	>( _T("SpawnPoint") );
 
@@ -156,6 +158,8 @@ void GamePlayState::Enter()
 	Bush* pBush = nullptr;
 	SpawnPoint* pSpawn = nullptr;
 	PickUp* pPickUp = nullptr;
+
+	m_pVM->ClearOtherLights();
 
 
 	if( pLevel == nullptr )
@@ -460,9 +464,36 @@ void GamePlayState::Enter()
 			pBoss->SetWidth(nth->width);
 			pBoss->SetPosX( (float)nth->x );
 			pBoss->SetPosY( (float)nth->y );
-			pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/EnemiesShoot.xml"));
+			pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 			pBoss->SetTarget(pPlayer);
 			m_pOM->AddObject(pBoss);
+			m_cEnemies.push_back(pBoss);
+			Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+			eWeapon->SetHeight(20);
+			eWeapon->SetWidth(10);
+			eWeapon->SetImageID(-1);
+			eWeapon->SetOwner(pBoss);
+			eWeapon->Init(WPN_SHOTGUN, 100, 0);
+			eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+			pBoss->SetWeapon(eWeapon);
+
+			pSpawn = nullptr;
+			tmp.erase(nth);
+			i--;
+		}
+		else if ( _stricmp(nth->m_cType,"Boss2") == 0 )
+		{
+			m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
+			Boss2* pBoss = (Boss2*)m_cBoss2;
+			pBoss->SetHealth(1000);
+			pBoss->SetHeight(nth->height);
+			pBoss->SetWidth(nth->width);
+			pBoss->SetPosX( (float)nth->x );
+			pBoss->SetPosY( (float)nth->y );
+			pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+			pBoss->SetTarget(pPlayer);
+			m_pOM->AddObject(pBoss);
+			m_cEnemies.push_back(pBoss);
 
 			Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 			eWeapon->SetHeight(20);
@@ -800,14 +831,7 @@ void GamePlayState::Render()
 
 	m_pOM->RenderAllObjects();
 	
-	for( unsigned int i = 0; i < fireA.size(); ++i)
-	{
-		float tmpx, tmpy;
-		tmpx = float(m_pPM->GetActiveEmitter(fireA[i])->rect.left);
-		tmpy = float(m_pPM->GetActiveEmitter(fireA[i])->rect.top);
-		RECT tmp = {0,0,32,32};
-		m_pVM->DrawStaticTexture(logID,tmpx-GetCamera().x - 16,tmpy-GetCamera().y - 16,2.0f,2.0f, &tmp);
-	}
+
 
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
 	{

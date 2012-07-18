@@ -39833,7 +39833,7 @@
     <ScrRect x="4449" y="1641" height="16" width="16" />
   </Collision>
   <Collision>
-    <Type>Boss1</Type>
-    <ScrRect x="704" y="448" height="64" width="64" />
+    <Type>Boss2</Type>
+    <ScrRect x="640" y="448" height="64" width="64" />
   </Collision>
 </levels_list>

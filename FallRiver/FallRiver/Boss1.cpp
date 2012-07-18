@@ -129,7 +129,7 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
 				pEnemy->SetHealth(100);
 				pEnemy->SetBossBool(true);
-				pEnemy->SetAnimation(GamePlayState::GetInstance()->GetSpawnEnemyID());
+				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
 				GamePlayState::GetInstance()->AddEnemy(m_cEnemies[m_cEnemies.size()-1]);
 				GamePlayState::GetInstance()->AddEnemy(m_cEnemies[m_cEnemies.size()-1]);
@@ -157,6 +157,21 @@ void Boss1::Update(float fElapsedTime)
 	}
 	else if( m_nStages == 2 )
 	{
+		if(GetHealth() <= 0)
+		{
+			for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetEnemies().size(); i++ )
+			{
+				if( this == GamePlayState::GetInstance()->GetEnemies()[i] )
+				{
+					vector<Enemy*>::iterator nth = GamePlayState::GetInstance()->GetEnemies().begin() + i;
+					GamePlayState::GetInstance()->GetEnemies()[i] = nullptr;
+					GamePlayState::GetInstance()->GetEnemies().erase(nth);
+					break;
+				}
+			}
+			ObjectManager::GetInstance()->RemoveObject( this );
+		}
+
 		if(m_nState == ESTATE_CHASING)
 		{
 			if( m_dwFireDelay == 0)
