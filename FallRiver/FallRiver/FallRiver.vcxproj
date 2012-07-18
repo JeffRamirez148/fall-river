@@ -116,6 +116,7 @@
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="LoadMenuState.cpp" />
     <ClCompile Include="LoseMenuState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="IObjects.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="LoadMenuState.h" />
     <ClInclude Include="LoseMenuState.h" />
     <ClInclude Include="MainMenuState.h" />

@@ -57,7 +57,7 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 		m_fFireRate = 200;
 		m_fFiringRange = 288.0f;
 		m_nClip = 8;
-		m_nDamage = 30;
+		m_nDamage = 10;
 		m_nMaxClip = 8;
 		break;
 	case WPN_MACHETE:

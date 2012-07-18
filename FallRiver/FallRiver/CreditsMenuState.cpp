@@ -80,10 +80,15 @@ bool CreditsMenuState::Input()
 {
 	if(m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 	{
-		CGame::GetInstance()->RemoveState();
-		return false;
+		if(CGame::GetInstance()->m_vStates.size() == 2)
+			CGame::GetInstance()->RemoveState();
+		else
+		{
+			CGame::GetInstance()->RemoveState();
+			CGame::GetInstance()->RemoveState();
+		}
 	}
-	if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(0,0))
+	else if(m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(0,0))
 	{
 		if(CGame::GetInstance()->m_vStates.size() == 2)
 			CGame::GetInstance()->RemoveState();
@@ -100,7 +105,7 @@ bool CreditsMenuState::Input()
 void CreditsMenuState::Update(float fElapsedTime) 
 {
 	fTime += fElapsedTime * 50;
-	if( fTime > 800)
+	if( fTime > 1000)
 		fTime = 0;
 }
 
