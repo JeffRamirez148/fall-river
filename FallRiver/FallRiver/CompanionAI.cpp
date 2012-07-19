@@ -124,11 +124,7 @@ void CompanionAI::HandleEvent(Event* aPEvent)
 
 void CompanionAI::SaySomething() 
 {
-	Player* tempPlayer;
-	if(CGame::GetInstance()->GetState() == GamePlayState::GetInstance() )
-		tempPlayer = GamePlayState::GetInstance()->GetPlayer();	
-	else
-		tempPlayer = TutorialState::GetInstance()->GetPlayer();
+	Player* tempPlayer = GamePlayState::GetInstance()->GetPlayer();	
 
 	double playerX = (tempPlayer->GetPosX());
 	double myX = GetPosX();
@@ -247,7 +243,6 @@ void CompanionAI::SaySomething()
 			else
 			{
 				pVM->DrawFont(m_nFontID, "Like Lights you also have several weapons you can choose from.\n\n\tPress \"Y\" To select the next weapon in your inventory", 12, 500, 0.7f, 0.7f);
-
 			}
 			break;
 		}
@@ -260,7 +255,6 @@ void CompanionAI::SaySomething()
 			else
 			{
 				pVM->DrawFont(m_nFontID, "Last but not least Press \"BACK\" to see/hide your mission log.\n\n Your mission log displays any current tasks you must complete", 12, 500, 0.7f, 0.7f);
-
 			}
 		}
 	}

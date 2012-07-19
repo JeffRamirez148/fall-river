@@ -643,7 +643,7 @@ bool ViewManager::DeviceEnd(void)
 	}
 	else if(ambientLight[0] == .0f)
 	{
-		if(CGame::GetInstance()->GetState() == GamePlayState::GetInstance() )
+		//if(CGame::GetInstance()->GetState() == GamePlayState::GetInstance() )
 		{
 			m_lpDirect3DDevice->BeginScene();
 			m_lpSprite->Begin(D3DXSPRITE_ALPHABLEND);
@@ -720,7 +720,7 @@ bool ViewManager::DeviceEnd(void)
 			m_lpSprite->End();
 			m_lpDirect3DDevice->EndScene();
 		}
-		else if( CGame::GetInstance()->GetState() == TutorialState::GetInstance() )
+		/*else if( CGame::GetInstance()->GetState() == TutorialState::GetInstance() )
 		{
 			m_lpDirect3DDevice->BeginScene();
 			m_lpSprite->Begin(D3DXSPRITE_ALPHABLEND);
@@ -732,7 +732,7 @@ bool ViewManager::DeviceEnd(void)
 			m_lpSprite->End();
 			m_lpDirect3DDevice->EndScene();
 			Present();
-		}
+		}*/
 	}
 
 	m_lpDirect3DDevice->Present(0,0,0,0);

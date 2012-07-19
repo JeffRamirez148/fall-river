@@ -155,7 +155,9 @@ public:
 	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}
 	CompanionAI* GetCompanion() {return m_cBuddy;}
+	void SetCompanion(CompanionAI* comp) {m_cBuddy = comp;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
+	void SetHud(HUD* hud) {m_pHUD = hud;}
 
 	void SetWinLose(bool wl)	{winLose = wl;}
 	bool GetWinLose()			{return winLose;}

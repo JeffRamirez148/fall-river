@@ -3,6 +3,7 @@
 
 #include "HUD.h"
 #include "GamePlayState.h"
+#include "TutorialState.h"
 #include "CGame.h"
 #include "ViewManager.h"
 #include "Player.h"
@@ -29,8 +30,16 @@ HUD::HUD()
 	healthID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/ECG.wav");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(healthID, sound1);
+	if( CGame::GetInstance()->GetState() == GamePlayState::GetInstance() )
+	{
 	sound1.x = GamePlayState::GetInstance()->GetPlayer()->GetPosX();
 	sound1.y = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
+	}
+	else
+	{
+		sound1.x = TutorialState::GetInstance()->GetPlayer()->GetPosX();
+		sound1.y = TutorialState::GetInstance()->GetPlayer()->GetPosY();
+	}
 	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(healthID, false);
 
