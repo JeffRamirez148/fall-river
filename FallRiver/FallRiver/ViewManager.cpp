@@ -694,7 +694,7 @@ bool ViewManager::DeviceEnd(void)
 			if( pBud && pBud->IsTeaching() )
 			{
 				pBud->SaySomething();
-				DrawFont(tmp->m_nFontID, "Press \"P\" to Skip Tutorial", 10, 10, 1.0f, 1.0f);
+				DrawFont(tmp->m_nFontID, "Press \"ENTER\" to Skip Tutorial", 10, 10, 1.0f, 1.0f);
 			}
 
 			vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();

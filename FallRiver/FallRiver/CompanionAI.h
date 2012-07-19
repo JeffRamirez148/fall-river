@@ -20,6 +20,7 @@ private:
 	int m_nNumTimes;
 	int talkBox;
 	bool teaching;
+	bool talking;
 
 public: 
 
