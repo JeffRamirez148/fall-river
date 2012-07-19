@@ -362,7 +362,7 @@ void Boss2::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 	pVM->GetSprite()->Flush();
 	RECT tmp = GetRect();
-	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x),  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y), 1.5f, 1.5f);
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x)+GetWidth()/2,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y)+GetHeight(), 1.0f, 1.0f);
 	BaseCharacter::Render();
 
 }

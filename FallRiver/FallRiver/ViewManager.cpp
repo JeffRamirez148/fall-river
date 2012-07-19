@@ -8,8 +8,10 @@ using namespace std;
 #include "Texture.h"
 #include "Font.h"
 #include "Animation.h"
+#include "TutorialState.h"
 #include "AnimInfo.h"
 #include "GamePlayState.h"
+#include "LoadingScreen.h"
 #include "HighScoresMenuState.h"
 #include "WinMenuState.h"
 #include "CreditsMenuState.h"
@@ -625,83 +627,113 @@ bool ViewManager::DeviceEnd(void)
 
 	m_lpDirect3DDevice->EndScene();
 
-	if(ambientLight[0] == .0f)
+	if(ambientLight[0] == .1f && ambientLight[2] == .0f)
 	{
 		m_lpDirect3DDevice->BeginScene();
 		m_lpSprite->Begin(D3DXSPRITE_ALPHABLEND);
 
-		GamePlayState::GetInstance()->m_pHUD->Render();
-		Player* tmp = GamePlayState::GetInstance()->GetPlayer();
-		//Quest Log Rect
-		RECT src_Rect = {0,0,200,200};
+		DrawFont(LoadingScreen::GetInstance()->GetFontID(), "Loading\nPlease Wait..", 10, 500);
 
-		if(tmp->questLogToggle)
-		{
-			// Quest Log Box
-			RECT logRect = { 600, 0, 800, 200};
-			//DrawRect(logRect, 50, 50, 50);
-			this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+0,1.0f,1.0f,&src_Rect);
-			DrawFont(tmp->m_nFontID,"Active Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+10.0f,0.5f,0.5f);
-			for(unsigned int i = 0; i < tmp->m_vpActiveQuests.size(); i++)
-			{
-				if(tmp->m_vpActiveQuests[i]->QuestID % 2 == 0)
-					DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i * 10 + 20), 0.5f, 0.5f);
-				if(tmp->m_vpActiveQuests[i]->QuestID == 2)
-				{
-					if(tmp->questCounter >= 10)
-						tmp->questCounter = 10;
-					char buffer[100];
-					_itoa_s(tmp->questCounter,buffer,10);
-					DrawFont(tmp->m_nFontID, buffer, 610.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i * 10 + 30), 0.5f, 0.5f);
-					DrawFont(tmp->m_nFontID, "/10 killed", 620.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i * 10 + 30), 0.5f, 0.5f);
-				}
+		RECT progrect = {250, 525, progrect.left+(3*LoadingScreen::GetInstance()->GetProgress()), 550};
 
-			}
+		DrawRect(progrect, 255, 0, 0);
 
-
-
-			// Quest Finished Box
-			RECT finishedLogRect = { 600, 200, 800, 400};
-			//DrawRect(finishedLogRect,50,50,50);
-			this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+200,1.0f,1.0f,&src_Rect);
-			DrawFont(tmp->m_nFontID,"Finished Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+210.0f,0.5f,0.5f);
-			for(unsigned int i = 0; i < tmp->m_vpFinishedQuests.size(); i++)
-			{
-				if(tmp->m_vpFinishedQuests[i]->QuestID % 2 == 0)
-					DrawFont(tmp->m_nFontID, (char*)tmp->m_vpFinishedQuests[i]->QuestTitle.c_str(), 610.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i*10+220), 0.5f, 0.5f);
-			}
-		}
-
-		CompanionAI* pBud = GamePlayState::GetInstance()->GetCompanion();
-		if( pBud && pBud->IsTeaching() )
-		{
-			pBud->SaySomething();
-		}
-
-		vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
-		for(unsigned int i = 0; i < tmpNPCs.size(); ++i)
-		{
-			tmpNPCs[i]->RenderQuests();
-		}
-		RECT questBox;
-		questBox.left = 0;
-		questBox.top = CGame::GetInstance()->GetScreenHeight() - 100;
-		questBox.right = CGame::GetInstance()->GetScreenWidth();
-		questBox.bottom = CGame::GetInstance()->GetScreenHeight();
-
-		/*if(GamePlayState::GetInstance()->questFlag)
-		{
-			DrawRect(questBox,255,255,255);
-			DrawFont(tmp->m_nFontID,"You killed enough zombies...for now \n Go turn this in now.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
-		}*/
-
-		if(ambientLight[2] == .1f)
-		{
-			PauseMenuState::GetInstance()->Render();
-		}
 		m_lpSprite->End();
 		m_lpDirect3DDevice->EndScene();
+	}
+	else if(ambientLight[0] == .0f)
+	{
+		//if(CGame::GetInstance()->GetState() == GamePlayState::GetInstance() )
+		{
+			m_lpDirect3DDevice->BeginScene();
+			m_lpSprite->Begin(D3DXSPRITE_ALPHABLEND);
 
+			GamePlayState::GetInstance()->m_pHUD->Render();
+			Player* tmp = GamePlayState::GetInstance()->GetPlayer();
+			//Quest Log Rect
+			RECT src_Rect = {0,0,200,200};
+
+			if(tmp->questLogToggle)
+			{
+				// Quest Log Box
+				RECT logRect = { 600, 0, 800, 200};
+				//DrawRect(logRect, 50, 50, 50);
+				this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+0,1.0f,1.0f,&src_Rect);
+				DrawFont(tmp->m_nFontID,"Active Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+10.0f,0.5f,0.5f);
+				for(unsigned int i = 0; i < tmp->m_vpActiveQuests.size(); i++)
+				{
+					if(tmp->m_vpActiveQuests[i]->QuestID % 2 == 0)
+						DrawFont(tmp->m_nFontID, (char*)tmp->m_vpActiveQuests[i]->QuestTitle.c_str(), 610.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i * 10 + 20), 0.5f, 0.5f);
+					if(tmp->m_vpActiveQuests[i]->QuestID == 2)
+					{
+						if(tmp->questCounter >= 10)
+							tmp->questCounter = 10;
+						char buffer[100];
+						_itoa_s(tmp->questCounter,buffer,10);
+						DrawFont(tmp->m_nFontID, buffer, 610.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i * 10 + 30), 0.5f, 0.5f);
+						DrawFont(tmp->m_nFontID, "/10 killed", 620.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i * 10 + 30), 0.5f, 0.5f);
+					}
+
+				}
+
+
+
+				// Quest Finished Box
+				RECT finishedLogRect = { 600, 200, 800, 400};
+				//DrawRect(finishedLogRect,50,50,50);
+				this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+200,1.0f,1.0f,&src_Rect);
+				DrawFont(tmp->m_nFontID,"Finished Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+210.0f,0.5f,0.5f);
+				for(unsigned int i = 0; i < tmp->m_vpFinishedQuests.size(); i++)
+				{
+					if(tmp->m_vpFinishedQuests[i]->QuestID % 2 == 0)
+						DrawFont(tmp->m_nFontID, (char*)tmp->m_vpFinishedQuests[i]->QuestTitle.c_str(), 610.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f), (float(CGame::GetInstance()->GetScreenHeight())*0.05f)+float(i*10+220), 0.5f, 0.5f);
+				}
+			}
+
+			CompanionAI* pBud = GamePlayState::GetInstance()->GetCompanion();
+			if( pBud && pBud->IsTeaching() )
+			{
+				pBud->SaySomething();
+				DrawFont(tmp->m_nFontID, "Press \"P\" to Skip Tutorial", 10, 10, 1.0f, 1.0f);
+			}
+
+			vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
+			for(unsigned int i = 0; i < tmpNPCs.size(); ++i)
+			{
+				tmpNPCs[i]->RenderQuests();
+			}
+			RECT questBox;
+			questBox.left = 0;
+			questBox.top = CGame::GetInstance()->GetScreenHeight() - 100;
+			questBox.right = CGame::GetInstance()->GetScreenWidth();
+			questBox.bottom = CGame::GetInstance()->GetScreenHeight();
+
+			/*if(GamePlayState::GetInstance()->questFlag)
+			{
+			DrawRect(questBox,255,255,255);
+			DrawFont(tmp->m_nFontID,"You killed enough zombies...for now \n Go turn this in now.",0,500,0.8f,0.8f,0,0,0,D3DCOLOR_XRGB(0,0,0));
+			}*/
+
+			if(ambientLight[2] == .1f)
+			{
+				PauseMenuState::GetInstance()->Render();
+			}
+			m_lpSprite->End();
+			m_lpDirect3DDevice->EndScene();
+		}
+		/*else if( CGame::GetInstance()->GetState() == TutorialState::GetInstance() )
+		{
+			m_lpDirect3DDevice->BeginScene();
+			m_lpSprite->Begin(D3DXSPRITE_ALPHABLEND);
+			CompanionAI* pBud = TutorialState::GetInstance()->GetCompanion();
+			if( pBud && pBud->IsTeaching() )
+			{
+				pBud->SaySomething();
+			}
+			m_lpSprite->End();
+			m_lpDirect3DDevice->EndScene();
+			Present();
+		}*/
 	}
 
 	m_lpDirect3DDevice->Present(0,0,0,0);
@@ -848,7 +880,7 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	m_PresentParams.Windowed			= bWindowed;
 	m_PresentParams.BackBufferWidth		= nWidth;
 	m_PresentParams.BackBufferHeight	= nHeight;
-	
+
 	// Reset the device.
 	HRESULT hr;
 	// TODO: release the shader, rendertargets, and textures
@@ -861,7 +893,7 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 	// Setup window style flags
 	DWORD dwWindowStyleFlags = WS_VISIBLE;
 
-	
+
 
 	HWND top;
 	if (bWindowed)
@@ -930,15 +962,17 @@ void ViewManager::CreateOtherLights(void)
 	{
 		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
 		if(
-				IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
-				//float cY 
-				)
+			IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
 
 		{
 			Light* tmp = new Light();
 			tmp->innerCone = (.75f);
 			tmp->outerCone = (.7f);
 
+			if(!GamePlayState::GetInstance()->GetPlayer())
+				return;
 
 
 			tmp->lightPos[0] = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )/ (CGame::GetInstance()->GetScreenWidth())) * 2) + .01f;

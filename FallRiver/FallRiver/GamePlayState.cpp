@@ -94,7 +94,7 @@ GamePlayState* GamePlayState::GetInstance()
 
 void GamePlayState::Enter()
 {
-	LoadingScreen* loading = new LoadingScreen();
+	LoadingScreen* loading = LoadingScreen::GetInstance();
 
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
@@ -106,6 +106,8 @@ void GamePlayState::Enter()
 	m_pAM = AudioManager::GetInstance();
 
 	loading->Render();
+
+	m_pVM->SetAmbientLight( .1f, .1f, .0f);
 
 	// Rain particles
 	rainL = m_pPM->LoadEmitter("rain.xml");
@@ -537,15 +539,6 @@ void GamePlayState::Enter()
 		}
 	}
 */
-	/*m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
-	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
-	pBuddy->SetPosX(550);
-	pBuddy->SetPosY(550);
-	pBuddy->SetHeight(32);
-	pBuddy->SetWidth(32);
-	pBuddy->SetImageID(-1);
-	pBuddy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
-	m_pOM->AddObject(pBuddy);*/
 
 	/*m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
 	Boss1* pBoss = (Boss1*)m_cBoss1;
@@ -616,8 +609,6 @@ void GamePlayState::Enter()
 	loading->Update();
 	loading->Render();
 
-	m_pVM->SetAmbientLight( .0f, .0f, .0f);
-
 	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
 	m_pHUD->m_nArrowID = m_pVM->RegisterTexture("resource//graphics//Arrow.png");
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_01.png.png"));
@@ -663,6 +654,10 @@ void GamePlayState::Enter()
 	//tmpLight.color[1] = 1;
 	//tmpLight.color[2] = 1;
 	//ViewManager::GetInstance()->RegisterLight(tmpLight);
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
+
+	loading->Reset();
+	loading = nullptr;
 }
 
 void GamePlayState::ReEnter()
@@ -712,6 +707,8 @@ void GamePlayState::Exit()
 	{
 		m_cNpcs[i] = nullptr;
 	}
+
+	fireA.clear();
 	m_cNpcs.clear();
 
 	m_pVM = nullptr;
@@ -720,6 +717,8 @@ void GamePlayState::Exit()
 	m_pOF = nullptr;
 	m_pOM = nullptr;
 	m_pES = nullptr;
+
+	m_pHUD = nullptr;
 
 	m_cPlayer = nullptr;
 }

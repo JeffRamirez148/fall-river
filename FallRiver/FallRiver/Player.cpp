@@ -121,8 +121,6 @@ void Player::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(weaponChangeID, sound1);
 	AudioManager::GetInstance()->setSoundPos(sheathID, sound1);
 
-	CompanionAI* pBud = GamePlayState::GetInstance()->GetCompanion();
-
 	m_fshotTimer += fElapsedTime;
 	dammageTimer += fElapsedTime;
 
@@ -170,8 +168,6 @@ void Player::Update(float fElapsedTime)
 			AudioManager::GetInstance()->GetSoundChannel(weaponChangeID)->stop();
 			AudioManager::GetInstance()->playSound(weaponChangeID);	
 		}
-		if( pBud && pBud->IsTeaching() && pBud->GetStage() == 3 )
-			pBud->NextStep();
 	}
 
 	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 && m_nState != PSTATE_DEAD )
@@ -202,8 +198,6 @@ void Player::Update(float fElapsedTime)
 			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 			m_dwGunReset = GetTickCount() + 500;
 		}
-		if( pBud && pBud->IsTeaching() )
-			pBud->NextStep();
 
 		if( m_bIsHidden == true )
 		{
@@ -233,8 +227,6 @@ void Player::Update(float fElapsedTime)
 			++flashLightType;
 			if(flashLightType > 3)
 				flashLightType = 0;
-			if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() &&  pBud->GetStep() < 4 )
-				pBud->NextStep();
 		}
 
 		if( pDI->KeyPressed(DIK_Q) || pDI->JoystickButtonPressed(5,0)) //pDI->JoystickDPadPressed(DIR_RIGHT,0) 9
@@ -243,30 +235,19 @@ void Player::Update(float fElapsedTime)
 			--flashLightType;
 			if(flashLightType < 0)
 				flashLightType = 3;
-			if( pBud && pBud->GetStage() == 1 && pBud->IsTeaching() && pBud->GetStep() == 4 )
-				pBud->NextStep();
 		}
 
 		if( pDI->KeyPressed(DIK_F) || pDI->JoystickButtonPressed(1,0))
 		{
-			if( pBud && pBud->IsTeaching() && pBud->GetStage() == 0 )
-				pBud->NextStep();
 			AudioManager::GetInstance()->playSound(flashLightID);		
 			lightOn = !lightOn;
 		}
 		if(pDI->KeyPressed(DIK_L) ||  pDI->JoystickButtonPressed(6,0))
 		{
-			if( pBud &&  pBud->IsTeaching() && pBud->GetStage() != 4 )
-			{}
-			else
-			{
 				if(questLogToggle == true)
 					questLogToggle = false;
 				else
 					questLogToggle = true;
-				if( pBud && pBud->IsTeaching() && pBud->GetStage() == 4 )
-					pBud->NextStep();
-			}
 		}
 
 		if(battery <= 0)
