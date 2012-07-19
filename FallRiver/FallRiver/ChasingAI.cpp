@@ -474,6 +474,8 @@ void ChasingAI::Render()
 	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
 	//pVM->DrawRect(reRect, 255, 0, 0);
+	BaseCharacter::Render();
+
 }
 
 bool ChasingAI::CheckCollision(IObjects* pBase) 
@@ -493,6 +495,8 @@ void ChasingAI::HandleEvent(Event* pEvent)
 		{
 			AudioManager::GetInstance()->playSound(zombieHitID);
 			m_nState = ESTATE_CHASING;
+			this->SetBleeding(true);
+
 		}
 	}
 }

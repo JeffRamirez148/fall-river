@@ -160,7 +160,7 @@ void Boss2::Update(float Time)
 		float savey = GetPosY();
 
 
-		MoveTo(chargeDestination.x, chargeDestination.y, 90 );
+		MoveTo(chargeDestination.x, chargeDestination.y, 200 );
 		BaseCharacter::Update(Time);
 
 		if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
@@ -363,6 +363,8 @@ void Boss2::Render()
 	pVM->GetSprite()->Flush();
 	RECT tmp = GetRect();
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x)+GetWidth()/2,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y)+GetHeight(), 1.0f, 1.0f);
+	BaseCharacter::Render();
+
 }
 
 bool Boss2::CheckCollision(IObjects* pBase) 
@@ -379,8 +381,7 @@ void Boss2::HandleEvent(Event* Event)
 	{
 		if( Event->GetParam() == this )
 		{
-			int i = this->GetHealth();
-			int j = 0;
+			this->SetBleeding(true);
 		}
 	}
 

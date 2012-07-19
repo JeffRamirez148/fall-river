@@ -327,6 +327,8 @@ void ShootingAi::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.0f, 1.0f);
+	BaseCharacter::Render();
+
 }
 
 bool ShootingAi::CheckCollision(IObjects* pBase)
@@ -349,6 +351,8 @@ void ShootingAi::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			AudioManager::GetInstance()->playSound(hitID);
+			this->SetBleeding(true);
+
 		}
 	}
 }

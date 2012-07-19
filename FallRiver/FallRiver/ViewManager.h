@@ -136,6 +136,11 @@ public:
 	void ShutdownDirect3D(void);
 
 	// Lights
+	float GetAmbientLightR(void) {return ambientLight[0];}
+	float GetAmbientLightG(void) {return ambientLight[1];}
+	float GetAmbientLightB(void) {return ambientLight[2];}
+
+
 	void SetAmbientLight(float r, float g, float b)
 	{
 		ambientLight[0] = r;

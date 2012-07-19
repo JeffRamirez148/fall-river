@@ -246,6 +246,7 @@ void NPC::Render()
 	//_itoa_s(double(distance), buffer, 10);
 	//pVM->DrawFont(temp_font_id,buffer,600,200);
 	// left top right bottom
+	BaseCharacter::Render();
 
 }
 

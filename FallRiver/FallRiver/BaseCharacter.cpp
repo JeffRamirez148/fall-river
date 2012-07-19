@@ -4,6 +4,7 @@
 #include "Particle_Manager.h"
 #include "Emitter.h"
 #include "ViewManager.h"
+#include "EventSystem.h"
 #include "Bullet.h"
 
 BaseCharacter::BaseCharacter()
@@ -11,6 +12,13 @@ BaseCharacter::BaseCharacter()
 	m_nObjectType = OBJ_CHARACTER;
 	died = false;
 	goreTime = 0.0f;
+	bleeding = false;
+	blood.curAnimID = ViewManager::GetInstance()->RegisterAnimation("resource/graphics/SQUIRT1.xml");
+	blood.fTime = 0;
+	blood.curAnimation = 0;
+	blood.curFrame = 0;
+	bloodAngle = 0;
+	gore = false;
 }
 
 BaseCharacter::~BaseCharacter()
@@ -53,11 +61,49 @@ void BaseCharacter::Update(float fElapsedTime)
 		m_pPM->GetActiveEmitter(goreA8)->SetRect(tmpRect);
 		died = true;
 	}
+
+	//Updating the player's frame and timer for animations
+	if(bleeding)
+	{
+		Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(blood.curAnimID);
+		blood.fTime += fElapsedTime;
+
+		if(blood.fTime >= thisAnim->frames[blood.curAnimation][blood.curFrame].duration)
+		{
+			blood.fTime -= thisAnim->frames[blood.curAnimation][blood.curFrame].duration;
+			blood.curFrame++;
+			if(blood.curFrame < (int)thisAnim->frames[blood.curAnimation].size())
+			{
+				if(strcmp(thisAnim->frames[blood.curAnimation][blood.curFrame].eventMsg,"none") != 0)
+					EventSystem::GetInstance()->SendEvent(thisAnim->frames[blood.curAnimation][blood.curFrame].eventMsg, this);
+			}
+			if((blood.curFrame == thisAnim->frames[blood.curAnimation].size()) && thisAnim->looping[blood.curAnimation])
+			{
+				this->SetBleeding(false);
+				blood.curFrame = 0;
+			}
+			else if(blood.curFrame == thisAnim->frames[blood.curAnimation].size() && !thisAnim->looping[blood.curAnimation])
+			{
+				blood.curFrame--;
+				this->SetBleeding(false);
+			}
+		}
+	}
+	else
+		blood.curFrame = 0;
 }
 
 void BaseCharacter::Render()
 {
-
+	if(bleeding)
+	{ 
+		float centerX, centerY;
+		centerX = (GetRect2().right - GetRect2().left) * .5f;
+		centerY = (GetRect2().bottom - GetRect2().top) * .5f;
+		ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() * 2, 1.0f, 1.0f, centerX,centerY, bloodAngle );
+		if(gore)
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() * 2, 1.0f, 1.0f, centerX,centerY, 3.14159f);
+	}
 }
 
 bool BaseCharacter::CheckCollision(IObjects* pBase)
@@ -88,6 +134,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL1());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL7());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL3());
+				bloodAngle = 3.14159f;
 				//tmpRect1.left += (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.right += (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.top += (this->GetRect2().bottom - this->GetRect2().top);
@@ -98,6 +145,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL2());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL8());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL3());
+				bloodAngle = 1.570796f;
 				//tmpRect1.left += (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.right += (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.top -= (this->GetRect2().bottom - this->GetRect2().top);
@@ -108,6 +156,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL3());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL2());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL1());
+				bloodAngle = 1.570796f + 0.785398f;
 				//tmpRect1.left += (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.right += (this->GetRect2().right - this->GetRect2().left);
 			}
@@ -116,6 +165,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL4());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL5());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL6());
+				bloodAngle = -1.570796f + 0.785398f;
 				//tmpRect1.left -= (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.right -= (this->GetRect2().right - this->GetRect2().left);
 			}
@@ -124,6 +174,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL5());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL4());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL8());
+				bloodAngle = 0;
 				//tmpRect1.left -= (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.right -= (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.top -= (this->GetRect2().bottom - this->GetRect2().top);
@@ -134,6 +185,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL6());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL4());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL7());
+				bloodAngle = 3.14159f + 1.570796f;
 				//tmpRect1.left -= (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.right -= (this->GetRect2().right - this->GetRect2().left);
 				//tmpRect1.top += (this->GetRect2().bottom - this->GetRect2().top);
@@ -144,6 +196,8 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL7());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL6());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL1());
+				bloodAngle = 3.14159f + 0.785398f;
+
 				//tmpRect1.top += (this->GetRect2().bottom - this->GetRect2().top);
 				//tmpRect1.bottom += (this->GetRect2().bottom - this->GetRect2().top);
 			}
@@ -152,6 +206,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				bloodA1 = m_pPM->ActivateEmitter(tmp->GetBloodL8());
 				bloodA2 = m_pPM->ActivateEmitter(tmp->GetBloodL5());
 				bloodA3 = m_pPM->ActivateEmitter(tmp->GetBloodL2());
+				bloodAngle = 0.785398f;
 				//tmpRect1.top -= (this->GetRect2().bottom - this->GetRect2().top);
 				//tmpRect1.bottom -= (this->GetRect2().bottom - this->GetRect2().top);
 			}
@@ -187,6 +242,9 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 				int goreA8 = m_pPM->ActivateEmitter(tmp->GetGoreL8());
 				m_pPM->GetActiveEmitter(goreA8)->SetRect(tmpRect);
 				goreTime = 0;
+				bleeding = true;
+				bloodAngle = 0;
+				gore = true;
 			}
 		}
 		return true;

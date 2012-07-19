@@ -111,6 +111,7 @@ void CompanionAI::Render()
 	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
 	pVM->DrawRect(reRect, 255, 255, 0);
+	BaseCharacter::Render();
 
 }
 

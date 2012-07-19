@@ -97,7 +97,6 @@ private:
 	Boss2*						m_cBoss2;
 	Weapon*						m_cWeapon;
 	vector<int>					fireA;
-
 	// For Everyone else on the screen
 	POINTFLOAT camera;
 
@@ -150,7 +149,6 @@ public:
 	int GetNumEnemies() {return m_cEnemies.size(); }
 	int GetLogID() {return logID;}
 	vector<int> GetFireA(void) { return fireA;}
-
 	bool questFlag;
 	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}
