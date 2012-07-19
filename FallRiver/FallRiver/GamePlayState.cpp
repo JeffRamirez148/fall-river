@@ -245,8 +245,8 @@ void GamePlayState::Enter()
 		pPlayer->SetWidth(32);
 		pPlayer->SetImageID(-1);
 		pPlayer->SetPosX(m_cPlayer->GetPosX());
-		pPlayer->SetHealth(100);
 		pPlayer->SetPosY(m_cPlayer->GetPosY());
+		pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
 		for(unsigned int i = 0; i < m_cPlayer->GetWeapons().size(); i++)
 		{
