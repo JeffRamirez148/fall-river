@@ -919,13 +919,17 @@ bool Player::CheckCollision(IObjects* pBase)
 						if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
 						{
 							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-								SetPosX(float(pBase->GetRect().left-GetWidth()));
+								MoveTo(float(pBase->GetRect().left-GetWidth() * 4), this->GetPosY(), 90);
+								//SetPosX(float(pBase->GetRect().left-GetWidth() * 4));
 							else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-								SetPosX(float(pBase->GetRect().right));
+								MoveTo(float(pBase->GetRect().left+GetWidth() * 4), this->GetPosY(), 90);
+								//SetPosX(float(pBase->GetRect().right+GetWidth() * 4 ));
 							else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-								SetPosY(float(pBase->GetRect().top-GetHeight()));
+								MoveTo(this->GetPosX(), float(pBase->GetRect().bottom-GetHeight() * 4), 90);								
+								//SetPosY(float(pBase->GetRect().top-GetHeight() * 4));
 							else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
-								SetPosY(float(pBase->GetRect().bottom));
+								MoveTo(this->GetPosX(), float(pBase->GetRect().bottom+GetHeight() * 4), 90);								
+								//SetPosY(float(pBase->GetRect().bottom+GetHeight() * 4));
 						}
 						if (dammageTimer > 1)
 						{
@@ -1039,3 +1043,22 @@ void Player::HandleEvent(Event* pEvent)
 }
 
 
+void Player::MoveTo(float x, float y, float speed) 
+{
+	float storey = GetPosY() - y;
+	float storex = GetPosX() - x;
+
+	if(storey >= -10 && storey <= 10)
+		SetVelY(0);
+	else if(GetPosY() < y)
+		SetVelY(GetVelY() + speed);
+	else if(GetPosY() > y)
+		SetVelY(GetVelY() -speed);
+
+	if(storex >= -10 && storex <= 10)
+		SetVelX(0);
+	else if(GetPosX() < x)
+		SetVelX(GetVelX() +speed);
+	else if(GetPosX() > x)
+		SetVelX(GetVelX() -speed);
+}
