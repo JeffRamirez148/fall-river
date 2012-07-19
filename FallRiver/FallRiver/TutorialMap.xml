@@ -18466,6 +18466,6 @@
   </Collision>
   <Collision>
     <Type>Wall</Type>
-    <ScrRect x="0" y="64" height="1152" width="64" />
+    <ScrRect x="0" y="64" height="1152" width="128" />
   </Collision>
 </levels_list>

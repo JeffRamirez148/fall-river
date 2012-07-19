@@ -561,12 +561,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B077973C54E4E05AFB4740139D979A3"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9B2FBE5D2E1B409A9726972EFADCDC1B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2768,26 +2762,6 @@
             "TargetName" = "8:health_anm_28.png.png"
             "Tag" = "8:"
             "Folder" = "8:_7AC98540120D46BC9D02D9017B30277D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B077973C54E4E05AFB4740139D979A3"
-            {
-            "SourcePath" = "8:..\\FallRiver\\resource\\graphics\\health_animation.zip"
-            "TargetName" = "8:health_animation.zip"
-            "Tag" = "8:"
-            "Folder" = "8:_43E1B7540BD84EF8A5FC8ACFEB73793D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

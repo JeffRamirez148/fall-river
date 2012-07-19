@@ -19,6 +19,7 @@ CompanionAI::CompanionAI()
 	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
 	talkBox = ViewManager::GetInstance()->RegisterTexture("resource/graphics/Paperthingy.png");
 	teaching = true;
+	talking = false;
 
 	//AnimInfo startup
 	m_playerAnim.curAnimation = 0;
@@ -35,6 +36,9 @@ CompanionAI::~CompanionAI()
 void CompanionAI::Update(float fElapsedTime)
 {
 	BaseCharacter::Update(fElapsedTime);
+
+	if( talking && DirectInput::GetInstance()->KeyPressed(DIK_RETURN) )
+		m_nStep++;
 
 	switch(m_nStages)
 	{
@@ -158,7 +162,10 @@ void CompanionAI::SaySomething()
 			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
 			{
 				if( m_nStep == 0 )
-					pVM->DrawFont(m_nFontID, "Steven\n\n Aghh my leg... I don't think I can walk..", 12, 500, 0.7f, 0.7f, 0, 0, 0, D3DCOLOR_XRGB(50, 200, 50));
+				{
+					pVM->DrawFont(m_nFontID, "Steven\n\n Aghh my leg... I don't think I can walk..", 12, 500, 0.7f, 0.7f, 0, 0, 0, D3DCOLOR_XRGB(50, 255, 255));
+					talking = true;
+				}
 			}
 			else
 			{

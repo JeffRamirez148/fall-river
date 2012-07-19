@@ -450,6 +450,8 @@ void TutorialState::Exit()
 	delete m_cBuddy;
 	delete m_cPlayer;*/
 
+	m_clevel = nullptr;
+
 	GamePlayState::GetInstance()->SetPlayer(nullptr);
 	GamePlayState::GetInstance()->SetCompanion(nullptr);
 	GamePlayState::GetInstance()->SetHud(nullptr);
@@ -462,7 +464,7 @@ bool TutorialState::Input()
 	{
 		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
 	}
-	else if( m_pDI->KeyPressed(DIK_P) )
+	else if( m_pDI->KeyPressed(DIK_T) )
 		m_cBuddy->SetTeaching(false);
 
 	if( !m_cBuddy->IsTeaching() )

@@ -299,7 +299,7 @@ void Player::Update(float fElapsedTime)
 						ViewManager::GetInstance()->SetLightPos(0.06f,0,0);
 
 					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
-					ViewManager::GetInstance()->SetInnerCone(.7f);
+					ViewManager::GetInstance()->SetInnerCone(.75f);
 					ViewManager::GetInstance()->SetOuterCone(.7f);
 					ViewManager::GetInstance()->SetColor(.3f, .3f, .3f);
 					decreaseTime = .6f;			

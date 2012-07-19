@@ -11,6 +11,7 @@ CreditsMenuState::CreditsMenuState()
 	fontID = -1;
 	creditsBGID = -1;
 	logoID = -1;
+	fTime = 0;
 }
 
 CreditsMenuState::~CreditsMenuState()
@@ -71,6 +72,7 @@ void CreditsMenuState::Exit()
 {
 	m_pDI = nullptr;
 	m_pVM = nullptr;
+	fTime = 0;
 	fontID = -1;
 	logoID = -1;
 	creditsBGID = -1;
