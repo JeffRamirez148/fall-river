@@ -40,6 +40,7 @@ class Player: public BaseCharacter, public IListener
 	int flickerRate;
 	int m_nlightglare;
 	float dammageTimer;
+	float pushTimer;
 
 	char* m_cName;
 	bool m_bIsAlive;

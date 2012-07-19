@@ -861,95 +861,98 @@ void ViewManager::ShutdownDirect3D(void)
 
 void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 {
-	// Set the new Presentation Parameters.
-	//m_PresentParams.BackBufferWidth				= nWidth;
-	//m_PresentParams.BackBufferHeight			= nHeight;
-	//m_PresentParams.BackBufferFormat			= D3DFMT_A1R5G5B5;
-	//m_PresentParams.BackBufferCount				= 1;
-	//m_PresentParams.MultiSampleType				= D3DMULTISAMPLE_NONE;
-	//m_PresentParams.MultiSampleQuality			= 0;
-	//m_PresentParams.SwapEffect					= D3DSWAPEFFECT_COPY;
-	//m_PresentParams.hDeviceWindow				= m_hWnd;
-	//m_PresentParams.Windowed					= bWindowed;
-	//m_PresentParams.EnableAutoDepthStencil		= false;
-	//m_PresentParams.Flags						= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
-	//m_PresentParams.FullScreen_RefreshRateInHz	= D3DPRESENT_RATE_DEFAULT;
-	//m_PresentParams.PresentationInterval		= (false) ? D3DPRESENT_INTERVAL_DEFAULT : D3DPRESENT_INTERVAL_IMMEDIATE;
+	//// Set the new Presentation Parameters.
+	////m_PresentParams.BackBufferWidth				= nWidth;
+	////m_PresentParams.BackBufferHeight			= nHeight;
+	////m_PresentParams.BackBufferFormat			= D3DFMT_A1R5G5B5;
+	////m_PresentParams.BackBufferCount				= 1;
+	////m_PresentParams.MultiSampleType				= D3DMULTISAMPLE_NONE;
+	////m_PresentParams.MultiSampleQuality			= 0;
+	////m_PresentParams.SwapEffect					= D3DSWAPEFFECT_COPY;
+	////m_PresentParams.hDeviceWindow				= m_hWnd;
+	////m_PresentParams.Windowed					= bWindowed;
+	////m_PresentParams.EnableAutoDepthStencil		= false;
+	////m_PresentParams.Flags						= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+	////m_PresentParams.FullScreen_RefreshRateInHz	= D3DPRESENT_RATE_DEFAULT;
+	////m_PresentParams.PresentationInterval		= (false) ? D3DPRESENT_INTERVAL_DEFAULT : D3DPRESENT_INTERVAL_IMMEDIATE;
+	//
+	//m_PresentParams.BackBufferFormat	= (bWindowed) ? D3DFMT_UNKNOWN : D3DFMT_R5G6B5;
+	//m_PresentParams.Windowed			= bWindowed;
+	//m_PresentParams.BackBufferWidth		= nWidth;
+	//m_PresentParams.BackBufferHeight	= nHeight;
+	//
+	//// Reset the device.
+	//HRESULT hr;
+	//// TODO: release the shader, rendertargets, and textures
+	//hr = m_lpLine->OnLostDevice();
+	//hr = m_lpSprite->OnLostDevice();
+	//hr = m_lpDirect3DDevice->Reset(&m_PresentParams);
+	//hr = m_lpSprite->OnResetDevice();
+	//hr = m_lpLine->OnResetDevice();
+	//
+	//// Setup window style flags
+	//DWORD dwWindowStyleFlags = WS_VISIBLE;
+	//
+	//
+	//
+	//HWND top;
+	//if (bWindowed)
+	//{
+	//	dwWindowStyleFlags |= WS_OVERLAPPEDWINDOW;
+	//	ShowCursor(TRUE); // show the mouse cursor
+	//	top = HWND_NOTOPMOST;
+	//}
+	//else
+	//{
+	//	dwWindowStyleFlags |= WS_POPUP;
+	//	ShowCursor(FALSE); // hide the mouse cursor
+	//	top = HWND_TOP;
+	//}
+	//
+	//SetWindowLong(m_hWnd, GWL_STYLE, dwWindowStyleFlags);
+	//
+	////	Set the window to the middle of the screen.
+	//if (bWindowed)
+	//{
+	//	// Setup the desired client area size
+	//	RECT rWindow;
+	//	rWindow.left	= 0;
+	//	rWindow.top		= 0;
+	//	rWindow.right	= nWidth;
+	//	rWindow.bottom	= nHeight;
+	//
+	//	// Get the dimensions of a window that will have a client rect that
+	//	// will really be the resolution we're looking for.
+	//	AdjustWindowRectEx(&rWindow, 
+	//		dwWindowStyleFlags,
+	//		FALSE, 
+	//		WS_EX_APPWINDOW);
+	//
+	//	// Calculate the width/height of that window's dimensions
+	//	int windowWidth		= rWindow.right - rWindow.left;
+	//	int windowHeight	= rWindow.bottom - rWindow.top;
+	//
+	//	SetWindowPos(m_hWnd, top,	(GetSystemMetrics(SM_CXSCREEN)>>1) - (windowWidth>>1),
+	//		(GetSystemMetrics(SM_CYSCREEN)>>1) - (windowHeight>>1),
+	//		windowWidth, windowHeight, SWP_SHOWWINDOW);
+	//}
+	//else
+	//{
+	//	// Let windows know the window has changed.
+	//	SetWindowPos(m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
+	//}
+	//// grab the actual display width
+	////IDirect3DSurface9 *bBuffer = 0; 
+	////m_lpDirect3DDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&bBuffer);
+	////bBuffer->GetDesc(&backbuffer);
+	////bBuffer->Release(); // drop ref count
+	//// Load Shader
+	//hr = D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
+	//hr = D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A1R5G5B5 , D3DPOOL_DEFAULT, &renderTarget); 
+	//int i = 0;
 
-	m_PresentParams.BackBufferFormat	= (bWindowed) ? D3DFMT_UNKNOWN : D3DFMT_R5G6B5;
-	m_PresentParams.Windowed			= bWindowed;
-	m_PresentParams.BackBufferWidth		= nWidth;
-	m_PresentParams.BackBufferHeight	= nHeight;
+	PostMessage( m_hWnd, WM_USER, NULL, NULL);
 
-	// Reset the device.
-	HRESULT hr;
-	// TODO: release the shader, rendertargets, and textures
-	hr = m_lpLine->OnLostDevice();
-	hr = m_lpSprite->OnLostDevice();
-	hr = m_lpDirect3DDevice->Reset(&m_PresentParams);
-	hr = m_lpSprite->OnResetDevice();
-	hr = m_lpLine->OnResetDevice();
-
-	// Setup window style flags
-	DWORD dwWindowStyleFlags = WS_VISIBLE;
-
-
-
-	HWND top;
-	if (bWindowed)
-	{
-		dwWindowStyleFlags |= WS_OVERLAPPEDWINDOW;
-		ShowCursor(TRUE); // show the mouse cursor
-		top = HWND_NOTOPMOST;
-	}
-	else
-	{
-		dwWindowStyleFlags |= WS_POPUP;
-		ShowCursor(FALSE); // hide the mouse cursor
-		top = HWND_TOP;
-	}
-
-	SetWindowLong(m_hWnd, GWL_STYLE, dwWindowStyleFlags);
-
-	//	Set the window to the middle of the screen.
-	if (bWindowed)
-	{
-		// Setup the desired client area size
-		RECT rWindow;
-		rWindow.left	= 0;
-		rWindow.top		= 0;
-		rWindow.right	= nWidth;
-		rWindow.bottom	= nHeight;
-
-		// Get the dimensions of a window that will have a client rect that
-		// will really be the resolution we're looking for.
-		AdjustWindowRectEx(&rWindow, 
-			dwWindowStyleFlags,
-			FALSE, 
-			WS_EX_APPWINDOW);
-
-		// Calculate the width/height of that window's dimensions
-		int windowWidth		= rWindow.right - rWindow.left;
-		int windowHeight	= rWindow.bottom - rWindow.top;
-
-		SetWindowPos(m_hWnd, top,	(GetSystemMetrics(SM_CXSCREEN)>>1) - (windowWidth>>1),
-			(GetSystemMetrics(SM_CYSCREEN)>>1) - (windowHeight>>1),
-			windowWidth, windowHeight, SWP_SHOWWINDOW);
-	}
-	else
-	{
-		// Let windows know the window has changed.
-		SetWindowPos(m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
-	}
-	// grab the actual display width
-	//IDirect3DSurface9 *bBuffer = 0; 
-	//m_lpDirect3DDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&bBuffer);
-	//bBuffer->GetDesc(&backbuffer);
-	//bBuffer->Release(); // drop ref count
-	// Load Shader
-	hr = D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
-	hr = D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A1R5G5B5 , D3DPOOL_DEFAULT, &renderTarget); 
-	int i = 0;
 }
 
 void ViewManager::CreateOtherLights(void)
@@ -965,16 +968,16 @@ void ViewManager::CreateOtherLights(void)
 			IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
 			//float cY 
 			)
-
+	
 		{
 			Light* tmp = new Light();
 			tmp->innerCone = (.75f);
 			tmp->outerCone = (.7f);
-
+	
 			if(!GamePlayState::GetInstance()->GetPlayer())
 				return;
-
-
+	
+	
 			tmp->lightPos[0] = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )/ (CGame::GetInstance()->GetScreenWidth())) * 2) + .01f;
 			tmp->lightPos[1] = (((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() ) / (CGame::GetInstance()->GetScreenHeight())) * -2) - .01f;
 			tmp->lightPos[2] = -.75;

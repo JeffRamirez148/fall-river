@@ -18,6 +18,8 @@ private:
 protected:
 	float m_nPosX;
 	float m_nPosY;
+	float pushX;
+	float pushY;
 	float	m_nVelX;
 	float	m_nVelY;
 	int m_nObjectType;
@@ -56,6 +58,12 @@ public:
 	void SetWidth(int width)   {m_nWidth = width;}
 	void SetImageID(int id)	   {m_nImageID = id;}
 	void SetShadow(bool display) { shadow = display; }
+
+	void SetPushX(float x) { pushX = x;}
+	void SetPushY(float y) { pushY = y;}
+
+	float GetPushX(void) {return pushX;}
+	float GetPushY(void) {return pushY;}
 };
 
 #endif

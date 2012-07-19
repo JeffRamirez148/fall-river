@@ -91,6 +91,7 @@ Player::Player()
 	flashLightType = 0;
 	decreaseTime = 0;
 	dammageTimer = 0;
+	pushTimer = 0;
 }
 
 Player::~Player()
@@ -123,6 +124,16 @@ void Player::Update(float fElapsedTime)
 
 	m_fshotTimer += fElapsedTime;
 	dammageTimer += fElapsedTime;
+	if(GetPushX() != 0 || GetPushY() != 0)
+	{
+		pushTimer += fElapsedTime;
+		if(pushTimer > 1)
+		{
+			SetPushX(0);
+			SetPushY(0);
+			pushTimer = 0;
+		}
+	}
 
 	if( GetHealth() <= 0 )
 	{
@@ -916,20 +927,32 @@ bool Player::CheckCollision(IObjects* pBase)
 					if(tmpChar->GetCharacterType() == CHA_BOSS2)
 					{
 						Boss2* tmpBoss = (Boss2*)tmpChar;
-						if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
+						//if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
 						{
 							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-								MoveTo(float(pBase->GetRect().left-GetWidth() * 4), this->GetPosY(), 90);
-								//SetPosX(float(pBase->GetRect().left-GetWidth() * 4));
+							{
+								//MoveTo(float(pBase->GetRect().left-GetWidth() * 4), this->GetPosY(), 90);
+								SetPosX(float(pBase->GetRect().left-GetWidth()));
+								SetPushX(float((GetWidth() * 2)-pBase->GetRect().left));
+							}
 							else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-								MoveTo(float(pBase->GetRect().left+GetWidth() * 4), this->GetPosY(), 90);
-								//SetPosX(float(pBase->GetRect().right+GetWidth() * 4 ));
+							{
+								//MoveTo(float(pBase->GetRect().left+GetWidth() * 4), this->GetPosY(), 90);
+								SetPosX(float(pBase->GetRect().right));
+								SetPushX(float(pBase->GetRect().right+GetWidth() * 2));
+							}
 							else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-								MoveTo(this->GetPosX(), float(pBase->GetRect().bottom-GetHeight() * 4), 90);								
-								//SetPosY(float(pBase->GetRect().top-GetHeight() * 4));
+							{
+								//MoveTo(this->GetPosX(), float(pBase->GetRect().bottom-GetHeight() * 4), 90);						
+								SetPosY(float(pBase->GetRect().top-GetHeight()));
+								SetPushY(float((GetHeight() * 2) - pBase->GetRect().top));
+							}
 							else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
-								MoveTo(this->GetPosX(), float(pBase->GetRect().bottom+GetHeight() * 4), 90);								
-								//SetPosY(float(pBase->GetRect().bottom+GetHeight() * 4));
+							{
+								//MoveTo(this->GetPosX(), float(pBase->GetRect().bottom+GetHeight() * 4), 90);				
+								SetPosY(float(pBase->GetRect().bottom));
+								SetPushY(float(pBase->GetRect().bottom+GetHeight() * 2));
+							}
 						}
 						if (dammageTimer > 1)
 						{
