@@ -512,7 +512,7 @@ void GamePlayState::Enter()
 			eWeapon->SetWidth(10);
 			eWeapon->SetImageID(-1);
 			eWeapon->SetOwner(pBoss);
-			eWeapon->Init(WPN_SHOTGUN, 100, 0);
+			eWeapon->Init(WPN_PISTOL, 100, 0);
 			eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
 			pBoss->SetWeapon(eWeapon);
 
