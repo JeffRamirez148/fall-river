@@ -37,7 +37,7 @@ void CompanionAI::Update(float fElapsedTime)
 {
 	BaseCharacter::Update(fElapsedTime);
 
-	if( talking && DirectInput::GetInstance()->KeyPressed(DIK_RETURN) )
+	if( talking && DirectInput::GetInstance()->KeyPressed(DIK_SPACE) )
 		m_nStep++;
 
 	switch(m_nStages)
@@ -46,7 +46,7 @@ void CompanionAI::Update(float fElapsedTime)
 	case 0:
 		{
 			if( m_nNumTimes == 0 )
-				m_nNumTimes = 3;
+				m_nNumTimes = 5;
 
 			if( m_nNumTimes <= m_nStep )
 			{
@@ -138,8 +138,8 @@ void CompanionAI::SaySomething()
 	double distance;
 	distance = sqrt(pow(playerX - myX,2) + pow(playerY - myY,2));
 
-	if( distance > 100 )
-		return;
+	//if( distance > 100 )
+	//return;
 
 	ViewManager* pVM = ViewManager::GetInstance();
 
@@ -159,18 +159,38 @@ void CompanionAI::SaySomething()
 		// Using Flashlight
 	case 0:
 		{
-			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
+			switch(m_nStep)
 			{
-				if( m_nStep == 0 )
+			case 0:
 				{
-					pVM->DrawFont(m_nFontID, "Steven\n\n Aghh my leg... I don't think I can walk..", 12, 500, 0.7f, 0.7f, 0, 0, 0, D3DCOLOR_XRGB(50, 255, 255));
+					pVM->DrawFont(m_nFontID, "Steven\n\n Aghh my leg... I don't think I can walk...\n\n\n\t Press \"Space\" to Continue", 12, 500, 0.7f, 0.7f);
 					talking = true;
 				}
-			}
-			else
-			{
-				if( m_nStep == 0 )
-					pVM->DrawFont(m_nFontID, "Alright let me teach me a few things before you run off.\n Turn your flashlight on and off by pressing    \"B\" \n    Turn on your Flashlight now.", 12, 500, 0.7f, 0.7f);
+				break;
+			case 1:
+				{
+					pVM->DrawFont(m_nFontID, "Steven\n\n You're terrible driving cost me my dang leg\n and you turn up just fine. Well that's total freakin' crap.\n\n\n\t Press \"Space\" to Continue", 12, 500, 0.7f, 0.7f);
+					talking = true;
+				}
+				break;
+			case 2:
+				{
+					pVM->DrawFont(m_nFontID, "Steven\n\n Forget it... By now whatever zombies nearby heard the crash and\n are on there way over here to kill us.\n\n\n\t Press \"Space\" to Continue", 12, 500, 0.7f, 0.7f);
+					talking = true;
+				}
+				break;
+			case 3:
+				{
+					pVM->DrawFont(m_nFontID, "Steven\n\n Listen to me. I'm not gonna live much longer with my leg so\n messed up, so I need YOU to go into the city\n to save my sister.\n\n\t Press \"Space\" to Continue", 12, 500, 0.7f, 0.7f);
+					talking = true;
+				}
+				break;
+			case 4:
+				{
+					pVM->DrawFont(m_nFontID, "Steven\n\n Least I can do to help you along is teaching you how to survive\n but you better not die before you save my sister. Just because\n you married her doesn't mean you can treat her how you like. \n\n\t Press \"Space\" to Continue", 12, 500, 0.7f, 0.7f);
+					talking = true;
+				}
+				break;
 			}
 			break;
 		}

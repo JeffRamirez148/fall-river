@@ -161,7 +161,7 @@ void TutorialState::Enter()
 	Weapon* pWeapon3 = nullptr;
 	Weapon* pWeapon4 = nullptr;
 
-	pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+	/*pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 	pWeapon->SetHeight(20);
 	pWeapon->SetWidth(10);
 	pWeapon->SetImageID(-1);
@@ -195,15 +195,15 @@ void TutorialState::Enter()
 	pWeapon4->SetOwner(pPlayer);
 	pWeapon4->Init(WPN_MACHETE, 100, 0);
 	pWeapon4->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
-	pWeapon4->SetPosY(pPlayer->GetPosY());
+	pWeapon4->SetPosY(pPlayer->GetPosY());*/
 
 	pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
-	pPlayer->AddWeapon(pWeapon2);
+	/*pPlayer->AddWeapon(pWeapon2);
 	pPlayer->AddWeapon(pWeapon3);
 	pPlayer->AddWeapon(pWeapon);
 	pPlayer->AddWeapon(pWeapon4);
-
+*/
 	
 	loading->Update();
 	loading->Render();
