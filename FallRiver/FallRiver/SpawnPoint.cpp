@@ -16,7 +16,7 @@ SpawnPoint::SpawnPoint(void)
 	m_fSpawnTime = 0;
 	m_bCanSpawn = false;
 	m_bIsColliding = false;
-	m_nSpawnCounter = 0;
+	//m_nSpawnCounter = 0;
 }
 
 
@@ -58,11 +58,11 @@ void SpawnPoint::Update(float fElapsedTime)
 	//ChasingAI* pEnemy;
 	if( m_fSpawnTime > 30 )
 	{
-		if( m_nSpawnCounter < 10 )
+		if(GamePlayState::GetInstance()->GetNumEnemies() < 75)
 		{
 			m_bCanSpawn = true;
 			m_fSpawnTime = 0;
-			m_nSpawnCounter++;
+			//m_nSpawnCounter++;
 		}
 	}
 

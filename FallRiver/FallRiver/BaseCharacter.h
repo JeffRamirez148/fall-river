@@ -7,7 +7,7 @@
 #include "ViewManager.h"
 #include <Windows.h>
 
-enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY, CHA_NPC };
+enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY, CHA_NPC, CHA_BOSS2 };
 enum DIRECTIONS { DIRE_LEFT = 0, DIRE_UP, DIRE_RIGHT, DIRE_DOWN, DIRE_UPLEFT, DIRE_UPRIGHT, DIRE_DOWNLEFT, DIRE_DOWNRIGHT};
 
 class BaseCharacter: public BaseObject
@@ -15,12 +15,12 @@ class BaseCharacter: public BaseObject
 protected: 
 	int			m_nCharacterType;
 	AnimInfo	m_playerAnim;
+	vector<int>		bloodA;
 	//Animation	thisAnim;
 
 private:
 	int				m_nHealth;
 	int				m_nDir;
-	vector<int>		bloodA;
 	bool			died;
 	float			goreTime;
 public:

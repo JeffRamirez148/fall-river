@@ -10,11 +10,14 @@ Weapon::Weapon()
 	m_bReloading = false;
 	m_nAmmo = 0;
 	m_nDamage = 0;
-	m_bMelee = false;
 	swingMissID	= -1;
 	shotID		= -1;
 	reloadID	= -1;
-	
+	m_fFireRate = 0;
+	m_fFiringRange = 0;
+	m_nClip = 0;
+	m_nDamage = 0;
+	m_nMaxClip = 0;
 }
 
 Weapon::~Weapon()
@@ -32,7 +35,6 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 	// Set up variables
 	m_nAmmo = nAmmo;
 	m_fCurrRotation = currRotation;
-	m_bMelee = false;
 	
 
 	switch( m_nWeaponType )
@@ -55,11 +57,15 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 		m_fFireRate = 200;
 		m_fFiringRange = 288.0f;
 		m_nClip = 8;
-		m_nDamage = 30;
+		m_nDamage = 10;
 		m_nMaxClip = 8;
 		break;
 	case WPN_MACHETE:
-		m_bMelee = true;
+		m_fFireRate = 500;
+		m_fFiringRange = 128.0f;
+		m_nClip = 10;
+		m_nDamage = 10;
+		m_nMaxClip = 10;
 		break;
 	}
 	AudioManager* m_pAM = AudioManager::GetInstance();
@@ -110,7 +116,7 @@ void Weapon::Render()
 
 void Weapon::FireWeapon()
 {
-	if( m_nClip == 0 || m_bReloading )
+	if( m_nClip == 0 || m_bReloading && m_nWeaponType != WPN_MACHETE )
 	{
 		if(!Reload())
 			return;
@@ -123,15 +129,15 @@ void Weapon::FireWeapon()
 		MessageSystem::GetInstance()->SendMsg( pMsg );
 		pMsg = nullptr;
 		m_nClip--;
-		if(m_nWeaponType == WPN_SHOTGUN)
-		{
-			for(int i = 0; i < 2; i++)
-			{
-				CreateBullet* pMsg = new CreateBullet( this );
-				MessageSystem::GetInstance()->SendMsg( pMsg );
-				pMsg = nullptr;
-			}
-		}
+		//if(m_nWeaponType == WPN_SHOTGUN)
+		//{
+		//	for(int i = 0; i < 2; i++)
+		//	{
+		//		CreateBullet* pMsg = new CreateBullet( this );
+		//		MessageSystem::GetInstance()->SendMsg( pMsg );
+		//		pMsg = nullptr;
+		//	}
+		//}
 		
 		AudioManager::GetInstance()->GetSoundChannel(shotID)->stop();
 		AudioManager::GetInstance()->playSound(shotID);

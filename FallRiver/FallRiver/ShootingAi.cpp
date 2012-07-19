@@ -43,12 +43,13 @@ ShootingAi::ShootingAi()
 	AudioManager::GetInstance()->setSoundPos(notifyID, sound1);
 	AudioManager::GetInstance()->setSoundLooping(notifyID, false);
 	notified = false;
-
+	boss = false;
 	//AnimInfo startup
 	m_playerAnim.curAnimation = 0;
 	m_playerAnim.curAnimID = 0;
 	m_playerAnim.curFrame = 0;
 	m_playerAnim.fTime = 0;
+	autoBotsRollOut = 0;
 }
 
 ShootingAi::~ShootingAi()
@@ -58,7 +59,11 @@ ShootingAi::~ShootingAi()
 
 void ShootingAi::Update(float fElapsedTime) 
 {
+	++autoBotsRollOut;
+	if( autoBotsRollOut > 1 )
+	{
 	BaseCharacter::Update(fElapsedTime);
+
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
@@ -214,29 +219,29 @@ void ShootingAi::Update(float fElapsedTime)
 	else if(m_pTarget->GetPosY() < GetPosY())
 		SetDirection(DIRE_UP);
 
-	if(m_nState == PSTATE_SHOOT)
+	if(m_nState == ESTATE_SHOOT)
 	{
-		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 8)
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 4)
 		{
-			m_playerAnim.curAnimation = 8;
+			m_playerAnim.curAnimation = 4;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 9)
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 6)
 		{
-			m_playerAnim.curAnimation = 9;
+			m_playerAnim.curAnimation = 6;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 11)
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 5)
 		{
-			m_playerAnim.curAnimation = 11;
+			m_playerAnim.curAnimation = 5;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 10)
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 7)
 		{
-			m_playerAnim.curAnimation = 10;
+			m_playerAnim.curAnimation = 7;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
@@ -244,7 +249,7 @@ void ShootingAi::Update(float fElapsedTime)
 	}
 	else
 	{
-		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() == 0)
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && GetVelY() == 0)
 		{
 			m_playerAnim.curAnimation = 0;
 			m_playerAnim.curFrame = 0;
@@ -252,43 +257,43 @@ void ShootingAi::Update(float fElapsedTime)
 		}
 		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 4 && GetVelY() < 0)
 		{
-			m_playerAnim.curAnimation = 4;
+			m_playerAnim.curAnimation = 0;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 1 && GetVelY() == 0)
-		{
-			m_playerAnim.curAnimation = 1;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 5 && GetVelY() > 0)
-		{
-			m_playerAnim.curAnimation = 5;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 3 && GetVelX() == 0)
-		{
-			m_playerAnim.curAnimation = 3;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 7 && GetVelX() > 0)
-		{
-			m_playerAnim.curAnimation = 7;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 2 && GetVelX() == 0)
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && GetVelY() == 0)
 		{
 			m_playerAnim.curAnimation = 2;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 6 && GetVelX() < 0)
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 2 && GetVelY() > 0)
 		{
-			m_playerAnim.curAnimation = 6;
+			m_playerAnim.curAnimation = 2;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 1 && GetVelX() > 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 3;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 3 && GetVelX() < 0)
+		{
+			m_playerAnim.curAnimation = 3;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
@@ -312,6 +317,7 @@ void ShootingAi::Update(float fElapsedTime)
 		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame--;
 	}
+	}
 }
 
 void ShootingAi::Render()
@@ -320,11 +326,7 @@ void ShootingAi::Render()
 
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
-
-	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
-
-	//pVM->DrawRect(reRect, 255, 255, 0);
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.0f, 1.0f);
 }
 
 bool ShootingAi::CheckCollision(IObjects* pBase)

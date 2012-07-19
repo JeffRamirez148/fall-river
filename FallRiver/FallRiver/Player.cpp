@@ -10,14 +10,17 @@
 #include "DirectInput.h"
 #include "Weapon.h"
 #include "Light.h"
+#include "Emitter.h"
 #include "EventSystem.h"
 #include "Level.h"
 #include "AudioManager.h"
+#include "Particle_Manager.h"
 #include "Sound.h"
 #include "ViewManager.h"
 #include "Bush.h"
 #include "LoseMenuState.h"
 #include "CGame.h"
+#include "Boss2.h"
 
 Player::Player()
 {
@@ -28,8 +31,9 @@ Player::Player()
 	m_fshotTimer = 0;
 	m_nScore = 0;
 	m_ncurrWeap = 0;
+	m_nlightglare = -1;
 	m_nState = PSTATE_IDLE;
-	SetHealth(200);
+	SetHealth(100);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -60,6 +64,8 @@ Player::Player()
 	sheathID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/sheath.wav");
 
 	m_nFontID = ViewManager::GetInstance()->RegisterFont("resource/graphics/FallRiver_0.png");
+	m_nlightglare = ViewManager::GetInstance()->RegisterTexture("resource/graphics/stryker_sprites_01.png");
+
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(hitID, sound1);
 	AudioManager::GetInstance()->setSoundVel(walkingID, sound1);
@@ -177,13 +183,19 @@ void Player::Update(float fElapsedTime)
 		if(m_dwGunCount == 0)
 		{
 			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
-			m_nState = PSTATE_SHOOT;
+			if( m_currWeapon->GetWeaponType() != WPN_MACHETE )
+				m_nState = PSTATE_SHOOT;
+			else
+				m_nState = PSTATE_SWING;
 			m_currWeapon->FireWeapon();
 			m_dwGunReset = GetTickCount() + 500;
 		}
 		else if( m_dwGunCount < GetTickCount() )
 		{
-			m_nState = PSTATE_SHOOT;
+			if( m_currWeapon->GetWeaponType() != WPN_MACHETE )
+				m_nState = PSTATE_SHOOT;
+			else
+				m_nState = PSTATE_SWING;
 			m_currWeapon->FireWeapon();
 			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 			m_dwGunReset = GetTickCount() + 500;
@@ -194,6 +206,7 @@ void Player::Update(float fElapsedTime)
 		if( m_bIsHidden == true )
 		{
 			m_bShotBush = true;
+			m_bIsHidden = false;
 			m_fshotTimer = 0;
 		}
 	}	
@@ -274,6 +287,16 @@ void Player::Update(float fElapsedTime)
 			case 0:		// Flashlight
 				{
 					ViewManager::GetInstance()->SetLightPos(0, 0, 0);
+
+					if( GetDirection() == DIRE_RIGHT )
+						ViewManager::GetInstance()->SetLightPos(0.05f,-0.03f,0);
+					else if( GetDirection() == DIRE_LEFT)
+						ViewManager::GetInstance()->SetLightPos(0.03f,-0.03f,0);
+					else if( GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT)
+						ViewManager::GetInstance()->SetLightPos(0.02f,-0.03f,0);
+					else if( GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT)
+						ViewManager::GetInstance()->SetLightPos(0.06f,0,0);
+
 					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 					ViewManager::GetInstance()->SetInnerCone(.95f);
 					ViewManager::GetInstance()->SetOuterCone(.9f);
@@ -284,6 +307,16 @@ void Player::Update(float fElapsedTime)
 			case 1:		// Mag Light
 				{
 					ViewManager::GetInstance()->SetLightPos(0, 0, 0);
+
+					if( GetDirection() == DIRE_RIGHT )
+						ViewManager::GetInstance()->SetLightPos(0.05f,-0.03f,0);
+					else if( GetDirection() == DIRE_LEFT)
+						ViewManager::GetInstance()->SetLightPos(0.03f,-0.03f,0);
+					else if( GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT)
+						ViewManager::GetInstance()->SetLightPos(0.02f,-0.03f,0);
+					else if( GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT)
+						ViewManager::GetInstance()->SetLightPos(0.06f,0,0);
+
 					ViewManager::GetInstance()->SetSpotLightPos(0, 0, -.3f);
 					ViewManager::GetInstance()->SetInnerCone(.7f);
 					ViewManager::GetInstance()->SetOuterCone(.7f);
@@ -524,12 +557,6 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.curFrame = 0;
 				m_playerAnim.fTime = 0;
 			}
-			/*else
-			{
-			m_playerAnim.curAnimation = 0;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-			}*/
 		}
 		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && GetVelY() > 0)
 		{
@@ -693,7 +720,33 @@ void Player::Update(float fElapsedTime)
 				m_playerAnim.fTime = 0;
 			}
 		}
-
+	}
+	else if( m_nState == PSTATE_SWING )
+	{
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 16)
+		{
+			m_playerAnim.curAnimation = 16;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 18)
+		{
+			m_playerAnim.curAnimation = 18;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if( GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 19 )
+		{
+			m_playerAnim.curAnimation = 19;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if( GetDirection() == DIRE_LEFT && m_playerAnim.curAnimation != 17 )
+		{
+			m_playerAnim.curAnimation = 17;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
 	}
 
 
@@ -728,45 +781,123 @@ void Player::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
 
+	if( IsOn() )
+	{
+		RECT c = {946, 67, c.left+54, c.top+45};
+
+		if( GetDirection() == DIRE_RIGHT )
+			pVM->DrawStaticTexture(m_nlightglare, ((GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2) - 19,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y-17), 1.0f, 1.0f, &c);
+		else if ( GetDirection() == DIRE_UP || GetDirection() == DIRE_UPRIGHT || GetDirection() == DIRE_UPLEFT )
+			pVM->DrawStaticTexture(m_nlightglare, ((GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2) - 35,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y-15), 1.0f, 1.0f, &c);
+	}
+
 	//Drawing Player Placeholder Sprite
+	for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
+	{
+		float tmpx, tmpy;
+		tmpx = float(Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->rect.left);
+		tmpy = float(Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->rect.top);
+		RECT tmp = {0,0,32,32};
+		pVM->DrawStaticTexture(GamePlayState::GetInstance()->GetLogID(),tmpx-GamePlayState::GetInstance()->GetCamera().x - 16,tmpy-GamePlayState::GetInstance()->GetCamera().y - 16,2.0f,2.0f, &tmp);
+	}
+
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight());
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
+	if( ( GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT ) && IsOn() )
+	{
+		RECT c = {946, 67, c.left+54, c.top+45};
+		pVM->DrawStaticTexture(m_nlightglare, ((GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2) - 15,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y-17), 1.0f, 1.0f, &c);
+	}
+	else if( GetDirection() == DIRE_LEFT && IsOn() )
+	{
+		RECT c = {946, 67, c.left+54, c.top+45};
+		pVM->DrawStaticTexture(m_nlightglare, ((GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2) - 30,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y-15), 1.0f, 1.0f, &c);
+	}
 
-	//char szName[100] = {};
-	//
-	//TCHAR buffer[ 100 ];
-	////int playerScore = 15;
-	//_stprintf_s( buffer, 100, _T("Health - %i"), GetHealth() );
-
-	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-	//pVM->GetSprite()->Flush();
-	//pVM->DrawTextW("hello",0,0,0,255,255);
-
-	////m_pVM->DrawText(szName,0,0,255,255,255);
-	//pVM->DrawFont(m_nFontID,szName,0,50);
-
-
-	//RECT reRect = {GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, reRect.left+GetWidth(), reRect.top + GetHeight()};
-
-
-	//RECT logRect = { 600, 0, 800, 200};
-
-	//pVM->DrawRect(logRect, 50, 50, 50);
-
-	//for(unsigned int i = 0; i < m_vpActiveQuests.size(); i++)
-	//		pVM->DrawFont(m_nFontID, (char*)m_vpActiveQuests[i]->QuestTitle.c_str(), 610, i*50+50, 0.5f, 0.5f);
-
-	//pVM->DrawRect(reRect, 0, 0, 0);
-
-	/*for(unsigned int i = 0; i < m_vpWeapons.size(); i++)
-	m_vpWeapons[i]->Render();*/
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
 {
-	//Animation thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	//Frame thisFrame = thisAnim.frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+
+	if( m_nState == PSTATE_SWING && pBase->GetObjectType() == OBJ_CHARACTER )
+	{
+		RECT cRect;
+		RECT collRect = {long(thisFrame.activeRect.left+GetPosX()), long(thisFrame.activeRect.top+GetPosY()), thisFrame.activeRect.right+(long)GetPosX(), thisFrame.activeRect.bottom+(long)GetPosY()};
+		if( IntersectRect(&cRect, &collRect, &pBase->GetRect() ) && m_playerAnim.curFrame == 1 )
+		{
+			BaseCharacter* tmp = (BaseCharacter*)pBase;
+			tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
+			EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+
+			GamePlayState* gameState = GamePlayState::GetInstance();
+			Particle_Manager* m_pPM = Particle_Manager::GetInstance();
+			int bloodA1;
+			int bloodA2;
+			int bloodA3;
+
+			RECT tmpRect1 = collRect;
+			//RECT tmpRect1 = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
+
+
+			if( GetDirection() == DIRE_DOWNRIGHT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL1());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL7());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL3());
+			}
+			else if( GetDirection() == DIRE_UPRIGHT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL2());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL8());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL3());
+			}
+			else if( GetDirection() == DIRE_RIGHT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL3());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL2());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL1());
+			}
+			else if( GetDirection() == DIRE_LEFT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL4());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL5());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL6());
+			}
+			else if( GetDirection() == DIRE_UPLEFT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL5());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL4());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL8());
+			}
+			else if(GetDirection() == DIRE_DOWNLEFT)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL6());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL4());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL7());
+			}
+			else if( GetDirection() == DIRE_DOWN)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL7());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL6());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL1());
+			}
+			else if(GetDirection() == DIRE_UP)
+			{
+				bloodA1 = m_pPM->ActivateEmitter(gameState->GetBloodL8());
+				bloodA2 = m_pPM->ActivateEmitter(gameState->GetBloodL5());
+				bloodA3 = m_pPM->ActivateEmitter(gameState->GetBloodL2());
+			}
+			m_pPM->GetActiveEmitter(bloodA1)->SetRect(tmpRect1);
+			m_pPM->GetActiveEmitter(bloodA2)->SetRect(tmpRect1);
+			m_pPM->GetActiveEmitter(bloodA3)->SetRect(tmpRect1);
+			bloodA.push_back(bloodA1);
+			bloodA.push_back(bloodA2);
+			bloodA.push_back(bloodA3);
+		}
+	}
 	//int x =pBase->GetObjectType();
 	if( pBase->GetObjectType() != OBJ_LEVEL)
 	{
@@ -790,7 +921,26 @@ bool Player::CheckCollision(IObjects* pBase)
 					//pMsg = nullptr;
 				}
 				if(pBase->GetObjectType() == OBJ_CHARACTER)
-
+				{
+					BaseCharacter* tmpChar = (BaseCharacter*)(pBase);
+					if(tmpChar->GetCharacterType() == CHA_BOSS2)
+					{
+						Boss2* tmpBoss = (Boss2*)tmpChar;
+						if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
+						{
+							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
+								SetPosX(float(pBase->GetRect().left-GetWidth()));
+							else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
+								SetPosX(float(pBase->GetRect().right));
+							else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
+								SetPosY(float(pBase->GetRect().top-GetHeight()));
+							else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
+								SetPosY(float(pBase->GetRect().bottom));
+						}
+						EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+					}
+					else
+					{
 					if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
 						SetPosX(float(pBase->GetRect().left-GetWidth()));
 					else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
@@ -799,6 +949,8 @@ bool Player::CheckCollision(IObjects* pBase)
 						SetPosY(float(pBase->GetRect().top-GetHeight()));
 					else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 						SetPosY(float(pBase->GetRect().bottom));
+					}
+				}
 			}
 
 		}
@@ -881,7 +1033,6 @@ void Player::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			SetHealth(GetHealth()-30);
 			AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
 			AudioManager::GetInstance()->playSound(hitID);
 		}

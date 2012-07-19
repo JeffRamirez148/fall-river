@@ -25,10 +25,10 @@ void BaseCharacter::Update(float fElapsedTime)
 	m_nPosY += m_nVelY * fElapsedTime;
 	goreTime += fElapsedTime;
 
-	for(unsigned int i = 0; i < bloodA.size(); ++i)
-	{
-		Particle_Manager::GetInstance()->GetActiveEmitter( bloodA[i] )->loopin = !Particle_Manager::GetInstance()->GetActiveEmitter( bloodA[i] )->loopin;
-	}
+	//for(unsigned int i = 0; i < bloodA.size(); ++i)
+	//{
+	//	Particle_Manager::GetInstance()->GetActiveEmitter( bloodA[i] )->loopin = !Particle_Manager::GetInstance()->GetActiveEmitter( bloodA[i] )->loopin;
+	//}
 
 	if(m_nHealth <= 0 && this->GetCharacterType() == CHA_PLAYER && !died )
 	{

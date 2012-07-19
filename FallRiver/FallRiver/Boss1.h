@@ -21,9 +21,15 @@ class Boss1: public Enemy
 	vector<Enemy*>	m_cEnemies;
 
 	int m_nStages;
-	int m_nMinnions;
+
 
 public: 
+	// Spawn
+	int m_nSpawnCounter;
+	int enemies;
+	float m_fSpawnTime;
+	int oldSize;
+
 	Boss1();
 	~Boss1();
 
@@ -38,6 +44,7 @@ public:
 	virtual bool CheckCollision(IObjects* pBase);
 
 	virtual void HandleEvent(Event* pEvent);
+	void SetEnemies(vector<Enemy*> enemies) { m_cEnemies = enemies; }
 };
 
 #endif

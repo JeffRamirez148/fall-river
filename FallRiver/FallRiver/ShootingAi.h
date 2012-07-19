@@ -17,7 +17,8 @@ private:
 	int walkingID;
 	int notifyID;
 	bool notified;
-
+	bool boss;
+	float autoBotsRollOut;
 
 public: 
 	ShootingAi();
@@ -28,6 +29,8 @@ public:
 	void SetWeapon(Weapon* pWeapon) {m_pWeapon = pWeapon;}
 	virtual bool CheckCollision(IObjects* aPBase);
 	virtual void HandleEvent(Event* aPEvent);
+	bool GetBossBool() {return boss;}
+	void SetBossBool(bool hasBoss) { boss = hasBoss; }
 };
 
 #endif

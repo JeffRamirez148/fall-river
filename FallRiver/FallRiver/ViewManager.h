@@ -178,6 +178,7 @@ public:
 	float GetOuterCone(void) { return outerCone; }
 
 	void CreateOtherLights(void);
+	void ClearOtherLights(void) { lightsToRender.clear(); } 
 };
 
 #endif

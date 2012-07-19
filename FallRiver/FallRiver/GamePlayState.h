@@ -27,7 +27,7 @@ class SpawnPoint;
 class Bush;
 class CompanionAI;
 class Boss1;
-
+class Boss2;
 
 typedef CObjectFactory< std::wstring, BaseObject> Factory;
 
@@ -94,6 +94,7 @@ private:
 	vector<Bush*>				m_cBushes;
 	vector<NPC*>				m_cNpcs;
 	Boss1*						m_cBoss1;
+	Boss2*						m_cBoss2;
 	Weapon*						m_cWeapon;
 	vector<int>					fireA;
 
@@ -128,6 +129,8 @@ public:
 	int GetBloodL6() { return bloodL6;}
 	int GetBloodL7() { return bloodL7;}
 	int GetBloodL8() { return bloodL8;}
+	int GetNumEnemies() {return m_cEnemies.size(); }
+	int GetLogID() {return logID;}
 	vector<int> GetFireA(void) { return fireA;}
 
 	bool questFlag;
@@ -158,6 +161,10 @@ public:
 
 	static void MessageProc(IMessage* pMsg);
 	vector<NPC*>* GetNPCs(void) { return &m_cNpcs; }
+
+	int GetSpawnEnemyID() { return SpawnEnemyAniID; }
+	void AddEnemy(Enemy* enemy) { m_cEnemies.push_back(enemy); }
+	vector<Enemy*> GetEnemies() {return m_cEnemies;}
 };
 
 #endif
