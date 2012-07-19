@@ -27,6 +27,7 @@ public:
 	~CompanionAI();
 
 	bool IsTeaching() {return teaching;}
+	void SetTeaching(bool teach) {teaching = teach;}
 
 	int GetStage() {return m_nStages;}
 	int GetStep() {return m_nStep;}

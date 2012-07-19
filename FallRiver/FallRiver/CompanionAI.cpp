@@ -158,20 +158,12 @@ void CompanionAI::SaySomething()
 			if( DirectInput::GetInstance()->JoystickIsUnplugged(0) )
 			{
 				if( m_nStep == 0 )
-					pVM->DrawFont(m_nFontID, "Alright let me teach me a few things before you run off.\n Turn your flashlight on and off by pressing    \"F\" \n    Turn on your Flashlight now.", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 1 )
-					pVM->DrawFont(m_nFontID, "Ok now turn your flashlight off", 12, 500, 0.7f, 0.7f);
-				else
-					pVM->DrawFont(m_nFontID, "Ok turn your flashlight back on\n so I can teach you about your different lights.", 12, 500, 0.7f, 0.7f);
+					pVM->DrawFont(m_nFontID, "Steven\n\n Aghh my leg... I don't think I can walk..", 12, 500, 0.7f, 0.7f, 0, 0, 0, D3DCOLOR_XRGB(50, 200, 50));
 			}
 			else
 			{
 				if( m_nStep == 0 )
 					pVM->DrawFont(m_nFontID, "Alright let me teach me a few things before you run off.\n Turn your flashlight on and off by pressing    \"B\" \n    Turn on your Flashlight now.", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 1 )
-					pVM->DrawFont(m_nFontID, "Ok now turn your flashlight off", 12, 500, 0.7f, 0.7f);
-				else
-					pVM->DrawFont(m_nFontID, "Ok turn your flashlight back on\n so I can teach you about your different lights.", 12, 500, 0.7f, 0.7f);
 			}
 			break;
 		}
@@ -182,31 +174,11 @@ void CompanionAI::SaySomething()
 			{
 				if( m_nStep == 0 )
 					pVM->DrawFont(m_nFontID, "Thie is your Flashlight.\n It allows you to see far away far away distances\n while only attracting a little attention. \n\n\tPress \"E\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 1 )
-					pVM->DrawFont(m_nFontID, "This is your MagLight. \nIt will let you see much farther than your flashlight would\n but you'll definitely attract more attention. \n\n\tPress \"E\" to select your next light source.", 12, 500, 0.6f, 0.7f);
-				else if( m_nStep == 2 )
-					pVM->DrawFont(m_nFontID, "This is your Lantern.\n It allows you to see very far\n but will make everyone in the area aware of where you are. \n\n\tPress \"E\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 3 )
-					pVM->DrawFont(m_nFontID, "This is your lighter.\n You can barely see at all with it\n however you'll be virtually invisable. \n\n\tPress \"E\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 4 )
-					pVM->DrawFont(m_nFontID, "Press \"Q\" to select your previous light source. ", 12, 500, 0.7f, 0.7f);
-				else
-					pVM->DrawFont(m_nFontID, "Now equip your flashlight again!", 12, 500, 0.7f, 0.7f);
 			}
 			else
 			{
 				if( m_nStep == 0 )
 					pVM->DrawFont(m_nFontID, "Thie is your Flashlight.\n It allows you to see far away far away distances\n while only attracting a little attention. \n\n\tPress \"LB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 1 )
-					pVM->DrawFont(m_nFontID, "This is your MagLight. \nIt will let you see much farther than your flashlight would\n but you'll definitely attract more attention. \n\n\tPress \"LB\" to select your next light source.", 12, 500, 0.6f, 0.7f);
-				else if( m_nStep == 2 )
-					pVM->DrawFont(m_nFontID, "This is your Lantern.\n It allows you to see very far\n but will make everyone in the area aware of where you are. \n\n\tPress \"LB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 3 )
-					pVM->DrawFont(m_nFontID, "This is your lighter.\n You can barely see at all with it\n however you'll be virtually invisable. \n\n\tPress \"LB\" to select your next light source. ", 12, 500, 0.7f, 0.7f);
-				else if( m_nStep == 4 )
-					pVM->DrawFont(m_nFontID, "Press \"RB\" to select your previous light source. ", 12, 500, 0.7f, 0.7f);
-				else
-					pVM->DrawFont(m_nFontID, "Now equip your flashlight again!", 12, 500, 0.7f, 0.7f);
 			}
 			break;
 		}
