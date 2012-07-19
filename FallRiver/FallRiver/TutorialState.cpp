@@ -5,8 +5,10 @@
 #include "Particle_Manager.h"
 #include "CompanionAI.h"
 #include "DestroyBullet.h"
+#include "PauseMenuState.h"
 #include "Player.h"
 #include "HUD.h"
+#include "LoadingScreen.h"
 #include "Bush.h"
 #include "PickUp.h"
 #include "Weapon.h"
@@ -48,6 +50,8 @@ TutorialState::~TutorialState(void)
 
 void TutorialState::Enter()
 {
+	LoadingScreen* loading = LoadingScreen::GetInstance();
+
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
 	m_pOF = Factory::GetInstance();
@@ -57,6 +61,15 @@ void TutorialState::Enter()
 	m_pPM = Particle_Manager::GetInstance();
 	m_pAM = AudioManager::GetInstance();
 
+	m_pVM->SetLightPos(0, 0, -1.0f);
+	m_pVM->SetSpotLightPos(0, 0, -.85f);
+	m_pVM->SetInnerCone(.95f);
+	m_pVM->SetOuterCone(.9f);
+
+	loading->Render();
+
+	m_pVM->SetAmbientLight( .1f, .1f, .0f);
+
 	m_pOF->RegisterClassType< Player		>( _T("Player") );
 	m_pOF->RegisterClassType< Level			>( _T("Level") );
 	m_pOF->RegisterClassType< Weapon		>( _T("Weapon") );
@@ -65,6 +78,10 @@ void TutorialState::Enter()
 	m_pOF->RegisterClassType< CompanionAI	>( _T("CompanionAI") );
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
+
+	
+	loading->Update();
+	loading->Render();
 
 	// Smoke particles
 	smokeL = m_pPM->LoadEmitter("smoke.xml");
@@ -85,6 +102,10 @@ void TutorialState::Enter()
 	goreL6 = m_pPM->LoadEmitter("gore6.xml");
 	goreL7 = m_pPM->LoadEmitter("gore7.xml");
 	goreL8 = m_pPM->LoadEmitter("gore8.xml");
+	
+	loading->Update();
+	loading->Render();
+
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 
@@ -113,6 +134,11 @@ void TutorialState::Enter()
 	Level* pLevel = nullptr;
 	Bush* pBush = nullptr;
 	PickUp* pPickUp = nullptr;
+
+	
+	loading->Update();
+	loading->Render();
+
 
 	if( pLevel == nullptr )
 	{
@@ -178,6 +204,11 @@ void TutorialState::Enter()
 	pPlayer->AddWeapon(pWeapon);
 	pPlayer->AddWeapon(pWeapon4);
 
+	
+	loading->Update();
+	loading->Render();
+
+
 	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
 	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
 	pBuddy->SetPosX(550);
@@ -187,6 +218,10 @@ void TutorialState::Enter()
 	pBuddy->SetImageID(-1);
 	pBuddy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
 	m_pOM->AddObject(pBuddy);
+
+	for(int i = 0; i < 10; i++)
+		loading->Update();
+	loading->Render();
 
 	m_pHUD = new HUD;
 	//m_pVM->SetAmbientLight( .0f, .0f, .0f);*/
@@ -295,6 +330,11 @@ void TutorialState::Enter()
 			tmp.erase(nth);
 			i--;
 		}
+
+		for(int i = 0; i < 10; i++)
+			loading->Update();
+		loading->Render();
+
 	}
 	pLevel->SetCollision(tmp);
 
@@ -321,6 +361,11 @@ void TutorialState::Enter()
 	m_pAM->setMusicVel(musicID, sound1);
 	m_pAM->setMusicLooping(musicID, true);
 	m_pAM->playMusic(musicID);
+
+	
+	loading->Update();
+	loading->Render();
+
 
 	m_pHUD->m_nHudID = m_pVM->RegisterTexture("resource//graphics//sprites_HUD.png");
 	m_pHUD->m_nArrowID = m_pVM->RegisterTexture("resource//graphics//Arrow.png");
@@ -354,10 +399,20 @@ void TutorialState::Enter()
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_28.png.png"));
 
 	m_pOM->AddObject(pPlayer);
+	
+	loading->Update();
+	loading->Update();
+	loading->Update();
+	loading->Render();
+
+	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
 	GamePlayState::GetInstance()->SetPlayer(m_cPlayer);
 	GamePlayState::GetInstance()->SetHud(m_pHUD);
 	GamePlayState::GetInstance()->SetCompanion(m_cBuddy);
+
+	loading->Reset();
+	loading = nullptr;
 
 	m_pMS->InitMessageSystem( &MessageProc );
 
@@ -395,6 +450,8 @@ void TutorialState::Exit()
 	delete m_cBuddy;
 	delete m_cPlayer;*/
 
+	m_clevel = nullptr;
+
 	GamePlayState::GetInstance()->SetPlayer(nullptr);
 	GamePlayState::GetInstance()->SetCompanion(nullptr);
 	GamePlayState::GetInstance()->SetHud(nullptr);
@@ -405,9 +462,17 @@ bool TutorialState::Input()
 	// Pressing Escape will End the Game
 	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 	{
+		CGame::GetInstance()->ChangeState(PauseMenuState::GetInstance());
+	}
+	else if( m_pDI->KeyPressed(DIK_T) )
+		m_cBuddy->SetTeaching(false);
+
+	if( !m_cBuddy->IsTeaching() )
+	{
 		CGame::GetInstance()->RemoveState();
 		CGame::GetInstance()->ChangeState(GamePlayState::GetInstance());
 	}
+
 	return true;
 }
 

@@ -561,12 +561,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B077973C54E4E05AFB4740139D979A3"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9B2FBE5D2E1B409A9726972EFADCDC1B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -883,13 +877,34 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
         "Release"
         {
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\Fall River Setup.msi"
+        "OutputFilename" = "8:Release\\Fall River.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -2761,26 +2776,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B077973C54E4E05AFB4740139D979A3"
-            {
-            "SourcePath" = "8:..\\FallRiver\\resource\\graphics\\health_animation.zip"
-            "TargetName" = "8:health_animation.zip"
-            "Tag" = "8:"
-            "Folder" = "8:_43E1B7540BD84EF8A5FC8ACFEB73793D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B2FBE5D2E1B409A9726972EFADCDC1B"
             {
             "SourcePath" = "8:..\\FallRiver\\blood8.xml"
@@ -3893,7 +3888,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Fall River Setup"
         "ProductCode" = "8:{E4C95DF7-8912-4B1F-8C11-189E874DF9E5}"
-        "PackageCode" = "8:{1F7101DE-2B7E-4B2A-A145-61D773B8748E}"
+        "PackageCode" = "8:{E2290C37-D7F3-4E83-AE45-A66A935D1F1E}"
         "UpgradeCode" = "8:{941A7506-D740-4441-B5D4-11CD2FE37633}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -4024,7 +4019,7 @@
             "Target" = "8:_5D979B3C3AC24A69A464CCB201F93673"
             "Folder" = "8:_A8E3E0F7205A4BAC9B08C4E3B0D72F8B"
             "WorkingFolder" = "8:_05AD60E69DAA4BB7A9743C425C2698B3"
-            "Icon" = "8:"
+            "Icon" = "8:_B61486E10520422D90CFBB6558E05330"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B89AE8210A5D41DF8C5AC8A64D787E49"
@@ -4038,7 +4033,7 @@
             "Target" = "8:_5D979B3C3AC24A69A464CCB201F93673"
             "Folder" = "8:_3B292B2FC7DB4F39A43BA6701D1287CF"
             "WorkingFolder" = "8:_05AD60E69DAA4BB7A9743C425C2698B3"
-            "Icon" = "8:"
+            "Icon" = "8:_B61486E10520422D90CFBB6558E05330"
             "Feature" = "8:"
             }
         }
