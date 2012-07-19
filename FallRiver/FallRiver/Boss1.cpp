@@ -159,17 +159,9 @@ void Boss1::Update(float fElapsedTime)
 	{
 		if(GetHealth() <= 0)
 		{
-			for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetEnemies().size(); i++ )
-			{
-				if( this == GamePlayState::GetInstance()->GetEnemies()[i] )
-				{
-					vector<Enemy*>::iterator nth = GamePlayState::GetInstance()->GetEnemies().begin() + i;
-					GamePlayState::GetInstance()->GetEnemies()[i] = nullptr;
-					GamePlayState::GetInstance()->GetEnemies().erase(nth);
-					break;
-				}
-			}
-			ObjectManager::GetInstance()->RemoveObject( this );
+			DestroyEnemy* pMsg = new DestroyEnemy(this);
+			MessageSystem::GetInstance()->SendMsg(pMsg);
+			pMsg = nullptr;
 		}
 
 		if(m_nState == ESTATE_CHASING)
@@ -391,6 +383,8 @@ void Boss1::Render()
 
 	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 	//pVM->DrawRect(reRect, 255, 255, 100);
+	BaseCharacter::Render();
+
 }
 
 bool Boss1::CheckCollision(IObjects* pBase)
@@ -407,6 +401,7 @@ void Boss1::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
+			this->SetBleeding(true);
 			//m_nStages =  1;
 		}
 	}

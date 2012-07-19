@@ -21,6 +21,7 @@ public:
 	void SetWeapon(Weapon* pWeapon) {m_pWeapon = pWeapon;}
 
 	virtual bool CheckCollision(IObjects* pBase);
+
 };
 
 #endif

@@ -33,7 +33,7 @@ Player::Player()
 	m_ncurrWeap = 0;
 	m_nlightglare = -1;
 	m_nState = PSTATE_IDLE;
-	SetHealth(100);
+	SetHealth(10000);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -90,6 +90,7 @@ Player::Player()
 	batteryTime = 0;
 	flashLightType = 0;
 	decreaseTime = 0;
+	dammageTimer = 0;
 }
 
 Player::~Player()
@@ -123,6 +124,7 @@ void Player::Update(float fElapsedTime)
 	CompanionAI* pBud = GamePlayState::GetInstance()->GetCompanion();
 
 	m_fshotTimer += fElapsedTime;
+	dammageTimer += fElapsedTime;
 
 	if( GetHealth() <= 0 )
 	{
@@ -814,6 +816,7 @@ void Player::Render()
 		RECT c = {946, 67, c.left+54, c.top+45};
 		pVM->DrawStaticTexture(m_nlightglare, ((GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2) - 30,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y-15), 1.0f, 1.0f, &c);
 	}
+	BaseCharacter::Render();
 
 }
 
@@ -937,7 +940,11 @@ bool Player::CheckCollision(IObjects* pBase)
 							else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 								SetPosY(float(pBase->GetRect().bottom));
 						}
-						SetHealth(GetHealth()-1);
+						if (dammageTimer > 1)
+						{
+							SetHealth(GetHealth()-1);
+							dammageTimer = 0;
+						}
 					}
 					else
 					{
@@ -1035,6 +1042,7 @@ void Player::HandleEvent(Event* pEvent)
 		{
 			AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
 			AudioManager::GetInstance()->playSound(hitID);
+			this->SetBleeding(true);
 		}
 	}
 	else if(pEvent->GetEventID() == "hit_wall")

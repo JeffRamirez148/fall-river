@@ -29,6 +29,8 @@ void Enemy::Render()
 	ViewManager* pVM = ViewManager::GetInstance();
 
 	pVM->DrawRect(GetRect(), 255, 0, 0);
+	BaseCharacter::Render();
+
 }
 
 void Enemy::MoveTo(float x, float y, float speed) 

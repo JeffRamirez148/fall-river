@@ -21,7 +21,6 @@ enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH, P
 class Player: public BaseCharacter, public IListener
 {
 
-private:
 	float m_fCurrRotation;
 	vector<Weapon*> m_vpWeapons;
 	vector<Light*> m_vpLights;
@@ -40,22 +39,11 @@ private:
 	float decreaseTime;
 	int flickerRate;
 	int m_nlightglare;
+	float dammageTimer;
 
-public:
-	int	m_nFontID;
-	int questCounter;
-	int completedQuest;
-	vector<Quest_Struct*> m_vpActiveQuests;
-	vector<Quest_Struct*> m_vpFinishedQuests;
-private:
 	char* m_cName;
 	bool m_bIsAlive;
-public:
-	bool m_bIsHidden;
-	bool m_bHasMedicine;
-	bool m_bShotBush;
-	float m_fshotTimer;
-private:
+
 	bool m_bTalking;
 	int m_nLives;
 	int walkingID;
@@ -65,14 +53,23 @@ private:
 	int sheathID;
 
 	bool lightOn;
-public:
-	int battery;
-	bool questLogToggle;
-private:
 	float batteryTime;
 
+public:
+	int	m_nFontID;
+	int questCounter;
+	int completedQuest;
+	vector<Quest_Struct*> m_vpActiveQuests;
+	vector<Quest_Struct*> m_vpFinishedQuests;
 
-public: 
+	bool m_bIsHidden;
+	bool m_bHasMedicine;
+	bool m_bShotBush;
+	float m_fshotTimer;
+
+	int battery;
+	bool questLogToggle;
+
 	Player();
 	~Player();
 

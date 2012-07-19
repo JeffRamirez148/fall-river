@@ -139,7 +139,6 @@ void GamePlayState::Enter()
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
-
 	logID = m_pVM->RegisterTexture("resource/graphics/logs.png");
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );

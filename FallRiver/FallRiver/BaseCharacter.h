@@ -15,7 +15,10 @@ class BaseCharacter: public BaseObject
 protected: 
 	int			m_nCharacterType;
 	AnimInfo	m_playerAnim;
-	vector<int>		bloodA;
+	AnimInfo	blood;
+	bool		bleeding;
+	vector<int>	bloodA;
+	float		bloodAngle;
 	//Animation	thisAnim;
 
 private:
@@ -23,6 +26,7 @@ private:
 	int				m_nDir;
 	bool			died;
 	float			goreTime;
+	bool gore;
 public:
 	BaseCharacter();
 	virtual ~BaseCharacter();
@@ -44,6 +48,8 @@ public:
 	void SetHealth(int health) {m_nHealth = health;}
 
 	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID; }
+	void SetBleeding(bool mhm) {bleeding = mhm; gore = false;}
+	void SetBloodAngle(float angle) {bloodAngle = angle;}
 };
 
 #endif
