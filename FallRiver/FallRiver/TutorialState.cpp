@@ -187,7 +187,7 @@ void TutorialState::Enter()
 	pWeapon3->Init(WPN_RIFLE, 100, 0);
 	pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 	pWeapon3->SetPosY(pPlayer->GetPosY());
-
+	*/
 	pWeapon4 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 	pWeapon4->SetHeight(20);
 	pWeapon4->SetWidth(10);
@@ -195,15 +195,14 @@ void TutorialState::Enter()
 	pWeapon4->SetOwner(pPlayer);
 	pWeapon4->Init(WPN_MACHETE, 100, 0);
 	pWeapon4->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
-	pWeapon4->SetPosY(pPlayer->GetPosY());*/
+	pWeapon4->SetPosY(pPlayer->GetPosY());
 
 	pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
 	/*pPlayer->AddWeapon(pWeapon2);
 	pPlayer->AddWeapon(pWeapon3);
-	pPlayer->AddWeapon(pWeapon);
+	pPlayer->AddWeapon(pWeapon);*/
 	pPlayer->AddWeapon(pWeapon4);
-*/
 	
 	loading->Update();
 	loading->Render();
