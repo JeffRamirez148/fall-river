@@ -139,6 +139,7 @@
     <ClCompile Include="tinyxml.cpp" />
     <ClCompile Include="tinyxmlerror.cpp" />
     <ClCompile Include="tinyxmlparser.cpp" />
+    <ClCompile Include="TutorialState.cpp" />
     <ClCompile Include="ViewManager.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="tinystr.h" />
     <ClInclude Include="tinyxml.h" />
+    <ClInclude Include="TutorialState.h" />
     <ClInclude Include="ViewManager.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WinMenuState.h" />

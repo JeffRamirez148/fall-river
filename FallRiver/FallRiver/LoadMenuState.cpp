@@ -5,6 +5,7 @@
 #include "DirectInput.h"
 #include "CGame.h"
 #include "GamePlayState.h"
+#include "TutorialState.h"
 #include "IMenuState.h"
 
 LoadMenuState* LoadMenuState::GetInstance() 
@@ -161,7 +162,7 @@ bool LoadMenuState::Input()
 			if( m_nCursPosY == 200 )
 			{
 				CGame::GetInstance()->RemoveState();
-				CGame::GetInstance()->ChangeState(GamePlayState::GetInstance());
+				CGame::GetInstance()->ChangeState(TutorialState::GetInstance());
 			}
 			else if(m_nCursPosY == 300 )
 			{

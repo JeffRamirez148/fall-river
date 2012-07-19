@@ -129,7 +129,7 @@ void Weapon::FireWeapon()
 		MessageSystem::GetInstance()->SendMsg( pMsg );
 		pMsg = nullptr;
 		m_nClip--;
-		if(m_nWeaponType == WPN_SHOTGUN)
+		/*if(m_nWeaponType == WPN_SHOTGUN)
 		{
 			for(int i = 0; i < 2; i++)
 			{
@@ -137,7 +137,7 @@ void Weapon::FireWeapon()
 				MessageSystem::GetInstance()->SendMsg( pMsg );
 				pMsg = nullptr;
 			}
-		}
+		}*/
 		
 		AudioManager::GetInstance()->GetSoundChannel(shotID)->stop();
 		AudioManager::GetInstance()->playSound(shotID);

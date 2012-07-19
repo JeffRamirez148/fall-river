@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "CGame.h"
 #include "ViewManager.h"
+#include "TutorialState.h"
 #include "DirectInput.h"
 
 CompanionAI::CompanionAI()
@@ -123,7 +124,11 @@ void CompanionAI::HandleEvent(Event* aPEvent)
 
 void CompanionAI::SaySomething() 
 {
-	Player* tempPlayer = GamePlayState::GetInstance()->GetPlayer();	
+	Player* tempPlayer;
+	if(CGame::GetInstance()->GetState() == GamePlayState::GetInstance() )
+		tempPlayer = GamePlayState::GetInstance()->GetPlayer();	
+	else
+		tempPlayer = TutorialState::GetInstance()->GetPlayer();
 
 	double playerX = (tempPlayer->GetPosX());
 	double myX = GetPosX();
@@ -146,6 +151,8 @@ void CompanionAI::SaySomething()
 
 	RECT src_Rect = {0,200,800,300};
 	pVM->DrawStaticTexture(talkBox,0,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
+
+	pVM->GetSprite()->Flush();
 
 	switch(m_nStages)
 	{
