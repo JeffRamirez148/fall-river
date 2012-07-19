@@ -20,6 +20,7 @@
 #include "Bush.h"
 #include "LoseMenuState.h"
 #include "CGame.h"
+#include "Boss2.h"
 
 Player::Player()
 {
@@ -791,6 +792,15 @@ void Player::Render()
 	}
 
 	//Drawing Player Placeholder Sprite
+	for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
+	{
+		float tmpx, tmpy;
+		tmpx = float(Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->rect.left);
+		tmpy = float(Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->rect.top);
+		RECT tmp = {0,0,32,32};
+		pVM->DrawStaticTexture(GamePlayState::GetInstance()->GetLogID(),tmpx-GamePlayState::GetInstance()->GetCamera().x - 16,tmpy-GamePlayState::GetInstance()->GetCamera().y - 16,2.0f,2.0f, &tmp);
+	}
+
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight());
 	/*pVM->DrawRect(GetRect(), 255, 255, 255);*/
 
@@ -911,7 +921,26 @@ bool Player::CheckCollision(IObjects* pBase)
 					//pMsg = nullptr;
 				}
 				if(pBase->GetObjectType() == OBJ_CHARACTER)
-
+				{
+					BaseCharacter* tmpChar = (BaseCharacter*)(pBase);
+					if(tmpChar->GetCharacterType() == CHA_BOSS2)
+					{
+						Boss2* tmpBoss = (Boss2*)tmpChar;
+						if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
+						{
+							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
+								SetPosX(float(pBase->GetRect().left-GetWidth()));
+							else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
+								SetPosX(float(pBase->GetRect().right));
+							else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
+								SetPosY(float(pBase->GetRect().top-GetHeight()));
+							else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
+								SetPosY(float(pBase->GetRect().bottom));
+						}
+						EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+					}
+					else
+					{
 					if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
 						SetPosX(float(pBase->GetRect().left-GetWidth()));
 					else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
@@ -920,6 +949,8 @@ bool Player::CheckCollision(IObjects* pBase)
 						SetPosY(float(pBase->GetRect().top-GetHeight()));
 					else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 						SetPosY(float(pBase->GetRect().bottom));
+					}
+				}
 			}
 
 		}

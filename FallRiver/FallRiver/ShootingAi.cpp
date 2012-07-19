@@ -49,6 +49,7 @@ ShootingAi::ShootingAi()
 	m_playerAnim.curAnimID = 0;
 	m_playerAnim.curFrame = 0;
 	m_playerAnim.fTime = 0;
+	autoBotsRollOut = 0;
 }
 
 ShootingAi::~ShootingAi()
@@ -58,7 +59,11 @@ ShootingAi::~ShootingAi()
 
 void ShootingAi::Update(float fElapsedTime) 
 {
+	++autoBotsRollOut;
+	if( autoBotsRollOut > 1 )
+	{
 	BaseCharacter::Update(fElapsedTime);
+
 	FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
@@ -311,6 +316,7 @@ void ShootingAi::Update(float fElapsedTime)
 			m_playerAnim.curFrame = 0;
 		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame--;
+	}
 	}
 }
 

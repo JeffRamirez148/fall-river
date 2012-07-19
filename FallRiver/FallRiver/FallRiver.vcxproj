@@ -206,6 +206,7 @@
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quests.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SaveMenuState.h" />
     <ClInclude Include="ShootingAi.h" />
     <ClInclude Include="sound.h" />
@@ -222,6 +223,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FallRiver.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -172,6 +172,8 @@ void XMLManager::SaveProgress( const char* szFilename, Player &player)
 	pPlayer->SetAttribute( "lives", player.GetLives() );
 	pPlayer->SetDoubleAttribute( "PosX", player.GetPosX() );
 	pPlayer->SetDoubleAttribute( "PosY", player.GetPosY() );
+	pPlayer->SetAttribute( "health", player.GetHealth() );
+	pPlayer->SetAttribute( "battery", player.GetBattery() );
 
 	// Write this node to the root "player"
 	pRoot->LinkEndChild( pPlayer );
@@ -235,17 +237,20 @@ Player* XMLManager::LoadProgress(const char* szFilename)
 
 	Player* m_cPlayer = new Player();
 
-	int nScore, nLives;
+	int nScore, nLives, nHealth, nBattery;
 	double posX, posY;
 	pPlayer->Attribute("score", &nScore);
 	pPlayer->Attribute( "lives", &nLives );
 	pPlayer->Attribute( "PosX", &posX );
 	pPlayer->Attribute( "PosY", &posY );
+	pPlayer->Attribute( "health", &nHealth );
+	pPlayer->Attribute( "battery", &nBattery );
 	m_cPlayer->SetScore(nScore);
 	m_cPlayer->SetLives(nLives);
 	m_cPlayer->SetPosX((float)posX);
 	m_cPlayer->SetPosY((float)posY);
-	
+	m_cPlayer->SetHealth(nHealth);
+	m_cPlayer->SetBattery(nBattery);
 
 	// Iterate through the nodes to load weapon data
 	TiXmlElement* pWeapon = pPlayer->NextSiblingElement( "player_weapons" );

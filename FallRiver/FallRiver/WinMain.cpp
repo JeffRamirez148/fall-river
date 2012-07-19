@@ -3,6 +3,7 @@
 #include <crtdbg.h>
 
 
+#include "resource.h"
 
 #include <windows.h>	//	Needed for Windows Applications.
 #include <tchar.h>
@@ -137,8 +138,8 @@ BOOL RegisterWindowClass(HINSTANCE hInstance)
 	winClassEx.cbClsExtra		= 0;
 	winClassEx.cbWndExtra		= 0;
 	winClassEx.hInstance		= hInstance;
-	//winClassEx.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
-	winClassEx.hIcon			= LoadIcon(NULL, IDI_APPLICATION);
+	winClassEx.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	//winClassEx.hIcon			= LoadIcon(NULL, IDI_APPLICATION);
 	winClassEx.hIconSm			= NULL;
 	winClassEx.hCursor			= LoadCursor(NULL, IDC_ARROW);
 	winClassEx.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);

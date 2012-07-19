@@ -195,6 +195,7 @@ bool LoadMenuState::Input()
 		else if( m_nCursPosY == 400 )
 			m_bIsLoading = false;
 
+		Player* testingstuff = GamePlayState::GetInstance()->GetPlayer();
 		return true;
 	}
 
