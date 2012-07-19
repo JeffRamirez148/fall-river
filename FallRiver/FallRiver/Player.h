@@ -81,6 +81,10 @@ public:
 	void HandleEvent(Event* aPEvent);
 	
 	int GetLightType() { return flashLightType; }
+
+	int GetBattery() { return battery; }
+	void SetBattery(int nBattery) { battery = nBattery; }
+
 	int GetHitID(void) { return hitID;}
 	// If the Player is in a bush or closet
 	bool CheckHidden() {return m_bIsHidden;}
