@@ -30,6 +30,9 @@ Boss2::Boss2()
 	m_playerAnim.curFrame = 0;
 	m_playerAnim.fTime = 0;
 	m_pTarget = GamePlayState::GetInstance()->GetPlayer();
+	oldPosition.x = this->GetPosX();
+	oldPosition.y = this->GetPosY();
+
 	chargeDestination.x =  m_pTarget->GetPosX();
 	chargeDestination.y = m_pTarget->GetPosY();
 	this->m_nCharacterType = CHA_BOSS2;
@@ -38,6 +41,7 @@ Boss2::Boss2()
 void Boss2::Update(float Time) 
 {
 	//BaseCharacter::Update(Time);
+	m_pWeapon->Update(Time);
 	if(GetHealth() <= 0)
 	{
 		DestroyEnemy* pMsg = new DestroyEnemy(this);
@@ -47,22 +51,22 @@ void Boss2::Update(float Time)
 
 	if(  float(GetHealth()) / 1000.0f >= .75f )
 	{
-		if(m_nState == ESTATE_CHASING)
-		{
+		//if(m_nState == ESTATE_CHASING)
+		//{
 			if( m_dwFireDelay == 0)
 			{
 				m_dwFireDelay = GetTickCount() + 1000;
 				//m_dwGunReset = GetTickCount() + 100;
 				m_nState = ESTATE_SHOOT;
 			}
-			if( m_dwFireDelay < GetTickCount() && m_nState == ESTATE_CHASING )
+			if( m_dwFireDelay < GetTickCount() )//&& m_nState == ESTATE_CHASING )
 			{
 				m_dwFireDelay = GetTickCount() + 1000;
 				m_pWeapon->FireWeapon();
 				m_nState = ESTATE_SHOOT;
 				//m_dwGunReset = GetTickCount() + 100;
 			}
-		}
+		//}
 
 		float distanceX = ( m_pTarget->GetPosX() -  GetPosX() );
 		float distanceY = ( m_pTarget->GetPosY() -  GetPosY() );
@@ -94,35 +98,35 @@ void Boss2::Update(float Time)
 			}
 			else if( distanceY < 50 || distanceX < 50 )
 			{
-				if(m_pTarget->GetPosX() < GetPosX()+5 )
-				{
+				//if(m_pTarget->GetPosX() < GetPosX()+5 )
+				//{
 					//MoveTo(GetPosX()+100, GetPosY(), 80);
 					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 					AudioManager::GetInstance()->playSound(walkingID);*/
-				}
-				else if(m_pTarget->GetPosX() > GetPosX()-5 )
-				{
+				//}
+				//else if(m_pTarget->GetPosX() > GetPosX()-5 )
+				//{
 					//MoveTo(GetPosX() - 100, GetPosY(), 80);
 					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 					AudioManager::GetInstance()->playSound(walkingID);*/
-				}
+				//}
 				//else
 				//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 
 				BaseCharacter::Update(Time);
 
-				if(m_pTarget->GetPosY() < GetPosY()+5 )
-				{
+				//if(m_pTarget->GetPosY() < GetPosY()+5 )
+				//{
 					//MoveTo(GetPosX(), GetPosY()+100, 80);
 					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 					AudioManager::GetInstance()->playSound(walkingID);*/
-				}
-				else if(m_pTarget->GetPosY() > GetPosY()-5 )
-				{
+				//}
+				//else if(m_pTarget->GetPosY() > GetPosY()-5 )
+				//{
 					//MoveTo(GetPosX(), GetPosY()-100, 80);
 					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 					AudioManager::GetInstance()->playSound(walkingID);*/
-				}
+				//}
 				/*else
 				AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();*/
 
@@ -135,24 +139,34 @@ void Boss2::Update(float Time)
 	else if( float(GetHealth()) / 1000.0f < .75f && float(GetHealth()) / 1000.0f >= .5f )
 	{
 		float distance = ( chargeDestination.x + chargeDestination.y ) - ( GetPosX() + GetPosY() );
-		if((chargeDestination.x == 0 && chargeDestination.y == 0))
+		float distanceO = ( chargeDestination.x + chargeDestination.y ) - ( oldPosition.x + oldPosition.y );
+
+		if(distance < 0)
+			distance = 0 - distance;
+		if( distance < 32)
 		{
-			chargeDestination.x = m_pTarget->GetPosX();
-			chargeDestination.y = m_pTarget->GetPosY();
+			if(chargeDestination.x > oldPosition.x)
+				chargeDestination.x += 200;
+			else if(chargeDestination.x < oldPosition.x)
+				chargeDestination.x -= 200;
+			
+			if(chargeDestination.y > oldPosition.y)
+				chargeDestination.y += 200;
+			else if(chargeDestination.y < oldPosition.y)
+				chargeDestination.y -= 200;
 		}
 
-		if( distance > GetWidth() )
-		{
-			float savex = GetPosX();
-			float savey = GetPosY();
-			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 90 );
-			BaseCharacter::Update(Time);
+		float savex = GetPosX();
+		float savey = GetPosY();
 
-			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
-			{
-				SetPosX(savex);
-				SetPosY(savey);
-			}
+
+		MoveTo(chargeDestination.x, chargeDestination.y, 90 );
+		BaseCharacter::Update(Time);
+
+		if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
+		{
+			SetPosX(savex);
+			SetPosY(savey);
 		}
 
 		if(m_pTarget->GetPosX() > GetPosX()+30)
@@ -182,8 +196,8 @@ void Boss2::Update(float Time)
 	{
 		float distance = ( m_pTarget->GetPosX() + m_pTarget->GetPosY() ) - ( GetPosX() + GetPosY() );
 
-		if( distance > GetWidth() )
-		{
+		//if( distance > GetWidth() )
+		//{
 			float savex = GetPosX();
 			float savey = GetPosY();
 			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 90 );
@@ -194,7 +208,7 @@ void Boss2::Update(float Time)
 				SetPosX(savex);
 				SetPosY(savey);
 			}
-		}
+		//}
 
 		if(m_pTarget->GetPosX() > GetPosX()+30)
 		{
@@ -375,6 +389,9 @@ void Boss2::HandleEvent(Event* Event)
 	{
 		if( Event->GetParam() == this )
 		{
+			oldPosition.x = this->GetPosX();
+			oldPosition.y = this->GetPosY();
+
 			chargeDestination.x = m_pTarget->GetPosX();
 			chargeDestination.y = m_pTarget->GetPosY();
 		}

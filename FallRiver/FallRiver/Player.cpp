@@ -20,6 +20,7 @@
 #include "Bush.h"
 #include "LoseMenuState.h"
 #include "CGame.h"
+#include "Boss2.h"
 
 Player::Player()
 {
@@ -922,6 +923,24 @@ bool Player::CheckCollision(IObjects* pBase)
 				if(pBase->GetObjectType() == OBJ_CHARACTER)
 				{
 					BaseCharacter* tmpChar = (BaseCharacter*)(pBase);
+					if(tmpChar->GetCharacterType() == CHA_BOSS2)
+					{
+						Boss2* tmpBoss = (Boss2*)tmpChar;
+						if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
+						{
+							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
+								SetPosX(float(pBase->GetRect().left-GetWidth()));
+							else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
+								SetPosX(float(pBase->GetRect().right));
+							else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
+								SetPosY(float(pBase->GetRect().top-GetHeight()));
+							else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
+								SetPosY(float(pBase->GetRect().bottom));
+						}
+						EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+					}
+					else
+					{
 					if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
 						SetPosX(float(pBase->GetRect().left-GetWidth()));
 					else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
@@ -930,17 +949,6 @@ bool Player::CheckCollision(IObjects* pBase)
 						SetPosY(float(pBase->GetRect().top-GetHeight()));
 					else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 						SetPosY(float(pBase->GetRect().bottom));
-
-					if(tmpChar->GetCharacterType() == CHA_BOSS2)
-					{
-						if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-							SetPosX(float(pBase->GetRect().left-GetWidth()));
-						else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-							SetPosX(float(pBase->GetRect().right));
-						else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-							SetPosY(float(pBase->GetRect().top-GetHeight()));
-						else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
-							SetPosY(float(pBase->GetRect().bottom));
 					}
 				}
 			}

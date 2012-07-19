@@ -518,7 +518,7 @@ void GamePlayState::Enter()
 
 			pSpawn = nullptr;
 			tmp.erase(nth);
-			i--;*/
+			i--;
 		}
 		loading->Update();
 		loading->Render();

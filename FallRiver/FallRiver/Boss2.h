@@ -9,6 +9,7 @@ class Boss2: public Enemy
 	Weapon*			m_pWeapon;
 	DWORD	m_dwFireDelay;
 	POINTFLOAT chargeDestination;
+	POINTFLOAT oldPosition;
 
 public: 
 	Boss2();
