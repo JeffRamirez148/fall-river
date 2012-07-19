@@ -3,6 +3,7 @@
 #include "tinyxml.h"
 #include "ViewManager.h"
 #include "GamePlayState.h"
+#include "TutorialState.h"
 #include <string>
 #include "CGame.h"
 #include "BaseCharacter.h"
@@ -68,7 +69,7 @@ void Level::Render()
 		{
 			if( m_vTiles[i].m_Layer > 1)
 			{
-				Player* tmp = GamePlayState::GetInstance()->GetPlayer();
+				Player*	tmp = GamePlayState::GetInstance()->GetPlayer();;
 
 				//if( m_vTiles[i].shadow && tmp->IsOn())
 				//{
@@ -592,6 +593,7 @@ void Level::CheckTriangleCollisions()
 	angleA = (float)sin(double(angleA));
 	float playerX = GamePlayState::GetInstance()->GetPlayer()->GetPosX();
 	float playerY = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
+	
 	float lightEndX, lightEndY, distanceC, distanceA;
 
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)

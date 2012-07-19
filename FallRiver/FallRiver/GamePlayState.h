@@ -129,6 +129,24 @@ public:
 	int GetBloodL6() { return bloodL6;}
 	int GetBloodL7() { return bloodL7;}
 	int GetBloodL8() { return bloodL8;}
+
+	void SetGoreL1(int id) { goreL1 = id;}
+	void SetGoreL2(int id) { goreL2 = id;}
+	void SetGoreL3(int id) { goreL3 = id;}
+	void SetGoreL4(int id) { goreL4 = id;}
+	void SetGoreL5(int id) { goreL5 = id;}
+	void SetGoreL6(int id) { goreL6 = id;}
+	void SetGoreL7(int id) { goreL7 = id;}
+	void SetGoreL8(int id) { goreL8 = id;}
+
+	void SetBloodL1(int id) { bloodL1 = id;}
+	void SetBloodL2(int id) { bloodL2 = id;}
+	void SetBloodL3(int id) { bloodL3 = id;}
+	void SetBloodL4(int id) { bloodL4 = id;}
+	void SetBloodL5(int id) { bloodL5 = id;}
+	void SetBloodL6(int id) { bloodL6 = id;}
+	void SetBloodL7(int id) { bloodL7 = id;}
+	void SetBloodL8(int id) { bloodL8 = id;}
 	int GetNumEnemies() {return m_cEnemies.size(); }
 	int GetLogID() {return logID;}
 	vector<int> GetFireA(void) { return fireA;}
@@ -137,7 +155,9 @@ public:
 	HUD*			m_pHUD;
 	Player* GetPlayer() {return m_cPlayer;}
 	CompanionAI* GetCompanion() {return m_cBuddy;}
+	void SetCompanion(CompanionAI* comp) {m_cBuddy = comp;}
 	void SetPlayer(Player* pPlayer) {m_cPlayer = pPlayer;}
+	void SetHud(HUD* hud) {m_pHUD = hud;}
 
 	void SetWinLose(bool wl)	{winLose = wl;}
 	bool GetWinLose()			{return winLose;}
@@ -145,6 +165,7 @@ public:
 	Level* GetLevel() {return m_clevel; }
 
 	POINTFLOAT GetCamera() {return camera;}
+	void SetCamera(float x, float y) {camera.x = x; camera.y = y;}
 
 	void Enter();
 

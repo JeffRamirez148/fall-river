@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "CGame.h"
 #include "ViewManager.h"
+#include "TutorialState.h"
 #include "DirectInput.h"
 
 CompanionAI::CompanionAI()
@@ -147,6 +148,8 @@ void CompanionAI::SaySomething()
 	RECT src_Rect = {0,200,800,300};
 	pVM->DrawStaticTexture(talkBox,0,CGame::GetInstance()->GetScreenHeight() - 130.0f,1.0f,2.5f,&src_Rect);
 
+	pVM->GetSprite()->Flush();
+
 	switch(m_nStages)
 	{
 		// Using Flashlight
@@ -240,7 +243,6 @@ void CompanionAI::SaySomething()
 			else
 			{
 				pVM->DrawFont(m_nFontID, "Like Lights you also have several weapons you can choose from.\n\n\tPress \"Y\" To select the next weapon in your inventory", 12, 500, 0.7f, 0.7f);
-
 			}
 			break;
 		}
@@ -253,7 +255,6 @@ void CompanionAI::SaySomething()
 			else
 			{
 				pVM->DrawFont(m_nFontID, "Last but not least Press \"BACK\" to see/hide your mission log.\n\n Your mission log displays any current tasks you must complete", 12, 500, 0.7f, 0.7f);
-
 			}
 		}
 	}

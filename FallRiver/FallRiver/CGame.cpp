@@ -102,7 +102,7 @@ void CGame::Render()
 	m_pVM->DeviceEnd();
 
 	// Render the buffer to the screen
-	m_pVM->Present();
+	//m_pVM->Present();
 }
 
 void CGame::Initialize(HWND hWnd, HINSTANCE hInstance, int nScreenWidth, int nScreenHeight, bool bIsWindowed)

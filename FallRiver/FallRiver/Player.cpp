@@ -937,7 +937,7 @@ bool Player::CheckCollision(IObjects* pBase)
 							else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
 								SetPosY(float(pBase->GetRect().bottom));
 						}
-						EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
+						SetHealth(GetHealth()-1);
 					}
 					else
 					{
