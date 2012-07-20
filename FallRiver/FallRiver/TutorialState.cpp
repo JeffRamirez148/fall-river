@@ -155,7 +155,7 @@ void TutorialState::Enter()
 	pPlayer->SetHeight(32);
 	pPlayer->SetWidth(32);
 	pPlayer->SetImageID(-1);
-	pPlayer->SetPosX(600);
+	pPlayer->SetPosX(620);
 	pPlayer->SetPosY(500);
 
 

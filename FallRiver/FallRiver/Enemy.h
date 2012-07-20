@@ -9,7 +9,7 @@
 #include "IListener.h"
 #include "Player.h"
 
-enum ENEMYSTATES{ ESTATE_IDLE = 0, ESTATE_CHASING, ESTATE_SHOOT, ESTATE_DISTRACTED, ESTATE_DEAD};
+enum ENEMYSTATES{ ESTATE_IDLE = 0, ESTATE_CHASING, ESTATE_SHOOT, ESTATE_DISTRACTED, ESTATE_DEAD, GONE};
 
 class Enemy: public BaseCharacter, public IListener
 {

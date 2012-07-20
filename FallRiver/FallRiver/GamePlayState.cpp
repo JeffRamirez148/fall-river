@@ -145,7 +145,7 @@ void GamePlayState::Enter()
 	loading->Render();
 
 	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
-	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/EnimeisChase.xml");
+	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/Zombies.xml");
 	logID = m_pVM->RegisterTexture("resource/graphics/logs.png");
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );

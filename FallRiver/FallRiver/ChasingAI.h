@@ -13,6 +13,7 @@ private:
 	bool notified;
 	bool locked;
 	DWORD attackDelay;
+	DWORD m_dwDeathTime;
 	float cryTimer;
 
 public: 

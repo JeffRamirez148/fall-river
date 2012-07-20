@@ -21,6 +21,7 @@ ChasingAI::ChasingAI()
 	m_pfDestination.y = 0;
 	m_dwIdleWait = 0;
 	attackDelay = 0;
+	m_dwDeathTime = 0;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 
 	AudioManager* m_pAM = AudioManager::GetInstance();
@@ -66,7 +67,18 @@ void ChasingAI::Update(float fElapsedTime)
 
 	if(GetHealth() <= 0)
 	{
-		m_nState = ESTATE_DEAD;
+		if( m_dwDeathTime == 0 )
+		{
+			m_dwDeathTime = GetTickCount() + 1000;
+			m_nState = ESTATE_DEAD;
+			SetVelX(0);
+			SetVelY(0);
+		}
+	}
+
+	if( m_dwDeathTime <= GetTickCount() && m_nState == ESTATE_DEAD )
+	{
+		m_nState = GONE;
 		DestroyEnemyC* pMsg = new DestroyEnemyC(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
@@ -103,7 +115,7 @@ void ChasingAI::Update(float fElapsedTime)
 		return;
 	}
 
-	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 500 )
+	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 500 && m_nState != ESTATE_DEAD && m_nState != GONE )
 	{
 		float targetPosX = m_pTarget->GetPosX();
 		float targetPosY = m_pTarget->GetPosY();
@@ -113,12 +125,12 @@ void ChasingAI::Update(float fElapsedTime)
 			m_nState = ESTATE_DISTRACTED;
 		}
 	}
-	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() )
+	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() && m_nState != ESTATE_DEAD && m_nState != GONE )
 	{
 		m_nState = ESTATE_IDLE;
 		notified = true;
 	}
-	else if( m_nState != ESTATE_DISTRACTED )
+	else if( m_nState != ESTATE_DISTRACTED && m_nState != ESTATE_DEAD && m_nState != GONE )
 	{
 		if(notified)
 			AudioManager::GetInstance()->playSound(notifyID);		
@@ -303,23 +315,23 @@ void ChasingAI::Update(float fElapsedTime)
 
 		/*while( collDist > 200 )
 		{
-			colltest.MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 100);
-			colltest.SetPosX(colltest.GetPosX()+colltest.GetVelX());
-			colltest.SetPosY(colltest.GetPosY()+colltest.GetVelY());
+		colltest.MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 100);
+		colltest.SetPosX(colltest.GetPosX()+colltest.GetVelX());
+		colltest.SetPosY(colltest.GetPosY()+colltest.GetVelY());
 
-			if(GamePlayState::GetInstance()->GetLevel()->CheckCollision(&colltest) )
-			{
-				LeaveAlone = true;
-				m_nState = ESTATE_IDLE;
-				break;
-			}
+		if(GamePlayState::GetInstance()->GetLevel()->CheckCollision(&colltest) )
+		{
+		LeaveAlone = true;
+		m_nState = ESTATE_IDLE;
+		break;
+		}
 
-			collX = (m_pTarget->GetPosX());
-			myX = colltest.GetPosX();
-			collY = m_pTarget->GetPosY();
-			myY = colltest.GetPosY();
+		collX = (m_pTarget->GetPosX());
+		myX = colltest.GetPosX();
+		collY = m_pTarget->GetPosY();
+		myY = colltest.GetPosY();
 
-			collDist = sqrt(pow(collX - myX,2) + pow(collY - myY,2));
+		collDist = sqrt(pow(collX - myX,2) + pow(collY - myY,2));
 		}*/
 
 		if( !LeaveAlone )
@@ -367,53 +379,88 @@ void ChasingAI::Update(float fElapsedTime)
 		}
 	}
 
-	if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() == 0)
+	if(GetVelX() > 0)
 	{
-		m_playerAnim.curAnimation = 0;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
+		if( GetVelY() < 0 )
+			SetDirection(DIRE_UPRIGHT);
+		else if( GetVelY() > 0 )
+			SetDirection(DIRE_DOWNRIGHT);
+		else
+			SetDirection(DIRE_RIGHT);
 	}
-	else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 4 && GetVelY() < 0)
+	else if(GetVelX() < 0)
 	{
-		m_playerAnim.curAnimation = 4;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
+		if( GetVelY() < 0 )
+			SetDirection(DIRE_UPLEFT);
+		else if( GetVelY() > 0 )
+			SetDirection(DIRE_DOWNLEFT);
+		else
+			SetDirection(DIRE_LEFT);
 	}
-	else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 1 && GetVelY() == 0)
+	else if( GetVelY() < 0 )
+		SetDirection(DIRE_UP);
+	else if( GetVelY() > 0 )
+		SetDirection(DIRE_DOWN);
+
+	if( m_nState == ESTATE_DEAD )
 	{
-		m_playerAnim.curAnimation = 1;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
+		if( m_playerAnim.curAnimation != 4 )
+		{
+			m_playerAnim.curAnimation = 4;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
 	}
-	else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 5 && GetVelY() > 0)
+	else
 	{
-		m_playerAnim.curAnimation = 5;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
-	}
-	else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 2 && GetVelX() == 0)
-	{
-		m_playerAnim.curAnimation = 2;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
-	}
-	else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 6 && GetVelX() > 0)
-	{
-		m_playerAnim.curAnimation = 6;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
-	}
-	else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 3 && GetVelX() == 0)
-	{
-		m_playerAnim.curAnimation = 3;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
-	}
-	else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 7 && GetVelX() < 0)
-	{
-		m_playerAnim.curAnimation = 7;
-		m_playerAnim.curFrame = 0;
-		m_playerAnim.fTime = 0;
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && GetVelY() == 0)
+		{
+			m_playerAnim.curAnimation = 3;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 3 && GetVelY() < 0)
+		{
+			m_playerAnim.curAnimation = 3;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && GetVelY() == 0)
+		{
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() > 0)
+		{
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 1 && GetVelX() > 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 2;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 2 && GetVelX() < 0)
+		{
+			m_playerAnim.curAnimation = 2;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
 	}
 
 	//Updating the ChasingAI's frame and timer for animations
@@ -496,7 +543,8 @@ void ChasingAI::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			AudioManager::GetInstance()->playSound(zombieHitID);
-			m_nState = ESTATE_CHASING;
+			if( m_nState != ESTATE_DEAD && m_nState != GONE )
+				m_nState = ESTATE_CHASING;
 			this->SetBleeding(true);
 
 		}

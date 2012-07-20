@@ -58,7 +58,7 @@ void CompanionAI::Update(float fElapsedTime)
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
-		if( m_cEnemies[i]->GetState() == ESTATE_DEAD )
+		if( m_cEnemies[i]->GetState() == GONE )
 		{
 			delete m_cEnemies[i];
 			m_cEnemies.pop_back();
@@ -402,7 +402,7 @@ void CompanionAI::Spawn()
 		pEnemy->SetPosX(GetPosX());
 		pEnemy->SetPosY(GetPosY()-400);
 		pEnemy->SetHealth(100);
-		pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
+		pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/Zombies.xml"));
 		pEnemy->SetLocked(true);
 		m_pOM->AddObject(pEnemy);
 		TutorialState::GetInstance()->AddEnemy(m_cEnemies.back());
@@ -427,7 +427,7 @@ void CompanionAI::SpawnRight()
 		pEnemy->SetPosX(GetPosX()+400);
 		pEnemy->SetPosY(GetPosY());
 		pEnemy->SetHealth(100);
-		pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/EnimeisChase.xml"));
+		pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/Zombies.xml"));
 		pEnemy->SetLocked(true);
 		m_pOM->AddObject(pEnemy);
 		TutorialState::GetInstance()->AddEnemy(m_cEnemies.back());
