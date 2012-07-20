@@ -50,6 +50,7 @@ public:
 	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID; }
 	void SetBleeding(bool mhm) {bleeding = mhm; gore = false;}
 	void SetBloodAngle(float angle) {bloodAngle = angle;}
+	void SetGore(bool bGore) { gore = bGore; }
 };
 
 #endif

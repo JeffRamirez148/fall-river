@@ -97,6 +97,7 @@ private:
 	Boss2*						m_cBoss2;
 	Weapon*						m_cWeapon;
 	vector<int>					fireA;
+	vector<RECT>				streetLights;
 	// For Everyone else on the screen
 	POINTFLOAT camera;
 
@@ -184,6 +185,7 @@ public:
 	int GetSpawnEnemyID() { return SpawnEnemyAniID; }
 	void AddEnemy(Enemy* enemy) { m_cEnemies.push_back(enemy); }
 	vector<Enemy*> GetEnemies() {return m_cEnemies;}
+	vector<RECT> GetStreelights() { return streetLights;}
 };
 
 #endif

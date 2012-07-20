@@ -74,7 +74,7 @@ void Boss1::Update(float fElapsedTime)
 	{
 		if( m_fSpawnTime > 3 )
 		{
-			if( m_nSpawnCounter < 1 )
+			if( m_nSpawnCounter < 5 )
 			{
 				m_cEnemies.push_back(nullptr);
 				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -85,7 +85,7 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
 				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
 				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetBossBool(true);
 				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
@@ -116,7 +116,7 @@ void Boss1::Update(float fElapsedTime)
 	{
 		if( m_fSpawnTime > 3 )
 		{
-			if( m_nSpawnCounter < 1 )
+			if( m_nSpawnCounter < 5 )
 			{
 				m_cEnemies.push_back(nullptr);
 				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
@@ -127,7 +127,7 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
 				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
 				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetBossBool(true);
 				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);

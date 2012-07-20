@@ -127,7 +127,7 @@ void Player::Update(float fElapsedTime)
 	if(GetPushX() != 0 || GetPushY() != 0)
 	{
 		pushTimer += fElapsedTime;
-		if(pushTimer > 1)
+		if(pushTimer > .1f)
 		{
 			SetPushX(0);
 			SetPushY(0);
@@ -138,6 +138,7 @@ void Player::Update(float fElapsedTime)
 	if( GetHealth() <= 0 )
 	{
 		SetHealth(0);
+		SetGore(true);
 		if( m_dwDeathTime == 0 )
 		{
 			m_dwDeathTime = GetTickCount() + 5000;
@@ -780,6 +781,12 @@ void Player::Update(float fElapsedTime)
 void Player::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
+	//RECT tmpRECT = GetRect2();
+	//tmpRECT.bottom -= GamePlayState::GetInstance()->GetCamera().y;
+	//tmpRECT.top -= GamePlayState::GetInstance()->GetCamera().y;
+	//tmpRECT.left -= GamePlayState::GetInstance()->GetCamera().x;
+	//tmpRECT.right -= GamePlayState::GetInstance()->GetCamera().x;
+	//pVM->DrawRect(tmpRECT, 255, 255, 255, 255);
 
 	if( IsOn() )
 	{
@@ -815,7 +822,14 @@ void Player::Render()
 		pVM->DrawStaticTexture(m_nlightglare, ((GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2) - 30,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y-15), 1.0f, 1.0f, &c);
 	}
 	BaseCharacter::Render();
-
+	//if( ( GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT || GetDirection() == DIRE_RIGHT))
+	//{
+	//	Particle_Manager::GetInstance()->GetActiveEmitter(smokeA)
+	//}
+	for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
+	{
+		Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();
+	}
 }
 
 bool Player::CheckCollision(IObjects* pBase) 

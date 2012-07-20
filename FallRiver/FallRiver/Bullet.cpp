@@ -57,9 +57,17 @@ void Bullet::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	if(this->GetImageID() != -1)
+	{
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y);
+	}
+	else
+	{
+		RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
-	pVM->DrawRect(reRect, 255, 0, 255);
+		pVM->DrawRect(reRect, 255, 0, 255);
+	}
+
 }
 
 void Bullet::HandleEvent(Event* pEvent) 

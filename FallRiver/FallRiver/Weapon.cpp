@@ -18,6 +18,7 @@ Weapon::Weapon()
 	m_nClip = 0;
 	m_nDamage = 0;
 	m_nMaxClip = 0;
+	this->SetImageID(-1);
 }
 
 Weapon::~Weapon()

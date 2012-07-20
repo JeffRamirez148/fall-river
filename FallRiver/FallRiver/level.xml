@@ -39829,6 +39829,10 @@
     <ScrRect x="2368" y="512" height="20" width="20" />
   </Collision>
   <Collision>
+    <Type>Streetlight</Type>
+    <ScrRect x="2668" y="512" height="20" width="20" />
+  </Collision>
+  <Collision>
     <Type>Medicine</Type>
     <ScrRect x="4449" y="1641" height="16" width="16" />
   </Collision>

@@ -318,8 +318,10 @@ void GamePlayState::Enter()
 			fireA.push_back(tmp2);
 			fireA.push_back(tmp1);
 			m_pPM->GetActiveEmitter(tmp1)->SetSoundID( m_pAM->RegisterSound("resource/Sounds/fire.wav"));
-			tmp.erase(nth);
-			i--;
+		}
+		else if(  _stricmp(nth->m_cType,"Streetlight") == 0)
+		{
+			streetLights.push_back(tmp[i].m_rCollision);
 		}
 		else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
 		{
@@ -516,7 +518,8 @@ void GamePlayState::Enter()
 			Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 			eWeapon->SetHeight(20);
 			eWeapon->SetWidth(10);
-			eWeapon->SetImageID(-1);
+			int tmpID = m_pVM->RegisterTexture("resource/graphics/Cinder_Block.png" );
+			eWeapon->SetImageID(tmpID);
 			eWeapon->SetOwner(pBoss);
 			eWeapon->Init(WPN_PISTOL, 100, 0);
 			eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
@@ -936,6 +939,10 @@ void GamePlayState::Render()
 	}
 	m_pPM->Render();
 
+	m_cPlayer->Render();
+	m_pPM->GetActiveEmitter(rainA)->Render();
+
+
 	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
 
 
@@ -979,7 +986,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
 			//Set up data members
-			bullet->SetImageID( -1 );
+			bullet->SetImageID( pOwner->GetImageID());
 			bullet->SetHeight(16);
 			bullet->SetWidth(16);
 			bullet->SetOwner(pOwner);
@@ -1000,7 +1007,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 				//bullet 2
-				bullet2->SetImageID( -1 );
+				bullet2->SetImageID( pOwner->GetImageID());
 				bullet2->SetHeight(16);
 				bullet2->SetWidth(16);
 				bullet2->SetOwner(pOwner);
@@ -1008,7 +1015,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				bullet2->SetPosY(pOwner->GetPosY());
 				bullet2->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
 				//bullet 3
-				bullet3->SetImageID( -1 );
+				bullet3->SetImageID(pOwner->GetImageID());
 				bullet3->SetHeight(16);
 				bullet3->SetWidth(16);
 				bullet3->SetOwner(pOwner);
@@ -1183,12 +1190,16 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet->SetPosY(pOwner->GetPosY()-30);
 						bullet->SetSpeedX(0);
 						bullet->SetSpeedY(-300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedY(-150);
 						break;
 					}
 				case DIRE_LEFT:
 					{
 						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
 						bullet->SetSpeedX(-300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedX(-150);
 						bullet->SetSpeedY(0);
 						break;
 					}
@@ -1196,6 +1207,9 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					{
 						bullet->SetPosX((float)pOwner->GetPosX()+30);
 						bullet->SetSpeedX(300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedX(150);
+
 						bullet->SetSpeedY(0);
 						break;
 					}
@@ -1205,6 +1219,8 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet->SetSpeedX(0);
 						bullet->SetSpeedY(300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedY(150);
 						break;
 					}
 				case DIRE_UPRIGHT:
@@ -1213,6 +1229,11 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet->SetPosX(pOwner->GetPosX()+20);
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(-300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(150);
+							bullet->SetSpeedY(-150);
+						}
 						break;
 					}
 				case DIRE_UPLEFT:
@@ -1221,6 +1242,11 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(-300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(-150);
+							bullet->SetSpeedY(-150);
+						}
 						break;
 					}
 				case DIRE_DOWNLEFT:
@@ -1229,6 +1255,11 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet->SetSpeedX(-300);
 						bullet->SetSpeedY(300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(-150);
+							bullet->SetSpeedY(150);
+						}
 						break;
 					}
 				case DIRE_DOWNRIGHT:
@@ -1237,6 +1268,11 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet->SetPosX(pOwner->GetPosX()+20);
 						bullet->SetSpeedX(300);
 						bullet->SetSpeedY(300);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(150);
+							bullet->SetSpeedY(150);
+						}
 						break;
 					}
 				}
