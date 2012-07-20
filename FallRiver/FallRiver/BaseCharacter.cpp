@@ -19,6 +19,8 @@ BaseCharacter::BaseCharacter()
 	blood.curFrame = 0;
 	bloodAngle = 0;
 	gore = false;
+	pushX = 0;
+	pushY = 0;
 }
 
 BaseCharacter::~BaseCharacter()
@@ -29,8 +31,8 @@ BaseCharacter::~BaseCharacter()
 void BaseCharacter::Update(float fElapsedTime)
 {
 	// Modify the token's position by its velocity
-	m_nPosX += m_nVelX * fElapsedTime;
-	m_nPosY += m_nVelY * fElapsedTime;
+	m_nPosX += (m_nVelX * fElapsedTime) + (pushX * fElapsedTime);
+	m_nPosY += (m_nVelY * fElapsedTime) + (pushY * fElapsedTime);
 	goreTime += fElapsedTime;
 
 	//for(unsigned int i = 0; i < bloodA.size(); ++i)

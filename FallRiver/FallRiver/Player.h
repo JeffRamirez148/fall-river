@@ -40,6 +40,7 @@ class Player: public BaseCharacter, public IListener
 	int flickerRate;
 	int m_nlightglare;
 	float dammageTimer;
+	float pushTimer;
 
 	char* m_cName;
 	bool m_bIsAlive;
@@ -110,6 +111,7 @@ public:
 	void AddWeapon(Weapon* pWeapon);
 	void AddLight(Light* pLight);
 
+	void MoveTo(float x, float y, float speed);
 	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID;}
 
 	void SetTimePlayed (float fTime) { m_fTimePlayed = fTime;}
