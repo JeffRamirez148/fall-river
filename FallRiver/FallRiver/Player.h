@@ -55,6 +55,8 @@ class Player: public BaseCharacter, public IListener
 	bool lightOn;
 	float batteryTime;
 
+	float m_fTimePlayed;
+
 public:
 	int	m_nFontID;
 	int questCounter;
@@ -109,6 +111,9 @@ public:
 	void AddLight(Light* pLight);
 
 	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID;}
+
+	void SetTimePlayed (float fTime) { m_fTimePlayed = fTime;}
+	float GetTimePlayed() {return m_fTimePlayed; }
 };
 
 #endif
