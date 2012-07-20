@@ -54,7 +54,7 @@ Player::Player()
 	m_dwGunReset = 0;
 	m_dwDeathTime = 0;
 	flickerRate = 9;
-
+	m_fTimePlayed = 0.0f;
 
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	EventSystem::GetInstance()->RegisterClient( "hit_wall", this );
@@ -147,6 +147,7 @@ void Player::Update(float fElapsedTime)
 			m_nState = PSTATE_DEAD;
 			SetVelX(0);
 			SetVelY(0);
+			SetScore(GetScore() - 100);
 		}
 	}
 
@@ -154,6 +155,7 @@ void Player::Update(float fElapsedTime)
 
 	if( m_dwDeathTime <= GetTickCount() && m_nState == PSTATE_DEAD )
 	{
+
 		CGame::GetInstance()->ChangeState(LoseMenuState::GetInstance());
 		//m_nLives--;
 		//SetHealth(100);

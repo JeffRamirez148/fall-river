@@ -750,6 +750,7 @@ void GamePlayState::Update(float fElapsedTime)
 	//m_clevel.Update(fElapsedTime);
 	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
+	m_cPlayer->SetTimePlayed(m_cPlayer->GetTimePlayed() + fElapsedTime);
 
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
@@ -1391,6 +1392,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			}		
 
 			self->m_pOM->RemoveObject( enemyc );
+			self->m_cPlayer->SetScore( self->m_cPlayer->GetScore() + 25 );
 			break;
 		}
 	case MSG_DESTROY_ENEMYS:
@@ -1407,6 +1409,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					self->m_cEnemies.erase(nth);
 					break;
 				}
+				self->m_cPlayer->SetScore( self->m_cPlayer->GetScore() + 35 );
 			}
 			self->m_pOM->RemoveObject( enemys );
 
@@ -1428,6 +1431,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 		{
 			Enemy* pEnemy = dynamic_cast<DestroyEnemy*>(pMsg)->GetEnemy();
 			self->m_pOM->RemoveObject( pEnemy );
+			self->m_cPlayer->SetScore( self->m_cPlayer->GetScore() + 250 );
 			break;
 		}
 	}

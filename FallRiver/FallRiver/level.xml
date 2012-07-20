@@ -39838,6 +39838,6 @@
   </Collision>
   <Collision>
     <Type>Boss2</Type>
-    <ScrRect x="640" y="448" height="64" width="64" />
+    <ScrRect x="3500" y="2275" height="64" width="64" />
   </Collision>
 </levels_list>
