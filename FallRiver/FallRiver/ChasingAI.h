@@ -11,7 +11,7 @@ private:
 	int zombieWalkingID;
 	int notifyID;
 	bool notified;
-	bool helped;
+	bool locked;
 	DWORD attackDelay;
 	float cryTimer;
 
@@ -22,6 +22,8 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render();
+
+	void SetLocked(bool lock) {locked = lock;}
 
 	bool CheckCollision(IObjects* pBase);
 

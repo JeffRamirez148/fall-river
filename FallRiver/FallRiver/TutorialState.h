@@ -52,6 +52,9 @@ private:
 	int soundID2;
 	int musicID;
 
+	bool right;
+	bool goback;
+
 	// Smoke particles
 	int smokeL;
 
@@ -86,6 +89,8 @@ public:
 	Player* GetPlayer() {return m_cPlayer;}
 	CompanionAI* GetCompanion() {return m_cBuddy;}
 
+	void GoBack(bool go) {goback = go;}
+
 	void Enter(void);
 	void ReEnter();
 
@@ -96,6 +101,8 @@ public:
 	void Update(float fElapsedTime);
 
 	void Render(void);
+
+	void AddEnemy(Enemy* enemy) { m_cEnemies.push_back(enemy); }
 
 	static void MessageProc(IMessage* pMsg);
 

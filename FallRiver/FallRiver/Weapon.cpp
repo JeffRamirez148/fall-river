@@ -149,6 +149,7 @@ bool Weapon::Reload()
 	{
 		AudioManager::GetInstance()->GetSoundChannel(reloadID)->stop();
 		AudioManager::GetInstance()->playSound(reloadID);
+		m_bReloading = false;
 	}
 	return true;
 

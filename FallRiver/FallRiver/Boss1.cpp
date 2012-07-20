@@ -81,7 +81,6 @@ void Boss1::Update(float fElapsedTime)
 				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
 				pEnemy->SetHeight(GetHeight());
 				pEnemy->SetWidth(GetWidth());
-				pEnemy->SetImageID(-1);
 				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
 				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
 				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
@@ -93,7 +92,6 @@ void Boss1::Update(float fElapsedTime)
 				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 				eWeapon->SetHeight(20);
 				eWeapon->SetWidth(10);
-				eWeapon->SetImageID(-1);
 				eWeapon->SetOwner(pEnemy);
 				eWeapon->Init(WPN_PISTOL, 100, 0);
 				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
@@ -136,7 +134,6 @@ void Boss1::Update(float fElapsedTime)
 				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 				eWeapon->SetHeight(20);
 				eWeapon->SetWidth(10);
-				eWeapon->SetImageID(-1);
 				eWeapon->SetOwner(pEnemy);
 				eWeapon->Init(WPN_PISTOL, 100, 0);
 				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);

@@ -77,7 +77,7 @@ void ObjectManager::UpdateAllObjects( float fElapsedTime )
 			(*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x + (*iter)->GetWidth() < 0 || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y + (*iter)->GetHeight() < 0) && (*iter)->GetObjectType() != OBJ_LEVEL)
 			continue;
 		else
-		(*iter)->Update(fElapsedTime);
+			(*iter)->Update(fElapsedTime);
 	}
 }
 
@@ -93,7 +93,7 @@ void ObjectManager::RenderAllObjects( void )
 			if((*iter)->GetObjectType() == OBJ_CHARACTER)
 			{
 				BaseCharacter* tmpCharacter = (BaseCharacter*)(*iter);
-				if(tmpCharacter->GetCharacterType() != CHA_PLAYER && tmpCharacter->GetCharacterType() != CHA_COMPANION)
+				if(tmpCharacter->GetCharacterType() != CHA_PLAYER)
 				{
 					Player* tmp = GamePlayState::GetInstance()->GetPlayer();
 					//if(tmpCharacter->GetShadow())
@@ -126,20 +126,20 @@ void ObjectManager::RenderAllObjects( void )
 					//}
 					if( tmp->IsOn() && ( tmp->GetLightType() > 1 ||  tmpCharacter->GetShadow()))
 					{
-					float angle = 0;
-					float x2 = tmp->GetPosX() - tmpCharacter->GetPosX();
-					float x = x2;
-					float y2 = tmp->GetPosY() - tmpCharacter->GetPosY();
-					float y = y2;
-					x2 *= x2;
-					y2 *= y2;
-					float distance = sqrt(x2 + y2);
+						float angle = 0;
+						float x2 = tmp->GetPosX() - tmpCharacter->GetPosX();
+						float x = x2;
+						float y2 = tmp->GetPosY() - tmpCharacter->GetPosY();
+						float y = y2;
+						x2 *= x2;
+						y2 *= y2;
+						float distance = sqrt(x2 + y2);
 
-					angle = acos(x/distance);
-					if( y < 0)
-						angle *=  -1;
+						angle = acos(x/distance);
+						if( y < 0)
+							angle *=  -1;
 
-					angle -= 1.57079f;
+						angle -= 1.57079f;
 
 						//angle = abs(angle);
 						//if(y < 0)
@@ -161,7 +161,7 @@ void ObjectManager::RenderAllObjects( void )
 						//else if(tmpCharacter->GetPosY() == tmp->GetPosY() && tmpCharacter->GetPosX() > tmp->GetPosX())
 						//	angle = 1.57079f;
 
-							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+						ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 					}
 				}
 			}
@@ -339,7 +339,7 @@ void ObjectManager::CheckTriangleCollisions()
 			(*iter1)->SetShadow((a == b) && (b == c));
 			if((*iter1)->GetShadow())
 				continue;
-			
+
 			// right, bottom;
 			a = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
 			b = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;

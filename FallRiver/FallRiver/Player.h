@@ -44,6 +44,8 @@ class Player: public BaseCharacter, public IListener
 
 	char* m_cName;
 	bool m_bIsAlive;
+	bool m_bLocked;
+	bool m_bmove;
 
 	bool m_bTalking;
 	int m_nLives;
@@ -93,6 +95,11 @@ public:
 	bool IsOn() {return lightOn;}
 
 	bool IsTalking() {return m_bTalking;}
+
+	bool CanMove() {return m_bmove;}
+	void SetMove(bool move) {m_bmove = move;}
+	bool IsLocked() {return m_bLocked;}
+	void SetLocked(bool lock) {m_bLocked = lock;}
 
 	int GetScore() { return m_nScore;}
 	int GetAmmo();

@@ -19,6 +19,7 @@ private:
 	int soundID2;
 	int musicID;
 	int musicID2;
+	int m_nFontID;
 
 	HowToPlayMenuState();
 	~HowToPlayMenuState();
