@@ -36,6 +36,7 @@ TutorialState::TutorialState(void)
 	m_pDI = nullptr;
 	m_pVM = nullptr;
 	m_pAM = nullptr;
+	goback = false;
 }
 
 void TutorialState::ReEnter()
@@ -50,6 +51,7 @@ TutorialState::~TutorialState(void)
 
 void TutorialState::Enter()
 {
+	goback = false;
 	LoadingScreen* loading = LoadingScreen::GetInstance();
 
 	m_pDI = DirectInput::GetInstance();
@@ -161,7 +163,7 @@ void TutorialState::Enter()
 	Weapon* pWeapon3 = nullptr;
 	Weapon* pWeapon4 = nullptr;
 
-	pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+	/*pWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 	pWeapon->SetHeight(20);
 	pWeapon->SetWidth(10);
 	pWeapon->SetImageID(-1);
@@ -187,7 +189,7 @@ void TutorialState::Enter()
 	pWeapon3->Init(WPN_RIFLE, 100, 0);
 	pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 	pWeapon3->SetPosY(pPlayer->GetPosY());
-
+	*/
 	pWeapon4 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
 	pWeapon4->SetHeight(20);
 	pWeapon4->SetWidth(10);
@@ -199,11 +201,10 @@ void TutorialState::Enter()
 
 	pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
-	pPlayer->AddWeapon(pWeapon2);
+	/*pPlayer->AddWeapon(pWeapon2);
 	pPlayer->AddWeapon(pWeapon3);
-	pPlayer->AddWeapon(pWeapon);
+	pPlayer->AddWeapon(pWeapon);*/
 	pPlayer->AddWeapon(pWeapon4);
-
 	
 	loading->Update();
 	loading->Render();
@@ -212,19 +213,30 @@ void TutorialState::Enter()
 	m_cBuddy = (CompanionAI*)m_pOF->CreateObject( _T("CompanionAI") );
 	CompanionAI* pBuddy = (CompanionAI*)(m_cBuddy);
 	pBuddy->SetPosX(550);
-	pBuddy->SetPosY(550);
+	pBuddy->SetPosY(500);
 	pBuddy->SetHeight(32);
 	pBuddy->SetWidth(32);
 	pBuddy->SetImageID(-1);
 	pBuddy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
 	m_pOM->AddObject(pBuddy);
 
+	pWeapon3 = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+	pWeapon3->SetHeight(20);
+	pWeapon3->SetWidth(10);
+	pWeapon3->SetImageID(-1);
+	pWeapon3->SetOwner(pBuddy);
+	pWeapon3->Init(WPN_RIFLE, 100, 0);
+	pWeapon3->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
+	pWeapon3->SetPosY(pPlayer->GetPosY());
+
+	pBuddy->SetWeapon(pWeapon3);
+
 	for(int i = 0; i < 10; i++)
 		loading->Update();
 	loading->Render();
 
 	m_pHUD = new HUD;
-	//m_pVM->SetAmbientLight( .0f, .0f, .0f);*/
+	//m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
 	vector<leveldata> tmp = pLevel->GetCollision();
 	for(unsigned int i = 0; i < tmp.size(); i++) 
@@ -416,6 +428,9 @@ void TutorialState::Enter()
 
 	m_pMS->InitMessageSystem( &MessageProc );
 
+	m_cPlayer->SetLocked(true);
+	m_cPlayer->SetMove(false);
+
 }
 
 void TutorialState::Exit() 
@@ -470,7 +485,8 @@ bool TutorialState::Input()
 	if( !m_cBuddy->IsTeaching() )
 	{
 		CGame::GetInstance()->RemoveState();
-		CGame::GetInstance()->ChangeState(GamePlayState::GetInstance());
+		if(!goback)
+			CGame::GetInstance()->ChangeState(GamePlayState::GetInstance());
 	}
 
 	return true;
@@ -478,14 +494,15 @@ bool TutorialState::Input()
 
 void TutorialState::Update(float fElapsedTime) 
 {
+	m_cPlayer->SetBattery(100);
 	GamePlayState::GetInstance()->SetPlayer(m_cPlayer);
 	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 	GamePlayState::GetInstance()->SetCamera( float(m_cPlayer->GetPosX() - (CGame::GetInstance()->GetScreenWidth()*0.5)), float(m_cPlayer->GetPosY() - (CGame::GetInstance()->GetScreenHeight()*0.5)));
 	m_pOM->UpdateAllObjects(fElapsedTime);
 	m_pOM->CheckCollisions();
 
-	/*if(m_cPlayer->IsOn() && m_cPlayer->GetLightType() < 2)
-		m_pOM->CheckTriangleCollisions();*/
+	if(m_cPlayer->IsOn() && m_cPlayer->GetLightType() < 2)
+		m_pOM->CheckTriangleCollisions();
 
 	FMOD_VECTOR tmp;
 	tmp.x = m_cPlayer->GetPosX();
@@ -516,6 +533,11 @@ void TutorialState::Update(float fElapsedTime)
 
 	m_pHUD->Update(fElapsedTime);
 	m_pPM->Update(fElapsedTime);
+
+	if( m_cBuddy->IsSpawning() && m_cPlayer->GetWeaponType() != WPN_PISTOL )
+		m_cBuddy->Spawn();
+	else if( m_cBuddy->IsSpawning() && m_cPlayer->GetWeaponType() == WPN_PISTOL )
+		m_cBuddy->SpawnRight();
 }
 
 void TutorialState::Render() 

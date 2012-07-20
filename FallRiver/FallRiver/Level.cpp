@@ -466,9 +466,10 @@ bool Level::CheckCollision(IObjects* pBase)
 					//{
 					//Player* pPlayer = (Player*)pCh;
 
-					if( _stricmp(m_vCollisions[i].m_cType,"Wall") == 0 )
+					if( _stricmp(m_vCollisions[i].m_cType,"Pickup") != 0 )
 					{
 						int check = 0;
+
 
 						float intmid = float(cRect.top + cRect.bottom) / 2.0f;
 						float intmidx = float(cRect.left + cRect.right) / 2.0f;
@@ -561,7 +562,7 @@ bool Level::CheckCollision(IObjects* pBase)
 							m_vCollisions[i].test = check;
 						}
 					}
-					if(_stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
+					else
 					{
 						EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
 					}

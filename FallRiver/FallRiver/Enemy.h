@@ -35,6 +35,8 @@ public:
 
 	virtual void MoveTo(float x, float y, float speed);
 
+	int GetState() {return m_nState;}
+
 	virtual bool CheckCollision(IObjects* pBase);
 	virtual RECT GetRect();
 };

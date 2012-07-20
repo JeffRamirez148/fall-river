@@ -694,7 +694,7 @@ bool ViewManager::DeviceEnd(void)
 			if( pBud && pBud->IsTeaching() )
 			{
 				pBud->SaySomething();
-				DrawFont(tmp->m_nFontID, "Press \"ENTER\" to Skip Tutorial", 10, 10, 1.0f, 1.0f);
+				DrawFont(tmp->m_nFontID, "Press \"T\" to Skip Tutorial", 500, 50, 0.6f, 0.6f);
 			}
 
 			vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
@@ -994,6 +994,44 @@ void ViewManager::CreateOtherLights(void)
 			{
 				tmp->color[0] = 1;
 				tmp->color[1] = .6f;
+				tmp->color[2] = 0;
+			}
+			lightsToRender.push_back(tmp);
+		}
+	}
+	vector<RECT> streetLights = GamePlayState::GetInstance()->GetStreelights();
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < streetLights.size(); ++i)
+	{
+		if(
+			IntersectRect( &cRect, &camRect, &streetLights[i] ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
+		{
+
+			Light* tmp = new Light();
+			tmp->innerCone = (.75f);
+			tmp->outerCone = (.7f);
+	
+			if(!GamePlayState::GetInstance()->GetPlayer())
+				return;
+	
+	
+			tmp->lightPos[0] = (((((streetLights[i].left + streetLights[i].right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )/ (CGame::GetInstance()->GetScreenWidth())) * 2) + .01f;
+			tmp->lightPos[1] = (((((streetLights[i].bottom + streetLights[i].top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() ) / (CGame::GetInstance()->GetScreenHeight())) * -2) - .01f;
+			tmp->lightPos[2] = -.75;
+			tmp->lightDir[0] = 0;
+			tmp->lightDir[1] = 0;
+			tmp->lightDir[2] = 1;
+			if(rand() % 90 > 7)
+			{
+				tmp->color[0] = .5;
+				tmp->color[1] = .5;
+				tmp->color[2] = 0;
+			}
+			else
+			{
+				tmp->color[0] = 0;
+				tmp->color[1] = 0;
 				tmp->color[2] = 0;
 			}
 			lightsToRender.push_back(tmp);

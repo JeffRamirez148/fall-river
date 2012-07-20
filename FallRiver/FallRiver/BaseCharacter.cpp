@@ -99,12 +99,66 @@ void BaseCharacter::Render()
 {
 	if(bleeding)
 	{ 
-		float centerX, centerY;
+		float centerX, centerY, posX, posY;
 		centerX = (GetRect2().right - GetRect2().left) * .5f;
 		centerY = (GetRect2().bottom - GetRect2().top) * .5f;
-		ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() * 2, 1.0f, 1.0f, centerX,centerY, bloodAngle );
+		D3DCOLOR color = 0x6affffff;
+		if(bloodAngle == 0) // Left, Up
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x);
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y);
+		}
+		else if(bloodAngle == 0.785398f) // Up
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 - 25;
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) - 30;
+		}
+		else if(bloodAngle == 1.570796f) // Right, Up
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 25;
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) - 30;
+		}
+		else if(bloodAngle == 0.785398f + 1.570796f) // Right
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 35;
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y);
+		}
+		else if(bloodAngle == 3.14159f) // Right, Down
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 40;
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight()  * 2 - 10;
+		}
+		else if(bloodAngle == 3.14159f + 0.785398f) // Down
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 10;
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight()  * 2 + 10;
+		}
+		else if(bloodAngle == 3.14159f + 1.570796f) // Left, Down
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * .5f + 10;
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight()  * 2 - 10;
+		}
+		else if(bloodAngle == -1.570796f + 0.785398f) // Left
+		{
+			posX = (GetPosX() - GamePlayState::GetInstance()->GetCamera().x);
+			posY = (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight();
+		}
+		//RECT tmpRECT = { , , , };
+
+		//ViewManager::GetInstance()->DrawRect(tmpRECT, 255, 255, 255, 255);		
 		if(gore)
-			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight() * 2, 1.0f, 1.0f, centerX,centerY, 3.14159f);
+		{
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x),  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.0f, 1.0f, centerX,centerY,										-1.570796f + 0.785398f, color);
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * .5f + 10,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight()  * 2 - 10, 1.0f, 1.0f, centerX,centerY,	3.14159f + 1.570796f, color);
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 10,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight()  * 2 + 10, 1.0f, 1.0f, centerX,centerY,		3.14159f + 0.785398f, color);
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 40,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight()  * 2 - 10, 1.0f, 1.0f, centerX,centerY,		3.14159f, color);
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 35,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y), 1.0f, 1.0f, centerX,centerY,								0.785398f + 1.570796f, color);
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 + 25,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) - 30, 1.0f, 1.0f, centerX,centerY,						1.570796f, color);
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth() * 2 - 25,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) - 30, 1.0f, 1.0f, centerX,centerY,						0.785398f, color);
+			ViewManager::GetInstance()->DrawAnimation(&blood, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x),  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y), 1.0f, 1.0f, centerX,centerY,													0, color);
+		}
+		else
+			ViewManager::GetInstance()->DrawAnimation(&blood, posX,  posY, 1.0f, 1.0f, centerX,centerY, bloodAngle, color);
 	}
 }
 
@@ -127,7 +181,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 			int bloodA2;
 			int bloodA3;
 
-			RECT tmpRect1 = tmpBullet->GetRect();
+			RECT tmpRect1 = GetRect2();//tmpBullet->GetRect();
 			//RECT tmpRect1 = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
 
 
@@ -215,9 +269,13 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 			m_pPM->GetActiveEmitter(bloodA1)->SetRect(tmpRect1);
 			m_pPM->GetActiveEmitter(bloodA2)->SetRect(tmpRect1);
 			m_pPM->GetActiveEmitter(bloodA3)->SetRect(tmpRect1);
-			bloodA.push_back(bloodA1);
-			bloodA.push_back(bloodA2);
-			bloodA.push_back(bloodA3);
+
+			if(rand()% 3 == 0)
+				bloodA.push_back(bloodA1);
+			if(rand()% 3 == 0)
+				bloodA.push_back(bloodA2);
+			if(rand()% 3 == 0)
+				bloodA.push_back(bloodA3);
 		}
 		else if( pBase->GetObjectType() == OBJ_CHARACTER)
 		{
@@ -226,7 +284,7 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 			{
 				GamePlayState* tmp = GamePlayState::GetInstance();
 				Particle_Manager* m_pPM = Particle_Manager::GetInstance();
-				RECT tmpRect = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
+				RECT tmpRect = GetRect2();//{LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
 				int goreA1 = m_pPM->ActivateEmitter(tmp->GetGoreL1());
 				m_pPM->GetActiveEmitter(goreA1)->SetRect(tmpRect);
 				int goreA2 = m_pPM->ActivateEmitter(tmp->GetGoreL2());
