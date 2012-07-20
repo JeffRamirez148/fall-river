@@ -28,12 +28,14 @@ Player::Player()
 	m_bIsAlive = true;
 	m_bIsHidden = false;
 	m_bShotBush = false;
+	m_bLocked = false;
+	m_bmove = true;
 	m_fshotTimer = 0;
 	m_nScore = 0;
 	m_ncurrWeap = 0;
 	m_nlightglare = -1;
 	m_nState = PSTATE_IDLE;
-	SetHealth(10000);
+	SetHealth(100);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";
@@ -182,7 +184,7 @@ void Player::Update(float fElapsedTime)
 		else
 			ViewManager::GetInstance()->SetAmbientLight(0.0f, 0.0f, 0.0f);
 
-	if( ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
+	if( !m_bLocked && ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
 	{
 		if(m_dwGunCount == 0)
 		{
@@ -401,13 +403,13 @@ void Player::Update(float fElapsedTime)
 		}
 
 
-		if( pDI->KeyDown(DIK_D) || (pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
+		if( m_bmove && pDI->KeyDown(DIK_D) || (pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
 		{
 			SetVelX(100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
 		}
-		else if( pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
+		else if( m_bmove &&  pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
 		{
 			int temptemp = pDI->JoystickGetLStickXAmount(0);
 			SetVelX(-100);
@@ -419,13 +421,13 @@ void Player::Update(float fElapsedTime)
 			SetVelX(0);
 		}
 
-		if(pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
+		if( m_bmove && pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
 		{
 			SetVelY(-100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
 		}
-		else if( pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
+		else if( m_bmove && pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
 		{
 			SetVelY(100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
@@ -1003,6 +1005,7 @@ void Player::AddWeapon(Weapon* pWeapon)
 	pWeapon->SetWidth(10);
 	pWeapon->SetPosX(GetPosX()+(GetWidth()/2));
 	pWeapon->SetPosY(GetPosY());
+	pWeapon->SetOwner(this);
 	m_vpWeapons.push_back(pWeapon);
 	m_currWeapon = pWeapon;
 	m_ncurrWeap = m_vpWeapons.size()-1;

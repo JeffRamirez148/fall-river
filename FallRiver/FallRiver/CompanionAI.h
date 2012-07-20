@@ -4,16 +4,24 @@
 #define __CompanionAI_h__
 
 #include "BaseCharacter.h"
+#include "ObjectFactory.h"
+#include "ObjectManager.h"
 
 class Weapon;
 class Event;
 class Player;
+class Enemy;
+
+typedef CObjectFactory< std::wstring, BaseObject> Factory;
 
 class CompanionAI: public BaseCharacter
 {
 private: 
+	Factory* m_pOF;
 	Player* m_cFriend;
 	Weapon* m_cWeapon;
+	vector<Enemy*>	m_cEnemies;
+
 	int m_nFontID;
 	int m_nStages;
 	int m_nStep;
@@ -21,6 +29,13 @@ private:
 	int talkBox;
 	bool teaching;
 	bool talking;
+	bool spawning;
+
+	int m_nSpawnCounter;
+	int enemies;
+	float m_fSpawnTime;
+
+	DWORD m_dwGunDelay;
 
 public: 
 
@@ -29,6 +44,8 @@ public:
 
 	bool IsTeaching() {return teaching;}
 	void SetTeaching(bool teach) {teaching = teach;}
+
+	bool IsSpawning() {return spawning;}
 
 	int GetStage() {return m_nStages;}
 	int GetStep() {return m_nStep;}
@@ -41,6 +58,10 @@ public:
 	virtual bool CheckCollision(IObjects* pBase);
 
 	virtual void HandleEvent(Event* pEvent);
+
+	void Spawn();
+	void SpawnRight();
+	void SetWeapon(Weapon* wep) {m_cWeapon = wep;}
 
 	void SaySomething();
 };

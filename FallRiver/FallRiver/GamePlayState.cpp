@@ -1024,7 +1024,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet2->SetPosY(bullet->GetPosY());
 						bullet3->SetPosY(bullet->GetPosY());
 
-						temp.top = bullet->GetPosY();
+						temp.top = (long)bullet->GetPosY();
 						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
 
 						bullet->SetSpeedX(0);
@@ -1058,7 +1058,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
 						
-						temp.left = bullet->GetPosX();
+						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
 						bullet->SetSpeedX(300);
@@ -1078,7 +1078,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet3->SetPosY(bullet->GetPosY());
 						bullet3->SetPosX(bullet->GetPosX());
 
-						temp.top = bullet->GetPosY();
+						temp.top = (long)bullet->GetPosY();
 						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
 
 						bullet->SetSpeedX(0);

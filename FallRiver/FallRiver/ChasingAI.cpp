@@ -14,7 +14,7 @@
 
 ChasingAI::ChasingAI()
 {
-	helped = false;
+	locked = false;
 	m_nState = ESTATE_IDLE;
 
 	m_pfDestination.x = 0;
@@ -66,9 +66,11 @@ void ChasingAI::Update(float fElapsedTime)
 
 	if(GetHealth() <= 0)
 	{
+		m_nState = ESTATE_DEAD;
 		DestroyEnemyC* pMsg = new DestroyEnemyC(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
+		return;
 	}
 
 	float distance = ( m_pTarget->GetPosX() + m_pTarget->GetPosY() ) - ( GetPosX() + GetPosY() );
@@ -124,7 +126,7 @@ void ChasingAI::Update(float fElapsedTime)
 		m_nState = ESTATE_CHASING;
 	}
 
-	if( m_nState == ESTATE_IDLE )
+	if( m_nState == ESTATE_IDLE && !locked )
 	{
 		float fDistX = m_pfDestination.x - GetPosX();
 		float fDistY = m_pfDestination.y - GetPosY();
@@ -159,7 +161,7 @@ void ChasingAI::Update(float fElapsedTime)
 		else
 			AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
 	}
-	else if( m_nState == ESTATE_DISTRACTED )
+	else if( m_nState == ESTATE_DISTRACTED && !locked )
 	{
 		float targetPosX = m_pTarget->GetPosX();
 		float targetPosY = m_pTarget->GetPosY();
@@ -285,7 +287,7 @@ void ChasingAI::Update(float fElapsedTime)
 		else if( GetVelY() > 0 )
 			SetDirection(DIRE_DOWN);
 	}
-	else if( m_nState == ESTATE_CHASING)
+	else if( m_nState == ESTATE_CHASING && !locked)
 	{
 		Enemy colltest = (Enemy)*this;
 
