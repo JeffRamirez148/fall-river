@@ -43,6 +43,8 @@ struct TwoInts
 	int y;
 };
 
+enum level{ FOREST,TOWN,HOUSE,HOSPITAL };
+
 class Level :  public BaseObject
 {
 private:
@@ -53,6 +55,8 @@ private:
 	float m_nPosY;
 	TCHAR buffer[100];
 	bool m_bNoClip;
+public:
+	int whichlevel;
 
 public: 
 	Level();
