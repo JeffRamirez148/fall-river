@@ -386,10 +386,10 @@ bool XMLManager::LoadHighScores( const char* szFilename, vector< tHighscore >& v
 	TiXmlElement* pHighscore = pRoot->FirstChildElement();
 	while( pHighscore != nullptr )
 	{
-		tHighscore info = {};
+		tHighscore info;
 		const char* pText = pHighscore->GetText();
 		if( pText != nullptr )
-			strcpy_s( info.szName, 32, pText );
+			strcpy_s( info.szName, 11, pText );
 		pHighscore->Attribute( "score", &info.nScore );
 		vHighscore.push_back( info );
 		pHighscore = pHighscore->NextSiblingElement();

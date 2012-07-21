@@ -859,6 +859,7 @@ void GamePlayState::Update(float fElapsedTime)
 	if(GetPlayer()->m_vpFinishedQuests.size() == 2)
 	{
 		questFlag = false;
+		CGame::GetInstance()->scoreCatch = m_cPlayer->GetScore();
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
 	}
 
@@ -867,6 +868,8 @@ void GamePlayState::Update(float fElapsedTime)
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
 	{
 		winLose = false;
+		CGame::GetInstance()->scoreCatch = m_cPlayer->GetScore();
+
 	}
 }
 
