@@ -632,159 +632,159 @@ bool Level::CheckCollision(IObjects* pBase)
 
 void Level::CheckTriangleCollisions()
 {
-	//GamePlayState* gamePlay = GamePlayState::GetInstance();
-	//CGame* game = CGame::GetInstance();
-	//Player* player = gamePlay->GetPlayer();
-	//POINTFLOAT cam = gamePlay->GetCamera();
-	//int height = game->GetScreenHeight();
-	//int width = game->GetScreenWidth();
+	GamePlayState* gamePlay = GamePlayState::GetInstance();
+	CGame* game = CGame::GetInstance();
+	Player* player = gamePlay->GetPlayer();
+	POINTFLOAT cam = gamePlay->GetCamera();
+	int height = game->GetScreenHeight();
+	int width = game->GetScreenWidth();
 
-	//float angleA = acos(ViewManager::GetInstance()->GetOuterCone());
-	//float angleB = 1.57079f;
-	//float angleC = 3.14159f - (angleA + angleB);
-	//angleC = (float)sin(double(angleC));
-	//angleA = (float)sin(double(angleA));
-	//float playerX = player->GetPosX();
-	//float playerY = player->GetPosY();
-	//int playerDirection = player->GetDirection();
+	float angleA = acos(ViewManager::GetInstance()->GetOuterCone());
+	float angleB = 1.57079f;
+	float angleC = 3.14159f - (angleA + angleB);
+	angleC = (float)sin(double(angleC));
+	angleA = (float)sin(double(angleA));
+	float playerX = player->GetPosX();
+	float playerY = player->GetPosY();
+	int playerDirection = player->GetDirection();
 
-	//float lightEndX, lightEndY, distanceC, distanceA;
-	//float point1X, point1Y, point2X, point2Y, point3X, point3Y;
+	float lightEndX, lightEndY, distanceC, distanceA;
+	float point1X, point1Y, point2X, point2Y, point3X, point3Y;
 
-	//bool a, b, c;
-	//for(unsigned int i = 0; i < m_vTiles.size(); i++)
-	//{
-	//	if(m_vTiles[i].m_Layer == 1)
-	//		continue;
-	//	switch(playerDirection)
-	//	{
+	bool a, b, c;
+	for(unsigned int i = 0; i < m_vTiles.size(); i++)
+	{
+		if(m_vTiles[i].m_Layer == 1)
+			continue;
+		switch(playerDirection)
+		{
 
-	//	case 0:
-	//		{
-	//			lightEndX = (cam.x);
-	//			lightEndY = playerY;
-	//		}
-	//		break;
-	//	case 1:
-	//		{
-	//			lightEndX = playerX;
-	//			lightEndY = (cam.y);
-	//		}
-	//		break;
-	//	case 2:
-	//		{
-	//			lightEndX = playerX + (width >> 1);
-	//			lightEndY = playerY;
-	//		}
-	//		break;
-	//	case 3:
-	//		{
-	//			lightEndX = playerX;
-	//			lightEndY = playerY + (height >> 1);
-	//		}
-	//		break;
-	//	case 4:
-	//		{
-	//			lightEndX = cam.x;
-	//			lightEndY = cam.y;
-	//		}
-	//		break;
-	//	case 5:
-	//		{
-	//			lightEndX = cam.x + width;
-	//			lightEndY = cam.y;
-	//		}
-	//		break;
-	//	case 6:
-	//		{
-	//			lightEndX = cam.x;
-	//			lightEndY = cam.y + height;
-	//		}
-	//		break;
-	//	case 7:
-	//		{
-	//			lightEndX = cam.x + width;
-	//			lightEndY = cam.y + height;
-	//		}
-	//		break;
-	//	default:
-	//		break;
-	//	}
+		case 0:
+			{
+				lightEndX = (cam.x);
+				lightEndY = playerY;
+			}
+			break;
+		case 1:
+			{
+				lightEndX = playerX;
+				lightEndY = (cam.y);
+			}
+			break;
+		case 2:
+			{
+				lightEndX = playerX + (width >> 1);
+				lightEndY = playerY;
+			}
+			break;
+		case 3:
+			{
+				lightEndX = playerX;
+				lightEndY = playerY + (height >> 1);
+			}
+			break;
+		case 4:
+			{
+				lightEndX = cam.x;
+				lightEndY = cam.y;
+			}
+			break;
+		case 5:
+			{
+				lightEndX = cam.x + width;
+				lightEndY = cam.y;
+			}
+			break;
+		case 6:
+			{
+				lightEndX = cam.x;
+				lightEndY = cam.y + height;
+			}
+			break;
+		case 7:
+			{
+				lightEndX = cam.x + width;
+				lightEndY = cam.y + height;
+			}
+			break;
+		default:
+			break;
+		}
 
 
-	//	float x2 = (lightEndX - playerX);
-	//	x2 *= x2;
-	//	float y2 = (lightEndY - playerY);
-	//	y2 *= y2;
-	//	distanceC = (float)sqrt(double(x2 + y2));
-	//	distanceA = (distanceC/angleC) * angleA;
+		float x2 = (lightEndX - playerX);
+		x2 *= x2;
+		float y2 = (lightEndY - playerY);
+		y2 *= y2;
+		distanceC = (float)sqrt(double(x2 + y2));
+		distanceA = (distanceC/angleC) * angleA;
 
-	//	// Make final triangle
-	//	switch(playerDirection)
-	//	{
-	//	case 0:
-	//	case 2:
-	//		point1X = lightEndX;
-	//		point1Y = lightEndY + distanceA;
-	//		point2X = lightEndX;
-	//		point2Y = lightEndY - distanceA;
-	//		break;
-	//	case 1:
-	//	case 3:
-	//		point1X = lightEndX + distanceA;
-	//		point1Y = lightEndY;
-	//		point2X = lightEndX - distanceA;
-	//		point2Y = lightEndY;
-	//		break;
-	//	case 4:
-	//	case 7:
-	//		point1X = lightEndX + (distanceA * .5f);
-	//		point1Y = lightEndY + (distanceA * .5f);
-	//		point2X = lightEndX - (distanceA * .5f);
-	//		point2Y = lightEndY - (distanceA * .5f);
-	//		break;
-	//	case 5:
-	//	case 6:
-	//		point1X = lightEndX - (distanceA * .5f);
-	//		point1Y = lightEndY + (distanceA * .5f);
-	//		point2X = lightEndX + (distanceA * .5f);
-	//		point2Y = lightEndY - (distanceA * .5f);
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//	point3X = playerX;
-	//	point3Y = playerY;
+		// Make final triangle
+		switch(playerDirection)
+		{
+		case 0:
+		case 2:
+			point1X = lightEndX;
+			point1Y = lightEndY + distanceA;
+			point2X = lightEndX;
+			point2Y = lightEndY - distanceA;
+			break;
+		case 1:
+		case 3:
+			point1X = lightEndX + distanceA;
+			point1Y = lightEndY;
+			point2X = lightEndX - distanceA;
+			point2Y = lightEndY;
+			break;
+		case 4:
+		case 7:
+			point1X = lightEndX + (distanceA * .5f);
+			point1Y = lightEndY + (distanceA * .5f);
+			point2X = lightEndX - (distanceA * .5f);
+			point2Y = lightEndY - (distanceA * .5f);
+			break;
+		case 5:
+		case 6:
+			point1X = lightEndX - (distanceA * .5f);
+			point1Y = lightEndY + (distanceA * .5f);
+			point2X = lightEndX + (distanceA * .5f);
+			point2Y = lightEndY - (distanceA * .5f);
+			break;
+		default:
+			break;
+		}
+		point3X = playerX;
+		point3Y = playerY;
 
-	//	RECT tmpRect = { (long)m_vTiles[i].m_nWorldPosX, (long)m_vTiles[i].m_nWorldPosY, long(m_vTiles[i].m_nWorldPosX + m_vTiles[i].width), long(m_vTiles[i].m_nWorldPosY + m_vTiles[i].height)};
-	//	// left, top
-	//	a = ((tmpRect.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ cam.y*/ - point2Y)) < 0.0f;
-	//	b = ((tmpRect.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ cam.y*/ - point3Y)) < 0.0f;
-	//	c = ((tmpRect.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ cam.y*/ - point1Y)) < 0.0f;
-	//	m_vTiles[i].shadow = ((a == b) && (b == c));
-	//	if(m_vTiles[i].shadow)
-	//		continue;
+		RECT tmpRect = { (long)m_vTiles[i].m_nWorldPosX, (long)m_vTiles[i].m_nWorldPosY, long(m_vTiles[i].m_nWorldPosX + m_vTiles[i].width), long(m_vTiles[i].m_nWorldPosY + m_vTiles[i].height)};
+		// left, top
+		a = ((tmpRect.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ cam.y*/ - point1Y)) < 0.0f;
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+		if(m_vTiles[i].shadow)
+			continue;
 
-	//	// left, bottom
-	//	a = ((tmpRect.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
-	//	b = ((tmpRect.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
-	//	c = ((tmpRect.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ cam.y*/ - point1Y)) < 0.0f;		
-	//	m_vTiles[i].shadow = ((a == b) && (b == c));
-	//	if(m_vTiles[i].shadow)
-	//		continue;
+		// left, bottom
+		a = ((tmpRect.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ cam.y*/ - point1Y)) < 0.0f;		
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+		if(m_vTiles[i].shadow)
+			continue;
 
-	//	// right, top
-	//	a = ((tmpRect.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ cam.y*/ - point2Y)) < 0.0f;
-	//	b = ((tmpRect.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ cam.y*/ - point3Y)) < 0.0f;
-	//	c = ((tmpRect.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ cam.y*/ - point1Y)) < 0.0f;
-	//	m_vTiles[i].shadow = ((a == b) && (b == c));
-	//	if(m_vTiles[i].shadow)
-	//		continue;
-	//	
-	//	// right, bottom;
-	//	a = ((tmpRect.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
-	//	b = ((tmpRect.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
-	//	c = ((tmpRect.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ cam.y*/ - point1Y)) < 0.0f;
-	//	m_vTiles[i].shadow = ((a == b) && (b == c));
-	//}
+		// right, top
+		a = ((tmpRect.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ cam.y*/ - point1Y)) < 0.0f;
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+		if(m_vTiles[i].shadow)
+			continue;
+		
+		// right, bottom;
+		a = ((tmpRect.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ cam.y*/ - point1Y)) < 0.0f;
+		m_vTiles[i].shadow = ((a == b) && (b == c));
+	}
 }
