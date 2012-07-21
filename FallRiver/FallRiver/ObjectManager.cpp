@@ -6,7 +6,8 @@
 #include "Player.h"
 #include "ViewManager.h"
 #include <math.h>
-
+#include "Particle_Manager.h"
+#include "Emitter.h"
 // Instantiate the staic data member
 ObjectManager* ObjectManager::s_Instance = nullptr;
 
@@ -83,6 +84,47 @@ void ObjectManager::UpdateAllObjects( float fElapsedTime )
 
 void ObjectManager::RenderAllObjects( void )
 {
+	vector<POINTFLOAT> lightsToRender;
+	RECT cRect;
+	RECT camRect = { (LONG)GamePlayState::GetInstance()->GetCamera().x - CGame::GetInstance()->GetScreenWidth(), (LONG)GamePlayState::GetInstance()->GetCamera().y - CGame::GetInstance()->GetScreenHeight(), LONG(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth() * 2), LONG(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight() * 2)};
+	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
+	{
+		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
+		if(
+			IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
+	
+		{
+			if(!GamePlayState::GetInstance()->GetPlayer())
+				break;
+	
+			POINTFLOAT tmp;
+			tmp.x = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
+
+			tmp.y = (((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() )));
+			lightsToRender.push_back(tmp);
+		}
+	}
+	vector<RECT> streetLights = GamePlayState::GetInstance()->GetStreelights();
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < streetLights.size(); ++i)
+	{
+		if(
+			IntersectRect( &cRect, &camRect, &streetLights[i] ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
+		{
+			if(!GamePlayState::GetInstance()->GetPlayer())
+				break;
+	
+			POINTFLOAT tmp;	
+			tmp.x = (((((streetLights[i].left + streetLights[i].right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
+			tmp.y = (((((streetLights[i].bottom + streetLights[i].top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() )));
+			lightsToRender.push_back(tmp);
+		}
+	}
+
 	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
 	{
 		if(((*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x > CGame::GetInstance()->GetScreenWidth() || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y > CGame::GetInstance()->GetScreenHeight() ||
@@ -163,7 +205,27 @@ void ObjectManager::RenderAllObjects( void )
 
 						ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 					}
+				for(int i = 0; i < lightsToRender.size();++i)
+				{
+					float angle = 0;
+					float x2 = lightsToRender[i].x - tmpCharacter->GetPosX();
+					float x = x2;
+					float y2 =lightsToRender[i].y - tmpCharacter->GetPosY();
+					float y = y2;
+					x2 *= x2;
+					y2 *= y2;
+					float distance = sqrt(x2 + y2);
+
+					angle = acos(x/distance);
+					if( y < 0)
+						angle *=  -1;
+
+					angle -= 1.57079f;
+					ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 				}
+				}
+
+
 			}
 			(*iter)->Render();
 		}
