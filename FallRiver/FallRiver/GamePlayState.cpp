@@ -455,7 +455,7 @@ void GamePlayState::Enter()
 		}
 		else if( _stricmp(nth->m_cType,"Town") == 0)
 		{
-			m_pHUD->SetTarget(nth->x, nth->y);
+			m_pHUD->SetTarget(float(nth->x), float(nth->y));
 		}
 		else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
 		{
@@ -868,8 +868,6 @@ void GamePlayState::Update(float fElapsedTime)
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
 	{
 		winLose = false;
-		CGame::GetInstance()->scoreCatch = m_cPlayer->GetScore();
-
 	}
 }
 
@@ -1467,6 +1465,49 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 {
 	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+	
+	if(aPEvent->GetEventID() == "HouseToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+
+	
+	if(aPEvent->GetEventID() == "HospitalToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+	
+	if(aPEvent->GetEventID() == "GoToHospital")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+
+	
+	if(aPEvent->GetEventID() == "GoToHouse")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+
+
+	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
@@ -1664,7 +1705,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
@@ -1994,7 +2035,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				}
 				else if( pPlayer->m_bHasMedicine == false  && pPlayer->m_vpActiveQuests.size() > 0 )
 				{
-					m_pHUD->SetTarget(hospitalX, hospitalY);
+					m_pHUD->SetTarget((float)hospitalX, (float)hospitalY);
 				}
 				else if( pPlayer->m_bHasMedicine == false && pPlayer->m_vpActiveQuests.size() == 0 )
 				{
@@ -2008,7 +2049,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
