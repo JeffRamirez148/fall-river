@@ -46,6 +46,7 @@ public:
 	BaseCharacter* GetOwner() {return m_pOwner;}
 	int GetWeaponType() {return m_nWeaponType;}
 	int GetAmmo() {return m_nAmmo;}
+	int GetMaxClip() {return m_nMaxClip;}
 	void SetAmmo(int x) { m_nAmmo=x;}
 
 	int GetClip() {return m_nClip;}
