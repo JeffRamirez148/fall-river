@@ -44,7 +44,7 @@ void BaseCharacter::Update(float fElapsedTime)
 	{
 		GamePlayState* tmp = GamePlayState::GetInstance();
 		Particle_Manager* m_pPM = Particle_Manager::GetInstance();
-		RECT tmpRect = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
+		RECT tmpRect = {long(m_nPosX - 5), long(m_nPosY - 5), long(m_nPosX + 5), long(m_nPosY + 5) };
 		int goreA1 = m_pPM->ActivateEmitter(tmp->GetGoreL1());
 		m_pPM->GetActiveEmitter(goreA1)->SetRect(tmpRect);
 		int goreA2 = m_pPM->ActivateEmitter(tmp->GetGoreL2());
@@ -314,10 +314,10 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 
 RECT BaseCharacter::GetRect()
 {
-	//RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
-	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
-	RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
+	RECT cRect = {long(GetPosX()), long(GetPosY()), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
+	//Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	//Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	//RECT cRect = {long(GetPosX()+ thisFrame.colRect.left), long(GetPosY() + thisFrame.colRect.top), long(GetPosX()+GetWidth()), long(GetPosY()+GetHeight())};
 	return cRect;
 	
 	//return thisFrame.colRect;

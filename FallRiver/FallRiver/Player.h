@@ -16,11 +16,11 @@ class GamePlayState;
 class Weapon;
 #include "Light.h"
 
-enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH, PSTATE_DEAD};
+enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH, PSTATE_DEAD, PSTATE_RELOAD};
 
 class Player: public BaseCharacter, public IListener
 {
-
+	bool lose;
 	float m_fCurrRotation;
 	vector<Weapon*> m_vpWeapons;
 	vector<Light*> m_vpLights;
@@ -32,6 +32,7 @@ class Player: public BaseCharacter, public IListener
 	DWORD m_dwGunCount;
 	DWORD m_dwGunReset;
 	DWORD m_dwDeathTime;
+	DWORD m_dwReloadTime;
 
 	int m_nScore;
 	int m_nState;
@@ -120,7 +121,7 @@ public:
 
 	void MoveTo(float x, float y, float speed);
 	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID;}
-
+	void setLose(bool lost) { lose = lost; }
 	void SetTimePlayed (float fTime) { m_fTimePlayed = fTime;}
 	float GetTimePlayed() {return m_fTimePlayed; }
 };

@@ -47,10 +47,10 @@ private:
 	Weapon*			m_cWeapon;
 
 	// Sound Ids
-	int backGroundID;
+	//int backGroundID;
 	int swingHitID;
 	int soundID2;
-	int musicID;
+	//int musicID;
 
 	bool right;
 	bool goback;

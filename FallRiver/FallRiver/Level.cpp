@@ -15,7 +15,19 @@
 
 Level::Level() 
 {
+	inside = false;
 	m_nObjectType = OBJ_LEVEL;
+	for(int i =0; i < 4; ++i)
+	{
+		fogID[i] = ViewManager::GetInstance()->RegisterTexture("resource/graphics/fog.png");
+		fog[i].x = 0;
+		fog[i].y = 0;
+		if(i == 2 )
+			fog[i].x = 1024;
+
+		if(i == 0)
+			fog[i].y = 1024;
+	}
 	m_bNoClip = false;
 }
 
@@ -33,6 +45,7 @@ void Level::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
+
 	if(pDI->KeyPressed(DIK_P) )
 	{
 		m_bNoClip = !m_bNoClip;
@@ -45,7 +58,7 @@ void Level::Render()
 	POINTFLOAT cam = GamePlayState::GetInstance()->GetCamera();
 
 	ViewManager* pView = ViewManager::GetInstance();
-	
+
 
 	CGame* pGame = CGame::GetInstance();
 
@@ -60,10 +73,10 @@ void Level::Render()
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp;
-		tmp.left =(LONG)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (LONG)m_vTiles[i].m_nWorldPosY;
-		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
+		tmp.left =(long)m_vTiles[i].m_nWorldPosX;
+		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
+		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
+		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
@@ -145,14 +158,30 @@ void Level::Render()
 	}
 
 
+	// Render Fog
+	if(!inside)
+		for( int i = 0; i < 4; ++i)
+		{
+			if(i < 2)
+				fog[i].y += 1;
+			else
+				fog[i].x += 1;
+
+			if( fog[i].x > 1024 )
+				fog[i].x = -1024;
+			if( fog[i].y > 1024 )
+				fog[i].y = -1024;
+			D3DCOLOR tmpColor = 0x3FFFFFFF;
+			pView->DrawStaticTexture(fogID[i], cam.x - fog[i].x - cam.x, cam.y - fog[i].y - cam.y, 4, 4, nullptr, 0, 0, 0, tmpColor);
+		}
 
 	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp;
-		tmp.left = (LONG)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (LONG)m_vTiles[i].m_nWorldPosY;
-		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
+		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
+		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
+		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
+		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
@@ -167,10 +196,10 @@ void Level::Render()
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp;
-		tmp.left = (LONG)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (LONG)m_vTiles[i].m_nWorldPosY;
-		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
+		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
+		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
+		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
+		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
@@ -185,10 +214,10 @@ void Level::Render()
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp;
-		tmp.left = (LONG)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (LONG)m_vTiles[i].m_nWorldPosY;
-		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
+		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
+		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
+		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
+		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
@@ -203,10 +232,10 @@ void Level::Render()
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp;
-		tmp.left = (LONG)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (LONG)m_vTiles[i].m_nWorldPosY;
-		tmp.right = LONG(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = LONG(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
+		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
+		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
+		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
+		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
@@ -223,10 +252,10 @@ void Level::Render()
 
 	/*for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
 	{
-		RECT test = { (LONG)(m_vCollisions[i].m_rCollision.left-GamePlayState::GetInstance()->GetCamera().x),
-			(LONG)(m_vCollisions[i].m_rCollision.top-GamePlayState::GetInstance()->GetCamera().y),
-			(LONG)(m_vCollisions[i].m_rCollision.right-GamePlayState::GetInstance()->GetCamera().x),
-			(LONG)(m_vCollisions[i].m_rCollision.bottom-GamePlayState::GetInstance()->GetCamera().y),
+		RECT test = { (long)(m_vCollisions[i].m_rCollision.left-GamePlayState::GetInstance()->GetCamera().x),
+			(long)(m_vCollisions[i].m_rCollision.top-GamePlayState::GetInstance()->GetCamera().y),
+			(long)(m_vCollisions[i].m_rCollision.right-GamePlayState::GetInstance()->GetCamera().x),
+			(long)(m_vCollisions[i].m_rCollision.bottom-GamePlayState::GetInstance()->GetCamera().y),
 		};
 
 						
@@ -402,10 +431,10 @@ bool Level::LoadLevel( const char* szFilename )
 			pCollision->Attribute( "width", &tmpW );
 			pCollision->Attribute( "height", &tmpH );
 
-			info.m_rCollision.left = (LONG)tmpX;
-			info.m_rCollision.top = (LONG)tmpY;
-			info.m_rCollision.right = (LONG)(tmpX+tmpW);
-			info.m_rCollision.bottom = (LONG)(tmpY+tmpH);
+			info.m_rCollision.left = (long)tmpX;
+			info.m_rCollision.top = (long)tmpY;
+			info.m_rCollision.right = (long)(tmpX+tmpW);
+			info.m_rCollision.bottom = (long)(tmpY+tmpH);
 
 			info.m_bPrevColliding = false;
 
@@ -479,8 +508,8 @@ bool Level::CheckCollision(IObjects* pBase)
 						float tilemidx = float(m_vCollisions[i].m_rCollision.left + m_vCollisions[i].m_rCollision.right) / 2.0f;
 
 
-						LONG x = cRect.bottom - cRect.top;
-						LONG y = cRect.right - cRect.left;
+						long x = cRect.bottom - cRect.top;
+						long y = cRect.right - cRect.left;
 
 						if( x != y )
 						{
@@ -587,70 +616,79 @@ bool Level::CheckCollision(IObjects* pBase)
 
 void Level::CheckTriangleCollisions()
 {
+	GamePlayState* gamePlay = GamePlayState::GetInstance();
+	CGame* game = CGame::GetInstance();
+	Player* player = gamePlay->GetPlayer();
+	POINTFLOAT cam = gamePlay->GetCamera();
+	int height = game->GetScreenHeight();
+	int width = game->GetScreenWidth();
+
 	float angleA = acos(ViewManager::GetInstance()->GetOuterCone());
 	float angleB = 1.57079f;
 	float angleC = 3.14159f - (angleA + angleB);
 	angleC = (float)sin(double(angleC));
 	angleA = (float)sin(double(angleA));
-	float playerX = GamePlayState::GetInstance()->GetPlayer()->GetPosX();
-	float playerY = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
-	
-	float lightEndX, lightEndY, distanceC, distanceA;
+	float playerX = player->GetPosX();
+	float playerY = player->GetPosY();
+	int playerDirection = player->GetDirection();
 
+	float lightEndX, lightEndY, distanceC, distanceA;
+	float point1X, point1Y, point2X, point2Y, point3X, point3Y;
+
+	bool a, b, c;
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
-		bool a, b, c;
 		if(m_vTiles[i].m_Layer == 1)
 			continue;
-		switch(GamePlayState::GetInstance()->GetPlayer()->GetDirection())
+		switch(playerDirection)
 		{
 
 		case 0:
 			{
-				lightEndX = (GamePlayState::GetInstance()->GetCamera().x);
+				lightEndX = (cam.x);
 				lightEndY = playerY;
 			}
 			break;
 		case 1:
 			{
 				lightEndX = playerX;
-				lightEndY = (GamePlayState::GetInstance()->GetCamera().y);
+				lightEndY = (cam.y);
 			}
 			break;
 		case 2:
 			{
-				lightEndX = playerX + (CGame::GetInstance()->GetScreenWidth() >> 1);
+				lightEndX = playerX + (width >> 1);
 				lightEndY = playerY;
 			}
 			break;
 		case 3:
 			{
 				lightEndX = playerX;
-				lightEndY = playerY + (CGame::GetInstance()->GetScreenHeight() >> 1);
+				lightEndY = playerY + (height >> 1);
 			}
 			break;
 		case 4:
 			{
-				lightEndX = GamePlayState::GetInstance()->GetCamera().x;
-				lightEndY = GamePlayState::GetInstance()->GetCamera().y;
+				lightEndX = cam.x;
+				lightEndY = cam.y;
 			}
 			break;
 		case 5:
 			{
-				lightEndX = GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth();
-				lightEndY = GamePlayState::GetInstance()->GetCamera().y;
+				lightEndX = cam.x + width;
+				lightEndY = cam.y;
 			}
 			break;
 		case 6:
 			{
-				lightEndX = GamePlayState::GetInstance()->GetCamera().x;
-				lightEndY = GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight();
+				lightEndX = cam.x;
+				lightEndY = cam.y + height;
 			}
 			break;
 		case 7:
 			{
-				lightEndX = GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth();
-				lightEndY = GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight();
+				lightEndX = cam.x + width;
+				lightEndY = cam.y + height;
 			}
 			break;
 		default:
@@ -666,8 +704,7 @@ void Level::CheckTriangleCollisions()
 		distanceA = (distanceC/angleC) * angleA;
 
 		// Make final triangle
-		float point1X, point1Y, point2X, point2Y, point3X, point3Y;
-		switch(GamePlayState::GetInstance()->GetPlayer()->GetDirection())
+		switch(playerDirection)
 		{
 		case 0:
 		case 2:
@@ -703,35 +740,35 @@ void Level::CheckTriangleCollisions()
 		point3X = playerX;
 		point3Y = playerY;
 
-		RECT tmpRect = { (LONG)m_vTiles[i].m_nWorldPosX, (LONG)m_vTiles[i].m_nWorldPosY, LONG(m_vTiles[i].m_nWorldPosX + m_vTiles[i].width), LONG(m_vTiles[i].m_nWorldPosY + m_vTiles[i].height)};
+		RECT tmpRect = { (long)m_vTiles[i].m_nWorldPosX, (long)m_vTiles[i].m_nWorldPosY, long(m_vTiles[i].m_nWorldPosX + m_vTiles[i].width), long(m_vTiles[i].m_nWorldPosY + m_vTiles[i].height)};
 		// left, top
-		a = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-		b = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-		c = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+		a = ((tmpRect.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ cam.y*/ - point1Y)) < 0.0f;
 		m_vTiles[i].shadow = ((a == b) && (b == c));
 		if(m_vTiles[i].shadow)
 			continue;
 
 		// left, bottom
-		a = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-		b = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-		c = ((tmpRect.left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;		
+		a = ((tmpRect.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ cam.y*/ - point1Y)) < 0.0f;		
 		m_vTiles[i].shadow = ((a == b) && (b == c));
 		if(m_vTiles[i].shadow)
 			continue;
 
 		// right, top
-		a = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-		b = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-		c = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+		a = ((tmpRect.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.top /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.top /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.top /*+ cam.y*/ - point1Y)) < 0.0f;
 		m_vTiles[i].shadow = ((a == b) && (b == c));
 		if(m_vTiles[i].shadow)
 			continue;
 		
 		// right, bottom;
-		a = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-		b = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-		c = ((tmpRect.right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+		a = ((tmpRect.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (tmpRect.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
+		b = ((tmpRect.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (tmpRect.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
+		c = ((tmpRect.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (tmpRect.bottom /*+ cam.y*/ - point1Y)) < 0.0f;
 		m_vTiles[i].shadow = ((a == b) && (b == c));
 	}
 }

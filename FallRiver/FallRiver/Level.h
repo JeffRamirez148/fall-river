@@ -22,9 +22,8 @@ struct leveldata
 	char m_cType[ 32 ];
 	bool m_bPrevColliding;
 	int test;
-	//int fire1A;
-	//int fire2A;
-	//int fire3A;
+
+
 };
 
 struct mapTiles
@@ -53,7 +52,11 @@ private:
 	float m_nPosY;
 	TCHAR buffer[100];
 	bool m_bNoClip;
+		int fogID[4];
 
+
+	POINTFLOAT fog[4];
+	bool inside;
 public: 
 	Level();
 
@@ -73,6 +76,8 @@ public:
 
 	vector<mapTiles> GetTiles() { return m_vTiles;};
 	void CheckTriangleCollisions();
+	bool GetInside(void) {return inside;}
+	void SetInside(bool in) {inside = in;}
 	//void SetCollision(vector<mapTiles> x) { m_vTiles = x; };
 
 };

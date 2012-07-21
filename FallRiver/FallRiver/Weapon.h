@@ -18,6 +18,7 @@ private:
 	int swingMissID;
 	int shotID;
 	int reloadID;
+	int throwID;
 
 	float m_fFireRate;
 	float m_fReloadSpeed;
@@ -45,6 +46,7 @@ public:
 	BaseCharacter* GetOwner() {return m_pOwner;}
 	int GetWeaponType() {return m_nWeaponType;}
 	int GetAmmo() {return m_nAmmo;}
+	int GetMaxClip() {return m_nMaxClip;}
 	void SetAmmo(int x) { m_nAmmo=x;}
 
 	int GetClip() {return m_nClip;}

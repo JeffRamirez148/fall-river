@@ -45,14 +45,16 @@ private:
 	MessageSystem*		m_pMS;
 	Particle_Manager*	m_pPM;
 
-	// Sound Ids
-	int backGroundID;
-	int swingHitID;
 	int SpawnEnemyAniID;
 
+	
+	// Sound Ids
 	int soundID2;
-	int musicID;
+//	int musicID;
 	int logID;
+//	int pianoID;
+//	int backGroundID;
+	int swingHitID;
 
 	// Rain particles
 	int rainA;

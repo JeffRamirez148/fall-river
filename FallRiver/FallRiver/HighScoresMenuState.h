@@ -27,8 +27,8 @@ private:
 	int				fontID;
 	int				bgID;
 	int soundID2;
-	int musicID;
-	int musicID2;
+//	int musicID;
+//	int musicID2;
 
 	bool m_bNameEntered;
 	float keytimer;

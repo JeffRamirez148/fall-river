@@ -16,7 +16,7 @@
 #include "GamePlayState.h"
 #include "ChasingAI.h"
 #include "ShootingAi.h"
-
+#include "CGame.h"
 
 Boss1::Boss1()
 {
@@ -43,6 +43,19 @@ Boss1::Boss1()
 	enemies = 0;
 	m_pOM = ObjectManager::GetInstance();
 	m_pOF = Factory::GetInstance();
+	AudioManager* m_pAM = AudioManager::GetInstance();
+	zombieHitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
+	zombieWalkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.wav");
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	m_pAM->setSoundVel(zombieHitID, sound1);
+	m_pAM->setSoundVel(zombieWalkingID, sound1);
+	sound1.x = m_nPosX;
+	sound1.y = m_nPosY;
+	m_pAM->setSoundPos(zombieWalkingID, sound1);
+	m_pAM->setSoundLooping(zombieWalkingID, true);
+	m_pAM->setSoundPos(zombieHitID, sound1);
+	m_pAM->setSoundLooping(zombieHitID, false);
+
 }
 
 Boss1::~Boss1()
@@ -53,6 +66,13 @@ Boss1::~Boss1()
 void Boss1::Update(float fElapsedTime)
 {
 	BaseCharacter::Update(fElapsedTime);
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	sound1.x = m_nPosX;
+	sound1.y = m_nPosY;
+	AudioManager* m_pAM = AudioManager::GetInstance();
+	m_pAM->setSoundPos(zombieWalkingID, sound1);
+	m_pAM->setSoundPos(zombieHitID, sound1);
+
 	//FMOD_VECTOR sound1 = { m_nPosX, m_nPosY, 0};
 	//AudioManager::GetInstance()->setSoundPos(walkingID, sound1);
 	//AudioManager::GetInstance()->setSoundPos(hitID, sound1);
@@ -82,8 +102,8 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetHeight(GetHeight());
 				pEnemy->SetWidth(GetWidth());
 				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
-				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
-				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
+				pEnemy->SetPosX(GetPosX()+(rand()%20-10) + (CGame::GetInstance()->GetScreenWidth() >>2));
+				pEnemy->SetPosY(GetPosY()+(rand()%20-10) + (CGame::GetInstance()->GetScreenHeight() >>2));
 				pEnemy->SetHealth(50);
 				pEnemy->SetBossBool(true);
 				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
@@ -123,8 +143,8 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetWidth(GetWidth());
 				pEnemy->SetImageID(-1);
 				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
-				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
-				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
+				pEnemy->SetPosX(GetPosX()+(rand()%20-10) + (CGame::GetInstance()->GetScreenWidth() >>2));
+				pEnemy->SetPosY(GetPosY()+(rand()%20-10) + (CGame::GetInstance()->GetScreenHeight() >>2));
 				pEnemy->SetHealth(50);
 				pEnemy->SetBossBool(true);
 				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
@@ -204,6 +224,8 @@ void Boss1::Update(float fElapsedTime)
 			if( ((distanceX < 300 && distanceX >= 150) || (distanceY < 300 && distanceY >= 150 )) && distanceX+distanceY < 300  )
 			{
 				MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 80 );
+				if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+					AudioManager::GetInstance()->playSound(zombieWalkingID);
 				BaseCharacter::Update(fElapsedTime);
 			}
 			else if( distanceY < 50 || distanceX < 50 )
@@ -211,39 +233,37 @@ void Boss1::Update(float fElapsedTime)
 				if(m_pTarget->GetPosX() < GetPosX()+5 )
 				{
 					MoveTo(GetPosX()+100, GetPosY(), 80);
-					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-					AudioManager::GetInstance()->playSound(walkingID);*/
+					if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+						AudioManager::GetInstance()->playSound(zombieWalkingID);
 				}
 				else if(m_pTarget->GetPosX() > GetPosX()-5 )
 				{
 					MoveTo(GetPosX() - 100, GetPosY(), 80);
-					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-					AudioManager::GetInstance()->playSound(walkingID);*/
+					if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+						AudioManager::GetInstance()->playSound(zombieWalkingID);
 				}
-				//else
-				//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+				else
+					AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
 
 				BaseCharacter::Update(fElapsedTime);
 
 				if(m_pTarget->GetPosY() < GetPosY()+5 )
 				{
 					MoveTo(GetPosX(), GetPosY()+100, 80);
-					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-					AudioManager::GetInstance()->playSound(walkingID);*/
+					if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+						AudioManager::GetInstance()->playSound(zombieWalkingID);
 				}
 				else if(m_pTarget->GetPosY() > GetPosY()-5 )
 				{
 					MoveTo(GetPosX(), GetPosY()-100, 80);
-					/*if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
-					AudioManager::GetInstance()->playSound(walkingID);*/
 				}
-				/*else
-				AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();*/
+				else
+				AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
 
 				BaseCharacter::Update(fElapsedTime);
 			}
-			//else
-			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+			else
+				AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
 		}
 	}
 
@@ -399,6 +419,8 @@ void Boss1::HandleEvent(Event* pEvent)
 		if( pEvent->GetParam() == this )
 		{
 			this->SetBleeding(true);
+			AudioManager::GetInstance()->GetSoundChannel(m_pTarget->GetHitID())->stop();
+			AudioManager::GetInstance()->playSound(zombieHitID);
 			//m_nStages =  1;
 		}
 	}

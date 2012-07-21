@@ -23,8 +23,8 @@ private:
 	int groupID;
 
 	int soundID2;
-	int musicID;
-	int musicID2;
+	//int musicID;
+	//int musicID2;
 	
 	bool leave;
 

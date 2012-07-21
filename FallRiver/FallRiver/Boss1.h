@@ -21,7 +21,8 @@ class Boss1: public Enemy
 	vector<Enemy*>	m_cEnemies;
 
 	int m_nStages;
-
+	int zombieHitID;
+	int zombieWalkingID;
 
 public: 
 	// Spawn

@@ -6,7 +6,8 @@
 #include "Player.h"
 #include "ViewManager.h"
 #include <math.h>
-
+#include "Particle_Manager.h"
+#include "Emitter.h"
 // Instantiate the staic data member
 ObjectManager* ObjectManager::s_Instance = nullptr;
 
@@ -83,6 +84,47 @@ void ObjectManager::UpdateAllObjects( float fElapsedTime )
 
 void ObjectManager::RenderAllObjects( void )
 {
+	vector<POINTFLOAT> lightsToRender;
+	RECT cRect;
+	RECT camRect = { (LONG)GamePlayState::GetInstance()->GetCamera().x - CGame::GetInstance()->GetScreenWidth(), (LONG)GamePlayState::GetInstance()->GetCamera().y - CGame::GetInstance()->GetScreenHeight(), LONG(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth() * 2), LONG(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight() * 2)};
+	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
+	{
+		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
+		if(
+			IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
+	
+		{
+			if(!GamePlayState::GetInstance()->GetPlayer())
+				break;
+	
+			POINTFLOAT tmp;
+			tmp.x = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
+
+			tmp.y = (((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() )));
+			lightsToRender.push_back(tmp);
+		}
+	}
+	vector<RECT> streetLights = GamePlayState::GetInstance()->GetStreelights();
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < streetLights.size(); ++i)
+	{
+		if(
+			IntersectRect( &cRect, &camRect, &streetLights[i] ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
+		{
+			if(!GamePlayState::GetInstance()->GetPlayer())
+				break;
+	
+			POINTFLOAT tmp;	
+			tmp.x = (((((streetLights[i].left + streetLights[i].right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
+			tmp.y = (((((streetLights[i].bottom + streetLights[i].top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() )));
+			lightsToRender.push_back(tmp);
+		}
+	}
+
 	for( OListIterator iter = m_Objects.begin(); iter != m_Objects.end(); ++iter)
 	{
 		if(((*iter)->GetPosX() - GamePlayState::GetInstance()->GetCamera().x > CGame::GetInstance()->GetScreenWidth() || (*iter)->GetPosY() - GamePlayState::GetInstance()->GetCamera().y > CGame::GetInstance()->GetScreenHeight() ||
@@ -163,7 +205,27 @@ void ObjectManager::RenderAllObjects( void )
 
 						ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 					}
+				for(int i = 0; i < lightsToRender.size();++i)
+				{
+					float angle = 0;
+					float x2 = lightsToRender[i].x - tmpCharacter->GetPosX();
+					float x = x2;
+					float y2 =lightsToRender[i].y - tmpCharacter->GetPosY();
+					float y = y2;
+					x2 *= x2;
+					y2 *= y2;
+					float distance = sqrt(x2 + y2);
+
+					angle = acos(x/distance);
+					if( y < 0)
+						angle *=  -1;
+
+					angle -= 1.57079f;
+					ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 				}
+				}
+
+
 			}
 			(*iter)->Render();
 		}
@@ -194,17 +256,27 @@ void ObjectManager::CheckCollisions( void )
 
 void ObjectManager::CheckTriangleCollisions()
 {
+	GamePlayState* gamePlay = GamePlayState::GetInstance();
+	CGame* game = CGame::GetInstance();
+	Player* player = gamePlay->GetPlayer();
+	POINTFLOAT cam = gamePlay->GetCamera();
+	int height = game->GetScreenHeight();
+	int width = game->GetScreenWidth();
+
 	float angleA = acos(ViewManager::GetInstance()->GetInnerCone());
 	float angleB = 1.57079f;
 	float angleC = 3.14159f - (angleA + angleB);
 	angleC = (float)sin(double(angleC));
 	angleA = (float)sin(double(angleA));
-	float playerX = GamePlayState::GetInstance()->GetPlayer()->GetPosX();
-	float playerY = GamePlayState::GetInstance()->GetPlayer()->GetPosY();
+	float playerX = player->GetPosX();
+	float playerY = player->GetPosY();
 	float lightEndX, lightEndY, distanceC, distanceA;
-
+	int playerDirection = player->GetDirection();
+	bool a, b, c;
+	float point1X, point1Y, point2X, point2Y, point3X, point3Y;
 	for( OListIterator iter1 = m_Objects.begin(); iter1 != m_Objects.end(); ++iter1)
 	{
+		RECT iter1RECT = (*iter1)->GetRect();
 		if((*iter1)->GetObjectType() != OBJ_LEVEL )
 		{
 			if((*iter1)->GetObjectType() == OBJ_CHARACTER)
@@ -213,57 +285,56 @@ void ObjectManager::CheckTriangleCollisions()
 				if(tmpPlayer->GetCharacterType() == CHA_PLAYER)
 					continue;
 			}
-			bool a, b, c;
 
-			switch(GamePlayState::GetInstance()->GetPlayer()->GetDirection())
+			switch(playerDirection)
 			{
 
 			case 0:
 				{
-					lightEndX = (GamePlayState::GetInstance()->GetCamera().x);
+					lightEndX = (cam.x);
 					lightEndY = playerY;
 				}
 				break;
 			case 1:
 				{
 					lightEndX = playerX;
-					lightEndY = (GamePlayState::GetInstance()->GetCamera().y);
+					lightEndY = (cam.y);
 				}
 				break;
 			case 2:
 				{
-					lightEndX = playerX + (CGame::GetInstance()->GetScreenWidth() >> 1);
+					lightEndX = playerX + (width >> 1);
 					lightEndY = playerY;
 				}
 				break;
 			case 3:
 				{
 					lightEndX = playerX;
-					lightEndY = playerY + (CGame::GetInstance()->GetScreenHeight() >> 1);
+					lightEndY = playerY + (height >> 1);
 				}
 				break;
 			case 4:
 				{
-					lightEndX = GamePlayState::GetInstance()->GetCamera().x;
-					lightEndY = GamePlayState::GetInstance()->GetCamera().y;
+					lightEndX = cam.x;
+					lightEndY = cam.y;
 				}
 				break;
 			case 5:
 				{
-					lightEndX = GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth();
-					lightEndY = GamePlayState::GetInstance()->GetCamera().y;
+					lightEndX = cam.x + width;
+					lightEndY = cam.y;
 				}
 				break;
 			case 6:
 				{
-					lightEndX = GamePlayState::GetInstance()->GetCamera().x;
-					lightEndY = GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight();
+					lightEndX = cam.x;
+					lightEndY = cam.y + height;
 				}
 				break;
 			case 7:
 				{
-					lightEndX = GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth();
-					lightEndY = GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight();
+					lightEndX = cam.x + width;
+					lightEndY = cam.y + height;
 				}
 				break;
 			default:
@@ -279,8 +350,7 @@ void ObjectManager::CheckTriangleCollisions()
 			distanceA = (distanceC/angleC) * angleA;
 
 			// Make final triangle
-			float point1X, point1Y, point2X, point2Y, point3X, point3Y;
-			switch(GamePlayState::GetInstance()->GetPlayer()->GetDirection())
+			switch(playerDirection)
 			{
 			case 0:
 			case 2:
@@ -317,33 +387,33 @@ void ObjectManager::CheckTriangleCollisions()
 			point3Y = playerY;
 
 			// left, top
-			a = (((*iter1)->GetRect().left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * ((*iter1)->GetRect().top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-			b = (((*iter1)->GetRect().left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * ((*iter1)->GetRect().top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-			c = (((*iter1)->GetRect().left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * ((*iter1)->GetRect().top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+			a = ((iter1RECT.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (iter1RECT.top /*+ cam.y*/ - point2Y)) < 0.0f;
+			b = ((iter1RECT.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (iter1RECT.top /*+ cam.y*/ - point3Y)) < 0.0f;
+			c = ((iter1RECT.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (iter1RECT.top /*+ cam.y*/ - point1Y)) < 0.0f;
 			(*iter1)->SetShadow((a == b) && (b == c));
 			if((*iter1)->GetShadow())
 				continue;
 
 			// left, bottom
-			a = (((*iter1)->GetRect().left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-			b = (((*iter1)->GetRect().left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-			c = (((*iter1)->GetRect().left /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+			a = ((iter1RECT.left /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (iter1RECT.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
+			b = ((iter1RECT.left /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (iter1RECT.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
+			c = ((iter1RECT.left /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (iter1RECT.bottom /*+ cam.y*/ - point1Y)) < 0.0f;
 			(*iter1)->SetShadow((a == b) && (b == c));
 			if((*iter1)->GetShadow())
 				continue;
 
 			// right, top
-			a = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * ((*iter1)->GetRect().top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-			b = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * ((*iter1)->GetRect().top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-			c = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * ((*iter1)->GetRect().top /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+			a = ((iter1RECT.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (iter1RECT.top /*+ cam.y*/ - point2Y)) < 0.0f;
+			b = ((iter1RECT.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (iter1RECT.top /*+ cam.y*/ - point3Y)) < 0.0f;
+			c = ((iter1RECT.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (iter1RECT.top /*+ cam.y*/ - point1Y)) < 0.0f;
 			(*iter1)->SetShadow((a == b) && (b == c));
 			if((*iter1)->GetShadow())
 				continue;
 
 			// right, bottom;
-			a = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point2Y)) < 0.0f;
-			b = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point3Y)) < 0.0f;
-			c = (((*iter1)->GetRect().right /*+ GamePlayState::GetInstance()->GetCamera().x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * ((*iter1)->GetRect().bottom /*+ GamePlayState::GetInstance()->GetCamera().y*/ - point1Y)) < 0.0f;
+			a = ((iter1RECT.right /*+ cam.x*/ - point2X) * (point1Y - point2Y) - (point1X - point2X) * (iter1RECT.bottom /*+ cam.y*/ - point2Y)) < 0.0f;
+			b = ((iter1RECT.right /*+ cam.x*/ - point3X) * (point2Y - point3Y) - (point2X - point3X) * (iter1RECT.bottom /*+ cam.y*/ - point3Y)) < 0.0f;
+			c = ((iter1RECT.right /*+ cam.x*/ - point1X) * (point3Y - point1Y) - (point3X - point1X) * (iter1RECT.bottom /*+ cam.y*/ - point1Y)) < 0.0f;
 			(*iter1)->SetShadow((a == b) && (b == c));
 		}
 	}

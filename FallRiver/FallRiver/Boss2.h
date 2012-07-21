@@ -11,6 +11,11 @@ class Boss2: public Enemy
 	POINTFLOAT chargeDestination;
 	POINTFLOAT oldPosition;
 
+	int zombieHitID;
+	int zombieWalkingID;
+	float cryTimer;
+	int notifyID;
+
 public: 
 	Boss2();
 	virtual void Update(float aTime);

@@ -54,26 +54,26 @@ void PauseMenuState::Enter()
 	audio->setSoundVel(soundID2, tmp);
 	audio->setSoundLooping(soundID2, false);
 
-	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
-	audio->setMusicPos(musicID, sound1);
+//	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
+//	audio->setMusicPos(musicID, sound1);
 
-	audio->setMusicVel(musicID, tmp);
-	audio->setMusicLooping(musicID, true);
-	audio->playMusic(musicID);
+//	audio->setMusicVel(musicID, tmp);
+//	audio->setMusicLooping(musicID, true);
+//	audio->playMusic(musicID);
 
-	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
-	audio->setMusicPos(musicID2, sound1);
+//	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+//	audio->setMusicPos(musicID2, sound1);
 
-	audio->setMusicVel(musicID2, tmp);
-	audio->setMusicLooping(musicID2, true);
-	audio->playMusic(musicID2);
+//	audio->setMusicVel(musicID2, tmp);
+//	audio->setMusicLooping(musicID2, true);
+//	audio->playMusic(musicID2);
 
 }
 
 void PauseMenuState::ReEnter()
 {
-	audio->playMusic(musicID);
-	audio->playMusic(musicID2);
+//	audio->playMusic(musicID);
+//	audio->playMusic(musicID2);
 }
 
 void PauseMenuState::Exit()

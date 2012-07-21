@@ -51,7 +51,7 @@ GamePlayState::GamePlayState()
 	m_cBoss1 = nullptr;
 	m_cWeapon = nullptr;
 
-	backGroundID = -1;
+//	backGroundID = -1;
 	swingHitID = -1;
 	SpawnEnemyAniID = -1;
 	logID = -1;
@@ -82,6 +82,8 @@ GamePlayState::GamePlayState()
 	goreL6 = -1;
 	goreL7 = -1;
 	goreL8 = -1;
+
+//	pianoID = -1;
 
 }
 
@@ -590,15 +592,19 @@ void GamePlayState::Enter()
 
 	m_pMS->InitMessageSystem( &MessageProc );
 
-	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
-
+//	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
+//	pianoID = m_pAM->registerMusic("resource/Sounds/piano.mp3");
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
-	m_pAM->setMusicPos(backGroundID, sound1);
-	m_pAM->setMusicVel(backGroundID, sound1);
-	m_pAM->setMusicLooping(backGroundID, true);
-	m_pAM->playMusic(backGroundID);
+//	m_pAM->setMusicPos(backGroundID, sound1);
+//	m_pAM->setMusicVel(backGroundID, sound1);
+//	m_pAM->setMusicLooping(backGroundID, true);
+//	m_pAM->playMusic(backGroundID);
+//	m_pAM->setMusicPos(pianoID, sound1);
+//	m_pAM->setMusicVel(pianoID, sound1);
+//	m_pAM->setMusicLooping(pianoID, true);
+//	m_pAM->playMusic(pianoID);
 
 	soundID2 = m_pAM->RegisterSound("resource/Sounds/thunder.wav");
 	m_pAM->setSoundPos(soundID2, sound1);
@@ -606,12 +612,12 @@ void GamePlayState::Enter()
 	m_pAM->setSoundVel(soundID2, sound1);
 	m_pAM->setSoundLooping(soundID2, false);
 
-	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
-	m_pAM->setMusicPos(musicID, sound1);
+//	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+//	m_pAM->setMusicPos(musicID, sound1);
 
-	m_pAM->setMusicVel(musicID, sound1);
-	m_pAM->setMusicLooping(musicID, true);
-	m_pAM->playMusic(musicID);
+//	m_pAM->setMusicVel(musicID, sound1);
+//	m_pAM->setMusicLooping(musicID, true);
+//	m_pAM->playMusic(musicID);
 	winLose = true;
 
 	loading->Update();
@@ -670,8 +676,9 @@ void GamePlayState::Enter()
 
 void GamePlayState::ReEnter()
 {
-	m_pAM->playMusic(backGroundID);
-	m_pAM->playMusic(musicID);
+//	m_pAM->playMusic(backGroundID);
+//	m_pAM->playMusic(pianoID);
+//	m_pAM->playMusic(musicID);
 }
 
 void GamePlayState::Exit() 
@@ -717,6 +724,7 @@ void GamePlayState::Exit()
 	}
 
 	fireA.clear();
+	streetLights.clear();
 	m_cNpcs.clear();
 
 	m_pVM = nullptr;
