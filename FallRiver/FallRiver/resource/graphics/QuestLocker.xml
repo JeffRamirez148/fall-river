@@ -9,8 +9,7 @@
     <Quest_Info Quest_ID="5" Quest_Title="Quest 3 Done" Quest_Dialog="You found everybody!. Press 'Enter' to continue"/>
     <Quest_Info Quest_ID="6" Quest_Title="Find the Hospital" Quest_Dialog="Completed when the player walks into the hospital. Starts once the player talks to leader of the survivors.Press 'Enter' to add quest"/>
     <Quest_Info Quest_ID="7" Quest_Title="Quest 4 Done" Quest_Dialog="You found the hospital!. Press 'Enter' to continue"/>
-    <Quest_Info Quest_ID="8" Quest_Title="Find the medicine" Quest_Dialog="Completed when the player Kills the second boss.Then grabs the medicine. Starts once the player walks into the hospital.Press 'Enter' to add quest"/>
+    <Quest_Info Quest_ID="8" Quest_Title="Find the medicine" Quest_Dialog="Completed when the player grabs the medicine.Press 'Enter' to add quest"/>
     <Quest_Info Quest_ID="9" Quest_Title="Quest 5 Done" Quest_Dialog="You got the medicine!. Press 'Enter' to continue"/>
   </Quest_Layer>
-  
 </Quest_Locker>

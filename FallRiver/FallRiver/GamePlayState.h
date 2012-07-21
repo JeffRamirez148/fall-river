@@ -8,6 +8,7 @@ using namespace std;
 #include "BaseObject.h"
 #include "ObjectFactory.h"
 #include "MessageSystem.h"
+#include "IListener.h"
 
 class ViewManager;
 class AudioManager;
@@ -31,7 +32,7 @@ class Boss2;
 
 typedef CObjectFactory< std::wstring, BaseObject> Factory;
 
-class GamePlayState : public IMenuState
+class GamePlayState : public IMenuState, public IListener
 {
 private: 
 	// Wrapper Memebers
@@ -46,7 +47,7 @@ private:
 	Particle_Manager*	m_pPM;
 
 	int SpawnEnemyAniID;
-
+	int bush;
 	
 	// Sound Ids
 	int soundID2;
@@ -113,6 +114,8 @@ private:
 	GamePlayState& operator=(const GamePlayState&);
 
 public:
+	int hospitalX;
+	int hospitalY;
 
 	int GetGoreL1() { return goreL1;}
 	int GetGoreL2() { return goreL2;}
@@ -149,6 +152,7 @@ public:
 	void SetBloodL6(int id) { bloodL6 = id;}
 	void SetBloodL7(int id) { bloodL7 = id;}
 	void SetBloodL8(int id) { bloodL8 = id;}
+	void ChangeLevel();
 	int GetNumEnemies() {return m_cEnemies.size(); }
 	int GetLogID() {return logID;}
 	vector<int> GetFireA(void) { return fireA;}
@@ -188,6 +192,7 @@ public:
 	void AddEnemy(Enemy* enemy) { m_cEnemies.push_back(enemy); }
 	vector<Enemy*> GetEnemies() {return m_cEnemies;}
 	vector<RECT> GetStreelights() { return streetLights;}
+	void HandleEvent(Event* aPEvent);
 };
 
 #endif

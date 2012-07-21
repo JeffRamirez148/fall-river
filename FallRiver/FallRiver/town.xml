@@ -140455,10 +140455,6 @@
     <ScrRect x="629" y="1602" height="13" width="60" />
   </Collision>
   <Collision>
-    <Type>Hospital</Type>
-    <ScrRect x="702" y="4062" height="18" width="90" />
-  </Collision>
-  <Collision>
     <Type>NPC</Type>
     <ScrRect x="4612" y="612" height="32" width="32" />
   </Collision>
@@ -140705,5 +140701,13 @@
   <Collision>
     <Type>Pistol Ammo</Type>
     <ScrRect x="3104" y="2528" height="16" width="16" />
+  </Collision>
+  <Collision>
+    <Type>Wall</Type>
+    <ScrRect x="3072" y="192" height="128" width="128" />
+  </Collision>
+  <Collision>
+    <Type>Hospital</Type>
+    <ScrRect x="706" y="4066" height="15" width="84" />
   </Collision>
 </levels_list>

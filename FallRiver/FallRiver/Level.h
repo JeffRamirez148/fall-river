@@ -42,6 +42,8 @@ struct TwoInts
 	int y;
 };
 
+enum level{ FOREST,TOWN,HOUSE,HOSPITAL };
+
 class Level :  public BaseObject
 {
 private:
@@ -53,6 +55,8 @@ private:
 	TCHAR buffer[100];
 	bool m_bNoClip;
 		int fogID[4];
+public:
+	int whichlevel;
 
 
 	POINTFLOAT fog[4];

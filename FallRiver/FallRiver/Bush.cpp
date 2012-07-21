@@ -7,6 +7,7 @@ Bush::Bush()
 {
 	m_nObjectType = OBJ_BUSH;
 	m_bIsInBush = false;
+	m_bCloset = false;
 	//this->
 }
 
@@ -42,6 +43,10 @@ void Bush::Update(float fElapsedTime)
 void Bush::Render() 
 {
 	ViewManager* pView = ViewManager::GetInstance();
+	if( m_bCloset == true )
+	{
+		return;
+	}
 	if( m_bIsInBush == false )
 	{
 		float x, y;

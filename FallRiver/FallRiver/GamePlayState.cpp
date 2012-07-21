@@ -60,6 +60,7 @@ GamePlayState::GamePlayState()
 	questFlag = false;
 	rainA = -1;
 	rainL = -1;
+	bush = -1;
 	smokeL = -1;
 
 	fire1L = -1;
@@ -146,9 +147,15 @@ void GamePlayState::Enter()
 	loading->Update();
 	loading->Render();
 
-	int bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
+	bush = m_pVM->RegisterTexture("resource//graphics//Bush.png");
 	SpawnEnemyAniID = m_pVM->RegisterAnimation("resource/graphics/Zombies.xml");
 	logID = m_pVM->RegisterTexture("resource/graphics/logs.png");
+
+	EventSystem::GetInstance()->RegisterClient( "ForestToTown", this );
+	EventSystem::GetInstance()->RegisterClient( "HospitalToTown", this );
+	EventSystem::GetInstance()->RegisterClient( "HouseToTown", this );
+	EventSystem::GetInstance()->RegisterClient( "GoToHouse", this );
+	EventSystem::GetInstance()->RegisterClient( "GoToHospital", this );
 
 	m_pOF->RegisterClassType< BaseObject	>( _T("BaseObject") );
 	m_pOF->RegisterClassType< Level			>( _T("Level") );
@@ -184,6 +191,7 @@ void GamePlayState::Enter()
 		m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
 		pLevel = m_clevel;
 		pLevel->LoadLevel("level.xml");
+		pLevel->whichlevel = FOREST;
 		m_pOM->AddObject(pLevel);
 	}
 
@@ -418,7 +426,7 @@ void GamePlayState::Enter()
 			eWeapon->Init(WPN_PISTOL, 100, 0);
 			eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
 			eWeapon->SetPosY(pEnemy->GetPosY());
-			eWeapon->SetDamage(10);
+			eWeapon->SetDamage(5);
 			pEnemy->SetWeapon(eWeapon);
 			tmp.erase(nth);
 			i--;
@@ -444,6 +452,10 @@ void GamePlayState::Enter()
 			pNpc = nullptr;
 			tmp.erase(nth);
 			i--;
+		}
+		else if( _stricmp(nth->m_cType,"Town") == 0)
+		{
+			m_pHUD->SetTarget(float(nth->x), float(nth->y));
 		}
 		else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
 		{
@@ -699,17 +711,17 @@ void GamePlayState::Exit()
 		m_pMS = nullptr;
 	}
 
+	if( m_pOF != nullptr )
+	{
+		m_pOF->ShutdownObjectFactory();
+		m_pOF = nullptr;
+	}
+
 	if( m_pOM != nullptr )
 	{
 		m_pOM->RemoveAllObjects();
 		ObjectManager::DeleteInstance();
 		m_pOM = nullptr;
-	}
-
-	if( m_pOF != nullptr )
-	{
-		m_pOF->ShutdownObjectFactory();
-		m_pOF = nullptr;
 	}
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
@@ -847,6 +859,7 @@ void GamePlayState::Update(float fElapsedTime)
 	if(GetPlayer()->m_vpFinishedQuests.size() == 2)
 	{
 		questFlag = false;
+		CGame::GetInstance()->scoreCatch = m_cPlayer->GetScore();
 		CGame::GetInstance()->ChangeState(WinMenuState::GetInstance());
 	}
 
@@ -984,6 +997,7 @@ void GamePlayState::Render()
 
 }
 
+
 void GamePlayState::MessageProc(IMessage* pMsg)
 {
 	GamePlayState* self = GamePlayState::GetInstance();
@@ -995,7 +1009,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
 			//Set up data members
-			bullet->SetImageID( pOwner->GetImageID());
+			bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 			bullet->SetHeight(16);
 			bullet->SetWidth(16);
 			bullet->SetOwner(pOwner);
@@ -1015,6 +1029,8 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			{
 				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				bullet2->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
+				bullet3->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				//bullet 2
 				bullet2->SetImageID( pOwner->GetImageID());
 				bullet2->SetHeight(16);
@@ -1443,4 +1459,1739 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			break;
 		}
 	}
+}
+
+void GamePlayState::HandleEvent(Event* aPEvent)
+{
+	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+	
+	if(aPEvent->GetEventID() == "HouseToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+
+	
+	if(aPEvent->GetEventID() == "HospitalToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+	
+	if(aPEvent->GetEventID() == "GoToHospital")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+
+	
+	if(aPEvent->GetEventID() == "GoToHouse")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+	}
+
+
+	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		//Player* tmpPlayer = this->GetPlayer();
+		//HUD* tmpHud = this->m_pHUD;
+		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		LoadingScreen* loading = LoadingScreen::GetInstance();
+		loading->Render();
+		ChangeLevel();
+
+		Player* pPlayer = this->GetPlayer();
+		//Weapon* pWeapon = nullptr;
+		Level* pLevel = nullptr;
+
+		Bush* pBush = nullptr;
+		SpawnPoint* pSpawn = nullptr;
+		PickUp* pPickUp = nullptr;
+
+		if( pLevel == nullptr )
+		{
+			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
+			pLevel = m_clevel;
+			pLevel->LoadLevel("town.xml");
+			pLevel->whichlevel = TOWN;
+			m_pOM->AddObject(pLevel);
+		}
+		loading->Update();
+		loading->Render();
+
+
+		vector<leveldata> tmp = pLevel->GetCollision();
+		for(unsigned int i = 0; i < tmp.size(); i++) 
+		{
+			vector<leveldata>::iterator nth = tmp.begin() + i;
+
+			if( _stricmp(nth->m_cType,"Bush") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shotgun Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(SHOTGUN_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(  _stricmp(nth->m_cType,"Fire") == 0)
+			{
+				int tmp1 = m_pPM->ActivateEmitter(fire1L);
+				m_pPM->GetActiveEmitter(tmp1)->SetRect(tmp[i].m_rCollision);
+				int tmp2 = m_pPM->ActivateEmitter(fire2L);
+				m_pPM->GetActiveEmitter(tmp2)->SetRect(tmp[i].m_rCollision);
+				int tmp3 = m_pPM->ActivateEmitter(fire3L);
+				m_pPM->GetActiveEmitter(tmp3)->SetRect(tmp[i].m_rCollision);
+				fireA.push_back(tmp3);
+				fireA.push_back(tmp2);
+				fireA.push_back(tmp1);
+				m_pPM->GetActiveEmitter(tmp1)->SetSoundID( m_pAM->RegisterSound("resource/Sounds/fire.wav"));
+			}
+			else if(  _stricmp(nth->m_cType,"Streetlight") == 0)
+			{
+				streetLights.push_back(tmp[i].m_rCollision);
+			}
+			else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(RIFLE_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Pistol Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(PISTOL_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Medicine") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(MEDICINE);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Health") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(HEALTH);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Battery") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(BATTERY);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shooting Enemy") == 0)
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight( nth->height);
+				pEnemy->SetWidth( nth->width);
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(m_cPlayer);
+				pEnemy->SetPosX((float)nth->x);
+				pEnemy->SetPosY((float)nth->y);
+				pEnemy->SetHealth(100);
+				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				m_pOM->AddObject(pEnemy);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pEnemy);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+				eWeapon->SetPosY(pEnemy->GetPosY());
+				eWeapon->SetDamage(10);
+				pEnemy->SetWeapon(eWeapon);
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"NPC") == 0)
+			{
+				m_cNpcs.push_back(nullptr);
+				m_cNpcs[m_cNpcs.size()-1] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+				NPC* pNpc =(NPC*)(m_cNpcs[m_cNpcs.size()-1]);
+				pNpc->SetHeight(32);
+				pNpc->SetWidth(32);
+				pNpc->SetImageID(-1);
+				pNpc->SetPosX((float)nth->x);
+				pNpc->SetPosY((float)nth->y);
+				pNpc->SetQuest(9);
+				pNpc->SetLabel(8);
+				pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
+				m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
+				m_pOM->AddObject(pNpc);
+				pNpc = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Town") == 0)
+			{
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+			}
+			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
+			{
+				hospitalX = nth->x;
+				hospitalY = nth->y;
+			}
+			else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
+			{
+				m_cSpawn.push_back(nullptr);
+				m_cSpawn[m_cSpawn.size()-1] = (SpawnPoint*)m_pOF->CreateObject( _T("SpawnPoint") );
+				pSpawn = m_cSpawn[m_cSpawn.size()-1];
+				pSpawn->SetPosX( (float)nth->x );
+				pSpawn->SetPosY( (float)nth->y );
+				pSpawn->SetHeight( nth->height );
+				pSpawn->SetWidth( nth->width );
+				pSpawn->SetImageID( -1 );
+				//m_pOM->AddObject(pSpawn);
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+				for( int i = 0; i < 1; i++)
+				{
+					m_cEnemies.push_back(nullptr);
+					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+					pEnemy->SetImageID(-1);
+					pEnemy->SetTarget(GetPlayer());
+					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+					pEnemy->SetHealth(100);
+					pEnemy->SetAnimation(SpawnEnemyAniID);
+					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+				}
+			} 
+			else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
+			{
+				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+
+				Boss1* pBoss = (Boss1*)m_cBoss1;
+				pBoss->SetHealth(200);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_SHOTGUN, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if ( _stricmp(nth->m_cType,"Boss2") == 0 )
+			{
+				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
+				Boss2* pBoss = (Boss2*)m_cBoss2;
+				pBoss->SetHealth(1000);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				int tmpID = m_pVM->RegisterTexture("resource/graphics/Cinder_Block.png" );
+				eWeapon->SetImageID(tmpID);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			loading->Update();
+			loading->Render();
+
+		}
+		pLevel->SetCollision(tmp);
+
+		pPlayer->SetPosX(3131);
+		pPlayer->SetPosY(374);
+		m_pOM->AddObject(pPlayer);
+
+		loading->Reset();
+		loading = nullptr;
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
+
+	}
+	if(aPEvent->GetEventID() == "HospitalToTown")//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		//Player* tmpPlayer = this->GetPlayer();
+		//HUD* tmpHud = this->m_pHUD;
+		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		LoadingScreen* loading = LoadingScreen::GetInstance();
+		loading->Render();
+		ChangeLevel();
+
+		Player* pPlayer = this->GetPlayer();
+		//Weapon* pWeapon = nullptr;
+		Level* pLevel = nullptr;
+
+		Bush* pBush = nullptr;
+		SpawnPoint* pSpawn = nullptr;
+		PickUp* pPickUp = nullptr;
+
+		if( pLevel == nullptr )
+		{
+			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
+			pLevel = m_clevel;
+			pLevel->LoadLevel("town.xml");
+			pLevel->whichlevel = TOWN;
+			m_pOM->AddObject(pLevel);
+		}
+		loading->Update();
+		loading->Render();
+
+
+		vector<leveldata> tmp = pLevel->GetCollision();
+		for(unsigned int i = 0; i < tmp.size(); i++) 
+		{
+			vector<leveldata>::iterator nth = tmp.begin() + i;
+
+			if( _stricmp(nth->m_cType,"Bush") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(_stricmp(nth->m_cType,"Closet") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				pBush->m_bCloset = true;
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shotgun Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(SHOTGUN_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(  _stricmp(nth->m_cType,"Fire") == 0)
+			{
+				int tmp1 = m_pPM->ActivateEmitter(fire1L);
+				m_pPM->GetActiveEmitter(tmp1)->SetRect(tmp[i].m_rCollision);
+				int tmp2 = m_pPM->ActivateEmitter(fire2L);
+				m_pPM->GetActiveEmitter(tmp2)->SetRect(tmp[i].m_rCollision);
+				int tmp3 = m_pPM->ActivateEmitter(fire3L);
+				m_pPM->GetActiveEmitter(tmp3)->SetRect(tmp[i].m_rCollision);
+				fireA.push_back(tmp3);
+				fireA.push_back(tmp2);
+				fireA.push_back(tmp1);
+				m_pPM->GetActiveEmitter(tmp1)->SetSoundID( m_pAM->RegisterSound("resource/Sounds/fire.wav"));
+			}
+			else if(  _stricmp(nth->m_cType,"Streetlight") == 0)
+			{
+				streetLights.push_back(tmp[i].m_rCollision);
+			}
+			else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(RIFLE_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Pistol Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(PISTOL_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Medicine") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(MEDICINE);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Health") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(HEALTH);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Battery") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(BATTERY);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shooting Enemy") == 0)
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight( nth->height);
+				pEnemy->SetWidth( nth->width);
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(m_cPlayer);
+				pEnemy->SetPosX((float)nth->x);
+				pEnemy->SetPosY((float)nth->y);
+				pEnemy->SetHealth(100);
+				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				m_pOM->AddObject(pEnemy);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pEnemy);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+				eWeapon->SetPosY(pEnemy->GetPosY());
+				eWeapon->SetDamage(10);
+				pEnemy->SetWeapon(eWeapon);
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"NPC") == 0)
+			{
+				m_cNpcs.push_back(nullptr);
+				m_cNpcs[m_cNpcs.size()-1] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+				NPC* pNpc =(NPC*)(m_cNpcs[m_cNpcs.size()-1]);
+				pNpc->SetHeight(32);
+				pNpc->SetWidth(32);
+				pNpc->SetImageID(-1);
+				pNpc->SetPosX((float)nth->x);
+				pNpc->SetPosY((float)nth->y);
+				if( pPlayer->m_bHasMedicine == false )
+				{
+					pNpc->SetQuest(9);
+					pNpc->SetLabel(8);
+				}
+				else
+				{
+					pNpc->SetQuest(10);
+					pNpc->SetLabel(9);
+				}
+				pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
+				int x = pPlayer->m_vpActiveQuests.size();
+				if( pPlayer->m_bHasMedicine == true  && x > 0 )
+				{
+					m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
+				}
+				else if( pPlayer->m_bHasMedicine == false  && pPlayer->m_vpActiveQuests.size() > 0 )
+				{
+					m_pHUD->SetTarget((float)hospitalX, (float)hospitalY);
+				}
+				else if( pPlayer->m_bHasMedicine == false && pPlayer->m_vpActiveQuests.size() == 0 )
+				{
+					m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
+				}
+
+				m_pOM->AddObject(pNpc);
+				pNpc = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Town") == 0)
+			{
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+			}
+			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
+			{
+				//m_pHUD->SetTarget(nth->x, nth->y);
+				hospitalX = nth->x;
+				hospitalY = nth->y;
+			}
+			else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
+			{
+				m_cSpawn.push_back(nullptr);
+				m_cSpawn[m_cSpawn.size()-1] = (SpawnPoint*)m_pOF->CreateObject( _T("SpawnPoint") );
+				pSpawn = m_cSpawn[m_cSpawn.size()-1];
+				pSpawn->SetPosX( (float)nth->x );
+				pSpawn->SetPosY( (float)nth->y );
+				pSpawn->SetHeight( nth->height );
+				pSpawn->SetWidth( nth->width );
+				pSpawn->SetImageID( -1 );
+				//m_pOM->AddObject(pSpawn);
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+				for( int i = 0; i < 1; i++)
+				{
+					m_cEnemies.push_back(nullptr);
+					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+					pEnemy->SetImageID(-1);
+					pEnemy->SetTarget(GetPlayer());
+					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+					pEnemy->SetHealth(100);
+					pEnemy->SetAnimation(SpawnEnemyAniID);
+					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+				}
+			} 
+			else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
+			{
+				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+
+				Boss1* pBoss = (Boss1*)m_cBoss1;
+				pBoss->SetHealth(200);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_SHOTGUN, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if ( _stricmp(nth->m_cType,"Boss2") == 0 )
+			{
+				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
+				Boss2* pBoss = (Boss2*)m_cBoss2;
+				pBoss->SetHealth(1000);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				int tmpID = m_pVM->RegisterTexture("resource/graphics/Cinder_Block.png" );
+				eWeapon->SetImageID(tmpID);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			loading->Update();
+			loading->Render();
+
+		}
+		pLevel->SetCollision(tmp);
+
+		pPlayer->SetPosX(739);
+		pPlayer->SetPosY(4166);
+
+		
+		m_pOM->AddObject(pPlayer);
+
+		loading->Reset();
+		loading = nullptr;
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
+	}
+	if(aPEvent->GetEventID() == "HouseToTown")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		//Player* tmpPlayer = this->GetPlayer();
+		//HUD* tmpHud = this->m_pHUD;
+		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		LoadingScreen* loading = LoadingScreen::GetInstance();
+		loading->Render();
+		ChangeLevel();
+
+		Player* pPlayer = this->GetPlayer();
+		//Weapon* pWeapon = nullptr;
+		Level* pLevel = nullptr;
+
+		Bush* pBush = nullptr;
+		SpawnPoint* pSpawn = nullptr;
+		PickUp* pPickUp = nullptr;
+
+		if( pLevel == nullptr )
+		{
+			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
+			pLevel = m_clevel;
+			pLevel->LoadLevel("town.xml");
+			pLevel->whichlevel = TOWN;
+			m_pOM->AddObject(pLevel);
+		}
+		loading->Update();
+		loading->Render();
+
+
+		vector<leveldata> tmp = pLevel->GetCollision();
+		for(unsigned int i = 0; i < tmp.size(); i++) 
+		{
+			vector<leveldata>::iterator nth = tmp.begin() + i;
+
+			if( _stricmp(nth->m_cType,"Bush") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(_stricmp(nth->m_cType,"Closet") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				pBush->m_bCloset = true;
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shotgun Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(SHOTGUN_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(  _stricmp(nth->m_cType,"Fire") == 0)
+			{
+				int tmp1 = m_pPM->ActivateEmitter(fire1L);
+				m_pPM->GetActiveEmitter(tmp1)->SetRect(tmp[i].m_rCollision);
+				int tmp2 = m_pPM->ActivateEmitter(fire2L);
+				m_pPM->GetActiveEmitter(tmp2)->SetRect(tmp[i].m_rCollision);
+				int tmp3 = m_pPM->ActivateEmitter(fire3L);
+				m_pPM->GetActiveEmitter(tmp3)->SetRect(tmp[i].m_rCollision);
+				fireA.push_back(tmp3);
+				fireA.push_back(tmp2);
+				fireA.push_back(tmp1);
+				m_pPM->GetActiveEmitter(tmp1)->SetSoundID( m_pAM->RegisterSound("resource/Sounds/fire.wav"));
+			}
+			else if(  _stricmp(nth->m_cType,"Streetlight") == 0)
+			{
+				streetLights.push_back(tmp[i].m_rCollision);
+			}
+			else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(RIFLE_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Pistol Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(PISTOL_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Medicine") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(MEDICINE);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Health") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(HEALTH);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Battery") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(BATTERY);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shooting Enemy") == 0)
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight( nth->height);
+				pEnemy->SetWidth( nth->width);
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(m_cPlayer);
+				pEnemy->SetPosX((float)nth->x);
+				pEnemy->SetPosY((float)nth->y);
+				pEnemy->SetHealth(100);
+				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				m_pOM->AddObject(pEnemy);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pEnemy);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+				eWeapon->SetPosY(pEnemy->GetPosY());
+				eWeapon->SetDamage(10);
+				pEnemy->SetWeapon(eWeapon);
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"NPC") == 0)
+			{
+				m_cNpcs.push_back(nullptr);
+				m_cNpcs[m_cNpcs.size()-1] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+				NPC* pNpc =(NPC*)(m_cNpcs[m_cNpcs.size()-1]);
+				pNpc->SetHeight(32);
+				pNpc->SetWidth(32);
+				pNpc->SetImageID(-1);
+				pNpc->SetPosX((float)nth->x);
+				pNpc->SetPosY((float)nth->y);
+				if( pPlayer->m_bHasMedicine == false )
+				{
+					pNpc->SetQuest(9);
+					pNpc->SetLabel(8);
+				}
+				else
+				{
+					pNpc->SetQuest(10);
+					pNpc->SetLabel(9);
+				}
+				pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
+
+				if( pPlayer->m_bHasMedicine == true  && pPlayer->m_vpActiveQuests.size() > 0 )
+				{
+					m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
+				}
+				else if( pPlayer->m_bHasMedicine == false  && pPlayer->m_vpActiveQuests.size() > 0 )
+				{
+					m_pHUD->SetTarget(hospitalX, hospitalY);
+				}
+				else if( pPlayer->m_bHasMedicine == false && pPlayer->m_vpActiveQuests.size() == 0 )
+				{
+					m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
+				}
+
+				m_pOM->AddObject(pNpc);
+				pNpc = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Town") == 0)
+			{
+				m_pHUD->SetTarget(nth->x, nth->y);
+			}
+			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
+			{
+				//m_pHUD->SetTarget(nth->x, nth->y);
+				hospitalX = nth->x;
+				hospitalY = nth->y;
+			}
+			else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
+			{
+				m_cSpawn.push_back(nullptr);
+				m_cSpawn[m_cSpawn.size()-1] = (SpawnPoint*)m_pOF->CreateObject( _T("SpawnPoint") );
+				pSpawn = m_cSpawn[m_cSpawn.size()-1];
+				pSpawn->SetPosX( (float)nth->x );
+				pSpawn->SetPosY( (float)nth->y );
+				pSpawn->SetHeight( nth->height );
+				pSpawn->SetWidth( nth->width );
+				pSpawn->SetImageID( -1 );
+				//m_pOM->AddObject(pSpawn);
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+				for( int i = 0; i < 1; i++)
+				{
+					m_cEnemies.push_back(nullptr);
+					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+					pEnemy->SetImageID(-1);
+					pEnemy->SetTarget(GetPlayer());
+					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+					pEnemy->SetHealth(100);
+					pEnemy->SetAnimation(SpawnEnemyAniID);
+					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+				}
+			} 
+			else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
+			{
+				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+
+				Boss1* pBoss = (Boss1*)m_cBoss1;
+				pBoss->SetHealth(200);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_SHOTGUN, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if ( _stricmp(nth->m_cType,"Boss2") == 0 )
+			{
+				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
+				Boss2* pBoss = (Boss2*)m_cBoss2;
+				pBoss->SetHealth(1000);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				int tmpID = m_pVM->RegisterTexture("resource/graphics/Cinder_Block.png" );
+				eWeapon->SetImageID(tmpID);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			loading->Update();
+			loading->Render();
+
+		}
+		pLevel->SetCollision(tmp);
+
+		pPlayer->SetPosX(651);
+		pPlayer->SetPosY(1704);
+		if( pPlayer->m_bHasMedicine == false )
+		{
+		}
+		m_pOM->AddObject(pPlayer);
+
+		loading->Reset();
+		loading = nullptr;
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
+	}
+	if(aPEvent->GetEventID() == "GoToHouse")
+	{
+	
+		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		LoadingScreen* loading = LoadingScreen::GetInstance();
+		loading->Render();
+		ChangeLevel();
+
+		Player* pPlayer = this->GetPlayer();
+		//Weapon* pWeapon = nullptr;
+		Level* pLevel = nullptr;
+
+		Bush* pBush = nullptr;
+		SpawnPoint* pSpawn = nullptr;
+		PickUp* pPickUp = nullptr;
+
+		if( pLevel == nullptr )
+		{
+			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
+			pLevel = m_clevel;
+			pLevel->LoadLevel("house.xml");
+			pLevel->whichlevel = HOUSE;
+			m_pOM->AddObject(pLevel);
+		}
+		loading->Update();
+		loading->Render();
+
+
+		vector<leveldata> tmp = pLevel->GetCollision();
+		for(unsigned int i = 0; i < tmp.size(); i++) 
+		{
+			vector<leveldata>::iterator nth = tmp.begin() + i;
+
+			if( _stricmp(nth->m_cType,"Bush") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(_stricmp(nth->m_cType,"Closet") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				pBush->m_bCloset = true;
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shotgun Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(SHOTGUN_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(  _stricmp(nth->m_cType,"Fire") == 0)
+			{
+				int tmp1 = m_pPM->ActivateEmitter(fire1L);
+				m_pPM->GetActiveEmitter(tmp1)->SetRect(tmp[i].m_rCollision);
+				int tmp2 = m_pPM->ActivateEmitter(fire2L);
+				m_pPM->GetActiveEmitter(tmp2)->SetRect(tmp[i].m_rCollision);
+				int tmp3 = m_pPM->ActivateEmitter(fire3L);
+				m_pPM->GetActiveEmitter(tmp3)->SetRect(tmp[i].m_rCollision);
+				fireA.push_back(tmp3);
+				fireA.push_back(tmp2);
+				fireA.push_back(tmp1);
+				m_pPM->GetActiveEmitter(tmp1)->SetSoundID( m_pAM->RegisterSound("resource/Sounds/fire.wav"));
+			}
+			else if(  _stricmp(nth->m_cType,"Streetlight") == 0)
+			{
+				streetLights.push_back(tmp[i].m_rCollision);
+			}
+			else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(RIFLE_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Pistol Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(PISTOL_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Medicine") == 0)
+			{
+				if( pPlayer->m_vpActiveQuests.size() > 0 && pPlayer->m_bHasMedicine == false )
+				{
+					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+					pPickUp->SetPosX((float)nth->x);
+					pPickUp->SetPosY((float)nth->y);
+					pPickUp->SetWidth(nth->width);
+					pPickUp->SetHeight(nth->height);
+					pPickUp->SetImageID(-1);
+					pPickUp->SetPickUpType(MEDICINE);
+					m_pOM->AddObject(pPickUp);
+					pPickUp = nullptr;
+					tmp.erase(nth);
+					i--;
+				}
+			}
+			else if( _stricmp(nth->m_cType,"Health") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(HEALTH);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Battery") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(BATTERY);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shooting Enemy") == 0)
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight( nth->height);
+				pEnemy->SetWidth( nth->width);
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(m_cPlayer);
+				pEnemy->SetPosX((float)nth->x);
+				pEnemy->SetPosY((float)nth->y);
+				pEnemy->SetHealth(100);
+				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				m_pOM->AddObject(pEnemy);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pEnemy);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+				eWeapon->SetPosY(pEnemy->GetPosY());
+				eWeapon->SetDamage(10);
+				pEnemy->SetWeapon(eWeapon);
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"NPC") == 0)
+			{
+				m_cNpcs.push_back(nullptr);
+				m_cNpcs[m_cNpcs.size()-1] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+				NPC* pNpc =(NPC*)(m_cNpcs[m_cNpcs.size()-1]);
+				pNpc->SetHeight(32);
+				pNpc->SetWidth(32);
+				pNpc->SetImageID(-1);
+				pNpc->SetPosX((float)nth->x);
+				pNpc->SetPosY((float)nth->y);
+				pNpc->SetQuest(9);
+				pNpc->SetLabel(8);
+				pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
+				m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
+				m_pOM->AddObject(pNpc);
+				pNpc = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Town") == 0)
+			{
+				m_pHUD->SetTarget(nth->x, nth->y);
+			}
+			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
+			{
+				hospitalX = nth->x;
+				hospitalY = nth->y;
+			}
+			else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
+			{
+				m_cSpawn.push_back(nullptr);
+				m_cSpawn[m_cSpawn.size()-1] = (SpawnPoint*)m_pOF->CreateObject( _T("SpawnPoint") );
+				pSpawn = m_cSpawn[m_cSpawn.size()-1];
+				pSpawn->SetPosX( (float)nth->x );
+				pSpawn->SetPosY( (float)nth->y );
+				pSpawn->SetHeight( nth->height );
+				pSpawn->SetWidth( nth->width );
+				pSpawn->SetImageID( -1 );
+				//m_pOM->AddObject(pSpawn);
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+				for( int i = 0; i < 1; i++)
+				{
+					m_cEnemies.push_back(nullptr);
+					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+					pEnemy->SetImageID(-1);
+					pEnemy->SetTarget(GetPlayer());
+					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+					pEnemy->SetHealth(100);
+					pEnemy->SetAnimation(SpawnEnemyAniID);
+					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+				}
+			} 
+			else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
+			{
+				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+
+				Boss1* pBoss = (Boss1*)m_cBoss1;
+				pBoss->SetHealth(200);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_SHOTGUN, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if ( _stricmp(nth->m_cType,"Boss2") == 0 )
+			{
+				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
+				Boss2* pBoss = (Boss2*)m_cBoss2;
+				pBoss->SetHealth(1000);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				int tmpID = m_pVM->RegisterTexture("resource/graphics/Cinder_Block.png" );
+				eWeapon->SetImageID(tmpID);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			loading->Update();
+			loading->Render();
+
+		}
+		pLevel->SetCollision(tmp);
+
+		pPlayer->SetPosX(500);
+		pPlayer->SetPosY(300);
+		m_pOM->AddObject(pPlayer);
+
+		loading->Reset();
+		loading = nullptr;
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
+	}
+	if(aPEvent->GetEventID() == "GoToHospital")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{
+		//Player* tmpPlayer = this->GetPlayer();
+		//HUD* tmpHud = this->m_pHUD;
+		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		LoadingScreen* loading = LoadingScreen::GetInstance();
+		loading->Render();
+		ChangeLevel();
+
+		Player* pPlayer = this->GetPlayer();
+		//Weapon* pWeapon = nullptr;
+		Level* pLevel = nullptr;
+
+		Bush* pBush = nullptr;
+		SpawnPoint* pSpawn = nullptr;
+		PickUp* pPickUp = nullptr;
+
+		if( pLevel == nullptr )
+		{
+			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
+			pLevel = m_clevel;
+			pLevel->LoadLevel("hospital.xml");
+			pLevel->whichlevel = HOSPITAL;
+			m_pOM->AddObject(pLevel);
+		}
+		loading->Update();
+		loading->Render();
+
+
+		vector<leveldata> tmp = pLevel->GetCollision();
+		for(unsigned int i = 0; i < tmp.size(); i++) 
+		{
+			vector<leveldata>::iterator nth = tmp.begin() + i;
+
+			if( _stricmp(nth->m_cType,"Bush") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(_stricmp(nth->m_cType,"Closet") == 0 )
+			{
+				m_cBushes.push_back(nullptr);
+				m_cBushes[m_cBushes.size()-1] = (Bush*)m_pOF->CreateObject( _T("Bush") );
+				pBush = m_cBushes[m_cBushes.size()-1];
+				pBush->SetPosX((float)nth->x);
+				pBush->SetPosY((float)nth->y);
+				pBush->SetWidth(nth->width);
+				pBush->SetHeight(nth->height);
+				pBush->SetImageID(bush);
+				pBush->m_bCloset = true;
+				m_pOM->AddObject(pBush);
+				pBush = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shotgun Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(SHOTGUN_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if(  _stricmp(nth->m_cType,"Fire") == 0)
+			{
+				int tmp1 = m_pPM->ActivateEmitter(fire1L);
+				m_pPM->GetActiveEmitter(tmp1)->SetRect(tmp[i].m_rCollision);
+				int tmp2 = m_pPM->ActivateEmitter(fire2L);
+				m_pPM->GetActiveEmitter(tmp2)->SetRect(tmp[i].m_rCollision);
+				int tmp3 = m_pPM->ActivateEmitter(fire3L);
+				m_pPM->GetActiveEmitter(tmp3)->SetRect(tmp[i].m_rCollision);
+				fireA.push_back(tmp3);
+				fireA.push_back(tmp2);
+				fireA.push_back(tmp1);
+				m_pPM->GetActiveEmitter(tmp1)->SetSoundID( m_pAM->RegisterSound("resource/Sounds/fire.wav"));
+			}
+			else if(  _stricmp(nth->m_cType,"Streetlight") == 0)
+			{
+				streetLights.push_back(tmp[i].m_rCollision);
+			}
+			else if( _stricmp(nth->m_cType,"Rifle Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(RIFLE_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Pistol Ammo") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(PISTOL_AMMO);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Medicine") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(MEDICINE);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Health") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(HEALTH);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Battery") == 0)
+			{
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(-1);
+				pPickUp->SetPickUpType(BATTERY);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Shooting Enemy") == 0)
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ShootingAi*)m_pOF->CreateObject( _T("ShootingAi") );
+				ShootingAi* pEnemy = (ShootingAi*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight( nth->height);
+				pEnemy->SetWidth( nth->width);
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(m_cPlayer);
+				pEnemy->SetPosX((float)nth->x);
+				pEnemy->SetPosY((float)nth->y);
+				pEnemy->SetHealth(100);
+				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				m_pOM->AddObject(pEnemy);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pEnemy);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
+				eWeapon->SetPosY(pEnemy->GetPosY());
+				eWeapon->SetDamage(10);
+				pEnemy->SetWeapon(eWeapon);
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"NPC") == 0)
+			{
+				m_cNpcs.push_back(nullptr);
+				m_cNpcs[m_cNpcs.size()-1] = (NPC*)m_pOF->CreateObject( _T("NPC") );
+				NPC* pNpc =(NPC*)(m_cNpcs[m_cNpcs.size()-1]);
+				pNpc->SetHeight(32);
+				pNpc->SetWidth(32);
+				pNpc->SetImageID(-1);
+				pNpc->SetPosX((float)nth->x);
+				pNpc->SetPosY((float)nth->y);
+				pNpc->SetQuest(9);
+				pNpc->SetLabel(8);
+				pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
+				m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
+				m_pOM->AddObject(pNpc);
+				pNpc = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if( _stricmp(nth->m_cType,"Town") == 0)
+			{
+				m_pHUD->SetTarget(nth->x, nth->y);
+			}
+			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
+			{
+				hospitalX = nth->x;
+				hospitalY = nth->y;
+			}
+			else if ( _stricmp(nth->m_cType,"Spawn Point") == 0 )
+			{
+				m_cSpawn.push_back(nullptr);
+				m_cSpawn[m_cSpawn.size()-1] = (SpawnPoint*)m_pOF->CreateObject( _T("SpawnPoint") );
+				pSpawn = m_cSpawn[m_cSpawn.size()-1];
+				pSpawn->SetPosX( (float)nth->x );
+				pSpawn->SetPosY( (float)nth->y );
+				pSpawn->SetHeight( nth->height );
+				pSpawn->SetWidth( nth->width );
+				pSpawn->SetImageID( -1 );
+				//m_pOM->AddObject(pSpawn);
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+				for( int i = 0; i < 1; i++)
+				{
+					m_cEnemies.push_back(nullptr);
+					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+					pEnemy->SetImageID(-1);
+					pEnemy->SetTarget(GetPlayer());
+					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+					pEnemy->SetHealth(100);
+					pEnemy->SetAnimation(SpawnEnemyAniID);
+					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+				}
+			} 
+			else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
+			{
+				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
+
+				Boss1* pBoss = (Boss1*)m_cBoss1;
+				pBoss->SetHealth(200);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				eWeapon->SetImageID(-1);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_SHOTGUN, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			else if ( _stricmp(nth->m_cType,"Boss2") == 0 )
+			{
+				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
+				Boss2* pBoss = (Boss2*)m_cBoss2;
+				pBoss->SetHealth(1000);
+				pBoss->SetHeight(nth->height);
+				pBoss->SetWidth(nth->width);
+				pBoss->SetPosX( (float)nth->x );
+				pBoss->SetPosY( (float)nth->y );
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetTarget(pPlayer);
+				m_pOM->AddObject(pBoss);
+				m_cEnemies.push_back(pBoss);
+
+				Weapon* eWeapon = (Weapon*)m_pOF->CreateObject( _T("Weapon"));
+				eWeapon->SetHeight(20);
+				eWeapon->SetWidth(10);
+				int tmpID = m_pVM->RegisterTexture("resource/graphics/Cinder_Block.png" );
+				eWeapon->SetImageID(tmpID);
+				eWeapon->SetOwner(pBoss);
+				eWeapon->Init(WPN_PISTOL, 100, 0);
+				eWeapon->SetPosX(pBoss->GetPosX()+pBoss->GetWidth()/2);
+				pBoss->SetWeapon(eWeapon);
+
+				pSpawn = nullptr;
+				tmp.erase(nth);
+				i--;
+			}
+			loading->Update();
+			loading->Render();
+
+		}
+		pLevel->SetCollision(tmp);
+
+		pPlayer->SetPosX(500);
+		pPlayer->SetPosY(300);
+		m_pOM->AddObject(pPlayer);
+
+		loading->Reset();
+		loading = nullptr;
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
+	}
+
+
+}
+
+void GamePlayState::ChangeLevel()
+{
+	
+	if( m_pOM != nullptr )
+	{
+		m_pOM->RemoveAllObjects();
+	}
+
+	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
+	{
+		m_cEnemies[i] = nullptr;
+	}
+	m_cEnemies.clear();
+
+	for(unsigned int i = 0; i < m_cNpcs.size(); i++)
+	{
+		m_cNpcs[i] = nullptr;
+	}
+	m_cNpcs.clear();
+	
+	for(unsigned int i = 0; i < m_cSpawn.size(); i++)
+	{
+		m_cSpawn[i] = nullptr;
+	}
+	m_cSpawn.clear();
+
+	for(unsigned int i = 0; i < m_cBushes.size(); i++)
+	{
+		m_cBushes[i] = nullptr;
+	}
+	m_cBushes.clear();
+	
+
+	fireA.clear();
+	streetLights.clear();
+	m_cNpcs.clear();
+
+
 }
