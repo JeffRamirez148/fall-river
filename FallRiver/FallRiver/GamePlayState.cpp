@@ -426,7 +426,7 @@ void GamePlayState::Enter()
 			eWeapon->Init(WPN_PISTOL, 100, 0);
 			eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
 			eWeapon->SetPosY(pEnemy->GetPosY());
-			eWeapon->SetDamage(10);
+			eWeapon->SetDamage(5);
 			pEnemy->SetWeapon(eWeapon);
 			tmp.erase(nth);
 			i--;
@@ -1011,7 +1011,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
 			//Set up data members
-			bullet->SetImageID( pOwner->GetImageID());
+			bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 			bullet->SetHeight(16);
 			bullet->SetWidth(16);
 			bullet->SetOwner(pOwner);
@@ -1031,6 +1031,8 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			{
 				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				bullet2->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
+				bullet3->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				//bullet 2
 				bullet2->SetImageID( pOwner->GetImageID());
 				bullet2->SetHeight(16);
@@ -2631,7 +2633,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Medicine") == 0)
 			{
-				if( pPlayer->m_vpActiveQuests.size() > 0 && pPlayer->m_bHasMedicine == false );
+				if( pPlayer->m_vpActiveQuests.size() > 0 && pPlayer->m_bHasMedicine == false )
 				{
 					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
 					pPickUp->SetPosX((float)nth->x);
