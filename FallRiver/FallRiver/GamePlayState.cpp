@@ -426,7 +426,7 @@ void GamePlayState::Enter()
 			eWeapon->Init(WPN_PISTOL, 100, 0);
 			eWeapon->SetPosX(pEnemy->GetPosX()+pEnemy->GetWidth()/2);
 			eWeapon->SetPosY(pEnemy->GetPosY());
-			eWeapon->SetDamage(10);
+			eWeapon->SetDamage(5);
 			pEnemy->SetWeapon(eWeapon);
 			tmp.erase(nth);
 			i--;
@@ -2590,7 +2590,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Medicine") == 0)
 			{
-				if( pPlayer->m_vpActiveQuests.size() > 0 && pPlayer->m_bHasMedicine == false );
+				if( pPlayer->m_vpActiveQuests.size() > 0 && pPlayer->m_bHasMedicine == false )
 				{
 					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
 					pPickUp->SetPosX((float)nth->x);
