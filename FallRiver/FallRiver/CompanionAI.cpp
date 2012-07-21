@@ -82,6 +82,7 @@ void CompanionAI::Update(float fElapsedTime)
 		// talking
 	case 0:
 		{
+			m_playerAnim.curAnimation = 2;
 			if( m_nNumTimes == 0 )
 				m_nNumTimes = 5;
 
@@ -97,6 +98,7 @@ void CompanionAI::Update(float fElapsedTime)
 		// Using lights
 	case 1:
 		{
+			m_playerAnim.curAnimation = 1;
 			spawning = true;
 
 			if( m_cFriend->IsOn() && m_cFriend->GetDirection() == DIRE_UP && m_cEnemies.size() > 0 && m_dwGunDelay <= GetTickCount() )
@@ -134,6 +136,7 @@ void CompanionAI::Update(float fElapsedTime)
 		// Shooting enemies
 	case 2:
 		{
+			m_playerAnim.curAnimation = 2;
 			spawning = true;
 			if( enemies == 6 )
 			{
@@ -148,6 +151,7 @@ void CompanionAI::Update(float fElapsedTime)
 		// Switching Guns
 	case 3:
 		{
+			m_playerAnim.curAnimation = 1;
 			if( m_nNumTimes <= m_nStep )
 			{
 				m_nStages++;
@@ -174,11 +178,13 @@ void CompanionAI::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	pVM->GetSprite()->Flush();
+	//pVM->GetSprite()->Flush();
 
-	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + GetWidth()/2  ,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + GetHeight(), 1.5f, 1.5f);
 
-	pVM->DrawRect(reRect, 255, 255, 0);
+	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+
+	//pVM->DrawRect(reRect, 255, 255, 0);
 	BaseCharacter::Render();
 
 }

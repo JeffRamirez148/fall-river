@@ -94,6 +94,7 @@ Player::Player()
 	decreaseTime = 0;
 	dammageTimer = 0;
 	pushTimer = 0;
+	m_dwReloadTime = 0;
 }
 
 Player::~Player()
@@ -186,11 +187,25 @@ void Player::Update(float fElapsedTime)
 		}
 	}
 
-	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 && m_nState != PSTATE_DEAD )
+	if( m_dwGunReset < GetTickCount() && m_dwGunReset != 0 && m_nState != PSTATE_DEAD && m_nState != PSTATE_RELOAD )
 		m_nState = PSTATE_IDLE;
 
-	if( pDI->KeyDown(DIK_R) || m_currWeapon->m_bReloading || pDI->JoystickButtonPressed(2,0) )
-		m_currWeapon->Reload();
+	if( pDI->KeyPressed(DIK_R)  || pDI->JoystickButtonPressed(2,0) )
+	{
+		m_dwReloadTime = GetTickCount() + 1000;
+		m_nState = PSTATE_RELOAD;
+	}
+
+	if( m_nState == PSTATE_RELOAD  )
+	{
+		if( m_currWeapon->GetClip() < m_currWeapon->GetMaxClip() )
+			m_currWeapon->Reload();
+		else if( m_dwReloadTime <= GetTickCount() )
+		{
+			m_dwReloadTime = 0;
+			m_nState = PSTATE_IDLE;
+		}
+	}
 
 	if( pDI->KeyDown(DIK_I) )
 		if(ViewManager::GetInstance()->GetAmbientLightR() != 1.0f)
@@ -200,7 +215,7 @@ void Player::Update(float fElapsedTime)
 
 	if( !m_bLocked && ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
 	{
-		if(m_dwGunCount == 0)
+		if(m_dwGunCount == 0 && m_nState != PSTATE_RELOAD)
 		{
 			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 			if( m_currWeapon->GetWeaponType() != WPN_MACHETE )
@@ -210,7 +225,7 @@ void Player::Update(float fElapsedTime)
 			m_currWeapon->FireWeapon();
 			m_dwGunReset = GetTickCount() + 500;
 		}
-		else if( m_dwGunCount < GetTickCount() )
+		else if( m_dwGunCount < GetTickCount() && m_nState != PSTATE_RELOAD )
 		{
 			if( m_currWeapon->GetWeaponType() != WPN_MACHETE )
 				m_nState = PSTATE_SHOOT;
@@ -498,6 +513,93 @@ void Player::Update(float fElapsedTime)
 			m_playerAnim.curAnimation = 23;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
+		}
+	}
+	else if( m_nState == PSTATE_RELOAD )
+	{
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) )
+		{
+			if( m_currWeapon->GetWeaponType() == WPN_PISTOL  && m_playerAnim.curAnimation != 28 )
+			{
+				m_playerAnim.curAnimation = 28;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_RIFLE  && m_playerAnim.curAnimation != 32 )
+			{
+				m_playerAnim.curAnimation = 32;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_SHOTGUN && m_playerAnim.curAnimation != 36 )
+			{
+				m_playerAnim.curAnimation = 36;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) )
+		{
+			if( m_currWeapon->GetWeaponType() == WPN_PISTOL && m_playerAnim.curAnimation != 30 )
+			{
+				m_playerAnim.curAnimation = 30;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_RIFLE  && m_playerAnim.curAnimation != 34 )
+			{
+				m_playerAnim.curAnimation = 34;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_SHOTGUN && m_playerAnim.curAnimation != 38 )
+			{
+				m_playerAnim.curAnimation = 38;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+		}
+		else if(GetDirection() == DIRE_RIGHT )
+		{
+			if( m_currWeapon->GetWeaponType() == WPN_PISTOL && m_playerAnim.curAnimation != 29 )
+			{
+				m_playerAnim.curAnimation = 29;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_RIFLE  && m_playerAnim.curAnimation != 33 )
+			{
+				m_playerAnim.curAnimation = 33;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_SHOTGUN && m_playerAnim.curAnimation != 37 )
+			{
+				m_playerAnim.curAnimation = 37;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+		}
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 31 )
+		{
+			if( m_currWeapon->GetWeaponType() == WPN_PISTOL )
+			{
+				m_playerAnim.curAnimation = 31;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_RIFLE  && m_playerAnim.curAnimation != 35 )
+			{
+				m_playerAnim.curAnimation = 35;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
+			else if( m_currWeapon->GetWeaponType() == WPN_SHOTGUN && m_playerAnim.curAnimation != 39 )
+			{
+				m_playerAnim.curAnimation = 39;
+				m_playerAnim.curFrame = 0;
+				m_playerAnim.fTime = 0;
+			}
 		}
 	}
 
