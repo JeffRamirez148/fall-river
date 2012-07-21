@@ -995,7 +995,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
 			//Set up data members
-			bullet->SetImageID( pOwner->GetImageID());
+			bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 			bullet->SetHeight(16);
 			bullet->SetWidth(16);
 			bullet->SetOwner(pOwner);
@@ -1015,6 +1015,8 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			{
 				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				bullet2->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
+				bullet3->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				//bullet 2
 				bullet2->SetImageID( pOwner->GetImageID());
 				bullet2->SetHeight(16);
