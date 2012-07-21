@@ -856,8 +856,6 @@ void GamePlayState::Update(float fElapsedTime)
 	if(m_pDI->KeyPressed(DIK_G) && winLose == true )
 	{
 		winLose = false;
-		CGame::GetInstance()->scoreCatch = m_cPlayer->GetScore();
-
 	}
 }
 

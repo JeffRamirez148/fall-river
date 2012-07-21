@@ -9,7 +9,7 @@
 HighScoresMenuState::HighScoresMenuState()
 {
 	fontID = -1;
-	m_bNameEntered = false;
+	m_bNameEntered = true;
 	keytimer = 0;
 	m_cName['\0'];
 	m_nSpace = 0;
@@ -88,10 +88,10 @@ void HighScoresMenuState::Exit()
 	for(int i = 0; i < 9; ++i)
 		m_cName[i] = '\0';
 
-	m_bNameEntered = false;
-	keytimer = 0;
-	m_nScore = 100;
-	m_nSpace = 0;
+	//m_bNameEntered = false;
+	//keytimer = 0;
+	//m_nScore = 100;
+	//m_nSpace = 0;
 }
 
 bool HighScoresMenuState::Input() 
