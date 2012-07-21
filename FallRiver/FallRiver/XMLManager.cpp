@@ -118,10 +118,10 @@ Emitter* XMLManager::ParseEmitter(string aFile)
 	pEmitter->Attribute("rectT", &top);
 	pEmitter->Attribute("rectR", &right);
 	pEmitter->Attribute("rectB", &bottom);
-	rect.left = (LONG)left;
-	rect.bottom = (LONG)bottom;
-	rect.top = (LONG)top;
-	rect.right = (LONG)right;
+	rect.left = (long)left;
+	rect.bottom = (long)bottom;
+	rect.top = (long)top;
+	rect.right = (long)right;
 	pEmitter->Attribute("spawnRate",  &spawnRate);
 	pEmitter->Attribute("startAlpha", &startAlpha);
 	pEmitter->Attribute("startRed",   &startRed);

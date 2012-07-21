@@ -959,7 +959,7 @@ void ViewManager::CreateOtherLights(void)
 {
 	lightsToRender.clear();
 	RECT cRect;
-	RECT camRect = { (LONG)GamePlayState::GetInstance()->GetCamera().x - CGame::GetInstance()->GetScreenWidth(), (LONG)GamePlayState::GetInstance()->GetCamera().y - CGame::GetInstance()->GetScreenHeight(), LONG(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth() * 2), LONG(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight() * 2)};
+	RECT camRect = { (long)GamePlayState::GetInstance()->GetCamera().x - CGame::GetInstance()->GetScreenWidth(), (long)GamePlayState::GetInstance()->GetCamera().y - CGame::GetInstance()->GetScreenHeight(), long(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth() * 2), long(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight() * 2)};
 	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
 	for( unsigned int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
 	{

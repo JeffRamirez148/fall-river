@@ -73,10 +73,10 @@ void SpawnPoint::Render()
 {
 	ViewManager* pView = ViewManager::GetInstance();
 	RECT tmp ;//= GetRect();
-	tmp.top = (LONG)(GetRect().top-GamePlayState::GetInstance()->GetCamera().y);
-	tmp.right = (LONG)(GetRect().right-GamePlayState::GetInstance()->GetCamera().x);
-	tmp.left = (LONG)(GetRect().left-GamePlayState::GetInstance()->GetCamera().x);
-	tmp.bottom = (LONG)(GetRect().bottom-GamePlayState::GetInstance()->GetCamera().y);
+	tmp.top = (long)(GetRect().top-GamePlayState::GetInstance()->GetCamera().y);
+	tmp.right = (long)(GetRect().right-GamePlayState::GetInstance()->GetCamera().x);
+	tmp.left = (long)(GetRect().left-GamePlayState::GetInstance()->GetCamera().x);
+	tmp.bottom = (long)(GetRect().bottom-GamePlayState::GetInstance()->GetCamera().y);
 	//= GetRect();
 	//pView->GetSprite()->Flush();
 	pView->DrawRect(tmp,0,255,255);
