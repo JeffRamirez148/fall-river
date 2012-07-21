@@ -18,6 +18,7 @@ private:
 	int swingMissID;
 	int shotID;
 	int reloadID;
+	int throwID;
 
 	float m_fFireRate;
 	float m_fReloadSpeed;

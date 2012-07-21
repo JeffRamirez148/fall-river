@@ -14,7 +14,7 @@ OptionsMenuState::OptionsMenuState()
 	sfxVolume = 0.10f;
 	m_bIsWindowed = false;
 	m_nOptionID = -1;
-	musicID = -1;
+//	musicID = -1;
 	soundID = -1;
 	m_nOptionSpriteID = -1;
 	m_nSelection = 1;
@@ -58,19 +58,19 @@ void OptionsMenuState::Enter()
 	m_pAM->setSoundVel(soundID2, tmp);
 	m_pAM->setSoundLooping(soundID2, false);
 
-	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
-	m_pAM->setMusicPos(musicID, sound1);
+//	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+//	m_pAM->setMusicPos(musicID, sound1);
 
-	m_pAM->setMusicVel(musicID, tmp);
-	m_pAM->setMusicLooping(musicID, true);
-	m_pAM->playMusic(musicID);
+//	m_pAM->setMusicVel(musicID, tmp);
+//	m_pAM->setMusicLooping(musicID, true);
+//	m_pAM->playMusic(musicID);
 
-	musicID2 = m_pAM->registerMusic("resource/Sounds/background.mp3");
-	m_pAM->setMusicPos(musicID2, sound1);
+//	musicID2 = m_pAM->registerMusic("resource/Sounds/background.mp3");
+//	m_pAM->setMusicPos(musicID2, sound1);
 
-	m_pAM->setMusicVel(musicID2, tmp);
-	m_pAM->setMusicLooping(musicID2, true);
-	m_pAM->playMusic(musicID2);
+//	m_pAM->setMusicVel(musicID2, tmp);
+//	m_pAM->setMusicLooping(musicID2, true);
+//	m_pAM->playMusic(musicID2);
 
 	m_bIsWindowed = CGame::GetInstance()->IsWindowed();
 
@@ -80,8 +80,8 @@ void OptionsMenuState::Enter()
 
 void OptionsMenuState::ReEnter()
 {
-	m_pAM->playMusic(musicID);
-	m_pAM->playMusic(musicID2);
+//	m_pAM->playMusic(musicID);
+//	m_pAM->playMusic(musicID2);
 }
 
 void OptionsMenuState::Exit() 

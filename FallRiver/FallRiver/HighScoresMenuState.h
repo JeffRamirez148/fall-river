@@ -26,8 +26,8 @@ private:
 	AudioManager*	audio;
 	int				fontID;
 	int soundID2;
-	int musicID;
-	int musicID2;
+//	int musicID;
+//	int musicID2;
 
 	HighScoresMenuState();
 	~HighScoresMenuState();
