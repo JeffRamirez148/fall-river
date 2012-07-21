@@ -39787,11 +39787,11 @@
     <ScrRect x="3500" y="2275" height="64" width="64" />
   </Collision>
   <Collision>
-    <Type>Town</Type>
-    <ScrRect x="2368" y="4032" height="64" width="256" />
-  </Collision>
-  <Collision>
     <Type>Bush</Type>
     <ScrRect x="2560" y="576" height="64" width="64" />
+  </Collision>
+  <Collision>
+    <Type>Town</Type>
+    <ScrRect x="2368" y="4032" height="64" width="256" />
   </Collision>
 </levels_list>

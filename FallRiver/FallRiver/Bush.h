@@ -9,6 +9,8 @@ class Bush: public BaseObject
 private:
 	bool m_bIsInBush;
 public:
+	bool m_bCloset;
+public:
 	Bush();
 	virtual ~Bush();
 

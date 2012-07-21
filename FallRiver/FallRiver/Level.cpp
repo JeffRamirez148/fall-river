@@ -29,6 +29,7 @@ Level::Level()
 	//		fog[i].y = 1024;
 	//}
 	m_bNoClip = false;
+	whichlevel = -1;
 }
 
 Level* Level::GetInstance() 
@@ -46,10 +47,10 @@ void Level::Update(float fElapsedTime)
 	DirectInput* pDI = DirectInput::GetInstance();
 
 
-	if(pDI->KeyPressed(DIK_P) )
+	/*if(pDI->KeyPressed(DIK_P) )
 	{
 		m_bNoClip = !m_bNoClip;
-	}
+	}*/
 	CheckTriangleCollisions();
 }
 
@@ -72,15 +73,12 @@ void Level::Render()
 
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
-		RECT tmp;
-		tmp.left =(long)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
-		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
+		RECT tmp = { (long)m_vTiles[i].m_nWorldPosX,(long)m_vTiles[i].m_nWorldPosY,long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width),long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height)};
+
 
 		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
 		{
-			if( m_vTiles[i].m_Layer > 1)
+			if( m_vTiles[i].m_Layer == 2)
 			{
 				Player*	tmp = GamePlayState::GetInstance()->GetPlayer();;
 
@@ -142,7 +140,7 @@ void Level::Render()
 					//else if(m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
 					//	angle = 0.0f;
 					//else if(m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
-					//	angle = 3.14159f;
+					//	angle = 3.14159f;xx
 					//else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
 					//	angle = -1.57079f;
 					//else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
@@ -491,11 +489,7 @@ bool Level::CheckCollision(IObjects* pBase)
 				{
 					BaseCharacter* pCh = (BaseCharacter*)pBase;
 
-					//else if( pCh->GetCharacterType() == CHA_PLAYER)
-					//{
-					//Player* pPlayer = (Player*)pCh;
-
-					if( _stricmp(m_vCollisions[i].m_cType,"Pickup") != 0 )
+					if( _stricmp(m_vCollisions[i].m_cType,"Pickup") != 0 && _stricmp(m_vCollisions[i].m_cType,"Town") != 0 && _stricmp(m_vCollisions[i].m_cType,"Hospital") != 0 && _stricmp(m_vCollisions[i].m_cType,"House") != 0 )
 					{
 						int check = 0;
 
@@ -591,9 +585,31 @@ bool Level::CheckCollision(IObjects* pBase)
 							m_vCollisions[i].test = check;
 						}
 					}
-					else
+					else if(  _stricmp(m_vCollisions[i].m_cType,"Pickup") == 0 )
 					{
 						EventSystem::GetInstance()->SendUniqueEvent( "got_pickup", pBase );
+					}
+					else if(  _stricmp(m_vCollisions[i].m_cType,"Town") == 0 && whichlevel == FOREST )
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "ForestToTown", pBase );
+					}
+					else if(  _stricmp(m_vCollisions[i].m_cType,"Town") == 0 && whichlevel == HOSPITAL )
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "HospitalToTown", pBase );
+					}
+					else if(  _stricmp(m_vCollisions[i].m_cType,"Town") == 0 && whichlevel == HOUSE )
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "HouseToTown", pBase );
+					}
+					else if(  _stricmp(m_vCollisions[i].m_cType,"House") == 0 )
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "GoToHouse", pBase );
+
+					}
+					else if(  _stricmp(m_vCollisions[i].m_cType,"Hospital") == 0 )
+					{
+						EventSystem::GetInstance()->SendUniqueEvent( "GoToHospital", pBase );
+
 					}
 					if(pCh->GetCharacterType() == CHA_BOSS2)
 					{

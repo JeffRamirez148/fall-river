@@ -41,6 +41,7 @@ Player::Player()
 	m_cName = "";
 	questCounter = 0;
 	completedQuest = 0;
+	m_bHasMedicine = false;
 	questLogToggle = false;
 	SetDirection(DIRE_UP);
 
@@ -210,11 +211,11 @@ void Player::Update(float fElapsedTime)
 		}
 	}
 
-	if( pDI->KeyDown(DIK_I) )
+	/*if( pDI->KeyDown(DIK_I) )
 		if(ViewManager::GetInstance()->GetAmbientLightR() != 1.0f)
 			ViewManager::GetInstance()->SetAmbientLight(1.0f, 1.0f, 1.0f);
 		else
-			ViewManager::GetInstance()->SetAmbientLight(0.0f, 0.0f, 0.0f);
+			ViewManager::GetInstance()->SetAmbientLight(0.0f, 0.0f, 0.0f);*/
 
 	if( !m_bLocked && ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
 	{
