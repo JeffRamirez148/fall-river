@@ -16,7 +16,7 @@
 #include "GamePlayState.h"
 #include "ChasingAI.h"
 #include "ShootingAi.h"
-
+#include "CGame.h"
 
 Boss1::Boss1()
 {
@@ -102,8 +102,8 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetHeight(GetHeight());
 				pEnemy->SetWidth(GetWidth());
 				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
-				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
-				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
+				pEnemy->SetPosX(GetPosX()+(rand()%20-10) + (CGame::GetInstance()->GetScreenWidth() >>2));
+				pEnemy->SetPosY(GetPosY()+(rand()%20-10) + (CGame::GetInstance()->GetScreenHeight() >>2));
 				pEnemy->SetHealth(50);
 				pEnemy->SetBossBool(true);
 				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
@@ -143,8 +143,8 @@ void Boss1::Update(float fElapsedTime)
 				pEnemy->SetWidth(GetWidth());
 				pEnemy->SetImageID(-1);
 				pEnemy->SetTarget(GamePlayState::GetInstance()->GetPlayer());
-				pEnemy->SetPosX(GetPosX()+(rand()%20-10));
-				pEnemy->SetPosY(GetPosY()+(rand()%20-10));
+				pEnemy->SetPosX(GetPosX()+(rand()%20-10) + (CGame::GetInstance()->GetScreenWidth() >>2));
+				pEnemy->SetPosY(GetPosY()+(rand()%20-10) + (CGame::GetInstance()->GetScreenHeight() >>2));
 				pEnemy->SetHealth(50);
 				pEnemy->SetBossBool(true);
 				pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
