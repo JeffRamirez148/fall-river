@@ -139,6 +139,7 @@ public:
 	float GetAmbientLightR(void) {return ambientLight[0];}
 	float GetAmbientLightG(void) {return ambientLight[1];}
 	float GetAmbientLightB(void) {return ambientLight[2];}
+	vector<Light*> GetOtherLights(void) { return lightsToRender;}
 
 
 	void SetAmbientLight(float r, float g, float b)

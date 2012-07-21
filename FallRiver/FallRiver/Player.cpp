@@ -41,6 +41,7 @@ Player::Player()
 	m_cName = "";
 	questCounter = 0;
 	completedQuest = 0;
+	m_bHasMedicine = false;
 	questLogToggle = false;
 	SetDirection(DIRE_UP);
 

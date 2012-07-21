@@ -63,6 +63,7 @@ public:
 
 	void ShutDown();
 
+	int scoreCatch;
 	////////////////////////////
 	// State Machine		  //
 	////////////////////////////

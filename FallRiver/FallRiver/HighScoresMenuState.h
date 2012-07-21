@@ -25,9 +25,16 @@ private:
 	vector<tHighscore> m_vHighscore;
 	AudioManager*	audio;
 	int				fontID;
+	int				bgID;
 	int soundID2;
 //	int musicID;
 //	int musicID2;
+
+	bool m_bNameEntered;
+	float keytimer;
+	char m_cName[10];
+	int  m_nSpace;
+	int  m_nScore;
 
 	HighScoresMenuState();
 	~HighScoresMenuState();

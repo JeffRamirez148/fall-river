@@ -44,7 +44,7 @@ void BaseCharacter::Update(float fElapsedTime)
 	{
 		GamePlayState* tmp = GamePlayState::GetInstance();
 		Particle_Manager* m_pPM = Particle_Manager::GetInstance();
-		RECT tmpRect = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
+		RECT tmpRect = {long(m_nPosX - 5), long(m_nPosY - 5), long(m_nPosX + 5), long(m_nPosY + 5) };
 		int goreA1 = m_pPM->ActivateEmitter(tmp->GetGoreL1());
 		m_pPM->GetActiveEmitter(goreA1)->SetRect(tmpRect);
 		int goreA2 = m_pPM->ActivateEmitter(tmp->GetGoreL2());
