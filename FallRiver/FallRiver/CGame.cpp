@@ -26,6 +26,8 @@ CGame::CGame()
 
 	m_pPrevState	= nullptr;
 	m_pCurrState	= nullptr;
+
+	scoreCatch		= 0;
 }
 
 CGame::~CGame()

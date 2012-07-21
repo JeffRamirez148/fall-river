@@ -18,7 +18,7 @@ class Player;
 
 struct tHighscore
 {
-	char	szName[ 32 ];
+	char	szName[ 11 ];
 	int		nScore;
 };
 
