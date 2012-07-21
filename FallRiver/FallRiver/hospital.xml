@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<levels_list Width="8" Height="8">
+<levels_list Width="24" Height="11">
   <Assets TileID="0">tiles_city_03FIX2.png</Assets>
   <Assets TileID="1">tiles_city_03FIX22.png</Assets>
+  <Assets TileID="2">HospitalDoor.png</Assets>
   <Tile layer="1">
     <ScrRect x="640" y="128" height="128" width="128" />
     <WorldPos x="0" y="128" />
@@ -27,17 +28,17 @@
     <WorldPos x="0" y="256" />
     <TileID ID="0" />
   </Tile>
-  <Tile layer="2">
+  <Tile layer="1">
     <ScrRect x="640" y="128" height="128" width="128" />
     <WorldPos x="0" y="384" />
     <TileID ID="0" />
   </Tile>
-  <Tile layer="2">
+  <Tile layer="1">
     <ScrRect x="640" y="128" height="128" width="128" />
     <WorldPos x="0" y="512" />
     <TileID ID="0" />
   </Tile>
-  <Tile layer="2">
+  <Tile layer="1">
     <ScrRect x="640" y="128" height="128" width="128" />
     <WorldPos x="0" y="768" />
     <TileID ID="0" />
@@ -321,6 +322,11 @@
     <ScrRect x="640" y="128" height="128" width="128" />
     <WorldPos x="896" y="896" />
     <TileID ID="1" />
+  </Tile>
+  <Tile layer="3">
+    <ScrRect x="0" y="0" height="64" width="64" />
+    <WorldPos x="480" y="192" />
+    <TileID ID="2" />
   </Tile>
   <Collision>
     <Type>Medicine</Type>
