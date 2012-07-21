@@ -17,8 +17,8 @@ private:
 	int		m_nHowToJoyID;
 	int		m_nHowToXboxID;
 	int soundID2;
-	int musicID;
-	int musicID2;
+//	int musicID;
+//	int musicID2;
 	int m_nFontID;
 
 	HowToPlayMenuState();

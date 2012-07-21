@@ -350,16 +350,16 @@ void TutorialState::Enter()
 	}
 	pLevel->SetCollision(tmp);
 
-	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
+//	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
 
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
-	m_pAM->setMusicPos(backGroundID, sound1);
-	m_pAM->setMusicVel(backGroundID, sound1);
-	m_pAM->setMusicLooping(backGroundID, true);
-	m_pAM->playMusic(backGroundID);
+//	m_pAM->setMusicPos(backGroundID, sound1);
+//	m_pAM->setMusicVel(backGroundID, sound1);
+//	m_pAM->setMusicLooping(backGroundID, true);
+//	m_pAM->playMusic(backGroundID);
 
 	soundID2 = m_pAM->RegisterSound("resource/Sounds/thunder.wav");
 	m_pAM->setSoundPos(soundID2, sound1);
@@ -367,12 +367,12 @@ void TutorialState::Enter()
 	m_pAM->setSoundVel(soundID2, sound1);
 	m_pAM->setSoundLooping(soundID2, false);
 
-	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
-	m_pAM->setMusicPos(musicID, sound1);
+//	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+//	m_pAM->setMusicPos(musicID, sound1);
 
-	m_pAM->setMusicVel(musicID, sound1);
-	m_pAM->setMusicLooping(musicID, true);
-	m_pAM->playMusic(musicID);
+//	m_pAM->setMusicVel(musicID, sound1);
+//	m_pAM->setMusicLooping(musicID, true);
+//	m_pAM->playMusic(musicID);
 
 	
 	loading->Update();

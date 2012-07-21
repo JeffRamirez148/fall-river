@@ -9,6 +9,7 @@
 #include "Level.h"
 #include "ObjectManager.h"
 #include "DestroyEnemy.h"
+#include "AudioManager.h"
 
 Boss2::Boss2()
 {
@@ -36,10 +37,36 @@ Boss2::Boss2()
 	chargeDestination.x =  m_pTarget->GetPosX();
 	chargeDestination.y = m_pTarget->GetPosY();
 	this->m_nCharacterType = CHA_BOSS2;
+	AudioManager* m_pAM = AudioManager::GetInstance();
+	zombieHitID = m_pAM->RegisterSound("resource/Sounds/zombieHit.wav");
+	zombieWalkingID = m_pAM->RegisterSound("resource/Sounds/zombieWalking.wav");
+	notifyID = m_pAM->RegisterSound("resource/Sounds/notify.wav");
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	m_pAM->setSoundVel(zombieHitID, sound1);
+	m_pAM->setSoundVel(zombieWalkingID, sound1);
+	m_pAM->setSoundVel(notifyID, sound1);
+	sound1.x = m_nPosX;
+	sound1.y = m_nPosY;
+	m_pAM->setSoundPos(zombieWalkingID, sound1);
+	m_pAM->setSoundLooping(zombieWalkingID, false);
+	m_pAM->setSoundPos(zombieHitID, sound1);
+	m_pAM->setSoundLooping(zombieHitID, false);
+	m_pAM->setSoundPos(notifyID, sound1);
+	m_pAM->setSoundLooping(notifyID, false);
+	cryTimer = 0;
+
 }
 
 void Boss2::Update(float Time) 
 {
+	FMOD_VECTOR sound1 = { 0, 0, 0 };
+	sound1.x = m_nPosX;
+	sound1.y = m_nPosY;
+	AudioManager* m_pAM = AudioManager::GetInstance();
+	m_pAM->setSoundPos(zombieWalkingID, sound1);
+	m_pAM->setSoundPos(zombieHitID, sound1);
+	m_pAM->setSoundPos(notifyID, sound1);
+
 	//BaseCharacter::Update(Time);
 	m_pWeapon->Update(Time);
 	if(GetHealth() <= 0)
@@ -47,6 +74,14 @@ void Boss2::Update(float Time)
 		DestroyEnemy* pMsg = new DestroyEnemy(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
+	}
+
+	cryTimer += Time;
+	if(cryTimer > 9 && rand() % 150 == 0)
+	{
+		AudioManager::GetInstance()->GetSoundChannel(notifyID)->stop();
+		AudioManager::GetInstance()->playSound(notifyID);	
+		cryTimer = 0;
 	}
 
 	if(  float(GetHealth()) / 1000.0f >= .75f )
@@ -161,6 +196,8 @@ void Boss2::Update(float Time)
 
 
 		MoveTo(chargeDestination.x, chargeDestination.y, 200 );
+		if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+			AudioManager::GetInstance()->playSound(zombieWalkingID);
 		BaseCharacter::Update(Time);
 
 		if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
@@ -201,6 +238,8 @@ void Boss2::Update(float Time)
 			float savex = GetPosX();
 			float savey = GetPosY();
 			MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 90 );
+			if(!AudioManager::GetInstance()->isSoundPlaying(zombieWalkingID))
+				AudioManager::GetInstance()->playSound(zombieWalkingID);
 			BaseCharacter::Update(Time);
 
 			if( GamePlayState::GetInstance()->GetLevel()->CheckCollision(this) )
@@ -369,10 +408,18 @@ void Boss2::Render()
 
 bool Boss2::CheckCollision(IObjects* pBase) 
 {
-	if( BaseCharacter::CheckCollision(pBase) == false)
-		return false;
+	if( BaseCharacter::CheckCollision(pBase) == true)
+	{
+		if(pBase->GetObjectType() == OBJ_CHARACTER )
+		{
+			BaseCharacter* tmp = (BaseCharacter*)pBase;
+			if(tmp->GetCharacterType() == CHA_PLAYER)
+				GamePlayState::GetInstance()->GetPlayer()->SetGore(true);
+		}
+		return true;
+	}
 
-	return true;
+	return false;
 }
 
 void Boss2::HandleEvent(Event* Event) 
@@ -382,6 +429,8 @@ void Boss2::HandleEvent(Event* Event)
 		if( Event->GetParam() == this )
 		{
 			this->SetBleeding(true);
+			AudioManager::GetInstance()->GetSoundChannel(m_pTarget->GetHitID())->stop();
+			AudioManager::GetInstance()->playSound(zombieHitID);
 		}
 	}
 
@@ -395,6 +444,8 @@ void Boss2::HandleEvent(Event* Event)
 
 			chargeDestination.x = m_pTarget->GetPosX();
 			chargeDestination.y = m_pTarget->GetPosY();
+			AudioManager::GetInstance()->GetSoundChannel(m_pTarget->GetHitID())->stop();
+			AudioManager::GetInstance()->playSound(zombieHitID);
 		}
 	}
 

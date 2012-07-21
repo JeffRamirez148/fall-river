@@ -73,6 +73,7 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 	swingMissID = m_pAM->RegisterSound("resource/Sounds/swingMiss.wav");
 	shotID = m_pAM->RegisterSound("resource/Sounds/shot.wav");
 	reloadID = m_pAM->RegisterSound("resource/Sounds/reload.wav");
+	throwID = m_pAM->RegisterSound("resource/Sounds/throw.wav");
 
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	m_pAM->setSoundVel(swingMissID, sound1);
@@ -81,12 +82,14 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 	m_pAM->setSoundLooping(shotID, false);
 	m_pAM->setSoundVel(reloadID, sound1);
 	m_pAM->setSoundLooping(reloadID, false);
+	m_pAM->setSoundVel(throwID, sound1);
+	m_pAM->setSoundLooping(throwID, false);
 	sound1.x = m_pOwner->GetPosX();
 	sound1.y = m_pOwner->GetPosY();
 	m_pAM->setSoundPos(swingMissID, sound1);
 	m_pAM->setSoundPos(shotID, sound1);
 	m_pAM->setSoundPos(reloadID, sound1);
-
+	m_pAM->setSoundPos(throwID, sound1);
 
 	return true;
 }
@@ -106,6 +109,7 @@ void Weapon::Update(float fElapsedTime)
 	m_pAM->setSoundPos(swingMissID, sound1);
 	m_pAM->setSoundPos(shotID, sound1);
 	m_pAM->setSoundPos(reloadID, sound1);
+	m_pAM->setSoundPos(throwID, sound1);
 }
 
 void Weapon::Render() 
@@ -131,8 +135,16 @@ void Weapon::FireWeapon()
 		pMsg = nullptr;
 		m_nClip--;
 		
-		AudioManager::GetInstance()->GetSoundChannel(shotID)->stop();
-		AudioManager::GetInstance()->playSound(shotID);
+		if(GetOwner()->GetCharacterType() != CHA_BOSS2)
+		{
+			AudioManager::GetInstance()->GetSoundChannel(shotID)->stop();
+			AudioManager::GetInstance()->playSound(shotID);
+		}
+		else
+		{
+			AudioManager::GetInstance()->GetSoundChannel(throwID)->stop();
+			AudioManager::GetInstance()->playSound(throwID);
+		}
 	}
 }
 

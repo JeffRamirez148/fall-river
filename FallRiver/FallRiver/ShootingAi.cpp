@@ -28,7 +28,7 @@ ShootingAi::ShootingAi()
 	m_pWeapon = nullptr;
 	EventSystem::GetInstance()->RegisterClient( "target_hit", this );
 	hitID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/hit.aiff");
-	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.aiff");
+	walkingID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/walking.wav");
 	notifyID = AudioManager::GetInstance()->RegisterSound("resource/Sounds/notify.mp3");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 	AudioManager::GetInstance()->setSoundVel(hitID, sound1);

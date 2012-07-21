@@ -22,8 +22,8 @@ private:
 	float fTime;
 	int soundID;
 	int soundID2;
-	int musicID;
-	int musicID2;
+//	int musicID;
+//	int musicID2;
 
 
 	// For Flashing effect

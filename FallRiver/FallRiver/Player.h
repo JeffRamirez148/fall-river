@@ -20,7 +20,7 @@ enum PLAYERSTATES {PSTATE_IDLE = 0, PSTATE_SHOOT, PSTATE_SWING, PSTATE_CROUCH, P
 
 class Player: public BaseCharacter, public IListener
 {
-
+	bool lose;
 	float m_fCurrRotation;
 	vector<Weapon*> m_vpWeapons;
 	vector<Light*> m_vpLights;
@@ -121,7 +121,7 @@ public:
 
 	void MoveTo(float x, float y, float speed);
 	void SetAnimation(int nAnimID) { m_playerAnim.curAnimID = nAnimID;}
-
+	void setLose(bool lost) { lose = lost; }
 	void SetTimePlayed (float fTime) { m_fTimePlayed = fTime;}
 	float GetTimePlayed() {return m_fTimePlayed; }
 };

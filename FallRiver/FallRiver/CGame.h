@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <vector>
+#include "AudioManager.h"
 using namespace std;
 
 #ifndef __CGame_h__
@@ -7,7 +8,6 @@ using namespace std;
 
 
 class DirectInput;
-class AudioManager;
 class IMenuState;
 class CGame;
 class IMenuState;
@@ -24,7 +24,18 @@ private:
 	IMenuState*			m_pCurrState;
 	IMenuState*			m_pPrevState;
 	
-	
+	// Sounds
+	int pianoID;
+	int backGroundID;
+	int musicID;
+	int stick;
+	int owl;
+	int loseID;
+
+
+	float stickTimer;
+	float owlTimer;
+
 	// Window Attributes
 	int m_nScreenWidth;
 	int m_nScreenHeight;
@@ -76,6 +87,11 @@ public:
 	int		GetScreenWidth( void ) const	{	return m_nScreenWidth;	}
 	int		GetScreenHeight( void ) const	{	return m_nScreenHeight;	}
 	bool	IsWindowed( void ) const		{	return m_bIsWindowed;	}
+	void PlayLoseSound(void)
+	{	
+		if(!AudioManager::GetInstance()->isMusicPlaying(loseID))
+			AudioManager::GetInstance()->playMusic(loseID);
+	}
 };
 
 #endif

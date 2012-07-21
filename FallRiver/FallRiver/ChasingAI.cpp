@@ -64,6 +64,7 @@ void ChasingAI::Update(float fElapsedTime)
 	AudioManager* m_pAM = AudioManager::GetInstance();
 	m_pAM->setSoundPos(zombieWalkingID, sound1);
 	m_pAM->setSoundPos(zombieHitID, sound1);
+	m_pAM->setSoundPos(notifyID, sound1);
 
 	if(GetHealth() <= 0)
 	{
@@ -96,9 +97,9 @@ void ChasingAI::Update(float fElapsedTime)
 	if( distY < 0)
 		distY = -distY;
 	cryTimer += fElapsedTime;
-	if(cryTimer > .5f)
+	if(cryTimer > 5)
 	{
-		//AudioManager::GetInstance()->playSound(notifyID);
+		AudioManager::GetInstance()->GetSoundChannel(notifyID)->stop();
 		AudioManager::GetInstance()->playSound(notifyID);	
 		cryTimer = 0;
 	}
@@ -531,6 +532,12 @@ bool ChasingAI::CheckCollision(IObjects* pBase)
 {
 	if(Enemy::CheckCollision(pBase))
 	{
+		if(pBase->GetObjectType() == OBJ_CHARACTER )
+		{
+			BaseCharacter* tmp = (BaseCharacter*)pBase;
+			if(tmp->GetCharacterType() == CHA_PLAYER)
+				GamePlayState::GetInstance()->GetPlayer()->SetGore(true);
+		}
 		return true;
 	}
 	return false;

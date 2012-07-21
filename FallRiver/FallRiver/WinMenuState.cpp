@@ -37,25 +37,33 @@ void WinMenuState::Enter()
 	audio->setSoundVel(soundID2, tmp);
 	audio->setSoundLooping(soundID2, false);
 
-	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
-	audio->setMusicPos(musicID, sound1);
 
-	audio->setMusicVel(musicID, tmp);
-	audio->setMusicLooping(musicID, true);
-	audio->playMusic(musicID);
+	victoryID = audio->registerMusic("resource/Sounds/winSound.mp3");
+	audio->setMusicPos(victoryID, sound1);
 
-	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
-	audio->setMusicPos(musicID2, sound1);
+	audio->setMusicVel(victoryID, tmp);
+	audio->setMusicLooping(victoryID, true);
+	audio->playMusic(victoryID);
 
-	audio->setMusicVel(musicID2, tmp);
-	audio->setMusicLooping(musicID2, true);
-	audio->playMusic(musicID2);
+//	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
+//	audio->setMusicPos(musicID, sound1);
+
+//	audio->setMusicVel(musicID, tmp);
+//	audio->setMusicLooping(musicID, true);
+//	audio->playMusic(musicID);
+
+//	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+//	audio->setMusicPos(musicID2, sound1);
+
+//	audio->setMusicVel(musicID2, tmp);
+//	audio->setMusicLooping(musicID2, true);
+//	audio->playMusic(musicID2);
 }
 
 void WinMenuState::ReEnter()
 {
-	audio->playMusic(musicID);
-	audio->playMusic(musicID2);
+	audio->playMusic(victoryID);
+//	audio->playMusic(musicID2);
 }
 
 void WinMenuState::Exit() 

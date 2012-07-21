@@ -91,6 +91,7 @@ Player::Player()
 	battery = 100;
 	batteryTime = 0;
 	flashLightType = 0;
+	lose = false;
 	decreaseTime = 0;
 	dammageTimer = 0;
 	pushTimer = 0;
@@ -142,6 +143,8 @@ void Player::Update(float fElapsedTime)
 	{
 		SetHealth(0);
 		SetGore(true);
+		lose = true;
+		CGame::GetInstance()->PlayLoseSound();
 		if( m_dwDeathTime == 0 )
 		{
 			m_dwDeathTime = GetTickCount() + 5000;
@@ -1173,8 +1176,11 @@ void Player::HandleEvent(Event* pEvent)
 	{
 		if( pEvent->GetParam() == this )
 		{
-			AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
-			AudioManager::GetInstance()->playSound(hitID);
+			if(!lose)
+			{
+				AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
+				AudioManager::GetInstance()->playSound(hitID);
+			}
 			this->SetBleeding(true);
 		}
 	}
