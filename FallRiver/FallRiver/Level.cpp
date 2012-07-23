@@ -17,7 +17,7 @@ Level::Level()
 {
 	inside = false;
 	m_nObjectType = OBJ_LEVEL;
-	/*for(int i =0; i < 4; ++i)
+	for(int i =0; i < 4; ++i)
 	{
 		fogID[i] = ViewManager::GetInstance()->RegisterTexture("resource/graphics/fog.png");
 		fog[i].x = 0;
@@ -27,7 +27,7 @@ Level::Level()
 
 		if(i == 0)
 			fog[i].y = 1024;
-	}*/
+	}
 	m_bNoClip = false;
 	whichlevel = -1;
 }
@@ -157,7 +157,7 @@ void Level::Render()
 
 
 	// Render Fog
-	/*if(!inside)
+	if(!inside)
 		for( int i = 0; i < 4; ++i)
 		{
 			if(i < 2)
@@ -171,7 +171,7 @@ void Level::Render()
 				fog[i].y = -1024;
 			D3DCOLOR tmpColor = 0x3FFFFFFF;
 			pView->DrawStaticTexture(fogID[i], cam.x - fog[i].x - cam.x, cam.y - fog[i].y - cam.y, 4, 4, nullptr, 0, 0, 0, tmpColor);
-		}*/
+		}
 
 	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{

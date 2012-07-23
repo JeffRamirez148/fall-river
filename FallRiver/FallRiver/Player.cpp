@@ -35,7 +35,7 @@ Player::Player()
 	m_ncurrWeap = 0;
 	m_nlightglare = -1;
 	m_nState = PSTATE_IDLE;
-	SetHealth(100);
+	SetHealth(500);
 	m_nLives = 3;
 	m_nFontID = 0;
 	m_cName = "";

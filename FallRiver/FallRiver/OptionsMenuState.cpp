@@ -136,7 +136,7 @@ bool OptionsMenuState::Input()
 		m_pAM->playSound(soundID);
 		if(m_nSelection == 1 && sfxVolume > 0.0f)
 		{
-			int temp = sfxVolume*100.0f;
+			int temp = (int)sfxVolume*100;
 			temp -= 5;
 			sfxVolume = temp /100.0f;
 			if(sfxVolume < 0)
@@ -144,7 +144,7 @@ bool OptionsMenuState::Input()
 		}
 		else if( m_nSelection == 2 && musicVolume > 0.0f)
 		{
-			int temp = musicVolume*100.0f;
+			int temp = (int)musicVolume*100;
 			temp -= 5;
 			musicVolume = temp /100.0f;
 			if(musicVolume < 0)

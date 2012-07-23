@@ -1510,7 +1510,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	{
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
@@ -1818,6 +1818,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
@@ -2163,7 +2164,8 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	{
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		//m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
@@ -2381,7 +2383,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				}
 				else if( pPlayer->m_bHasMedicine == false  && pPlayer->m_vpActiveQuests.size() > 0 )
 				{
-					m_pHUD->SetTarget(hospitalX, hospitalY);
+					m_pHUD->SetTarget((float)hospitalX, (float)hospitalY);
 				}
 				else if( pPlayer->m_bHasMedicine == false && pPlayer->m_vpActiveQuests.size() == 0 )
 				{
@@ -2395,7 +2397,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
@@ -2723,7 +2725,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
@@ -3045,7 +3047,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{

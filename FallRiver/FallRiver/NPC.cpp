@@ -110,7 +110,7 @@ void NPC::Update(float fElapsedTime)
 		if(pDI->KeyPressed(DIK_RETURN) || pDI->JoystickButtonPressed(0,0))
 		{
 			bool questEmpty = true;
-			pGPS->m_pHUD->SetTarget(pGPS->hospitalX,pGPS->hospitalY);
+			pGPS->m_pHUD->SetTarget((float)pGPS->hospitalX,(float)pGPS->hospitalY);
 
 
 			for(unsigned int i = 0; i < pGPS->GetPlayer()->m_vpActiveQuests.size(); i++)
