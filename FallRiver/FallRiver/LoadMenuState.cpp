@@ -4,6 +4,7 @@
 #include "XMLManager.h"
 #include "DirectInput.h"
 #include "CGame.h"
+#include "LoadingScreen.h"
 #include "GamePlayState.h"
 #include "TutorialState.h"
 #include "IMenuState.h"
@@ -38,13 +39,27 @@ LoadMenuState::~LoadMenuState()
 
 void LoadMenuState::Enter() 
 {
+	LoadingScreen* loading = LoadingScreen::GetInstance();
+
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
 
+	m_pVM->SetAmbientLight( .1f, .1f, .0f);
+
+	loading->Update();
+	loading->Render();
+
 	m_nNewID	= m_pVM->RegisterTexture("resource/graphics/bg_loadMenu_newGame.png");
 	m_nLoadID	= m_pVM->RegisterTexture("resource/graphics/bg_loadMenu_loadGame.png");
+
+	loading->Update();
+	loading->Render();
+
 	m_nExitID	= m_pVM->RegisterTexture("resource/graphics/bg_loadMenu_exit.png");
 	m_nFontID	= m_pVM->RegisterFont("resource/graphics/FallRiver_0.png");
+
+	loading->Update();
+	loading->Render();
 
 	m_nCursPosY = 200;
 	m_nCursPosX = 280;
@@ -55,34 +70,56 @@ void LoadMenuState::Enter()
 	soundID = audio->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
 	audio->setSoundPos(soundID, sound1);
 
+	for(int i = 0; i < 50; i++)
+	{
+		loading->Update();
+		loading->Render();
+	}
+
 	audio->setSoundVel(soundID, tmp);
 	audio->setSoundLooping(soundID, false);
 
 	soundID2 = audio->RegisterSound("resource/Sounds/thunder.wav");
 	audio->setSoundPos(soundID2, sound1);
 
+	for(int i = 0; i < 50; i++)
+	{
+		loading->Update();
+		loading->Render();
+	}
+
 	audio->setSoundVel(soundID2, tmp);
 	audio->setSoundLooping(soundID2, false);
 
-//	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
-//	audio->setMusicPos(musicID, sound1);
+	loading->Update();
+	loading->Render();
 
-//	audio->setMusicVel(musicID, tmp);
-//	audio->setMusicLooping(musicID, true);
-//	audio->playMusic(musicID);
+	loading->Reset();
 
-//	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
-//	audio->setMusicPos(musicID2, sound1);
+	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
-//	audio->setMusicVel(musicID2, tmp);
-//	audio->setMusicLooping(musicID2, true);
-//	audio->playMusic(musicID2);
+	loading = nullptr;
+
+
+	//	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
+	//	audio->setMusicPos(musicID, sound1);
+
+	//	audio->setMusicVel(musicID, tmp);
+	//	audio->setMusicLooping(musicID, true);
+	//	audio->playMusic(musicID);
+
+	//	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+	//	audio->setMusicPos(musicID2, sound1);
+
+	//	audio->setMusicVel(musicID2, tmp);
+	//	audio->setMusicLooping(musicID2, true);
+	//	audio->playMusic(musicID2);
 }
 
 void LoadMenuState::ReEnter()
 {
-//	audio->playMusic(musicID);
-//	audio->playMusic(musicID2);
+	//	audio->playMusic(musicID);
+	//	audio->playMusic(musicID2);
 }
 
 void LoadMenuState::Exit() 

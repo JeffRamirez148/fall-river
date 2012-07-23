@@ -8,6 +8,7 @@
 #include "LoadMenuState.h"
 #include "CreditsMenuState.h"
 #include "CGame.h"
+#include "LoadingScreen.h"
 #include "AudioManager.h"
 #include "XMLManager.h"
 
@@ -26,8 +27,8 @@ MainMenuState::MainMenuState()
 	m_nMenuHighScoresID = -1;
 	m_nMenuCreditsID	= -1;
 	m_nMenuExitID		= -1;
-//	musicID = -1;
-//	musicID2 = -1;
+	//	musicID = -1;
+	//	musicID2 = -1;
 	soundID = -1;
 	m_nLightMenuPlayID = -1;
 	m_nLightMenuHowToID = -1;
@@ -44,8 +45,15 @@ MainMenuState::~MainMenuState()
 
 void MainMenuState::Enter() 
 {
+	LoadingScreen* loading = LoadingScreen::GetInstance();
+
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
+
+	m_pVM->SetAmbientLight( .1f, .1f, .0f);
+
+	loading->Update();
+	loading->Render();
 
 	m_nMenuPlayID		= m_pVM->RegisterTexture("resource/graphics/main_play.png");
 	m_nMenuHowToID		= m_pVM->RegisterTexture("resource/graphics/main_howTo.png");
@@ -55,13 +63,23 @@ void MainMenuState::Enter()
 	m_nMenuCreditsID	= m_pVM->RegisterTexture("resource/graphics/main_credits.png");
 	m_nMenuExitID		= m_pVM->RegisterTexture("resource/graphics/main_exit.png");
 
+	loading->Update();
+	loading->Render();
+
 	m_nLightMenuPlayID		 = m_pVM->RegisterTexture("resource/graphics/light_main_play.png");
 	m_nLightMenuHowToID		 = m_pVM->RegisterTexture("resource/graphics/light_main_howTo.png");
+	loading->Update();
+	loading->Render();
 	m_nLightMenuOptionsID	 = m_pVM->RegisterTexture("resource/graphics/light_main_options.png");
 	m_nLightMenuHighScoresID = m_pVM->RegisterTexture("resource/graphics/light_main_highScores.png");
+	loading->Update();
+	loading->Render();
 	m_nLightMenuCreditsID	 = m_pVM->RegisterTexture("resource/graphics/light_main_credits.png");
 	m_nLightMenuExitID		 = m_pVM->RegisterTexture("resource/graphics/light_main_exit.png");
-	
+
+	loading->Update();
+	loading->Render();
+
 	audio = AudioManager::GetInstance();
 
 	vector<int> setting;
@@ -70,8 +88,21 @@ void MainMenuState::Enter()
 	if( XMLManager::GetInstance()->LoadSettings("settings.xml", setting))
 	{
 		audio->setMusicVolume(setting[0]*0.01f);
+		for(int i = 0; i < 50; i++)
+		{
+		loading->Update();
+		loading->Render();
+		}
 		audio->setSoundVolume(setting[1]*0.01f);
+		for(int i = 0; i < 50; i++)
+		{
+		loading->Update();
+		loading->Render();
+		}
 	}
+
+	loading->Update();
+	loading->Render();
 
 
 
@@ -80,6 +111,9 @@ void MainMenuState::Enter()
 	audio->SetListenerPos(tmp);
 	soundID = audio->RegisterSound("resource/Sounds/KCJ_MenuClick.wav");
 	audio->setSoundPos(soundID, sound1);
+
+	loading->Update();
+	loading->Render();
 
 	audio->setSoundVel(soundID, tmp);
 	audio->setSoundLooping(soundID, false);
@@ -90,27 +124,36 @@ void MainMenuState::Enter()
 	audio->setSoundVel(soundID2, tmp);
 	audio->setSoundLooping(soundID2, false);
 
-//	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
-//	audio->setMusicPos(musicID, sound1);
+	loading->Update();
+	loading->Render();
 
-//	audio->setMusicVel(musicID, tmp);
-//	audio->setMusicLooping(musicID, true);
-//	audio->playMusic(musicID);
+	loading->Reset();
 
-//	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
-//	audio->setMusicPos(musicID2, sound1);
+	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
-//	audio->setMusicVel(musicID2, tmp);
-//	audio->setMusicLooping(musicID2, true);
-//	audio->playMusic(musicID2);
+	loading = nullptr;
 
-	
+	//	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");
+	//	audio->setMusicPos(musicID, sound1);
+
+	//	audio->setMusicVel(musicID, tmp);
+	//	audio->setMusicLooping(musicID, true);
+	//	audio->playMusic(musicID);
+
+	//	musicID2 = audio->registerMusic("resource/Sounds/background.mp3");
+	//	audio->setMusicPos(musicID2, sound1);
+
+	//	audio->setMusicVel(musicID2, tmp);
+	//	audio->setMusicLooping(musicID2, true);
+	//	audio->playMusic(musicID2);
+
+
 }
 
 void MainMenuState::ReEnter()
 {
-//	audio->playMusic(musicID);
-//	audio->playMusic(musicID2);
+	//	audio->playMusic(musicID);
+	//	audio->playMusic(musicID2);
 }
 
 void MainMenuState::Exit() 
@@ -189,7 +232,7 @@ void MainMenuState::Render()
 		m_dwFlash3 = GetTickCount() + 3000;
 
 	// Do Rendering Here
-	
+
 
 	if(m_nCursPosY == 175)
 	{
@@ -210,7 +253,7 @@ void MainMenuState::Render()
 		if(m_dwFlash1 <= GetTickCount() )
 		{
 			m_pVM->DrawStaticTexture(m_nLightMenuOptionsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
-			
+
 		}
 		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
 		{
@@ -225,7 +268,7 @@ void MainMenuState::Render()
 		if(m_dwFlash1 <= GetTickCount() )
 		{
 			m_pVM->DrawStaticTexture(m_nLightMenuHowToID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
-			
+
 		}
 		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
 		{
@@ -240,7 +283,7 @@ void MainMenuState::Render()
 		if(m_dwFlash1 <= GetTickCount() )
 		{
 			m_pVM->DrawStaticTexture(m_nLightMenuHighScoresID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
-			
+
 		}
 		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
 		{
@@ -255,7 +298,7 @@ void MainMenuState::Render()
 		if(m_dwFlash1 <= GetTickCount() )
 		{
 			m_pVM->DrawStaticTexture(m_nLightMenuCreditsID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
-			
+
 		}
 		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
 		{
@@ -270,7 +313,7 @@ void MainMenuState::Render()
 		if(m_dwFlash1 <= GetTickCount())
 		{
 			m_pVM->DrawStaticTexture(m_nLightMenuExitID, 0, 0, 0.4f, 0.6f, 0, 0, 0, 0, D3DCOLOR_ARGB(255, 0, 0, 0));
-			
+
 		}
 		else if(m_dwFlash2 <= GetTickCount() || m_dwFlash3 <= GetTickCount())
 		{

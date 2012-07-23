@@ -21,11 +21,11 @@ const int	g_nWINDOW_HEIGHT		= 600;							//	Window Height.
 
 
 //	Windowed or Full screen depending on project setting
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	bool	g_bIS_WINDOWED			= TRUE;						
-#else
-	bool	g_bIS_WINDOWED			= FALSE;
-#endif
+//#else
+	//bool	g_bIS_WINDOWED			= TRUE;
+//#endif
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

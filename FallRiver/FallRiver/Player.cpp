@@ -937,9 +937,7 @@ void Player::Render()
 	//	Particle_Manager::GetInstance()->GetActiveEmitter(smokeA)
 	//}
 	for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
-	{
 		Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();
-	}
 
 	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];

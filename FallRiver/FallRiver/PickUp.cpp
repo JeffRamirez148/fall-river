@@ -178,10 +178,6 @@ bool PickUp::CheckCollision(IObjects* pBase)
 						audio->GetSoundChannel(healthID)->stop();
 						audio->playSound(healthID);
 						int x = GamePlayState::GetInstance()->GetPlayer()->GetHealth() + 30 ;
-						if( x > 100 )
-						{
-							x = 100;
-						}
 						GamePlayState::GetInstance()->GetPlayer()->SetHealth(x);
 						DestroyPickUp* pMsg = new DestroyPickUp(this);
 						MessageSystem::GetInstance()->SendMsg(pMsg);

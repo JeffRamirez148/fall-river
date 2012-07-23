@@ -1276,7 +1276,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				case DIRE_DOWN:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
+						bullet->SetPosX(pOwner->GetPosX()+5);
 						bullet->SetSpeedX(0);
 						bullet->SetSpeedY(500);
 						bullet->SetRotation(D3DX_PI/2);
