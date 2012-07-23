@@ -12,6 +12,7 @@ private:
 	Weapon* m_pOwner;
 	float m_fSpeedX;
 	float m_fSpeedY;
+	float m_nRotation;
 
 	// For the Range
 	float m_fStartPosX;
@@ -30,6 +31,7 @@ public:
 	RECT GetRect();
 
 	void SetStartPos(float x, float y) {m_fStartPosX = x; m_fStartPosY = y;}
+	void SetRotation(float rot) { m_nRotation = rot; }
 
 	// Get and Set Speed for X
 	float GetSpeedX() {return m_fSpeedX;}

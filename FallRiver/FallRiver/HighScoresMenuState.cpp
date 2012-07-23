@@ -9,7 +9,7 @@
 HighScoresMenuState::HighScoresMenuState()
 {
 	fontID = -1;
-	m_bNameEntered = true;
+	m_bNameEntered = false;
 	keytimer = 0;
 	m_cName['\0'];
 	m_nSpace = 0;

@@ -940,6 +940,17 @@ void Player::Render()
 	{
 		Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();
 	}
+
+	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+
+	/*if( m_nState == PSTATE_SWING)
+	{
+		Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+	RECT collRect = {long(thisFrame.activeRect.left+GetPosX() - GamePlayState::GetInstance()->GetCamera().x+10), long(thisFrame.activeRect.top+GetPosY()- GamePlayState::GetInstance()->GetCamera().y+30), thisFrame.activeRect.right+(long)GetPosX() - GamePlayState::GetInstance()->GetCamera().x+10, thisFrame.activeRect.bottom+(long)GetPosY() - GamePlayState::GetInstance()->GetCamera().y+30};
+	pVM->DrawRect(collRect, 255, 21, 39);
+	}*/
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
@@ -954,7 +965,7 @@ bool Player::CheckCollision(IObjects* pBase)
 		if( tmp->GetCharacterType() == CHA_ENEMY || tmp->GetCharacterType() == CHA_BOSS2 )
 		{
 			RECT cRect;
-			RECT collRect = {long(thisFrame.activeRect.left+GetPosX()), long(thisFrame.activeRect.top+GetPosY()), thisFrame.activeRect.right+(long)GetPosX(), thisFrame.activeRect.bottom+(long)GetPosY()};
+			RECT collRect = {long(thisFrame.activeRect.left+GetPosX()+10), long(thisFrame.activeRect.top+GetPosY()+30), thisFrame.activeRect.right+(long)GetPosX()+10, thisFrame.activeRect.bottom+(long)GetPosY()+30};
 			if( IntersectRect(&cRect, &collRect, &pBase->GetRect() ) && m_playerAnim.curFrame == 1 )
 			{
 				tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());

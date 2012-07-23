@@ -476,7 +476,7 @@ void GamePlayState::Enter()
 				m_cEnemies.push_back(nullptr);
 				m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 				ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-				pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+				pEnemy->SetHeight(64);
 				pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
 				pEnemy->SetImageID(-1);
 				pEnemy->SetTarget(GetPlayer());
@@ -822,7 +822,7 @@ void GamePlayState::Update(float fElapsedTime)
 			m_cEnemies.push_back(nullptr);
 			m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 			ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-			pEnemy->SetHeight(m_cSpawn[i]->GetHeight());
+			pEnemy->SetHeight(64);
 			pEnemy->SetWidth(m_cSpawn[i]->GetWidth());
 			pEnemy->SetImageID(-1);
 			pEnemy->SetTarget(GetPlayer());
@@ -1032,7 +1032,6 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				bullet2->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				bullet3->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				//bullet 2
-				bullet2->SetImageID( pOwner->GetImageID());
 				bullet2->SetHeight(16);
 				bullet2->SetWidth(16);
 				bullet2->SetOwner(pOwner);
@@ -1040,7 +1039,6 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				bullet2->SetPosY(pOwner->GetPosY());
 				bullet2->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
 				//bullet 3
-				bullet3->SetImageID(pOwner->GetImageID());
 				bullet3->SetHeight(16);
 				bullet3->SetWidth(16);
 				bullet3->SetOwner(pOwner);
@@ -1060,51 +1058,63 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
 
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/2);
 						bullet2->SetSpeedX(50);
-						bullet2->SetSpeedY(-300);
+						bullet2->SetSpeedY(-500);
+						bullet2->SetRotation(-D3DX_PI/2);
 						bullet3->SetSpeedX(-50);
-						bullet3->SetSpeedY(-300);
+						bullet3->SetSpeedY(-500);
+						bullet3->SetRotation(-D3DX_PI/2);
 						break;
 					}
 				case DIRE_LEFT:
 					{
 						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
+						bullet->SetPosY((float)bullet->GetPosY()+ 15);
 						bullet2->SetPosX(bullet->GetPosX());
+						bullet2->SetPosY(bullet->GetPosY());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
 						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
-						bullet->SetSpeedX(-300);
+						bullet->SetSpeedX(-500);
 						bullet->SetSpeedY(0);
-						bullet2->SetSpeedX(-300);
+						bullet->SetRotation(D3DX_PI);
+						bullet2->SetSpeedX(-500);
 						bullet2->SetSpeedY(50);
-						bullet3->SetSpeedX(-300);
+						bullet2->SetRotation(D3DX_PI);
+						bullet3->SetSpeedX(-500);
 						bullet3->SetSpeedY(-50);
+						bullet3->SetRotation(D3DX_PI);
 						break;
 					}
 				case DIRE_RIGHT:
 					{
 						bullet->SetPosX((float)pOwner->GetPosX()+30);
+						bullet->SetPosY((float)bullet->GetPosY()-15);
 						bullet2->SetPosX(bullet->GetPosX());
+						bullet2->SetPosY(bullet->GetPosY());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 						
 						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
-						bullet->SetSpeedX(300);
+						bullet->SetSpeedX(500);
 						bullet->SetSpeedY(0);
-						bullet2->SetSpeedX(300);
+						bullet2->SetSpeedX(500);
 						bullet2->SetSpeedY(50);
-						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedX(500);
 						bullet3->SetSpeedY(-50);
 						break;
 					}
 				case DIRE_DOWN:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
+						bullet->SetPosX(pOwner->GetPosX());
 						bullet2->SetPosY(bullet->GetPosY());
 						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosY(bullet->GetPosY());
@@ -1114,79 +1124,94 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
 
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/2);
 						bullet2->SetSpeedX(50);
-						bullet2->SetSpeedY(300);
+						bullet2->SetSpeedY(500);
+						bullet2->SetRotation(D3DX_PI/2);
 						bullet3->SetSpeedX(-50);
-						bullet3->SetSpeedY(300);
+						bullet3->SetSpeedY(500);
+						bullet3->SetRotation(D3DX_PI/2);
 						break;
 					}
 				case DIRE_UPRIGHT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
-						bullet->SetPosX(pOwner->GetPosX()+20);
-
+						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(-300);
-						bullet2->SetSpeedX(300);
-						bullet2->SetSpeedY(-350);
-						bullet3->SetSpeedX(350);
-						bullet3->SetSpeedY(-300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/4);
+						bullet2->SetSpeedX(500);
+						bullet2->SetSpeedY(-550);
+						bullet2->SetRotation(-D3DX_PI/4);
+						bullet3->SetSpeedX(550);
+						bullet3->SetSpeedY(-500);
+						bullet3->SetRotation(-D3DX_PI/4);
 						break;
 					}
 				case DIRE_UPLEFT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
-
+						bullet->SetPosX(pOwner->GetPosX());
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(-300);
-						bullet2->SetSpeedX(-300);
-						bullet2->SetSpeedY(-350);
-						bullet3->SetSpeedX(-350);
-						bullet3->SetSpeedY(-300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-3*D3DX_PI/4);
+						bullet2->SetSpeedX(-500);
+						bullet2->SetSpeedY(-550);
+						bullet2->SetRotation(-3*D3DX_PI/4);
+						bullet3->SetSpeedX(-550);
+						bullet3->SetSpeedY(-500);
+						bullet3->SetRotation(-3*D3DX_PI/4);
 						break;
 					}
 				case DIRE_DOWNLEFT:
 					{
-						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
-
+						bullet->SetPosY(pOwner->GetPosY()+25);
+						bullet->SetPosX(pOwner->GetPosX()+10);
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(300);
-						bullet2->SetSpeedX(-300);
-						bullet2->SetSpeedY(350);
-						bullet3->SetSpeedX(-350);
-						bullet3->SetSpeedY(300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(3*D3DX_PI/4);
+						bullet2->SetSpeedX(-500);
+						bullet2->SetSpeedY(550);
+						bullet2->SetRotation(3*D3DX_PI/4);
+						bullet3->SetSpeedX(-550);
+						bullet3->SetSpeedY(500);
+						bullet3->SetRotation(3*D3DX_PI/4);
 						break;
 					}
 				case DIRE_DOWNRIGHT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()+20);
-
+						bullet->SetPosX(pOwner->GetPosX());
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(300);
-						bullet2->SetSpeedX(300);
-						bullet2->SetSpeedY(350);
-						bullet3->SetSpeedX(350);
-						bullet3->SetSpeedY(300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/4);
+						bullet2->SetSpeedX(500);
+						bullet2->SetSpeedY(550);
+						bullet2->SetRotation(D3DX_PI/4);
+						bullet3->SetSpeedX(550);
+						bullet3->SetSpeedY(500);
+						bullet3->SetRotation(D3DX_PI/4);
 						break;
 					}
 				}
@@ -1214,15 +1239,21 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					{
 						bullet->SetPosY(pOwner->GetPosY()-30);
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/2);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 							bullet->SetSpeedY(-150);
 						break;
 					}
 				case DIRE_LEFT:
 					{
-						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
-						bullet->SetSpeedX(-300);
+						if(pOwner->GetWeaponType() == WPN_RIFLE)
+							bullet->SetPosY(bullet->GetPosY()+15);
+						else
+							bullet->SetPosY(bullet->GetPosY()+5);
+						bullet->SetPosX((float)pOwner->GetOwner()->GetRect2().left);
+						bullet->SetSpeedX(-500);
+						bullet->SetRotation(D3DX_PI);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 							bullet->SetSpeedX(-150);
 						bullet->SetSpeedY(0);
@@ -1230,8 +1261,12 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_RIGHT:
 					{
+						if( pOwner->GetWeaponType() == WPN_RIFLE )
+							bullet->SetPosY(pOwner->GetPosY()-15);
+						else
+							bullet->SetPosY(bullet->GetPosY()-25);
 						bullet->SetPosX((float)pOwner->GetPosX()+30);
-						bullet->SetSpeedX(300);
+						bullet->SetSpeedX(500);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 							bullet->SetSpeedX(150);
 
@@ -1243,7 +1278,8 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet->SetPosY(pOwner->GetPosY()+20);
 						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/2);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 							bullet->SetSpeedY(150);
 						break;
@@ -1252,8 +1288,9 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
 						bullet->SetPosX(pOwner->GetPosX()+20);
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/4);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 						{
 							bullet->SetSpeedX(150);
@@ -1265,8 +1302,9 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
 						bullet->SetPosX(pOwner->GetPosX()-20);
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-3*D3DX_PI/4);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 						{
 							bullet->SetSpeedX(-150);
@@ -1278,8 +1316,9 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
 						bullet->SetPosX(pOwner->GetPosX()-20);
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(3*D3DX_PI/4);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 						{
 							bullet->SetSpeedX(-150);
@@ -1291,8 +1330,9 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
 						bullet->SetPosX(pOwner->GetPosX()+20);
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/4);
 						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
 						{
 							bullet->SetSpeedX(150);
@@ -1731,7 +1771,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					m_cEnemies.push_back(nullptr);
 					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetHeight(64);
 					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
 					pEnemy->SetImageID(-1);
 					pEnemy->SetTarget(GetPlayer());
@@ -2424,7 +2464,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					m_cEnemies.push_back(nullptr);
 					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetHeight(64);
 					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
 					pEnemy->SetImageID(-1);
 					pEnemy->SetTarget(GetPlayer());
@@ -2751,7 +2791,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					m_cEnemies.push_back(nullptr);
 					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetHeight(64);
 					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
 					pEnemy->SetImageID(-1);
 					pEnemy->SetTarget(GetPlayer());
@@ -3073,7 +3113,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					m_cEnemies.push_back(nullptr);
 					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
+					pEnemy->SetHeight(64);
 					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
 					pEnemy->SetImageID(-1);
 					pEnemy->SetTarget(GetPlayer());

@@ -14,6 +14,9 @@ Bullet::Bullet()
 	m_nObjectType = OBJ_BULLET;
 	m_fStartPosX = 0;
 	m_fStartPosY = 0;
+	m_nRotation = 0;
+	SetVelX(0);
+	SetVelY(0);
 }
 
 Bullet::~Bullet()
@@ -57,17 +60,24 @@ void Bullet::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
 
-	if(this->GetImageID() != -1)
-	{
+	/*if( GetSpeedX() > 0 && GetSpeedY() > 0 )
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, 0, 0, 0, 45);
+	else if( GetSpeedX() > 0 && GetSpeedY() == 0 )
 		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y);
-	}
-	else
-	{
-		RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	else if( GetSpeedX() > 0 && GetSpeedY() < 0 )
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, 0, 0, 0, -45);
+	else if( GetSpeedX() == 0 && GetSpeedY() > 0 )
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, 0, 0, 0, 90);
+	else if( GetSpeedX() == 0 && GetSpeedY() < 0 )
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, 0, 0, 0, -90);
+	else if( GetSpeedX() < 0 && GetSpeedY() > 0 )
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, 0, 0, 0, 135);
+	else if( GetSpeedX() < 0 && GetSpeedY() == 0 )
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, 0, 0, 0, 180);
+	else if( GetSpeedX() < 0 && GetSpeedY() < 0 )
+		pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, 0, 0, 0, -135);*/
 
-		pVM->DrawRect(reRect, 255, 0, 255);
-	}
-
+	pVM->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 0.9f, 0.9f, 0, 0, 0, m_nRotation);
 }
 
 void Bullet::HandleEvent(Event* pEvent) 
