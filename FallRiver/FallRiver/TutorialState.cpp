@@ -681,7 +681,7 @@ void TutorialState::MessageProc(IMessage* pMsg)
 						bullet2->SetPosY(bullet->GetPosY());
 						bullet3->SetPosX(bullet->GetPosX());
 						bullet3->SetPosY(bullet->GetPosY());
-
+						
 						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
@@ -868,8 +868,17 @@ void TutorialState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_UPRIGHT:
 					{
-						bullet->SetPosY(pOwner->GetPosY()-20);
-						bullet->SetPosX(pOwner->GetPosX()+20);
+						if( pOwner->GetWeaponType() == WPN_RIFLE )
+						{
+							bullet->SetPosY(pOwner->GetPosY()-35);
+							bullet->SetPosX(pOwner->GetPosX());
+						}
+						else
+						{
+							bullet->SetPosY(pOwner->GetPosY()-35);
+							bullet->SetPosX(pOwner->GetPosX());
+						}
+						
 						bullet->SetSpeedX(500);
 						bullet->SetSpeedY(-500);
 						bullet->SetRotation(-D3DX_PI/4);
@@ -882,8 +891,16 @@ void TutorialState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_UPLEFT:
 					{
-						bullet->SetPosY(pOwner->GetPosY()-20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
+						if( pOwner->GetWeaponType() == WPN_RIFLE )
+						{
+							bullet->SetPosY(pOwner->GetPosY()-35);
+							bullet->SetPosX(pOwner->GetPosX());
+						}
+						else
+						{
+							bullet->SetPosY(pOwner->GetPosY()-35);
+							bullet->SetPosX(pOwner->GetPosX());
+						}
 						bullet->SetSpeedX(-500);
 						bullet->SetSpeedY(-500);
 						bullet->SetRotation(-3*D3DX_PI/4);
@@ -896,8 +913,16 @@ void TutorialState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_DOWNLEFT:
 					{
-						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
+						if( pOwner->GetWeaponType() == WPN_RIFLE )
+						{
+							bullet->SetPosY(pOwner->GetPosY()+20);
+							bullet->SetPosX(pOwner->GetPosX()+15);
+						}
+						else
+						{
+							bullet->SetPosY(pOwner->GetPosY()+20);
+							bullet->SetPosX(pOwner->GetPosX()+15);
+						}
 						bullet->SetSpeedX(-500);
 						bullet->SetSpeedY(500);
 						bullet->SetRotation(3*D3DX_PI/4);
@@ -910,8 +935,17 @@ void TutorialState::MessageProc(IMessage* pMsg)
 					}
 				case DIRE_DOWNRIGHT:
 					{
-						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()+20);
+						if( pOwner->GetWeaponType() == WPN_RIFLE )
+						{
+							bullet->SetPosY(pOwner->GetPosY()+20);
+							bullet->SetPosX(pOwner->GetPosX());
+						}
+						else
+						{
+							bullet->SetPosY(pOwner->GetPosY()+20);
+							bullet->SetPosX(pOwner->GetPosX());
+						}
+
 						bullet->SetSpeedX(500);
 						bullet->SetSpeedY(500);
 						bullet->SetRotation(D3DX_PI/4);

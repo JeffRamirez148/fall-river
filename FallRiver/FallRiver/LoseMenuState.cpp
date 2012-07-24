@@ -116,6 +116,11 @@ bool LoseMenuState::Input()
 	return true;
 }
 
+void LoseMenuState::Update(float fElapsedTime)
+{
+	fElapsedTime;
+}
+
 void LoseMenuState::Render()
 {
 	pVM->GetSprite()->Flush();
