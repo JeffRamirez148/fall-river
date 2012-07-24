@@ -746,6 +746,7 @@ void GamePlayState::Exit()
 	m_pOM = nullptr;
 	m_pES = nullptr;
 
+	delete m_pHUD;
 	m_pHUD = nullptr;
 
 	m_cPlayer = nullptr;

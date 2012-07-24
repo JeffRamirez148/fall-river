@@ -37,6 +37,7 @@ void Emitter::Update(float fElapsedTime)
 		tmpParticle->SetScaleX(startScaleX);
         tmpParticle->SetScaleY(startScaleY);
 		_m_vparticles.push_back(tmpParticle);
+		//delete tmpParticle;
 	}
 
 	bool keepGoing;

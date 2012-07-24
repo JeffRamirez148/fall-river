@@ -41,6 +41,7 @@ int Particle_Manager::ActivateEmitter(int id)
 	tmp->startRot = loaded[id]->startRot;
 	tmp->spawnTimer = 0.0f;
 	active.push_back(tmp);
+	//delete tmp;
 	active[active.size() - 1]->spawn = true;
 	return active.size() - 1;
 }

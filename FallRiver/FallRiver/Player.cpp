@@ -965,16 +965,17 @@ bool Player::CheckCollision(IObjects* pBase)
 		{
 			RECT cRect;
 			RECT collRect = {long(thisFrame.activeRect.left+GetPosX()+10), long(thisFrame.activeRect.top+GetPosY()+30), thisFrame.activeRect.right+(long)GetPosX()+10, thisFrame.activeRect.bottom+(long)GetPosY()+30};
-			if( IntersectRect(&cRect, &collRect, &tmp->GetRect()) == true && m_playerAnim.curFrame == 1 )
+			RECT temp = tmp->GetRect();
+			if( IntersectRect(&cRect, &collRect, &temp) == TRUE && m_playerAnim.curFrame == 1 )
 			{
 				tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
 				EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
 
 				GamePlayState* gameState = GamePlayState::GetInstance();
 				Particle_Manager* m_pPM = Particle_Manager::GetInstance();
-				int bloodA1;
-				int bloodA2;
-				int bloodA3;
+				int bloodA1=0;
+				int bloodA2=0;
+				int bloodA3=0;
 
 				RECT tmpRect1 = collRect;
 				//RECT tmpRect1 = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
@@ -1058,7 +1059,7 @@ bool Player::CheckCollision(IObjects* pBase)
 					BaseCharacter* tmpChar = (BaseCharacter*)(pBase);
 					if(tmpChar->GetCharacterType() == CHA_BOSS2)
 					{
-						Boss2* tmpBoss = (Boss2*)tmpChar;
+						//Boss2* tmpBoss = (Boss2*)tmpChar;
 						//if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
 						{
 							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
@@ -1112,7 +1113,9 @@ bool Player::CheckCollision(IObjects* pBase)
 			if(BaseObject::CheckCollision(pBase) == true )
 			{
 				RECT cRect;
-				if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == TRUE )
+				RECT temp = GetRect();
+				RECT temp2 = pBase->GetRect();
+				if( IntersectRect( &cRect, &temp, &temp2 ) == TRUE )
 				{
 					Bush* tmp = (Bush*)pBase;
 					tmp->SetIsInBush( true );
