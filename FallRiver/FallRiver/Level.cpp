@@ -44,6 +44,7 @@ Level::~Level()
 
 void Level::Update(float fElapsedTime)
 {
+	fElapsedTime;
 	DirectInput* pDI = DirectInput::GetInstance();
 
 
@@ -468,7 +469,7 @@ bool Level::CheckCollision(IObjects* pBase)
 		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
 			RECT cRect;
-			if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
+			if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == FALSE )
 			{
 				if( m_vCollisions[i].m_bPrevColliding == true )
 				{
@@ -553,7 +554,6 @@ bool Level::CheckCollision(IObjects* pBase)
 								}
 							}
 
-							DirectInput* pDI = DirectInput::GetInstance();
 							//check = 0;
 							if( check == 0 )
 							{

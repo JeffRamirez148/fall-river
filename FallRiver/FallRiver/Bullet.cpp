@@ -50,8 +50,6 @@ void Bullet::Update(float fElapsedTime)
 		pMsg = nullptr;
 	}
 
-	DirectInput* pDI = DirectInput::GetInstance();
-
 	m_nPosX += m_fSpeedX * fElapsedTime;
 	m_nPosY += m_fSpeedY* fElapsedTime;
 }
@@ -82,6 +80,7 @@ void Bullet::Render()
 
 void Bullet::HandleEvent(Event* pEvent) 
 {
+	pEvent;
 }
 
 RECT Bullet::GetRect()

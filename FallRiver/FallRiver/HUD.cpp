@@ -140,9 +140,9 @@ void HUD::Update(float aTime)
 			{
 				m_aClipAnim.fTime -= thisAnim->frames[m_aClipAnim.curAnimation][m_aClipAnim.curFrame].duration-0.1f;
 				m_aClipAnim.curFrame++;
-				if((m_aClipAnim.curFrame == thisAnim->frames[m_aClipAnim.curAnimation].size()) && thisAnim->looping[m_aClipAnim.curAnimation])
+				if(((unsigned)m_aClipAnim.curFrame == thisAnim->frames[m_aClipAnim.curAnimation].size()) && thisAnim->looping[m_aClipAnim.curAnimation])
 					m_aClipAnim.curFrame = 0;
-				else if(m_aClipAnim.curFrame == thisAnim->frames[m_aClipAnim.curAnimation].size() && !thisAnim->looping[m_aClipAnim.curAnimation])
+				else if((unsigned)m_aClipAnim.curFrame == thisAnim->frames[m_aClipAnim.curAnimation].size() && !thisAnim->looping[m_aClipAnim.curAnimation])
 				{
 					m_aClipAnim.curFrame = 0;
 					m_aClipAnim.curAnimation = 10 - GamePlayState::GetInstance()->GetPlayer()->GetClip();
@@ -779,7 +779,7 @@ void HUD::Render()
 	float tmpX = ((test.right - test.left)/2.0f)/2.0f;
 
 	float offsetY = ((rArrow.bottom - rArrow.top)/2.0f)/2.0f;
-	float offsetX = ((rArrow.right - rArrow.left)/2.0f)/2.0f;
+	/*float offsetX = ((rArrow.right - rArrow.left)/2.0f)/2.0f;*/
 
 
 	

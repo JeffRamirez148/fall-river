@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FallRiver", "FallRiver\FallRiver.vcxproj", "{CFFA8C68-64EF-4F85-A959-F46E05147302}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BD6AA898-0EAD-4CBD-AF29-18C471285903} = {BD6AA898-0EAD-4CBD-AF29-18C471285903}
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Fall River Setup", "Fall River Setup\Fall River Setup.vdproj", "{BD6AA898-0EAD-4CBD-AF29-18C471285903}"
 EndProject

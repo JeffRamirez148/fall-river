@@ -81,7 +81,7 @@ void TutorialState::Enter()
 	m_pOF->RegisterClassType< ChasingAI		>( _T("ChasingAI") );
 	m_pOF->RegisterClassType< Bullet		>( _T("Bullet") );
 
-	
+
 	loading->Update();
 	loading->Render();
 
@@ -104,7 +104,7 @@ void TutorialState::Enter()
 	goreL6 = m_pPM->LoadEmitter("gore6.xml");
 	goreL7 = m_pPM->LoadEmitter("gore7.xml");
 	goreL8 = m_pPM->LoadEmitter("gore8.xml");
-	
+
 	loading->Update();
 	loading->Render();
 
@@ -132,12 +132,12 @@ void TutorialState::Enter()
 	m_pVM->ClearOtherLights();
 
 	Player* pPlayer = nullptr;
-	Weapon* pWeapon = nullptr;
+	//Weapon* pWeapon = nullptr;
 	Level* pLevel = nullptr;
 	Bush* pBush = nullptr;
 	PickUp* pPickUp = nullptr;
 
-	
+
 	loading->Update();
 	loading->Render();
 
@@ -159,7 +159,7 @@ void TutorialState::Enter()
 	pPlayer->SetPosY(500);
 
 
-	Weapon* pWeapon2 = nullptr;
+	//Weapon* pWeapon2 = nullptr;
 	Weapon* pWeapon3 = nullptr;
 	Weapon* pWeapon4 = nullptr;
 
@@ -201,11 +201,11 @@ void TutorialState::Enter()
 
 	pPlayer->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/PlayerAnimations.xml"));
 
-	/*pPlayer->AddWeapon(pWeapon2);
+	//pPlayer->AddWeapon(pWeapon2);
 	pPlayer->AddWeapon(pWeapon3);
-	pPlayer->AddWeapon(pWeapon);*/
+	//pPlayer->AddWeapon(pWeapon);
 	pPlayer->AddWeapon(pWeapon4);
-	
+
 	loading->Update();
 	loading->Render();
 
@@ -350,16 +350,16 @@ void TutorialState::Enter()
 	}
 	pLevel->SetCollision(tmp);
 
-//	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
+	//	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
 
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
 
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
-//	m_pAM->setMusicPos(backGroundID, sound1);
-//	m_pAM->setMusicVel(backGroundID, sound1);
-//	m_pAM->setMusicLooping(backGroundID, true);
-//	m_pAM->playMusic(backGroundID);
+	//	m_pAM->setMusicPos(backGroundID, sound1);
+	//	m_pAM->setMusicVel(backGroundID, sound1);
+	//	m_pAM->setMusicLooping(backGroundID, true);
+	//	m_pAM->playMusic(backGroundID);
 
 	soundID2 = m_pAM->RegisterSound("resource/Sounds/thunder.wav");
 	m_pAM->setSoundPos(soundID2, sound1);
@@ -367,14 +367,14 @@ void TutorialState::Enter()
 	m_pAM->setSoundVel(soundID2, sound1);
 	m_pAM->setSoundLooping(soundID2, false);
 
-//	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
-//	m_pAM->setMusicPos(musicID, sound1);
+	//	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+	//	m_pAM->setMusicPos(musicID, sound1);
 
-//	m_pAM->setMusicVel(musicID, sound1);
-//	m_pAM->setMusicLooping(musicID, true);
-//	m_pAM->playMusic(musicID);
+	//	m_pAM->setMusicVel(musicID, sound1);
+	//	m_pAM->setMusicLooping(musicID, true);
+	//	m_pAM->playMusic(musicID);
 
-	
+
 	loading->Update();
 	loading->Render();
 
@@ -411,7 +411,7 @@ void TutorialState::Enter()
 	m_pHUD->m_vFrameIDs.push_back( m_pVM->RegisterTexture("resource//graphics//health_animation//health_anm_28.png.png"));
 
 	m_pOM->AddObject(pPlayer);
-	
+
 	loading->Update();
 	loading->Update();
 	loading->Update();
@@ -593,7 +593,7 @@ void TutorialState::MessageProc(IMessage* pMsg)
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
 			//Set up data members
-			bullet->SetImageID( -1 );
+			bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 			bullet->SetHeight(16);
 			bullet->SetWidth(16);
 			bullet->SetOwner(pOwner);
@@ -613,8 +613,9 @@ void TutorialState::MessageProc(IMessage* pMsg)
 			{
 				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				bullet2->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
+				bullet3->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				//bullet 2
-				bullet2->SetImageID( -1 );
 				bullet2->SetHeight(16);
 				bullet2->SetWidth(16);
 				bullet2->SetOwner(pOwner);
@@ -622,7 +623,6 @@ void TutorialState::MessageProc(IMessage* pMsg)
 				bullet2->SetPosY(pOwner->GetPosY());
 				bullet2->SetStartPos(pOwner->GetPosX(), pOwner->GetPosY());
 				//bullet 3
-				bullet3->SetImageID( -1 );
 				bullet3->SetHeight(16);
 				bullet3->SetWidth(16);
 				bullet3->SetOwner(pOwner);
@@ -642,51 +642,63 @@ void TutorialState::MessageProc(IMessage* pMsg)
 						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
 
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/2);
 						bullet2->SetSpeedX(50);
-						bullet2->SetSpeedY(-300);
+						bullet2->SetSpeedY(-500);
+						bullet2->SetRotation(-D3DX_PI/2);
 						bullet3->SetSpeedX(-50);
-						bullet3->SetSpeedY(-300);
+						bullet3->SetSpeedY(-500);
+						bullet3->SetRotation(-D3DX_PI/2);
 						break;
 					}
 				case DIRE_LEFT:
 					{
 						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
+						bullet->SetPosY((float)bullet->GetPosY()+ 15);
 						bullet2->SetPosX(bullet->GetPosX());
+						bullet2->SetPosY(bullet->GetPosY());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
 						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
-						bullet->SetSpeedX(-300);
+						bullet->SetSpeedX(-500);
 						bullet->SetSpeedY(0);
-						bullet2->SetSpeedX(-300);
+						bullet->SetRotation(D3DX_PI);
+						bullet2->SetSpeedX(-500);
 						bullet2->SetSpeedY(50);
-						bullet3->SetSpeedX(-300);
+						bullet2->SetRotation(D3DX_PI);
+						bullet3->SetSpeedX(-500);
 						bullet3->SetSpeedY(-50);
+						bullet3->SetRotation(D3DX_PI);
 						break;
 					}
 				case DIRE_RIGHT:
 					{
 						bullet->SetPosX((float)pOwner->GetPosX()+30);
+						bullet->SetPosY((float)bullet->GetPosY()-15);
 						bullet2->SetPosX(bullet->GetPosX());
+						bullet2->SetPosY(bullet->GetPosY());
 						bullet3->SetPosX(bullet->GetPosX());
-						
+						bullet3->SetPosY(bullet->GetPosY());
+
 						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
-						bullet->SetSpeedX(300);
+						bullet->SetSpeedX(500);
 						bullet->SetSpeedY(0);
-						bullet2->SetSpeedX(300);
+						bullet2->SetSpeedX(500);
 						bullet2->SetSpeedY(50);
-						bullet3->SetSpeedX(300);
+						bullet3->SetSpeedX(500);
 						bullet3->SetSpeedY(-50);
 						break;
 					}
 				case DIRE_DOWN:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
+						bullet->SetPosX(pOwner->GetPosX());
 						bullet2->SetPosY(bullet->GetPosY());
 						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosY(bullet->GetPosY());
@@ -696,79 +708,94 @@ void TutorialState::MessageProc(IMessage* pMsg)
 						temp.bottom = (long)16.0f + (long)bullet->GetPosY();
 
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/2);
 						bullet2->SetSpeedX(50);
-						bullet2->SetSpeedY(300);
+						bullet2->SetSpeedY(500);
+						bullet2->SetRotation(D3DX_PI/2);
 						bullet3->SetSpeedX(-50);
-						bullet3->SetSpeedY(300);
+						bullet3->SetSpeedY(500);
+						bullet3->SetRotation(D3DX_PI/2);
 						break;
 					}
 				case DIRE_UPRIGHT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
-						bullet->SetPosX(pOwner->GetPosX()+20);
-
+						bullet->SetPosX(pOwner->GetPosX()-20);
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(-300);
-						bullet2->SetSpeedX(300);
-						bullet2->SetSpeedY(-350);
-						bullet3->SetSpeedX(350);
-						bullet3->SetSpeedY(-300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/4);
+						bullet2->SetSpeedX(500);
+						bullet2->SetSpeedY(-550);
+						bullet2->SetRotation(-D3DX_PI/4);
+						bullet3->SetSpeedX(550);
+						bullet3->SetSpeedY(-500);
+						bullet3->SetRotation(-D3DX_PI/4);
 						break;
 					}
 				case DIRE_UPLEFT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
-
+						bullet->SetPosX(pOwner->GetPosX());
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(-300);
-						bullet2->SetSpeedX(-300);
-						bullet2->SetSpeedY(-350);
-						bullet3->SetSpeedX(-350);
-						bullet3->SetSpeedY(-300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-3*D3DX_PI/4);
+						bullet2->SetSpeedX(-500);
+						bullet2->SetSpeedY(-550);
+						bullet2->SetRotation(-3*D3DX_PI/4);
+						bullet3->SetSpeedX(-550);
+						bullet3->SetSpeedY(-500);
+						bullet3->SetRotation(-3*D3DX_PI/4);
 						break;
 					}
 				case DIRE_DOWNLEFT:
 					{
-						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
-
+						bullet->SetPosY(pOwner->GetPosY()+25);
+						bullet->SetPosX(pOwner->GetPosX()+10);
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(300);
-						bullet2->SetSpeedX(-300);
-						bullet2->SetSpeedY(350);
-						bullet3->SetSpeedX(-350);
-						bullet3->SetSpeedY(300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(3*D3DX_PI/4);
+						bullet2->SetSpeedX(-500);
+						bullet2->SetSpeedY(550);
+						bullet2->SetRotation(3*D3DX_PI/4);
+						bullet3->SetSpeedX(-550);
+						bullet3->SetSpeedY(500);
+						bullet3->SetRotation(3*D3DX_PI/4);
 						break;
 					}
 				case DIRE_DOWNRIGHT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()+20);
-
+						bullet->SetPosX(pOwner->GetPosX());
 						bullet2->SetPosY(bullet->GetPosY());
-
+						bullet2->SetPosX(bullet->GetPosX());
 						bullet3->SetPosX(bullet->GetPosX());
+						bullet3->SetPosY(bullet->GetPosY());
 
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(300);
-						bullet2->SetSpeedX(300);
-						bullet2->SetSpeedY(350);
-						bullet3->SetSpeedX(350);
-						bullet3->SetSpeedY(300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/4);
+						bullet2->SetSpeedX(500);
+						bullet2->SetSpeedY(550);
+						bullet2->SetRotation(D3DX_PI/4);
+						bullet3->SetSpeedX(550);
+						bullet3->SetSpeedY(500);
+						bullet3->SetRotation(D3DX_PI/4);
 						break;
 					}
 				}
@@ -796,61 +823,105 @@ void TutorialState::MessageProc(IMessage* pMsg)
 					{
 						bullet->SetPosY(pOwner->GetPosY()-30);
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/2);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedY(-150);
 						break;
 					}
 				case DIRE_LEFT:
 					{
-						bullet->SetPosX((float)pOwner->GetOwner()->GetRect().left);
-						bullet->SetSpeedX(-300);
+						if(pOwner->GetWeaponType() == WPN_RIFLE)
+							bullet->SetPosY(bullet->GetPosY()+15);
+						else
+							bullet->SetPosY(bullet->GetPosY()+5);
+						bullet->SetPosX((float)pOwner->GetOwner()->GetRect2().left);
+						bullet->SetSpeedX(-500);
+						bullet->SetRotation(D3DX_PI);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedX(-150);
 						bullet->SetSpeedY(0);
 						break;
 					}
 				case DIRE_RIGHT:
 					{
+						if( pOwner->GetWeaponType() == WPN_RIFLE )
+							bullet->SetPosY(pOwner->GetPosY()-15);
+						else
+							bullet->SetPosY(bullet->GetPosY()-25);
 						bullet->SetPosX((float)pOwner->GetPosX()+30);
-						bullet->SetSpeedX(300);
+						bullet->SetSpeedX(500);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedX(150);
+
 						bullet->SetSpeedY(0);
 						break;
 					}
 				case DIRE_DOWN:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
-						bullet->SetPosX(pOwner->GetPosX()-20);
+						bullet->SetPosX(pOwner->GetPosX()+5);
 						bullet->SetSpeedX(0);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/2);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+							bullet->SetSpeedY(150);
 						break;
 					}
 				case DIRE_UPRIGHT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
 						bullet->SetPosX(pOwner->GetPosX()+20);
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-D3DX_PI/4);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(150);
+							bullet->SetSpeedY(-150);
+						}
 						break;
 					}
 				case DIRE_UPLEFT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()-20);
 						bullet->SetPosX(pOwner->GetPosX()-20);
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(-300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(-500);
+						bullet->SetRotation(-3*D3DX_PI/4);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(-150);
+							bullet->SetSpeedY(-150);
+						}
 						break;
 					}
 				case DIRE_DOWNLEFT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
 						bullet->SetPosX(pOwner->GetPosX()-20);
-						bullet->SetSpeedX(-300);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedX(-500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(3*D3DX_PI/4);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(-150);
+							bullet->SetSpeedY(150);
+						}
 						break;
 					}
 				case DIRE_DOWNRIGHT:
 					{
 						bullet->SetPosY(pOwner->GetPosY()+20);
 						bullet->SetPosX(pOwner->GetPosX()+20);
-						bullet->SetSpeedX(300);
-						bullet->SetSpeedY(300);
+						bullet->SetSpeedX(500);
+						bullet->SetSpeedY(500);
+						bullet->SetRotation(D3DX_PI/4);
+						if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+						{
+							bullet->SetSpeedX(150);
+							bullet->SetSpeedY(150);
+						}
 						break;
 					}
 				}

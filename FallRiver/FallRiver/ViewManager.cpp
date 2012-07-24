@@ -13,6 +13,7 @@ using namespace std;
 #include "GamePlayState.h"
 #include "LoadingScreen.h"
 #include "HighScoresMenuState.h"
+#include "DirectInput.h"
 #include "WinMenuState.h"
 #include "CreditsMenuState.h"
 #include "LoadMenuState.h"
@@ -292,7 +293,7 @@ bool ViewManager::DrawFont(int nFontID, char* cString, float nPosX, float nPosY,
 	{
 		char ch = cString[i];
 		int id = ch - ' ';
-		int find = 0;
+		//int find = 0;
 
 		if(i == 0)
 			second = ch;
@@ -453,7 +454,7 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 
 	// Load Shader
 	HRESULT hr = D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
-
+	hr;
 	// Create Render Target
 	D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
 
@@ -517,6 +518,7 @@ bool ViewManager::DeviceBegin(void)
 	current = 0;
 	output = 0;
 	HRESULT hr = m_lpDirect3DDevice->GetRenderTarget(0,&current);
+	hr;
 	// get texture surface and set render target
 	renderTarget->GetSurfaceLevel(0,&output);
 	m_lpDirect3DDevice->SetRenderTarget(0,output);
@@ -656,7 +658,7 @@ bool ViewManager::DeviceEnd(void)
 			if(tmp->questLogToggle)
 			{
 				// Quest Log Box
-				RECT logRect = { 600, 0, 800, 200};
+				//RECT logRect = { 600, 0, 800, 200};
 				//DrawRect(logRect, 50, 50, 50);
 				this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+0,1.0f,1.0f,&src_Rect);
 				DrawFont(tmp->m_nFontID,"Active Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+10.0f,0.5f,0.5f);
@@ -679,7 +681,7 @@ bool ViewManager::DeviceEnd(void)
 
 
 				// Quest Finished Box
-				RECT finishedLogRect = { 600, 200, 800, 400};
+				//RECT finishedLogRect = { 600, 200, 800, 400};
 				//DrawRect(finishedLogRect,50,50,50);
 				this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+200,1.0f,1.0f,&src_Rect);
 				DrawFont(tmp->m_nFontID,"Finished Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+210.0f,0.5f,0.5f);
@@ -694,7 +696,10 @@ bool ViewManager::DeviceEnd(void)
 			if( pBud && pBud->IsTeaching() )
 			{
 				pBud->SaySomething();
-				DrawFont(tmp->m_nFontID, "Press \"T\" to Skip Tutorial", 500, 50, 0.6f, 0.6f);
+				if( !DirectInput::GetInstance()->JoystickIsUnplugged(0) )
+					DrawFont(tmp->m_nFontID, "Press \"Back\" to Skip Tutorial", 500, 50, 0.6f, 0.6f);
+				else
+					DrawFont(tmp->m_nFontID, "Press \"T\" to Skip Tutorial", 500, 50, 0.6f, 0.6f);
 			}
 
 			vector<NPC*> tmpNPCs = *GamePlayState::GetInstance()->GetNPCs();
@@ -861,6 +866,7 @@ void ViewManager::ShutdownDirect3D(void)
 
 void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 {
+	bWindowed;nWidth;nHeight;
 	//// Set the new Presentation Parameters.
 	////m_PresentParams.BackBufferWidth				= nWidth;
 	////m_PresentParams.BackBufferHeight			= nHeight;

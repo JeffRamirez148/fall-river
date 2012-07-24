@@ -200,17 +200,6 @@ void Player::Update(float fElapsedTime)
 		m_nState = PSTATE_RELOAD;
 	}
 
-	if( m_nState == PSTATE_RELOAD  )
-	{
-		if( m_currWeapon->GetClip() < m_currWeapon->GetMaxClip() )
-			m_currWeapon->Reload();
-		else if( m_dwReloadTime <= GetTickCount() )
-		{
-			m_dwReloadTime = 0;
-			m_nState = PSTATE_IDLE;
-		}
-	}
-
 	/*if( pDI->KeyDown(DIK_I) )
 		if(ViewManager::GetInstance()->GetAmbientLightR() != 1.0f)
 			ViewManager::GetInstance()->SetAmbientLight(1.0f, 1.0f, 1.0f);
@@ -219,7 +208,12 @@ void Player::Update(float fElapsedTime)
 
 	if( !m_bLocked && ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
 	{
-		if(m_dwGunCount == 0 && m_nState != PSTATE_RELOAD)
+		if( m_currWeapon->GetClip() == 0 )
+		{
+			m_dwReloadTime = GetTickCount() + 1000;
+			m_nState = PSTATE_RELOAD;
+		}
+		else if(m_dwGunCount == 0 && m_nState != PSTATE_RELOAD)
 		{
 			m_dwGunCount = DWORD(GetTickCount() + m_currWeapon->GetFireRate());
 			if( m_currWeapon->GetWeaponType() != WPN_MACHETE )
@@ -246,7 +240,18 @@ void Player::Update(float fElapsedTime)
 			m_bIsHidden = false;
 			m_fshotTimer = 0;
 		}
-	}	
+	}
+
+	if( m_nState == PSTATE_RELOAD  )
+	{
+		if( m_currWeapon->GetClip() < m_currWeapon->GetMaxClip() )
+			m_currWeapon->Reload();
+		else if( m_dwReloadTime <= GetTickCount() )
+		{
+			m_dwReloadTime = 0;
+			m_nState = PSTATE_IDLE;
+		}
+	}
 
 	if( m_bShotBush == true && m_fshotTimer < 5 )
 	{
@@ -407,7 +412,7 @@ void Player::Update(float fElapsedTime)
 		}
 		else if( pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
 		{
-			int temp = pDI->JoystickGetLStickXAmount(0);
+			//int temp = pDI->JoystickGetLStickXAmount(0);
 			if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
 			{
 				SetDirection(DIRE_UPLEFT);
@@ -444,7 +449,7 @@ void Player::Update(float fElapsedTime)
 		}
 		else if( m_bmove &&  pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
 		{
-			int temptemp = pDI->JoystickGetLStickXAmount(0);
+			//int temptemp = pDI->JoystickGetLStickXAmount(0);
 			SetVelX(-100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
@@ -877,9 +882,9 @@ void Player::Update(float fElapsedTime)
 			if(strcmp(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
 				EventSystem::GetInstance()->SendEvent(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
 		}
-		if((m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
+		if(((unsigned)m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
-		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
+		else if((unsigned)m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame--;
 	}
 
@@ -938,17 +943,6 @@ void Player::Render()
 	//}
 	for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
 		Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();
-
-	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
-
-	/*if( m_nState == PSTATE_SWING)
-	{
-		Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
-	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
-	RECT collRect = {long(thisFrame.activeRect.left+GetPosX() - GamePlayState::GetInstance()->GetCamera().x+10), long(thisFrame.activeRect.top+GetPosY()- GamePlayState::GetInstance()->GetCamera().y+30), thisFrame.activeRect.right+(long)GetPosX() - GamePlayState::GetInstance()->GetCamera().x+10, thisFrame.activeRect.bottom+(long)GetPosY() - GamePlayState::GetInstance()->GetCamera().y+30};
-	pVM->DrawRect(collRect, 255, 21, 39);
-	}*/
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
@@ -1057,7 +1051,7 @@ bool Player::CheckCollision(IObjects* pBase)
 					BaseCharacter* tmpChar = (BaseCharacter*)(pBase);
 					if(tmpChar->GetCharacterType() == CHA_BOSS2)
 					{
-						Boss2* tmpBoss = (Boss2*)tmpChar;
+						//Boss2* tmpBoss = (Boss2*)tmpChar;
 						//if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
 						{
 							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)

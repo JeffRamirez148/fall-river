@@ -44,6 +44,7 @@ PickUp::~PickUp()
 
 void PickUp::Update(float fElapsedTime)
 {
+	fElapsedTime;
 	FMOD_VECTOR sound1 = { GamePlayState::GetInstance()->GetPlayer()->GetPosX(), GamePlayState::GetInstance()->GetPlayer()->GetPosY(), 0};
 	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
 	AudioManager::GetInstance()->setSoundPos(medicineID, sound1);

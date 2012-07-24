@@ -198,7 +198,7 @@ bool CompanionAI::CheckCollision(IObjects* pBase)
 
 void CompanionAI::HandleEvent(Event* aPEvent)
 {
-
+	aPEvent;
 }
 
 void CompanionAI::SaySomething() 

@@ -79,12 +79,12 @@ void BaseCharacter::Update(float fElapsedTime)
 				if(strcmp(thisAnim->frames[blood.curAnimation][blood.curFrame].eventMsg,"none") != 0)
 					EventSystem::GetInstance()->SendEvent(thisAnim->frames[blood.curAnimation][blood.curFrame].eventMsg, this);
 			}
-			if((blood.curFrame == thisAnim->frames[blood.curAnimation].size()) && thisAnim->looping[blood.curAnimation])
+			if(((unsigned)blood.curFrame == thisAnim->frames[blood.curAnimation].size()) && thisAnim->looping[blood.curAnimation])
 			{
 				this->SetBleeding(false);
 				blood.curFrame = 0;
 			}
-			else if(blood.curFrame == thisAnim->frames[blood.curAnimation].size() && !thisAnim->looping[blood.curAnimation])
+			else if((unsigned)blood.curFrame == thisAnim->frames[blood.curAnimation].size() && !thisAnim->looping[blood.curAnimation])
 			{
 				blood.curFrame--;
 				this->SetBleeding(false);

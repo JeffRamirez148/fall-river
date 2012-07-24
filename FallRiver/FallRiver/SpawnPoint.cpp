@@ -35,7 +35,7 @@ void SpawnPoint::Update(float fElapsedTime)
 
 	//ObjectFactory
 
-	DirectInput* pDI = DirectInput::GetInstance();
+	//DirectInput* pDI = DirectInput::GetInstance();
 
 	/*if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
 	{

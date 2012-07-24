@@ -192,6 +192,7 @@ bool OptionsMenuState::Input()
 
 void OptionsMenuState::Update(float fElapsedTime)
 {
+	fElapsedTime;
 }
 
 void OptionsMenuState::Render()
@@ -201,7 +202,7 @@ void OptionsMenuState::Render()
 	RECT src_NotPressed = {16,40,72,16};
 	RECT src_Pressed = {74,40,110,16};
 	RECT src_PowerNotPressed = {160,55,200,16};
-	RECT src_PowerPressed = {220,55,260,16};
+	//RECT src_PowerPressed = {220,55,260,16};
 	RECT src_SFX = {238,93,263,80};
 	RECT src_Music = {225,128,264,115};
 	RECT src_Res = {188,164,264,150};

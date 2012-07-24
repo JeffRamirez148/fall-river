@@ -783,10 +783,10 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 
 	m_lpDevice->GetCapabilities(&didCaps);
 	{
-		if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
+	/*	if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
 			int y = 4;
 		if (didCaps.dwFlags & DIDC_POLLEDDEVICE)
-			int y = 5;
+			int y = 5;*/
 
 		if (didCaps.dwFlags & DIDC_FORCEFEEDBACK)
 			bIsExclusive = true; // forces true so that the device can use ForceFeedback (has to be exclusive to use FF).
@@ -1090,7 +1090,7 @@ LONG DIJoystick::TranslateRStickY(DIJOYSTATE2& diJoyState)
 
 bool DIJoystick::DPadDown(int nDir)
 {
-	DWORD dwDir = m_diJoyState.rgdwPOV[0];
+	//DWORD dwDir = m_diJoyState.rgdwPOV[0];
 
 	return TranslatePOV(nDir, m_diJoyState.rgdwPOV[0]);
 }

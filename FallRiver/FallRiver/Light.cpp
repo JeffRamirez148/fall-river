@@ -23,5 +23,6 @@ Light::~Light()
 
 void Light::Update(float fElapsedTime) 
 {
+	fElapsedTime;
 }
 

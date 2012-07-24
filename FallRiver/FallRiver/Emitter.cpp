@@ -233,7 +233,7 @@ void Emitter::Update(float fElapsedTime)
 
 void Emitter::Render() 
 {
-	ViewManager* view = ViewManager::GetInstance();
+	//ViewManager* view = ViewManager::GetInstance();
 	//view->DrawUnfilledRect( this->rect, 255, 255, 255 );
 	for( unsigned int i = 0; i < _m_vparticles.size(); ++i)
 	{

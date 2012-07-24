@@ -96,11 +96,12 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 
 void Weapon::Update(float fElapsedTime)
 {
+	fElapsedTime;
 	SetPosX(m_pOwner->GetPosX()+m_pOwner->GetWidth()/2);
 	SetPosY(m_pOwner->GetPosY());
 
 	
-	DirectInput* pDI = DirectInput::GetInstance();
+	//DirectInput* pDI = DirectInput::GetInstance();
 
 	AudioManager* m_pAM = AudioManager::GetInstance();
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
