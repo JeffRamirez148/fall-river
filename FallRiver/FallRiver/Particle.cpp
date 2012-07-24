@@ -46,7 +46,7 @@ void Particle::Render()
 
 	}
 	view->GetSprite()->Flush();
-	view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmpD);
-	view->GetDirect3DDevice()->SetRenderState(D3DRS_SRCBLEND, tmpS);
+	/*view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmpD);
+	view->GetDirect3DDevice()->SetRenderState(D3DRS_SRCBLEND, tmpS);*/
 }
 
