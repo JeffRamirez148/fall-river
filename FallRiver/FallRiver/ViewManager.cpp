@@ -851,6 +851,7 @@ void ViewManager::ShutdownDirect3D(void)
 	SAFE_RELEASE(renderTarget);
 	SAFE_RELEASE(postEffect);
 
+
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		textures[i].ref = 0;
