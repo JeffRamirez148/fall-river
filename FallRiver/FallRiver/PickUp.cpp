@@ -57,7 +57,7 @@ void PickUp::Render()
 	ViewManager::GetInstance()->GetSprite()->Flush();
 
 	
-	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
+	//RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
 	//pVM->DrawRect(reRect, 255, 0, 255);
 	if( this->GetImageID() != -1 )

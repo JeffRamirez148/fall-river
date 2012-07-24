@@ -589,6 +589,7 @@ bool ViewManager::DeviceEnd(void)
 		tmpColor[j] = light->color;
 		tmpInnerCone[j] = light->innerCone;
 		tmpOuterCone[j] = light->outerCone;
+		delete light;
 	}
 
 	for(unsigned i(0); i<passes; ++i)
@@ -1002,6 +1003,7 @@ void ViewManager::CreateOtherLights(void)
 				tmp->color[2] = 0;
 			}
 			lightsToRender.push_back(tmp);
+			//delete tmp;
 		}
 	}
 	vector<RECT> streetLights = GamePlayState::GetInstance()->GetStreelights();

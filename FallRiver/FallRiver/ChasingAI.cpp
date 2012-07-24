@@ -122,8 +122,8 @@ void ChasingAI::Update(float fElapsedTime)
 
 	if( m_pTarget->IsOn() && m_nState == ESTATE_IDLE && distance < 500 && m_nState != ESTATE_DEAD && m_nState != GONE )
 	{
-		float targetPosX = m_pTarget->GetPosX();
-		float targetPosY = m_pTarget->GetPosY();
+		//float targetPosX = m_pTarget->GetPosX();
+		//float targetPosY = m_pTarget->GetPosY();
 		//float targetPosX = m_pTarget->GetPosX();
 		//float targetPosY = m_pTarget->GetPosY();
 

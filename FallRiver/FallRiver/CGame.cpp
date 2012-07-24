@@ -38,6 +38,8 @@ CGame::CGame()
 	owl = m_pAM->registerMusic("resource/Sounds/owl.wav");
 	loseID = m_pAM->registerMusic("resource/Sounds/loseSound.wav");
 
+	
+
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
 	m_pAM->setMusicPos(backGroundID, sound1);
@@ -65,6 +67,7 @@ CGame::CGame()
 
 CGame::~CGame()
 {
+	
 }
 
 bool CGame::Input() 

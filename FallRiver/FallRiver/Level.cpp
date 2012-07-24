@@ -48,12 +48,14 @@ void Level::Update(float fElapsedTime)
 {
 	DirectInput* pDI = DirectInput::GetInstance();
 
-
 	if(pDI->KeyPressed(DIK_P) )
 	{
 		m_bNoClip = !m_bNoClip;
 	}
-	CheckTriangleCollisions();
+	if( GamePlayState::GetInstance()->GetPlayer()->IsOn() )
+	{
+		CheckTriangleCollisions();
+	}
 }
 
 void Level::Render() 
@@ -529,7 +531,8 @@ bool Level::CheckCollision(IObjects* pBase)
 		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
 			RECT cRect;
-			if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == FALSE )
+			RECT temp = pBase->GetRect();
+			if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &temp ) == FALSE )
 			{
 				if( m_vCollisions[i].m_bPrevColliding == true )
 				{
@@ -708,10 +711,10 @@ void Level::CheckTriangleCollisions()
 	float playerY = player->GetPosY();
 	int playerDirection = player->GetDirection();
 
-	float lightEndX, lightEndY, distanceC, distanceA;
-	float point1X, point1Y, point2X, point2Y, point3X, point3Y;
+	float lightEndX=0, lightEndY=0, distanceC=0, distanceA=0;
+	float point1X=0, point1Y=0, point2X=0, point2Y=0, point3X=0, point3Y=0;
 
-	bool a, b, c;
+	bool a=false, b=false, c=false;
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		if(m_vTiles[i].m_Layer == 1)

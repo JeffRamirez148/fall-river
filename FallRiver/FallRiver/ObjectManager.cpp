@@ -55,6 +55,7 @@ void ObjectManager::RemoveObject( BaseObject* ptr )
 		if( (*iter) == ptr)
 		{
 			ptr->Release();
+			//delete ptr;
 
 			iter = m_Objects.erase(iter);
 			break;
