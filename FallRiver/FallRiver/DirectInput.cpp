@@ -619,13 +619,13 @@ DIMouse::DIMouse(LPDIRECTINPUT8 pDI, HWND hWnd, bool bIsExclusive)
 		memset(&didCaps, 0, sizeof(didCaps));
 		didCaps.dwSize = sizeof(didCaps); 
 
-		m_lpDevice->GetCapabilities(&didCaps);
+	/*	m_lpDevice->GetCapabilities(&didCaps);
 		{
 			if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
 				int y = 4;
 			if (didCaps.dwFlags & DIDC_POLLEDDEVICE)
 				int y = 5;
-		}
+		}*/
 
 		// will be zero if it failed because the struct was cleared out
 		m_nNumButtons = didCaps.dwButtons;
@@ -728,7 +728,7 @@ int DIMouse::CheckBufferedButtons(void)
 	for (int j = 0; j < GetNumButtons(); j++)
 	{
 		//	Find the first button that was pressed
-		if (ButtonPressed(j))
+		if (ButtonPressed((unsigned char)j))
 		{
 			//	return the first one that was found to be pressed.
 			nButton = j;
@@ -783,17 +783,17 @@ DIJoystick::DIJoystick(LPDIRECTINPUT8 pDI, HWND hWnd, const DIDEVICEINSTANCE* lp
 
 	m_lpDevice->GetCapabilities(&didCaps);
 	{
-		if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
-			int y = 4;
-		if (didCaps.dwFlags & DIDC_POLLEDDEVICE)
-			int y = 5;
+		//if (didCaps.dwFlags & DIDC_POLLEDDATAFORMAT)
+		//	int y = 4;
+		//if (didCaps.dwFlags & DIDC_POLLEDDEVICE)
+			//int y = 5;
 
 		if (didCaps.dwFlags & DIDC_FORCEFEEDBACK)
 			bIsExclusive = true; // forces true so that the device can use ForceFeedback (has to be exclusive to use FF).
 	}
 
-	DWORD axes = didCaps.dwAxes;
-	DWORD povs = didCaps.dwPOVs;
+	//DWORD axes = didCaps.dwAxes;
+	//DWORD povs = didCaps.dwPOVs;
 
 	// will be zero if it failed because the struct was cleared out
 	m_nNumButtons = didCaps.dwButtons;
@@ -1090,7 +1090,7 @@ LONG DIJoystick::TranslateRStickY(DIJOYSTATE2& diJoyState)
 
 bool DIJoystick::DPadDown(int nDir)
 {
-	DWORD dwDir = m_diJoyState.rgdwPOV[0];
+//	DWORD dwDir = m_diJoyState.rgdwPOV[0];
 
 	return TranslatePOV(nDir, m_diJoyState.rgdwPOV[0]);
 }

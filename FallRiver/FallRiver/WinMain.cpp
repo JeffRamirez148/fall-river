@@ -22,9 +22,9 @@ const int	g_nWINDOW_HEIGHT		= 600;							//	Window Height.
 
 //	Windowed or Full screen depending on project setting
 #ifdef _DEBUG
-	BOOL	g_bIS_WINDOWED			= TRUE;						
+	bool	g_bIS_WINDOWED			= true;						
 #else
-	BOOL	g_bIS_WINDOWED			= FALSE;
+	bool	g_bIS_WINDOWED			= true;
 #endif
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -238,6 +238,7 @@ HWND MakeWindow(HINSTANCE hInstance)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	lpCmdLine;
 	MSG		msg;	//	Generic message.
 	HWND	hWnd;	//	Main Window Handle.
 
@@ -285,7 +286,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//////////////////////////////////////////
 
 	//	Enter main event loop
-	while (TRUE)
+	bool test = true;
+	while (test)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{ 

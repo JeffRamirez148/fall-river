@@ -196,10 +196,6 @@ bool CompanionAI::CheckCollision(IObjects* pBase)
 	return false;
 }
 
-void CompanionAI::HandleEvent(Event* aPEvent)
-{
-
-}
 
 void CompanionAI::SaySomething() 
 {

@@ -195,7 +195,7 @@ bool LoadMenuState::Input()
 		else if( m_nCursPosY == 400 )
 			m_bIsLoading = false;
 
-		Player* testingstuff = GamePlayState::GetInstance()->GetPlayer();
+//		Player* testingstuff = GamePlayState::GetInstance()->GetPlayer();
 		return true;
 	}
 
@@ -210,6 +210,7 @@ bool LoadMenuState::Input()
 
 void LoadMenuState::Update(float fElapsedTime) 
 {
+	fElapsedTime;
 }
 
 void LoadMenuState::Render() 

@@ -117,7 +117,7 @@ bool LoseMenuState::Input()
 }
 void LoseMenuState::Update(float aFElapsedTime)
 {
-
+	aFElapsedTime;
 }
 void LoseMenuState::Render()
 {

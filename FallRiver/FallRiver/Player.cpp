@@ -407,7 +407,7 @@ void Player::Update(float fElapsedTime)
 		}
 		else if( pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
 		{
-			int temp = pDI->JoystickGetLStickXAmount(0);
+			//int temp = pDI->JoystickGetLStickXAmount(0);
 			if( pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
 			{
 				SetDirection(DIRE_UPLEFT);
@@ -444,7 +444,7 @@ void Player::Update(float fElapsedTime)
 		}
 		else if( m_bmove &&  pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
 		{
-			int temptemp = pDI->JoystickGetLStickXAmount(0);
+			//int temptemp = pDI->JoystickGetLStickXAmount(0);
 			SetVelX(-100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
@@ -877,9 +877,9 @@ void Player::Update(float fElapsedTime)
 			if(strcmp(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
 				EventSystem::GetInstance()->SendEvent(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
 		}
-		if((m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
+		if(((unsigned int )m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
-		else if(m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
+		else if((unsigned int )m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame--;
 	}
 
@@ -955,16 +955,17 @@ bool Player::CheckCollision(IObjects* pBase)
 		{
 			RECT cRect;
 			RECT collRect = {long(thisFrame.activeRect.left+GetPosX()), long(thisFrame.activeRect.top+GetPosY()), thisFrame.activeRect.right+(long)GetPosX(), thisFrame.activeRect.bottom+(long)GetPosY()};
-			if( IntersectRect(&cRect, &collRect, &pBase->GetRect() ) && m_playerAnim.curFrame == 1 )
+			RECT temp = pBase->GetRect();
+			if( IntersectRect(&cRect, &collRect, &temp ) && m_playerAnim.curFrame == 1 )
 			{
 				tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
 				EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
 
 				GamePlayState* gameState = GamePlayState::GetInstance();
 				Particle_Manager* m_pPM = Particle_Manager::GetInstance();
-				int bloodA1;
-				int bloodA2;
-				int bloodA3;
+				int bloodA1 = -1;
+				int bloodA2 = -1;
+				int bloodA3 = -1;
 
 				RECT tmpRect1 = collRect;
 				//RECT tmpRect1 = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };
@@ -1048,7 +1049,7 @@ bool Player::CheckCollision(IObjects* pBase)
 					BaseCharacter* tmpChar = (BaseCharacter*)(pBase);
 					if(tmpChar->GetCharacterType() == CHA_BOSS2)
 					{
-						Boss2* tmpBoss = (Boss2*)tmpChar;
+//						Boss2* tmpBoss = (Boss2*)tmpChar;
 						//if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
 						{
 							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
@@ -1102,7 +1103,10 @@ bool Player::CheckCollision(IObjects* pBase)
 			if(BaseObject::CheckCollision(pBase) == true )
 			{
 				RECT cRect;
-				if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == TRUE )
+				RECT temp = GetRect();
+				RECT temp2 = pBase->GetRect();
+
+				if( IntersectRect( &cRect, &temp, &temp2 ) == TRUE )
 				{
 					Bush* tmp = (Bush*)pBase;
 					tmp->SetIsInBush( true );

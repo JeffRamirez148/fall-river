@@ -4,6 +4,7 @@
 
 void CutScene::Update(float fElapsedTime) 
 {
+	fElapsedTime;
 }
 
 void CutScene::Render() 

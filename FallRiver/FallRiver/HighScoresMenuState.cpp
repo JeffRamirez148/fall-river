@@ -96,7 +96,7 @@ void HighScoresMenuState::Exit()
 
 bool HighScoresMenuState::Input() 
 {
-	CGame* pGame = CGame::GetInstance();
+//	CGame* pGame = CGame::GetInstance();
 
 	if( m_pDI->KeyPressed(DIK_ESCAPE) || m_pDI->JoystickButtonPressed(1,0) )
 		CGame::GetInstance()->RemoveState();
@@ -221,9 +221,11 @@ void HighScoresMenuState::Render()
 
 void HighScoresMenuState::SetEnd(bool aEnd) 
 {
+	aEnd;
 }
 
 void HighScoresMenuState::SetOldAttractMode(bool aMode)
 {
+	aMode;
 }
 

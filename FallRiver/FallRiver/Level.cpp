@@ -44,7 +44,8 @@ Level::~Level()
 
 void Level::Update(float fElapsedTime)
 {
-	DirectInput* pDI = DirectInput::GetInstance();
+	fElapsedTime;
+	//DirectInput* pDI = DirectInput::GetInstance();
 
 
 	/*if(pDI->KeyPressed(DIK_P) )
@@ -468,7 +469,8 @@ bool Level::CheckCollision(IObjects* pBase)
 		for(unsigned int i = 0; i < m_vCollisions.size(); i++)
 		{
 			RECT cRect;
-			if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &pBase->GetRect() ) == false )
+			RECT temp2 = pBase->GetRect();
+			if( IntersectRect(&cRect, &m_vCollisions[i].m_rCollision, &temp2 ) == false )
 			{
 				if( m_vCollisions[i].m_bPrevColliding == true )
 				{
@@ -553,7 +555,7 @@ bool Level::CheckCollision(IObjects* pBase)
 								}
 							}
 
-							DirectInput* pDI = DirectInput::GetInstance();
+						//	DirectInput* pDI = DirectInput::GetInstance();
 							//check = 0;
 							if( check == 0 )
 							{
@@ -648,8 +650,8 @@ void Level::CheckTriangleCollisions()
 	float playerY = player->GetPosY();
 	int playerDirection = player->GetDirection();
 
-	float lightEndX, lightEndY, distanceC, distanceA;
-	float point1X, point1Y, point2X, point2Y, point3X, point3Y;
+	float lightEndX=0, lightEndY=0, distanceC=0, distanceA=0;
+	float point1X=0, point1Y=0, point2X=0, point2Y=0, point3X=0, point3Y=0;
 
 	bool a, b, c;
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)

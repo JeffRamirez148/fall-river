@@ -132,7 +132,7 @@ void TutorialState::Enter()
 	m_pVM->ClearOtherLights();
 
 	Player* pPlayer = nullptr;
-	Weapon* pWeapon = nullptr;
+//	Weapon* pWeapon = nullptr;
 	Level* pLevel = nullptr;
 	Bush* pBush = nullptr;
 	PickUp* pPickUp = nullptr;
@@ -159,7 +159,7 @@ void TutorialState::Enter()
 	pPlayer->SetPosY(500);
 
 
-	Weapon* pWeapon2 = nullptr;
+	//Weapon* pWeapon2 = nullptr;
 	Weapon* pWeapon3 = nullptr;
 	Weapon* pWeapon4 = nullptr;
 

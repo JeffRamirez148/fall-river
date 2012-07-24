@@ -2381,7 +2381,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				}
 				else if( pPlayer->m_bHasMedicine == false  && pPlayer->m_vpActiveQuests.size() > 0 )
 				{
-					m_pHUD->SetTarget(hospitalX, hospitalY);
+					m_pHUD->SetTarget((float)hospitalX, (float)hospitalY);
 				}
 				else if( pPlayer->m_bHasMedicine == false && pPlayer->m_vpActiveQuests.size() == 0 )
 				{
@@ -2395,7 +2395,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
@@ -2723,7 +2723,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
@@ -3045,7 +3045,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget(nth->x, nth->y);
+				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{

@@ -27,9 +27,6 @@ class XMLManager
 {
 
 public:
-	Level* Parse(string aFile);
-	float* ParseSound(string aFile);
-	void ParseAnim(char* aFile, Animation& anim);
 	static XMLManager* GetInstance(void);
 	Emitter* ParseEmitter(string aFile);
 

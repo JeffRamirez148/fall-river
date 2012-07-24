@@ -44,6 +44,7 @@ PickUp::~PickUp()
 
 void PickUp::Update(float fElapsedTime)
 {
+	fElapsedTime;
 	FMOD_VECTOR sound1 = { GamePlayState::GetInstance()->GetPlayer()->GetPosX(), GamePlayState::GetInstance()->GetPlayer()->GetPosY(), 0};
 	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
 	AudioManager::GetInstance()->setSoundPos(medicineID, sound1);
@@ -99,8 +100,9 @@ RECT PickUp::GetRect()
 bool PickUp::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
-
-	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == false  )
+	RECT temp = GetRect();
+	RECT temp2 = pBase->GetRect();
+	if( IntersectRect( &cRect, &temp, &temp2 ) == false  )
 		return false;
 	else
 	{

@@ -20,21 +20,6 @@ XMLManager* XMLManager::GetInstance(void)
 	return &s_Instance;
 }
 
-Level* XMLManager::Parse(string aFile) 
-{
-	return NULL;
-}
-
-float* XMLManager::ParseSound(string aFile) 
-{
-	return 0;
-}
-
-void XMLManager::ParseAnim(char* aFile, Animation& anim)
-{
-
-}
-
 Emitter* XMLManager::ParseEmitter(string aFile)
 {
 	TiXmlDocument doc;

@@ -250,11 +250,6 @@ int ViewManager::RegisterAnimation(char* aFilePath)
 	return (int)animations.size() - 1;
 }
 
-int ViewManager::RegisterShader(char* aFilePath)
-{
-
-	return -1;
-}
 
 //For Drawing Animations
 bool ViewManager::DrawAnimation(AnimInfo* aAnimInfo, float nPosX, float nPosY, float fScaleX, float fScaleY, float fRotCenterX, 
@@ -284,15 +279,15 @@ bool ViewManager::DrawFont(int nFontID, char* cString, float nPosX, float nPosY,
 	float nX = nPosX;
 	float nColStart = nX;
 	float nY = nPosY;
-	char first;
-	char second;
+	char first = 0;
+	char second = 0;
 	//char newline;
 
 	for(int i = 0; cString[i] != '\0'; i++)
 	{
 		char ch = cString[i];
 		int id = ch - ' ';
-		int find = 0;
+		//int find = 0;
 
 		if(i == 0)
 			second = ch;
@@ -452,7 +447,8 @@ bool ViewManager::InitViewManager(HWND hWnd, int nScreenWidth, int nScreenHeight
 	bBuffer->Release(); // drop ref count
 
 	// Load Shader
-	HRESULT hr = D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
+	//HRESULT hr = 
+	D3DXCreateEffectFromFile(m_lpDirect3DDevice,L"resource/Shaders/Lights.fx",0,0,0,0,&postEffect,0);
 
 	// Create Render Target
 	D3DXCreateTexture(m_lpDirect3DDevice, backbuffer.Width, backbuffer.Height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &renderTarget); 
@@ -516,7 +512,8 @@ bool ViewManager::DeviceBegin(void)
 	// store backbuffer
 	current = 0;
 	output = 0;
-	HRESULT hr = m_lpDirect3DDevice->GetRenderTarget(0,&current);
+	//HRESULT hr = 
+	m_lpDirect3DDevice->GetRenderTarget(0,&current);
 	// get texture surface and set render target
 	renderTarget->GetSurfaceLevel(0,&output);
 	m_lpDirect3DDevice->SetRenderTarget(0,output);
@@ -656,7 +653,7 @@ bool ViewManager::DeviceEnd(void)
 			if(tmp->questLogToggle)
 			{
 				// Quest Log Box
-				RECT logRect = { 600, 0, 800, 200};
+				//RECT logRect = { 600, 0, 800, 200};
 				//DrawRect(logRect, 50, 50, 50);
 				this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+0,1.0f,1.0f,&src_Rect);
 				DrawFont(tmp->m_nFontID,"Active Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+10.0f,0.5f,0.5f);
@@ -679,7 +676,7 @@ bool ViewManager::DeviceEnd(void)
 
 
 				// Quest Finished Box
-				RECT finishedLogRect = { 600, 200, 800, 400};
+				//RECT finishedLogRect = { 600, 200, 800, 400};
 				//DrawRect(finishedLogRect,50,50,50);
 				this->DrawStaticTexture(QuestLog,600-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+200,1.0f,1.0f,&src_Rect);
 				DrawFont(tmp->m_nFontID,"Finished Quests",640.0f-(float(CGame::GetInstance()->GetScreenWidth())*0.05f),(float(CGame::GetInstance()->GetScreenHeight())*0.05f)+210.0f,0.5f,0.5f);
@@ -861,6 +858,9 @@ void ViewManager::ShutdownDirect3D(void)
 
 void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 {
+	bWindowed;
+	nHeight;
+	nWidth;
 	//// Set the new Presentation Parameters.
 	////m_PresentParams.BackBufferWidth				= nWidth;
 	////m_PresentParams.BackBufferHeight			= nHeight;

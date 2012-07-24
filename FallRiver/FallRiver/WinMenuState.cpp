@@ -117,7 +117,7 @@ bool WinMenuState::Input()
 
 void WinMenuState::Update(float aFElapsedTime) 
 {
-	
+	aFElapsedTime;
 }
 
 void WinMenuState::Render()
@@ -137,10 +137,10 @@ void WinMenuState::Render()
 	else if(curPos == 500)
 	{ExitRect.left = 1535; ExitRect.right = ExitRect.left+287;}
 
-	pVM->DrawStaticTexture(tempWinID, (float)170, curPos-50, 1.0f, 1.0f, &BloodRect);
+	pVM->DrawStaticTexture(tempWinID, (float)170, (float)curPos-50.0f, 1.0f, 1.0f, &BloodRect);
 
-	pVM->DrawStaticTexture(tempWinID, 350, 400,  0.5f, 0.9f, &resumeRect);
-	pVM->DrawStaticTexture(tempWinID, 370, 500,  0.5f, 0.9f, &ExitRect);
+	pVM->DrawStaticTexture(tempWinID, (float)350, (float)400,  0.5f, 0.9f, &resumeRect);
+	pVM->DrawStaticTexture(tempWinID, (float)370, (float)500,  0.5f, 0.9f, &ExitRect);
 
 }
 

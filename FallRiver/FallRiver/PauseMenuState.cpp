@@ -131,7 +131,7 @@ bool PauseMenuState::Input()
 
 void PauseMenuState::Update(float fElapsedTime) 
 {
-
+	fElapsedTime;
 }
 
 void PauseMenuState::Render() 
@@ -156,7 +156,7 @@ void PauseMenuState::Render()
 	else if(m_nCursPosY == 500)
 	{ExitRect.left = 1535; ExitRect.right = ExitRect.left+287;}
 
-	m_pVM->DrawStaticTexture(m_nPauseID, (float)170, m_nCursPosY-50, 1.0f, 1.0f, &BloodRect);
+	m_pVM->DrawStaticTexture(m_nPauseID, (float)170, (float)m_nCursPosY-50.0f, 1.0f, 1.0f, &BloodRect);
 
 	m_pVM->DrawStaticTexture(m_nPauseID, (float)320, (float)200,  0.7f, 0.9f, &resumeRect);
 	m_pVM->DrawStaticTexture(m_nPauseID, (float)330, (float)300,  0.7f, 0.9f, &saveRect);

@@ -47,7 +47,7 @@ void Bullet::Update(float fElapsedTime)
 		pMsg = nullptr;
 	}
 
-	DirectInput* pDI = DirectInput::GetInstance();
+//	DirectInput* pDI = DirectInput::GetInstance();
 
 	m_nPosX += m_fSpeedX * fElapsedTime;
 	m_nPosY += m_fSpeedY* fElapsedTime;
@@ -70,9 +70,6 @@ void Bullet::Render()
 
 }
 
-void Bullet::HandleEvent(Event* pEvent) 
-{
-}
 
 RECT Bullet::GetRect()
 {
@@ -83,7 +80,9 @@ RECT Bullet::GetRect()
 bool Bullet::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
-	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == false  )
+	RECT temp = GetRect();
+	RECT temp2 = pBase->GetRect();
+	if( IntersectRect( &cRect, &temp, &temp2 ) == false  )
 		return false;
 	else if(pBase->GetObjectType() == OBJ_CHARACTER && GetOwner()->GetOwner() != pBase)
 	{

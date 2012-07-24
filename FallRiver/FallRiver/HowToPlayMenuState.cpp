@@ -91,6 +91,7 @@ bool HowToPlayMenuState::Input()
 
 void HowToPlayMenuState::Update(float fElapsedTime) 
 {
+	fElapsedTime;
 }
 
 void HowToPlayMenuState::Render() 

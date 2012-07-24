@@ -1,5 +1,4 @@
 #include "Weapon.h"
-#include "DirectInput.h"
 #include "CreateBullet.h"
 #include "MessageSystem.h"
 #include "ViewManager.h"
@@ -96,11 +95,11 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 
 void Weapon::Update(float fElapsedTime)
 {
+	fElapsedTime;
 	SetPosX(m_pOwner->GetPosX()+m_pOwner->GetWidth()/2);
 	SetPosY(m_pOwner->GetPosY());
 
-	
-	DirectInput* pDI = DirectInput::GetInstance();
+
 
 	AudioManager* m_pAM = AudioManager::GetInstance();
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
@@ -176,7 +175,9 @@ RECT Weapon::GetRect()
 bool Weapon::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
-	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == false  )
+	RECT temp = GetRect();
+	RECT temp2 = pBase->GetRect();
+	if( IntersectRect( &cRect, &temp, &temp2 ) == false  )
 		return false;
 	return true;
 }

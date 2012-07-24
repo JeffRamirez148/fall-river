@@ -74,17 +74,17 @@ void BaseCharacter::Update(float fElapsedTime)
 		{
 			blood.fTime -= thisAnim->frames[blood.curAnimation][blood.curFrame].duration;
 			blood.curFrame++;
-			if(blood.curFrame < (int)thisAnim->frames[blood.curAnimation].size())
+			if((unsigned int)blood.curFrame < (int)thisAnim->frames[blood.curAnimation].size())
 			{
 				if(strcmp(thisAnim->frames[blood.curAnimation][blood.curFrame].eventMsg,"none") != 0)
 					EventSystem::GetInstance()->SendEvent(thisAnim->frames[blood.curAnimation][blood.curFrame].eventMsg, this);
 			}
-			if((blood.curFrame == thisAnim->frames[blood.curAnimation].size()) && thisAnim->looping[blood.curAnimation])
+			if(((unsigned int)blood.curFrame == thisAnim->frames[blood.curAnimation].size()) && thisAnim->looping[blood.curAnimation])
 			{
 				this->SetBleeding(false);
 				blood.curFrame = 0;
 			}
-			else if(blood.curFrame == thisAnim->frames[blood.curAnimation].size() && !thisAnim->looping[blood.curAnimation])
+			else if((unsigned int)blood.curFrame == thisAnim->frames[blood.curAnimation].size() && !thisAnim->looping[blood.curAnimation])
 			{
 				blood.curFrame--;
 				this->SetBleeding(false);
@@ -99,7 +99,7 @@ void BaseCharacter::Render()
 {
 	if(bleeding)
 	{ 
-		float centerX, centerY, posX, posY;
+		float centerX=0, centerY=0, posX=0, posY=0;
 		centerX = (GetRect2().right - GetRect2().left) * .5f;
 		centerY = (GetRect2().bottom - GetRect2().top) * .5f;
 		D3DCOLOR color = 0x6affffff;
@@ -177,9 +177,9 @@ bool BaseCharacter::CheckCollision(IObjects* pBase)
 			tmpVel.x = tmpBullet->GetSpeedX();
 			tmpVel.y = tmpBullet->GetSpeedY();
 			tmpVel.z = 0;
-			int bloodA1;
-			int bloodA2;
-			int bloodA3;
+			int bloodA1=0;
+			int bloodA2=0;
+			int bloodA3=0;
 
 			RECT tmpRect1 = GetRect2();//tmpBullet->GetRect();
 			//RECT tmpRect1 = {LONG(m_nPosX - 5), LONG(m_nPosY - 5), LONG(m_nPosX + 5), LONG(m_nPosY + 5) };

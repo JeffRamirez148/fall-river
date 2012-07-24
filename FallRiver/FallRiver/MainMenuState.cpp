@@ -175,6 +175,7 @@ bool MainMenuState::Input()
 
 void MainMenuState::Update(float fElapsedTime) 
 {
+	fElapsedTime;
 }
 
 void MainMenuState::Render() 
