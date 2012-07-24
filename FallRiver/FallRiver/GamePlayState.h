@@ -134,6 +134,7 @@ public:
 	int GetBloodL6() { return bloodL6;}
 	int GetBloodL7() { return bloodL7;}
 	int GetBloodL8() { return bloodL8;}
+	int GetRainID() { return rainA; }
 
 	void SetGoreL1(int id) { goreL1 = id;}
 	void SetGoreL2(int id) { goreL2 = id;}

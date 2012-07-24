@@ -42,7 +42,7 @@ void WinMenuState::Enter()
 	audio->setMusicPos(victoryID, sound1);
 
 	audio->setMusicVel(victoryID, tmp);
-	audio->setMusicLooping(victoryID, true);
+	audio->setMusicLooping(victoryID, false);
 	audio->playMusic(victoryID);
 
 //	musicID = audio->registerMusic("resource/Sounds/rainroof.wav");

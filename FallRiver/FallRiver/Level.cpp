@@ -12,6 +12,8 @@
 #include "DestroyBullet.h"
 #include "Bullet.h"
 #include "Player.h"
+#include "Particle_Manager.h"
+#include "Emitter.h"
 
 Level::Level() 
 {
@@ -71,6 +73,47 @@ void Level::Render()
 
 	RECT intersect;
 
+	vector<POINTFLOAT> lightsToRender;
+	RECT cRect;
+	RECT camRect = { (LONG)GamePlayState::GetInstance()->GetCamera().x - CGame::GetInstance()->GetScreenWidth(), (LONG)GamePlayState::GetInstance()->GetCamera().y - CGame::GetInstance()->GetScreenHeight(), LONG(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth() * 2), LONG(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight() * 2)};
+	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
+	{
+		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
+		if(
+			IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
+	
+		{
+			//if(!GamePlayState::GetInstance()->GetPlayer())
+			//	break;
+	
+			POINTFLOAT tmp;
+			tmp.x = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
+
+			tmp.y = (((((fire.bottom + fire.top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() )));
+			lightsToRender.push_back(tmp);
+		}
+	}
+	vector<RECT> streetLights = GamePlayState::GetInstance()->GetStreelights();
+	for( unsigned int i = 0; lightsToRender.size() < 6 && i < streetLights.size(); ++i)
+	{
+		if(
+			IntersectRect( &cRect, &camRect, &streetLights[i] ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
+			//float cY 
+			)
+		{
+			//if(!GamePlayState::GetInstance()->GetPlayer())
+			//	break;
+	
+			POINTFLOAT tmp;	
+			tmp.x = (((((streetLights[i].left + streetLights[i].right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
+			tmp.y = (((((streetLights[i].bottom + streetLights[i].top) *.5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosY() )));
+			lightsToRender.push_back(tmp);
+		}
+	}
+
 	for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp = { (long)m_vTiles[i].m_nWorldPosX,(long)m_vTiles[i].m_nWorldPosY,long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width),long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height)};
@@ -80,6 +123,7 @@ void Level::Render()
 		{
 			if( m_vTiles[i].m_Layer == 2)
 			{
+
 				Player*	tmp = GamePlayState::GetInstance()->GetPlayer();;
 
 				//if( m_vTiles[i].shadow && tmp->IsOn())
@@ -148,7 +192,24 @@ void Level::Render()
 
 					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.02f, &m_vTiles[i].m_rImageRect, 32, 50, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 				}
+				for(int i = 0; i < lightsToRender.size();++i)
+				{
+					float angle = 0;
+					float x2 = lightsToRender[i].x - m_vTiles[i].m_nWorldPosX;
+					float x = x2;
+					float y2 =lightsToRender[i].y - m_vTiles[i].m_nWorldPosY;
+					float y = y2;
+					x2 *= x2;
+					y2 *= y2;
+					float distance = sqrt(x2 + y2);
 
+					angle = acos(x/distance);
+					if( y < 0)
+						angle *=  -1;
+
+					angle -= 1.57079f;
+					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.02f, &m_vTiles[i].m_rImageRect, 32, 50, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+				}
 			}
 			pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
 

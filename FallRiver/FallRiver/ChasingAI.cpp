@@ -16,6 +16,7 @@ ChasingAI::ChasingAI()
 {
 	locked = false;
 	m_nState = ESTATE_IDLE;
+	m_nCharacterType = CHA_CHASING;
 
 	m_pfDestination.x = 0;
 	m_pfDestination.y = 0;
@@ -68,6 +69,9 @@ void ChasingAI::Update(float fElapsedTime)
 
 	if(GetHealth() <= 0)
 	{
+		AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(zombieHitID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(notifyID)->stop();
 		if( m_dwDeathTime == 0 )
 		{
 			m_dwDeathTime = GetTickCount() + 1000;

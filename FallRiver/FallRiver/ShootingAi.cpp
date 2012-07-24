@@ -13,6 +13,7 @@
 #include "Bullet.h"
 #include "CGame.h"
 #include "AudioManager.h"
+#include "sound.h"
 
 ShootingAi::ShootingAi()
 {
@@ -69,6 +70,8 @@ void ShootingAi::Update(float fElapsedTime)
 	AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	if(GetHealth() <= 0)
 	{
+		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
 		DestroyEnemyS* pMsg = new DestroyEnemyS(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
