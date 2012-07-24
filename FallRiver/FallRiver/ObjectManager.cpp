@@ -97,8 +97,8 @@ void ObjectManager::RenderAllObjects( void )
 			)
 	
 		{
-			if(!GamePlayState::GetInstance()->GetPlayer())
-				break;
+			//if(!GamePlayState::GetInstance()->GetPlayer())
+			//	break;
 	
 			POINTFLOAT tmp;
 			tmp.x = (((((fire.left + fire.right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
@@ -115,8 +115,8 @@ void ObjectManager::RenderAllObjects( void )
 			//float cY 
 			)
 		{
-			if(!GamePlayState::GetInstance()->GetPlayer())
-				break;
+			//if(!GamePlayState::GetInstance()->GetPlayer())
+			//	break;
 	
 			POINTFLOAT tmp;	
 			tmp.x = (((((streetLights[i].left + streetLights[i].right) * .5f) - GamePlayState::GetInstance()->GetPlayer()->GetPosX() )));
@@ -203,8 +203,15 @@ void ObjectManager::RenderAllObjects( void )
 						//else if(tmpCharacter->GetPosY() == tmp->GetPosY() && tmpCharacter->GetPosX() > tmp->GetPosX())
 						//	angle = 1.57079f;
 
-						ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+						if( tmpCharacter->GetCharacterType() == CHA_CHASING || tmpCharacter->GetCharacterType() == CHA_BOSS2 )
+							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() /2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 16, 1.0f, 1.25f, 16, 64, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+						else if(tmpCharacter->GetCharacterType() == CHA_NPC || tmpCharacter->GetCharacterType() == CHA_COMPANION )
+							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() /2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()), 1.0f, 1.25f, 8, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+						else
+							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() /2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()), 1.0f, 1.25f, 16, 64, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+
 					}
+				for(int i = 0; i < lightsToRender.size();++i)
 				for(unsigned int i = 0; i < lightsToRender.size();++i)
 				{
 					float angle = 0;
@@ -221,10 +228,22 @@ void ObjectManager::RenderAllObjects( void )
 						angle *=  -1;
 
 					angle -= 1.57079f;
-					ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth()/2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 15, 1.0f, 1.25f, 16, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					if( tmpCharacter->GetCharacterType() == CHA_CHASING || tmpCharacter->GetCharacterType() == CHA_BOSS2 )
+						ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() - 16, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) - 16, 1.0f, 1.25f, 16, 64, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					else if(tmpCharacter->GetCharacterType() == CHA_NPC || tmpCharacter->GetCharacterType() == CHA_COMPANION )
+							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() /2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()), 1.0f, 1.25f, 8, 32, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					else if( tmpCharacter->GetCharacterType() == CHA_PLAYER)
+					{
+						if(tmpCharacter->GetDirection() == DIRE_LEFT)
+							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) - tmpCharacter->GetWidth() /2 - 10, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()) + 16, -1.0f, 1.25f, 16, 64, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+						else
+							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() /2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()), -1.0f, 1.25f, 16, 64, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
+					}
+					else
+						ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() /2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()), 1.0f, 1.25f, 16, 64, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 				}
 				}
-
+				
 
 			}
 			(*iter)->Render();
@@ -270,8 +289,11 @@ void ObjectManager::CheckTriangleCollisions()
 	angleA = (float)sin(double(angleA));
 	float playerX = player->GetPosX();
 	float playerY = player->GetPosY();
+	float lightEndX, lightEndY, distanceC, distanceA;
 	float lightEndX=0, lightEndY=0, distanceC=0, distanceA=0;
 	int playerDirection = player->GetDirection();
+	bool a, b, c;
+	float point1X, point1Y, point2X, point2Y, point3X, point3Y;
 	bool a=false, b=false, c=false;
 	float point1X=0, point1Y=0, point2X=0, point2Y=0, point3X=0, point3Y=0;
 	for( OListIterator iter1 = m_Objects.begin(); iter1 != m_Objects.end(); ++iter1)

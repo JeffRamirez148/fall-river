@@ -71,6 +71,8 @@ void Boss2::Update(float Time)
 	m_pWeapon->Update(Time);
 	if(GetHealth() <= 0)
 	{
+		AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(zombieHitID)->stop();
 		DestroyEnemy* pMsg = new DestroyEnemy(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;
@@ -84,7 +86,7 @@ void Boss2::Update(float Time)
 		cryTimer = 0;
 	}
 
-	if(  float(GetHealth()) / 1000.0f >= .75f )
+	if(  float(GetHealth()) / 100.0f >= .75f )
 	{
 		//if(m_nState == ESTATE_CHASING)
 		//{
@@ -171,7 +173,7 @@ void Boss2::Update(float Time)
 			//AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 		}
 	}
-	else if( float(GetHealth()) / 1000.0f < .75f && float(GetHealth()) / 1000.0f >= .5f )
+	else if( float(GetHealth()) / 100.0f < .75f && float(GetHealth()) / 100.0f >= .5f )
 	{
 		float distance = ( chargeDestination.x + chargeDestination.y ) - ( GetPosX() + GetPosY() );
 		//float distanceO = ( chargeDestination.x + chargeDestination.y ) - ( oldPosition.x + oldPosition.y );

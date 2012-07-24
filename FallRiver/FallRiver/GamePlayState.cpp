@@ -309,7 +309,7 @@ void GamePlayState::Enter()
 			pPickUp->SetPosY((float)nth->y);
 			pPickUp->SetWidth(nth->width);
 			pPickUp->SetHeight(nth->height);
-			pPickUp->SetImageID(-1);
+			pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 			pPickUp->SetPickUpType(SHOTGUN_AMMO);
 			m_pOM->AddObject(pPickUp);
 			pPickUp = nullptr;
@@ -340,7 +340,7 @@ void GamePlayState::Enter()
 			pPickUp->SetPosY((float)nth->y);
 			pPickUp->SetWidth(nth->width);
 			pPickUp->SetHeight(nth->height);
-			pPickUp->SetImageID(-1);
+			pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 			pPickUp->SetPickUpType(RIFLE_AMMO);
 			m_pOM->AddObject(pPickUp);
 			pPickUp = nullptr;
@@ -354,7 +354,7 @@ void GamePlayState::Enter()
 			pPickUp->SetPosY((float)nth->y);
 			pPickUp->SetWidth(nth->width);
 			pPickUp->SetHeight(nth->height);
-			pPickUp->SetImageID(-1);
+			pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 			pPickUp->SetPickUpType(PISTOL_AMMO);
 			m_pOM->AddObject(pPickUp);
 			pPickUp = nullptr;
@@ -368,7 +368,7 @@ void GamePlayState::Enter()
 			pPickUp->SetPosY((float)nth->y);
 			pPickUp->SetWidth(nth->width);
 			pPickUp->SetHeight(nth->height);
-			pPickUp->SetImageID(-1);
+			pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
 			pPickUp->SetPickUpType(MEDICINE);
 			m_pOM->AddObject(pPickUp);
 			pPickUp = nullptr;
@@ -382,7 +382,7 @@ void GamePlayState::Enter()
 			pPickUp->SetPosY((float)nth->y);
 			pPickUp->SetWidth(nth->width);
 			pPickUp->SetHeight(nth->height);
-			pPickUp->SetImageID(-1);
+			pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/health.png"));
 			pPickUp->SetPickUpType(HEALTH);
 			m_pOM->AddObject(pPickUp);
 			pPickUp = nullptr;
@@ -396,7 +396,7 @@ void GamePlayState::Enter()
 			pPickUp->SetPosY((float)nth->y);
 			pPickUp->SetWidth(nth->width);
 			pPickUp->SetHeight(nth->height);
-			pPickUp->SetImageID(-1);
+			pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/battery.png"));
 			pPickUp->SetPickUpType(BATTERY);
 			m_pOM->AddObject(pPickUp);
 			pPickUp = nullptr;
@@ -414,7 +414,7 @@ void GamePlayState::Enter()
 			pEnemy->SetTarget(m_cPlayer);
 			pEnemy->SetPosX((float)nth->x);
 			pEnemy->SetPosY((float)nth->y);
-			pEnemy->SetHealth(100);
+			pEnemy->SetHealth(50);
 			pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 			m_pOM->AddObject(pEnemy);
 
@@ -482,7 +482,7 @@ void GamePlayState::Enter()
 				pEnemy->SetTarget(GetPlayer());
 				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetAnimation(SpawnEnemyAniID);
 				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
@@ -493,7 +493,7 @@ void GamePlayState::Enter()
 			m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
 
 			Boss1* pBoss = (Boss1*)m_cBoss1;
-			pBoss->SetHealth(200);
+			pBoss->SetHealth(100);
 			pBoss->SetHeight(nth->height);
 			pBoss->SetWidth(nth->width);
 			pBoss->SetPosX( (float)nth->x );
@@ -519,7 +519,7 @@ void GamePlayState::Enter()
 		{
 			m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
 			Boss2* pBoss = (Boss2*)m_cBoss2;
-			pBoss->SetHealth(1000);
+			pBoss->SetHealth(100);
 			pBoss->SetHeight(nth->height);
 			pBoss->SetWidth(nth->width);
 			pBoss->SetPosX( (float)nth->x );
@@ -828,7 +828,7 @@ void GamePlayState::Update(float fElapsedTime)
 			pEnemy->SetTarget(GetPlayer());
 			pEnemy->SetPosX(m_cSpawn[i]->GetPosX()+(rand()%20-10));
 			pEnemy->SetPosY(m_cSpawn[i]->GetPosY()+(rand()%20-10));
-			pEnemy->SetHealth(100);
+			pEnemy->SetHealth(50);
 			pEnemy->SetAnimation(SpawnEnemyAniID);
 			GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 			m_cSpawn[i]->SetSpawn( false );
@@ -911,52 +911,52 @@ void GamePlayState::Render()
 		//	}
 		//}
 		//else
-		if( m_cPlayer->IsOn() && (m_cPlayer->GetLightType() > 1 || m_cBushes[i]->GetShadow()))
-		{
-			//float angle = 0;
-			//if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-			//	angle = 0.78539f;
-			//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-			//	angle = -0.78539f;
-			//else if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-			//	angle = -2.35619f;
-			//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-			//	angle = 2.35619f;
-			//else if(m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-			//	angle = 0.0f;
-			//else if(m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-			//	angle = 3.14159f;
-			//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-			//	angle = -1.57079f;
-			//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-			//	angle = 1.57079f;
-
-			RECT tmp = {0,0,64,64};
-
-			float angle = 0;
-			float x2 = m_cPlayer->GetPosX() - m_cBushes[i]->GetPosX();
-			float x = x2;
-			float y2 = m_cPlayer->GetPosY() - m_cBushes[i]->GetPosY();
-			float y = y2;
-			x2 *= x2;
-			y2 *= y2;
-			float distance = sqrt(x2 + y2);
-
-			angle = acos(x/distance);
-			if( y < 0)
-				angle *=  -1;
-
-			angle -= 1.57079f;
-
-			float xP, yP;
-			int z;
-			xP = m_cBushes[i]->GetPosX();
-			yP = m_cBushes[i]->GetPosY();
-			z = m_cBushes[i]->GetImageID();
-
-			m_pVM->DrawStaticTexture(z,xP-GetCamera().x,yP-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
-
-		}
+		//if( m_cPlayer->IsOn() && (m_cPlayer->GetLightType() > 1 || m_cBushes[i]->GetShadow()))
+		//{
+		//	//float angle = 0;
+		//	//if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+		//	//	angle = 0.78539f;
+		//	//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+		//	//	angle = -0.78539f;
+		//	//else if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+		//	//	angle = -2.35619f;
+		//	//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+		//	//	angle = 2.35619f;
+		//	//else if(m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
+		//	//	angle = 0.0f;
+		//	//else if(m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
+		//	//	angle = 3.14159f;
+		//	//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
+		//	//	angle = -1.57079f;
+		//	//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
+		//	//	angle = 1.57079f;
+		//
+		//	RECT tmp = {0,0,64,64};
+		//
+		//	float angle = 0;
+		//	float x2 = m_cPlayer->GetPosX() - m_cBushes[i]->GetPosX();
+		//	float x = x2;
+		//	float y2 = m_cPlayer->GetPosY() - m_cBushes[i]->GetPosY();
+		//	float y = y2;
+		//	x2 *= x2;
+		//	y2 *= y2;
+		//	float distance = sqrt(x2 + y2);
+		//
+		//	angle = acos(x/distance);
+		//	if( y < 0)
+		//		angle *=  -1;
+		//
+		//	angle -= 1.57079f;
+		//
+		//	float xP, yP;
+		//	int z;
+		//	xP = m_cBushes[i]->GetPosX();
+		//	yP = m_cBushes[i]->GetPosY();
+		//	z = m_cBushes[i]->GetImageID();
+		//
+		//	m_pVM->DrawStaticTexture(z,xP-GetCamera().x,yP-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
+		//
+		//}
 		m_cBushes[i]->Render();
 	}
 	m_pPM->Render();
@@ -1667,7 +1667,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pEnemy->SetTarget(m_cPlayer);
 				pEnemy->SetPosX((float)nth->x);
 				pEnemy->SetPosY((float)nth->y);
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
 
@@ -1737,7 +1737,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					pEnemy->SetTarget(GetPlayer());
 					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-					pEnemy->SetHealth(100);
+					pEnemy->SetHealth(50);
 					pEnemy->SetAnimation(SpawnEnemyAniID);
 					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
@@ -1748,7 +1748,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
 
 				Boss1* pBoss = (Boss1*)m_cBoss1;
-				pBoss->SetHealth(200);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -1774,7 +1774,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			{
 				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
 				Boss2* pBoss = (Boss2*)m_cBoss2;
-				pBoss->SetHealth(1000);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -1990,7 +1990,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pEnemy->SetTarget(m_cPlayer);
 				pEnemy->SetPosX((float)nth->x);
 				pEnemy->SetPosY((float)nth->y);
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
 
@@ -2082,7 +2082,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					pEnemy->SetTarget(GetPlayer());
 					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-					pEnemy->SetHealth(100);
+					pEnemy->SetHealth(50);
 					pEnemy->SetAnimation(SpawnEnemyAniID);
 					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
@@ -2093,7 +2093,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
 
 				Boss1* pBoss = (Boss1*)m_cBoss1;
-				pBoss->SetHealth(200);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -2119,7 +2119,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			{
 				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
 				Boss2* pBoss = (Boss2*)m_cBoss2;
-				pBoss->SetHealth(1000);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -2336,7 +2336,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pEnemy->SetTarget(m_cPlayer);
 				pEnemy->SetPosX((float)nth->x);
 				pEnemy->SetPosY((float)nth->y);
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
 
@@ -2439,7 +2439,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
 
 				Boss1* pBoss = (Boss1*)m_cBoss1;
-				pBoss->SetHealth(200);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -2465,7 +2465,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			{
 				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
 				Boss2* pBoss = (Boss2*)m_cBoss2;
-				pBoss->SetHealth(1000);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -2685,7 +2685,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pEnemy->SetTarget(m_cPlayer);
 				pEnemy->SetPosX((float)nth->x);
 				pEnemy->SetPosY((float)nth->y);
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
 
@@ -2755,7 +2755,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					pEnemy->SetTarget(GetPlayer());
 					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-					pEnemy->SetHealth(100);
+					pEnemy->SetHealth(50);
 					pEnemy->SetAnimation(SpawnEnemyAniID);
 					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
@@ -2766,7 +2766,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
 
 				Boss1* pBoss = (Boss1*)m_cBoss1;
-				pBoss->SetHealth(200);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -2792,7 +2792,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			{
 				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
 				Boss2* pBoss = (Boss2*)m_cBoss2;
-				pBoss->SetHealth(1000);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -3007,7 +3007,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pEnemy->SetTarget(m_cPlayer);
 				pEnemy->SetPosX((float)nth->x);
 				pEnemy->SetPosY((float)nth->y);
-				pEnemy->SetHealth(100);
+				pEnemy->SetHealth(50);
 				pEnemy->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
 				m_pOM->AddObject(pEnemy);
 
@@ -3077,7 +3077,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					pEnemy->SetTarget(GetPlayer());
 					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-					pEnemy->SetHealth(100);
+					pEnemy->SetHealth(50);
 					pEnemy->SetAnimation(SpawnEnemyAniID);
 					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
@@ -3088,7 +3088,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				m_cBoss1 = (Boss1*)m_pOF->CreateObject( _T("Boss1") );
 
 				Boss1* pBoss = (Boss1*)m_cBoss1;
-				pBoss->SetHealth(200);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
@@ -3114,7 +3114,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			{
 				m_cBoss2 = (Boss2*)m_pOF->CreateObject( _T("Boss2") );
 				Boss2* pBoss = (Boss2*)m_cBoss2;
-				pBoss->SetHealth(1000);
+				pBoss->SetHealth(100);
 				pBoss->SetHeight(nth->height);
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
