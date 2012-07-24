@@ -56,6 +56,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			//	gaining focus
 			if (LOWORD(wParam) != WA_INACTIVE)
 			{
+				g_bIS_WINDOWED = !g_bIS_WINDOWED;
+				PostMessage( hWnd, WM_USER, NULL, NULL);
 				// unpause game code here
 			}
 			else // losing focus
@@ -280,7 +282,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//////////////////////////////////////////
 	//	Initialize Game here
 	//////////////////////////////////////////
-	
+	g_bIS_WINDOWED = !g_bIS_WINDOWED;
 	CGame* pGame = CGame::GetInstance();
 	pGame->Initialize( hWnd, hInstance,
 					   g_nWINDOW_WIDTH, g_nWINDOW_HEIGHT,
