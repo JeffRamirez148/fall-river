@@ -211,7 +211,7 @@ void ObjectManager::RenderAllObjects( void )
 							ViewManager::GetInstance()->DrawAnimation(tmpCharacter->GetAnimation(), (tmpCharacter->GetPosX() - GamePlayState::GetInstance()->GetCamera().x) + tmpCharacter->GetWidth() /2, ((tmpCharacter->GetPosY() - GamePlayState::GetInstance()->GetCamera().y) + tmpCharacter->GetHeight()), 1.0f, 1.25f, 16, 64, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 
 					}
-				for(int i = 0; i < lightsToRender.size();++i)
+				for(unsigned int i = 0; i < lightsToRender.size();++i)
 				for(unsigned int i = 0; i < lightsToRender.size();++i)
 				{
 					float angle = 0;
@@ -289,11 +289,8 @@ void ObjectManager::CheckTriangleCollisions()
 	angleA = (float)sin(double(angleA));
 	float playerX = player->GetPosX();
 	float playerY = player->GetPosY();
-	float lightEndX, lightEndY, distanceC, distanceA;
 	float lightEndX=0, lightEndY=0, distanceC=0, distanceA=0;
 	int playerDirection = player->GetDirection();
-	bool a, b, c;
-	float point1X, point1Y, point2X, point2Y, point3X, point3Y;
 	bool a=false, b=false, c=false;
 	float point1X=0, point1Y=0, point2X=0, point2Y=0, point3X=0, point3Y=0;
 	for( OListIterator iter1 = m_Objects.begin(); iter1 != m_Objects.end(); ++iter1)

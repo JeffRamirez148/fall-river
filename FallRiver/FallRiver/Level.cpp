@@ -193,7 +193,7 @@ void Level::Render()
 
 					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.02f, &m_vTiles[i].m_rImageRect, 32, 50, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 				}
-				for(int i = 0; i < lightsToRender.size();++i)
+				for(unsigned int i = 0; i < lightsToRender.size();++i)
 				{
 					float angle = 0;
 					float x2 = lightsToRender[i].x - m_vTiles[i].m_nWorldPosX;

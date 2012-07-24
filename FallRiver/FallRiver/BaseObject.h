@@ -26,8 +26,6 @@ public:
 	BaseObject()
 	{
 		shadow = false;
-		pushX =0;
-		pushY=0;
 		m_nVelX=0;
 		m_nVelY=0;
 	}

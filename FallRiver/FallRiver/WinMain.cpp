@@ -21,13 +21,8 @@ const int	g_nWINDOW_HEIGHT		= 600;							//	Window Height.
 
 
 //	Windowed or Full screen depending on project setting
-#ifdef _DEBUG
-
-	BOOL	g_bIS_WINDOWED			= TRUE;						
+#ifdef _DEBUG	
 	bool	g_bIS_WINDOWED			= true;						
-#else
-	BOOL	g_bIS_WINDOWED			= FALSE;
-#endif
 #else
 	bool	g_bIS_WINDOWED			= true;
 #endif
@@ -291,7 +286,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//////////////////////////////////////////
 
 	//	Enter main event loop
-	while (TRUE)
 	bool test = true;
 	while (test)
 	{
