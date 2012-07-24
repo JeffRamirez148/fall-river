@@ -9,7 +9,6 @@ using namespace std;
 
 void Terrain::Update(float aFElapsedTime) 
 {
-	aFElapsedTime;
 }
 
 void Terrain::Render() 
@@ -19,7 +18,6 @@ void Terrain::Render()
 
 bool Terrain::CheckCollision(BaseCharacter* aPBase) 
 {
-	aPBase;
 	return true;
 }
 

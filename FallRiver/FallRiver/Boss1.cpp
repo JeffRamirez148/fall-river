@@ -78,6 +78,8 @@ void Boss1::Update(float fElapsedTime)
 	//AudioManager::GetInstance()->setSoundPos(hitID, sound1);
 	if(GetHealth() <= 0)
 	{
+		AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(zombieHitID)->stop();
 		DestroyEnemy* pMsg = new DestroyEnemy(this);
 		MessageSystem::GetInstance()->SendMsg(pMsg);
 		pMsg = nullptr;

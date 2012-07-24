@@ -96,7 +96,6 @@ bool Weapon::Init(int wType, int nAmmo, float currRotation )
 
 void Weapon::Update(float fElapsedTime)
 {
-	fElapsedTime;
 	SetPosX(m_pOwner->GetPosX()+m_pOwner->GetWidth()/2);
 	SetPosY(m_pOwner->GetPosY());
 

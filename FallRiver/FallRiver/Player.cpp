@@ -145,6 +145,12 @@ void Player::Update(float fElapsedTime)
 		SetHealth(0);
 		SetGore(true);
 		lose = true;
+		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
+			AudioManager::GetInstance()->GetSoundChannel(flashLightID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(weaponChangeID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(sheathID)->stop();
+
 		CGame::GetInstance()->PlayLoseSound();
 		if( m_dwDeathTime == 0 )
 		{
@@ -234,7 +240,7 @@ void Player::Update(float fElapsedTime)
 			m_dwGunReset = GetTickCount() + 500;
 		}
 
-		if( m_bIsHidden == true )
+		//if( m_bIsHidden == true )
 		{
 			m_bShotBush = true;
 			m_bIsHidden = false;
@@ -468,6 +474,7 @@ void Player::Update(float fElapsedTime)
 		else if( m_bmove && pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
 		{
 			SetVelY(100);
+			Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetRainID())->Update(fElapsedTime * .0065f);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
 		}
@@ -958,7 +965,7 @@ bool Player::CheckCollision(IObjects* pBase)
 		{
 			RECT cRect;
 			RECT collRect = {long(thisFrame.activeRect.left+GetPosX()+10), long(thisFrame.activeRect.top+GetPosY()+30), thisFrame.activeRect.right+(long)GetPosX()+10, thisFrame.activeRect.bottom+(long)GetPosY()+30};
-			if( IntersectRect(&cRect, &collRect, &pBase->GetRect() ) && m_playerAnim.curFrame == 1 )
+			if( IntersectRect(&cRect, &collRect, &tmp->GetRect()) == true && m_playerAnim.curFrame == 1 )
 			{
 				tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
 				EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );
@@ -1051,7 +1058,7 @@ bool Player::CheckCollision(IObjects* pBase)
 					BaseCharacter* tmpChar = (BaseCharacter*)(pBase);
 					if(tmpChar->GetCharacterType() == CHA_BOSS2)
 					{
-						//Boss2* tmpBoss = (Boss2*)tmpChar;
+						Boss2* tmpBoss = (Boss2*)tmpChar;
 						//if(float(tmpBoss->GetHealth() / 1000.0f) < .5f)
 						{
 							if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)

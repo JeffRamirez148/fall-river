@@ -131,7 +131,6 @@ bool PauseMenuState::Input()
 
 void PauseMenuState::Update(float fElapsedTime) 
 {
-	fElapsedTime;
 }
 
 void PauseMenuState::Render() 

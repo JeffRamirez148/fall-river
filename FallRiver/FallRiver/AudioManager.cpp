@@ -114,7 +114,6 @@ int	AudioManager::registerMusic(char* aFilePath)
 // Update Everybody
 void AudioManager::Update(float fElapsedTime)
 {
-	fElapsedTime;
 	for( unsigned int i = 0; i < _sfxSound.size(); ++i)
 	{
 		_sfxSound[i]->channel->setMute(_sfxMute);

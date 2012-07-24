@@ -247,7 +247,6 @@ bool LoadMenuState::Input()
 
 void LoadMenuState::Update(float fElapsedTime) 
 {
-	fElapsedTime;
 }
 
 void LoadMenuState::Render() 

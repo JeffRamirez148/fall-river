@@ -221,11 +221,9 @@ void HighScoresMenuState::Render()
 
 void HighScoresMenuState::SetEnd(bool aEnd) 
 {
-	aEnd;
 }
 
 void HighScoresMenuState::SetOldAttractMode(bool aMode)
 {
-	aMode;
 }
 

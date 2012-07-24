@@ -22,9 +22,9 @@ const int	g_nWINDOW_HEIGHT		= 600;							//	Window Height.
 
 //	Windowed or Full screen depending on project setting
 //#ifdef _DEBUG
-	bool	g_bIS_WINDOWED			= TRUE;						
+	BOOL	g_bIS_WINDOWED			= TRUE;						
 //#else
-	//bool	g_bIS_WINDOWED			= TRUE;
+//	BOOL	g_bIS_WINDOWED			= FALSE;
 //#endif
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -95,7 +95,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					SetWindowLong( hWnd, GWL_STYLE, windowStyle);
 					SetWindowPos(hWnd, HWND_TOP, 0, 0, g_nWINDOW_WIDTH, g_nWINDOW_HEIGHT, SWP_SHOWWINDOW);
 				}
-				else
+				else if( !g_bIS_WINDOWED )
 				{
 					DEVMODE* screenRes = new DEVMODE();
 					screenRes->dmSize = sizeof(DEVMODE);

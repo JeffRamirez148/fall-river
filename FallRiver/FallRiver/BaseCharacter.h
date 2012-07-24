@@ -7,7 +7,7 @@
 #include "ViewManager.h"
 #include <Windows.h>
 
-enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY, CHA_NPC, CHA_BOSS2 };
+enum CHARACTERS { CHA_PLAYER = 0, CHA_COMPANION, CHA_ENEMY, CHA_NPC, CHA_BOSS2, CHA_CHASING, CHA_SHOOTING };
 enum DIRECTIONS { DIRE_LEFT = 0, DIRE_UP, DIRE_RIGHT, DIRE_DOWN, DIRE_UPLEFT, DIRE_UPRIGHT, DIRE_DOWNLEFT, DIRE_DOWNRIGHT};
 
 class BaseCharacter: public BaseObject
@@ -20,6 +20,8 @@ protected:
 	vector<int>	bloodA;
 	float		bloodAngle;
 	//Animation	thisAnim;
+	float pushX;
+	float pushY;
 
 private:
 	int				m_nHealth;
@@ -51,6 +53,12 @@ public:
 	void SetBleeding(bool mhm) {bleeding = mhm; gore = false;}
 	void SetBloodAngle(float angle) {bloodAngle = angle;}
 	void SetGore(bool bGore) { gore = bGore; }
+
+	void SetPushX(float x) { pushX = x;}
+	void SetPushY(float y) { pushY = y;}
+
+	float GetPushX(void) {return pushX;}
+	float GetPushY(void) {return pushY;}
 };
 
 #endif

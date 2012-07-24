@@ -44,7 +44,6 @@ PickUp::~PickUp()
 
 void PickUp::Update(float fElapsedTime)
 {
-	fElapsedTime;
 	FMOD_VECTOR sound1 = { GamePlayState::GetInstance()->GetPlayer()->GetPosX(), GamePlayState::GetInstance()->GetPlayer()->GetPosY(), 0};
 	AudioManager::GetInstance()->setSoundPos(healthID, sound1);
 	AudioManager::GetInstance()->setSoundPos(medicineID, sound1);
@@ -60,35 +59,11 @@ void PickUp::Render()
 	RECT reRect = {long(GetPosX() - GamePlayState::GetInstance()->GetCamera().x), long(GetPosY() - GamePlayState::GetInstance()->GetCamera().y), long(reRect.left+GetWidth()), long(reRect.top + GetHeight())};
 
 	//pVM->DrawRect(reRect, 255, 0, 255);
-
-	if( GetPickUpType() == 0 )
+	if( this->GetImageID() != -1 )
 	{
-		ViewManager::GetInstance()->DrawRect(reRect,255,0,255);
+		ViewManager::GetInstance()->DrawStaticTexture(this->GetImageID(), GetPosX() - GamePlayState::GetInstance()->GetCamera().x, GetPosY() - GamePlayState::GetInstance()->GetCamera().y, 1.0f, 1.0f, nullptr, 0.0f, 0.0f);
 	}
-	else if( GetPickUpType() == 1 )
-	{
-		ViewManager::GetInstance()->DrawRect(reRect,255,0,0);
-	}
-	else if( GetPickUpType() == 2 )
-	{
-		ViewManager::GetInstance()->DrawRect(reRect,0,0,255);
-	}
-	else if( GetPickUpType() == 3 )
-	{
-		ViewManager::GetInstance()->DrawRect(reRect,255,255,255);
-	}
-	else if( GetPickUpType() == 4 )
-	{
-		ViewManager::GetInstance()->DrawRect(reRect,0,255,0);
-	}
-	else if( GetPickUpType() == 5 )
-	{
-		ViewManager::GetInstance()->DrawRect(reRect,255,255,0);
-	}
-	else if( GetPickUpType() == 6 )
-	{
-		ViewManager::GetInstance()->DrawRect(reRect,100,100,100);
-	}
+	
 }
 
 RECT PickUp::GetRect()

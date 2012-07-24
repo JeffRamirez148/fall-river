@@ -16,6 +16,7 @@ ChasingAI::ChasingAI()
 {
 	locked = false;
 	m_nState = ESTATE_IDLE;
+	m_nCharacterType = CHA_CHASING;
 
 	m_pfDestination.x = 0;
 	m_pfDestination.y = 0;
@@ -68,6 +69,9 @@ void ChasingAI::Update(float fElapsedTime)
 
 	if(GetHealth() <= 0)
 	{
+		AudioManager::GetInstance()->GetSoundChannel(zombieWalkingID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(zombieHitID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(notifyID)->stop();
 		if( m_dwDeathTime == 0 )
 		{
 			m_dwDeathTime = GetTickCount() + 1000;
@@ -535,17 +539,8 @@ bool ChasingAI::CheckCollision(IObjects* pBase)
 		if(pBase->GetObjectType() == OBJ_CHARACTER )
 		{
 			BaseCharacter* tmp = (BaseCharacter*)pBase;
-
 			if(tmp->GetCharacterType() == CHA_PLAYER)
 				GamePlayState::GetInstance()->GetPlayer()->SetGore(true);
-			if(pBase->GetRect().left <= GetRect().right && GetRect().right - pBase->GetRect().left <= 5)
-				SetPosX(float(pBase->GetRect().left-GetWidth()));
-			else if(pBase->GetRect().right >= GetRect().left && pBase->GetRect().right - GetRect().left <= 5)
-				SetPosX(float(pBase->GetRect().right));
-			else if(pBase->GetRect().top <= GetRect().bottom && GetRect().bottom - pBase->GetRect().top <= 5)
-				SetPosY(float(pBase->GetRect().top-GetHeight()));
-			else if(pBase->GetRect().bottom >= GetRect().top && pBase->GetRect().bottom - GetRect().top <= 5)
-				SetPosY(float(pBase->GetRect().bottom));
 		}
 		return true;
 	}
