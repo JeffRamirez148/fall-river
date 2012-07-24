@@ -117,7 +117,6 @@ public:
 	//Loading assets
 	int RegisterTexture(char* aFilePath);
 	int RegisterAnimation(char* aFilePath);
-	int RegisterShader(char* aFilePath);
 	int RegisterFont(char* filename );
 
 	//For Drawing Animations

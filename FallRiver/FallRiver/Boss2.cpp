@@ -176,7 +176,7 @@ void Boss2::Update(float Time)
 	else if( float(GetHealth()) / 100.0f < .75f && float(GetHealth()) / 100.0f >= .5f )
 	{
 		float distance = ( chargeDestination.x + chargeDestination.y ) - ( GetPosX() + GetPosY() );
-	/*	float distanceO = ( chargeDestination.x + chargeDestination.y ) - ( oldPosition.x + oldPosition.y );*/
+		//float distanceO = ( chargeDestination.x + chargeDestination.y ) - ( oldPosition.x + oldPosition.y );
 
 		if(distance < 0)
 			distance = 0 - distance;
@@ -386,14 +386,14 @@ void Boss2::Update(float Time)
 	{
 		m_playerAnim.fTime -= thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].duration;
 		m_playerAnim.curFrame++;
-		if(m_playerAnim.curFrame < (int)thisAnim->frames[m_playerAnim.curAnimation].size())
+		if((unsigned int)m_playerAnim.curFrame < (int)thisAnim->frames[m_playerAnim.curAnimation].size())
 		{
 			if(strcmp(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg,"none") != 0)
 				EventSystem::GetInstance()->SendEvent(thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame].eventMsg, this);
 		}
-		if(((unsigned)m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
+		if(((unsigned int)m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size()) && thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame = 0;
-		else if((unsigned)m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
+		else if((unsigned int)m_playerAnim.curFrame == thisAnim->frames[m_playerAnim.curAnimation].size() && !thisAnim->looping[m_playerAnim.curAnimation])
 			m_playerAnim.curFrame--;
 	}
 }
@@ -402,6 +402,7 @@ void Boss2::Render()
 {
 	ViewManager* pVM = ViewManager::GetInstance();
 	pVM->GetSprite()->Flush();
+//	RECT tmp = GetRect();
 	pVM->DrawAnimation(&m_playerAnim, (GetPosX() - GamePlayState::GetInstance()->GetCamera().x)+GetWidth()/2,  (GetPosY() - GamePlayState::GetInstance()->GetCamera().y)+GetHeight(), 1.0f, 1.0f);
 	BaseCharacter::Render();
 

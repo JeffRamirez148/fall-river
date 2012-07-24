@@ -196,11 +196,6 @@ bool CompanionAI::CheckCollision(IObjects* pBase)
 	return false;
 }
 
-void CompanionAI::HandleEvent(Event* aPEvent)
-{
-	aPEvent;
-}
-
 void CompanionAI::SaySomething() 
 {
 	Player* tempPlayer = GamePlayState::GetInstance()->GetPlayer();	

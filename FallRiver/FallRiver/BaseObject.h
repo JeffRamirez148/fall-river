@@ -26,6 +26,8 @@ public:
 	BaseObject()
 	{
 		shadow = false;
+		m_nVelX=0;
+		m_nVelY=0;
 	}
 	virtual void AddRef();
 

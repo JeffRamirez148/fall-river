@@ -51,7 +51,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -90,7 +90,6 @@
     <ClCompile Include="Bush.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="ChasingAI.cpp" />
-    <ClCompile Include="Closet.cpp" />
     <ClCompile Include="CompanionAI.cpp" />
     <ClCompile Include="CreateBullet.cpp" />
     <ClCompile Include="CreateEnemyC.cpp" />
@@ -134,7 +133,6 @@
     <ClCompile Include="SaveMenuState.cpp" />
     <ClCompile Include="ShootingAi.cpp" />
     <ClCompile Include="SpawnPoint.cpp" />
-    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="tinystr.cpp" />
     <ClCompile Include="tinyxml.cpp" />
@@ -159,7 +157,6 @@
     <ClInclude Include="Bush.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="ChasingAI.h" />
-    <ClInclude Include="Closet.h" />
     <ClInclude Include="CompanionAI.h" />
     <ClInclude Include="CreateBullet.h" />
     <ClInclude Include="CreateEnemyC.h" />
@@ -212,7 +209,6 @@
     <ClInclude Include="ShootingAi.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="SpawnPoint.h" />
-    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="tinystr.h" />
     <ClInclude Include="tinyxml.h" />

@@ -24,9 +24,6 @@ protected:
 public: 
 	Enemy();
 	~Enemy();
-
-	virtual void HandleEvent(Event* pEvent);
-
 	virtual void Update(float fElapsedTime);
 
 	virtual void SetTarget(Player* p) {m_pTarget = p;}
@@ -39,6 +36,7 @@ public:
 
 	virtual bool CheckCollision(IObjects* pBase);
 	virtual RECT GetRect();
+	virtual void HandleEvent(Event* aPEvent);
 };
 
 #endif

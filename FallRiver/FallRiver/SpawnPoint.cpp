@@ -35,8 +35,6 @@ void SpawnPoint::Update(float fElapsedTime)
 
 	//ObjectFactory
 
-	//DirectInput* pDI = DirectInput::GetInstance();
-
 	/*if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
 	{
 		SetPosX(GetPosX()-100 * fElapsedTime);
@@ -93,9 +91,11 @@ RECT SpawnPoint::GetRect()
 bool SpawnPoint::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
+	RECT temp = GetRect();
+	RECT temp2 = pBase->GetRect();
 	if(pBase->GetObjectType() == OBJ_CHARACTER)
 	{
-		if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == TRUE  )
+		if(IntersectRect( &cRect, &temp, &temp2 ) == TRUE  )
 		{
 			//m_bIsColliding = true;
 			return true;
@@ -106,7 +106,7 @@ bool SpawnPoint::CheckCollision(IObjects* pBase)
 		}
 	}
 
-	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == TRUE  )
+	if(IntersectRect( &cRect, &temp, &temp2 ) == TRUE  )
 	{
 		return true;
 	}

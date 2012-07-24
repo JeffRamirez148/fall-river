@@ -57,7 +57,6 @@ public:
 
 	virtual bool CheckCollision(IObjects* pBase);
 
-	virtual void HandleEvent(Event* pEvent);
 
 	void Spawn();
 	void SpawnRight();

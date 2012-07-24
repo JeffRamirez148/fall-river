@@ -5,7 +5,7 @@
 #include "IListener.h"
 #include "Weapon.h"
 
-class Bullet: public BaseObject, public IListener
+class Bullet: public BaseObject
 {
 private: 
 	int soundID;
@@ -48,7 +48,6 @@ public:
 
 	bool CheckCollision(IObjects* pBase);
 
-	void HandleEvent (Event* cEvent);
 	int GetSmokeID() { return smokeA; }
 	void SetSmokeID(int id) { smokeA = id; }
 

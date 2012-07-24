@@ -94,8 +94,3 @@ RECT Enemy::GetRect()
 
 	return cRect;
 }
-
-void Enemy::HandleEvent(Event* aPEvent) 
-{
-	aPEvent;
-}

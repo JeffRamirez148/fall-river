@@ -187,7 +187,7 @@ bool SaveMenuState::Input()
 
 void SaveMenuState::Update(float fElapsedTime)
 {
-
+	fElapsedTime;
 }
 
 void SaveMenuState::Render()

@@ -206,7 +206,7 @@ void CGame::ChangeState(IMenuState* pNewState)
 {
 
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
-		if( i != pianoID && i != backGroundID && i != musicID && i != owl && i != stick && i != loseID )
+		if( (int)i != pianoID && (int)i != backGroundID && (int)i != musicID && (int)i != owl && (int)i != stick && (int)i != loseID )
 			AudioManager::GetInstance()->GetMusicChannel(i)->stop();
 
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
@@ -260,7 +260,7 @@ IMenuState* CGame::GetPreviousState( void )		{return m_pPrevState; }
 void CGame::RemoveState( void )
 {
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
-		if( i != pianoID && i != backGroundID && i != musicID && i != owl && i != stick && i != loseID )
+		if( (int)i != pianoID && (int)i != backGroundID && (int)i != musicID && (int)i != owl && (int)i != stick && (int)i != loseID )
 			AudioManager::GetInstance()->GetMusicChannel(i)->stop();
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();
@@ -304,7 +304,7 @@ void CGame::RemoveState(int state)
 {
 	
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetMusic()->size(); ++i)
-		if( i != pianoID && i != backGroundID && i != musicID && i != owl && i != stick && i != loseID )
+		if( (int)i != pianoID && (int)i != backGroundID && (int)i != musicID && (int)i != owl && (int)i != stick && (int)i != loseID )
 			AudioManager::GetInstance()->GetMusicChannel(i)->stop();
 	for(unsigned int i = 0; i < AudioManager::GetInstance()->GetSounds()->size(); ++i)
 		AudioManager::GetInstance()->GetSoundChannel(i)->stop();

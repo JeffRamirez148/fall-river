@@ -87,9 +87,6 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -142,9 +139,6 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Bush.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Closet.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="EventSystem.cpp">
@@ -293,9 +287,6 @@
     <ClInclude Include="sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -379,9 +370,6 @@
     </ClInclude>
     <ClInclude Include="IMessage.h">
       <Filter>Wrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="Closet.h">
-      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Bush.h">
       <Filter>Objects</Filter>

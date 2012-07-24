@@ -18,7 +18,8 @@ Bush::~Bush()
 
 void Bush::Update(float fElapsedTime)
 {
-	DirectInput* pDI = DirectInput::GetInstance();
+	fElapsedTime;
+	//DirectInput* pDI = DirectInput::GetInstance();
 
 	//if(pDI->KeyDown(DIK_RIGHT) && GamePlayState::GetInstance()->CanMoveRight() )
 	//{
@@ -79,7 +80,9 @@ RECT Bush::GetRect()
 bool Bush::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
-	if( IntersectRect( &cRect, &GetRect(), &pBase->GetRect() ) == TRUE  )
+	RECT temp = GetRect();
+	RECT temp2 = pBase->GetRect();
+	if( IntersectRect( &cRect, &temp, &temp2 ) == TRUE  )
 		return true;
 	return false;
 }

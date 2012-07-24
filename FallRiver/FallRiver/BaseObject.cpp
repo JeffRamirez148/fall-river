@@ -16,6 +16,7 @@ void BaseObject::Release()
 
 void BaseObject::Update(float fElapsedTime)
 {
+	fElapsedTime;
 }
 
 void BaseObject::Render()
@@ -26,7 +27,9 @@ void BaseObject::Render()
 bool BaseObject::CheckCollision(IObjects* pBase)
 {
 	RECT cRect;
-	if( IntersectRect(&cRect, &GetRect(), &pBase->GetRect() ) == false )
+	RECT temp = GetRect();
+	RECT temp2 = pBase->GetRect();
+	if( IntersectRect(&cRect, &temp, &temp2 ) == false )
 		return false;
 
 	return true;
