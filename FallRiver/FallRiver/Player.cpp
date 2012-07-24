@@ -948,8 +948,8 @@ void Player::Render()
 	//{
 	//	Particle_Manager::GetInstance()->GetActiveEmitter(smokeA)
 	//}
-	for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
-		Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();
+	/*for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
+		Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();*/
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
