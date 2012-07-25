@@ -103,7 +103,10 @@ bool HighScoresMenuState::Input()
 		if(m_bNameEntered == true)
 		{
 		CGame::GetInstance()->RemoveState();
-		CGame::GetInstance()->ChangeState(CreditsMenuState::GetInstance());
+		if(dynamic_cast<MainMenuState*>(CGame::GetInstance()->GetPreviousState()))
+			CGame::GetInstance()->ChangeState(CreditsMenuState::GetInstance());
+		else
+			CGame::GetInstance()->ChangeState(MainMenuState::GetInstance());
 		}
 	}
 
