@@ -9,7 +9,7 @@
 HighScoresMenuState::HighScoresMenuState()
 {
 	fontID = -1;
-	m_bNameEntered = false;
+	m_bNameEntered = true;
 	keytimer = 0;
 	m_cName['\0'];
 	m_nSpace = 0;
@@ -102,8 +102,7 @@ bool HighScoresMenuState::Input()
 	{
 		if(m_bNameEntered == true)
 		{
-		CGame::GetInstance()->RemoveState();
-		CGame::GetInstance()->ChangeState(CreditsMenuState::GetInstance());
+			CGame::GetInstance()->RemoveState();
 		}
 	}
 

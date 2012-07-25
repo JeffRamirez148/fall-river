@@ -49,6 +49,7 @@ GamePlayState::GamePlayState()
 	m_pPM = nullptr;
 	m_cPlayer = nullptr;
 	m_cBoss1 = nullptr;
+	m_cBoss2 = nullptr;
 	m_cWeapon = nullptr;
 
 //	backGroundID = -1;
@@ -471,22 +472,22 @@ void GamePlayState::Enter()
 			pSpawn = nullptr;
 			tmp.erase(nth);
 			i--;
-			for( int i = 0; i < 1; i++)
-			{
-				m_cEnemies.push_back(nullptr);
-				m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
-				ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-				pEnemy->SetHeight(64);
-				pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
-				pEnemy->SetImageID(-1);
-				pEnemy->SetTarget(GetPlayer());
-				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
-				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-				pEnemy->SetHealth(50);
-				pEnemy->SetAnimation(SpawnEnemyAniID);
-				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
-				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
-			}
+			//for( int i = 0; i < 1; i++)
+			//{
+			//	m_cEnemies.push_back(nullptr);
+			//	m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+			//	ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+			//	pEnemy->SetHeight(64);
+			//	pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+			//	pEnemy->SetImageID(-1);
+			//	pEnemy->SetTarget(GetPlayer());
+			//	pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+			//	pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+			//	pEnemy->SetHealth(50);
+			//	pEnemy->SetAnimation(SpawnEnemyAniID);
+			//	GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+			//	m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+			//}
 		} 
 		else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
 		{
@@ -726,18 +727,52 @@ void GamePlayState::Exit()
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
+		m_cEnemies[i]->Release();
 		m_cEnemies[i] = nullptr;
 	}
 	m_cEnemies.clear();
 
 	for(unsigned int i = 0; i < m_cNpcs.size(); i++)
 	{
+		m_cNpcs[i]->Release();
 		m_cNpcs[i] = nullptr;
 	}
+	m_cNpcs.clear();
+
+	for(unsigned int i = 0; i < m_cSpawn.size(); i++)
+	{
+		m_cSpawn[i]->Release();
+		m_cSpawn[i] = nullptr;
+	}
+	m_cSpawn.clear();
+
+	for(unsigned int i = 0; i < m_cBushes.size(); i++)
+	{
+		m_cBushes[i]->Release();
+		m_cBushes[i] = nullptr;
+	}
+	m_cSpawn.clear();
+
+	if( m_cBoss2 != nullptr )
+		m_cBoss2->Release();
+	m_cBoss1 = nullptr;
+	m_cBoss2 = nullptr;
+
+	if( m_cBuddy != nullptr )
+		m_cBuddy->Release();
+	m_cBuddy = nullptr;
+	if( m_cPlayer != nullptr )
+		m_cPlayer->Release();
+	if( m_cWeapon != nullptr )
+		m_cWeapon->Release();
+
+	if(m_clevel != nullptr)
+		m_clevel->Release();
+
+	m_clevel = nullptr;
 
 	fireA.clear();
 	streetLights.clear();
-	m_cNpcs.clear();
 
 	m_pVM = nullptr;
 	m_pDI = nullptr;
@@ -884,117 +919,11 @@ void GamePlayState::Render()
 
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
 	{
-
-
-		//if(m_cBushes[i]->GetShadow() && m_cPlayer->IsOn())
-		//{
-		//	if(m_cPlayer->GetDirection() < 4)
-		//		m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, (m_cPlayer->GetDirection() - 1) * 1.57079f,D3DCOLOR_ARGB(200,0,0,0));
-		//	else
-		//	{
-		//		switch(m_cPlayer->GetDirection())
-		//		{
-		//		case 4:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -0.78539f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		case 5:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 0.78539f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		case 6:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -2.35619f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		case 7:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 2.35619f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		default:
-		//			break;
-		//		}
-		//	}
-		//}
-		//else
-		//if( m_cPlayer->IsOn() && (m_cPlayer->GetLightType() > 1 || m_cBushes[i]->GetShadow()))
-		//{
-		//	//float angle = 0;
-		//	//if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-		//	//	angle = 0.78539f;
-		//	//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-		//	//	angle = -0.78539f;
-		//	//else if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-		//	//	angle = -2.35619f;
-		//	//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-		//	//	angle = 2.35619f;
-		//	//else if(m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-		//	//	angle = 0.0f;
-		//	//else if(m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-		//	//	angle = 3.14159f;
-		//	//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-		//	//	angle = -1.57079f;
-		//	//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-		//	//	angle = 1.57079f;
-		//
-		//	RECT tmp = {0,0,64,64};
-		//
-		//	float angle = 0;
-		//	float x2 = m_cPlayer->GetPosX() - m_cBushes[i]->GetPosX();
-		//	float x = x2;
-		//	float y2 = m_cPlayer->GetPosY() - m_cBushes[i]->GetPosY();
-		//	float y = y2;
-		//	x2 *= x2;
-		//	y2 *= y2;
-		//	float distance = sqrt(x2 + y2);
-		//
-		//	angle = acos(x/distance);
-		//	if( y < 0)
-		//		angle *=  -1;
-		//
-		//	angle -= 1.57079f;
-		//
-		//	float xP, yP;
-		//	int z;
-		//	xP = m_cBushes[i]->GetPosX();
-		//	yP = m_cBushes[i]->GetPosY();
-		//	z = m_cBushes[i]->GetImageID();
-		//
-		//	m_pVM->DrawStaticTexture(z,xP-GetCamera().x,yP-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
-		//
-		//}
 		m_cBushes[i]->Render();
 	}
 	m_pPM->Render();
 
-	m_cPlayer->Render();
 	m_pPM->GetActiveEmitter(rainA)->Render();
-
-
-	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
-
-
-	//char szName[100] = {};
-	//
-	//TCHAR buffer[ 100 ];
-	////int playerScore = 15;
-	//_stprintf_s( buffer, 100, _T("Health = %i"), m_pHUD->m_fHealth );
-
-	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-	//m_pVM->DrawTextW("hello",GamePlayState::GetInstance()->GetCamera().x,GamePlayState::GetInstance()->GetCamera().y,255,255,255);
-
-	////m_pVM->DrawText(szName,0,0,255,255,255);
-	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,0);
-
-	////char szName1[100] = {};
-	////
-	////TCHAR buffer1[ 100 ];
-	////int playerScore = 15;
-	//_stprintf_s( buffer, 100, _T("Lives = %i"), m_pHUD->m_nLives );
-
-	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-
-	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
-
-
-
-
-
 
 }
 

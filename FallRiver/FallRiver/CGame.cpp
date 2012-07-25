@@ -6,6 +6,7 @@
 #include "MainMenuState.h"
 #include "AudioManager.h"
 #include "GamePlayState.h"
+#include "Particle_Manager.h"
 #include "sound.h"
 
 CGame* CGame::GetInstance()
@@ -203,6 +204,12 @@ void CGame::ShutDown()
 		m_pDI->ShutdownDirectInput();
 		m_pDI = nullptr;
 	}
+
+	if( m_pVM != nullptr )
+	{
+		m_pVM->ShutdownDirect3D();
+		m_pVM = nullptr;
+	}
 }
 
 void CGame::ChangeState(IMenuState* pNewState) 
@@ -225,31 +232,6 @@ void CGame::ChangeState(IMenuState* pNewState)
 		pNewState->Enter();
 	}
 	// Exit the current state (if any)
-	/*if( pNewState == nullptr)
-	{
-		m_pCurrState->Exit();
-		if(m_pPrevState != nullptr)
-			m_pPrevState->Exit();
-
-		m_pCurrState = nullptr;
-		m_pPrevState = nullptr;
-	}*/
-
-	// Set the Previous State to what Current State is now
-	/*if(m_pCurrState != nullptr )
-		m_pPrevState = m_pCurrState;*/
-	
-	
-
-	//// Add the new State
-	//m_vStates.push_back(pNewState);
-
-	//// Assign the current state
-	//m_pCurrState = pNewState;
-
-	//// Enter the new state (if any)
-	//if( m_pCurrState != nullptr )
-	//	m_pCurrState->Enter();
 }
 
 ///////////////////////////

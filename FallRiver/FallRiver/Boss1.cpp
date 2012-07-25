@@ -60,7 +60,9 @@ Boss1::Boss1()
 
 Boss1::~Boss1()
 {
-
+	SetWeapon(nullptr);
+	m_cInTheWay = nullptr;
+	EventSystem::GetInstance()->UnregisterClient( "target_hit", this );
 }
 
 void Boss1::Update(float fElapsedTime)
