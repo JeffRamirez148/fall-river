@@ -83,6 +83,10 @@ GamePlayState::GamePlayState()
 	goreL6 = -1;
 	goreL7 = -1;
 	goreL8 = -1;
+	townX = 0;
+	townY = 0;
+	hospitalX = 0;
+	hospitalY = 0;
 
 //	pianoID = -1;
 
@@ -812,6 +816,12 @@ void GamePlayState::Update(float fElapsedTime)
 	else
 	{
 		GetPlayer()->m_bIsHidden = false; 
+	}
+
+
+	if( GetPlayer()->m_vpActiveQuests.size() > 0 && GetPlayer()->m_bHasMedicine == true && m_clevel->whichlevel == HOSPITAL)
+	{
+		m_pHUD->SetTarget((float)townX, (float)townY);
 	}
 
 
@@ -3033,15 +3043,18 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Medicine") == 0)
 			{
-				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
-				pPickUp->SetPosX((float)nth->x);
-				pPickUp->SetPosY((float)nth->y);
-				pPickUp->SetWidth(nth->width);
-				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
-				pPickUp->SetPickUpType(MEDICINE);
-				m_pOM->AddObject(pPickUp);
-				pPickUp = nullptr;
+				if( GetPlayer()->m_vpActiveQuests.size() > 0 && GetPlayer()->m_bHasMedicine == false )
+				{
+					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+					pPickUp->SetPosX((float)nth->x);
+					pPickUp->SetPosY((float)nth->y);
+					pPickUp->SetWidth(nth->width);
+					pPickUp->SetHeight(nth->height);
+					pPickUp->SetImageID(-1);
+					pPickUp->SetPickUpType(MEDICINE);
+					m_pOM->AddObject(pPickUp);
+					pPickUp = nullptr;
+				}
 				tmp.erase(nth);
 				i--;
 			}
@@ -3122,7 +3135,12 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
-				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				townX = nth->x;
+				townY = nth->y;
+				if( GetPlayer()->m_vpActiveQuests.size() == 0 && GetPlayer()->m_bHasMedicine == false )
+				{
+					m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				}
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{

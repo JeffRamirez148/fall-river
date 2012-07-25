@@ -4,6 +4,7 @@
 #include "DirectInput.h"
 #include "CGame.h"
 #include "CreditsMenuState.h"
+#include "MainMenuState.h"
 #include "XMLManager.h"
 
 HighScoresMenuState::HighScoresMenuState()
