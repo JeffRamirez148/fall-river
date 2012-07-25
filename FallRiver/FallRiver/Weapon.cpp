@@ -22,6 +22,7 @@ Weapon::Weapon()
 
 Weapon::~Weapon()
 {
+	SetOwner(nullptr);
 }
 
 bool Weapon::Init(int wType, int nAmmo, float currRotation )

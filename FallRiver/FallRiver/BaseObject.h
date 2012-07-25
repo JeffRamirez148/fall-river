@@ -28,7 +28,7 @@ public:
 		shadow = false;
 		m_nVelX=0;
 		m_nVelY=0;
-		m_unRefCount = -1;
+		m_unRefCount = 1;
 	}
 	virtual void AddRef();
 

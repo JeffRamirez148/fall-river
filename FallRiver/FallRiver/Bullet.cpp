@@ -21,6 +21,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
+	SetOwner(nullptr);
 }
 
 void Bullet::Update(float fElapsedTime) 

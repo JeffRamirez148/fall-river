@@ -46,6 +46,7 @@ Level::~Level()
 
 void Level::Update(float fElapsedTime)
 {
+	fElapsedTime;
 	/*DirectInput* pDI = DirectInput::GetInstance();
 
 	if(pDI->KeyPressed(DIK_P) )

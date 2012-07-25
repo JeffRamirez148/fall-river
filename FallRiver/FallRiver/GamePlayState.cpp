@@ -1007,9 +1007,8 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 	case MSG_CREATE_BULLET:
 		{
 			// Create bullet
-			Bullet* bullet = dynamic_cast< Bullet* >( self->m_pOF->CreateObject( _T("Bullet") ) );
+			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
-			pOwner->AddRef();
 			//Set up data members
 			bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 			bullet->SetHeight(16);
@@ -1029,8 +1028,8 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 
 			if( pOwner->GetWeaponType() == WPN_SHOTGUN )
 			{
-				Bullet* bullet2 = dynamic_cast< Bullet* >( self->m_pOF->CreateObject( _T("Bullet") ) );
-				Bullet* bullet3 = dynamic_cast< Bullet* >( self->m_pOF->CreateObject( _T("Bullet") ) );
+				Bullet* bullet2 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
+				Bullet* bullet3 = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 				bullet2->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				bullet3->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 				//bullet 2
@@ -1229,8 +1228,6 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 				bullet->Release();
 				bullet2->Release();
 				bullet3->Release();
-				//pOwner->Release();
-				pOwner = nullptr;
 				bullet = nullptr;
 				bullet2 = nullptr;
 				bullet3 = nullptr;
@@ -1472,7 +1469,6 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 	case MSG_DESTROY_BULLET:
 		{
 			Bullet* bullet = dynamic_cast<DestroyBullet*>(pMsg)->GetBullet();
-			bullet->GetOwner()->Release();
 			self->m_pOM->RemoveObject( bullet );
 			break;
 		}
