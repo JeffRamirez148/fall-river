@@ -755,7 +755,7 @@ void GamePlayState::Exit()
 		m_cBushes[i]->Release();
 		m_cBushes[i] = nullptr;
 	}
-	m_cSpawn.clear();
+	m_cBushes.clear();
 
 	if( m_cBoss2 != nullptr )
 		m_cBoss2->Release();
