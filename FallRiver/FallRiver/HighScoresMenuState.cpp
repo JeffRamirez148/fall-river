@@ -6,7 +6,7 @@
 #include "CreditsMenuState.h"
 #include "MainMenuState.h"
 #include "XMLManager.h"
-
+#include "MainMenuState.h"
 HighScoresMenuState::HighScoresMenuState()
 {
 	fontID = -1;
