@@ -4,8 +4,9 @@
 #include "DirectInput.h"
 #include "CGame.h"
 #include "CreditsMenuState.h"
+#include "MainMenuState.h"
 #include "XMLManager.h"
-
+#include "MainMenuState.h"
 HighScoresMenuState::HighScoresMenuState()
 {
 	fontID = -1;
@@ -102,7 +103,11 @@ bool HighScoresMenuState::Input()
 	{
 		if(m_bNameEntered == true)
 		{
-			CGame::GetInstance()->RemoveState();
+		CGame::GetInstance()->RemoveState();
+		if(dynamic_cast<MainMenuState*>(CGame::GetInstance()->GetPreviousState()))
+			CGame::GetInstance()->ChangeState(CreditsMenuState::GetInstance());
+		else
+			CGame::GetInstance()->ChangeState(MainMenuState::GetInstance());
 		}
 	}
 

@@ -116,6 +116,8 @@ private:
 public:
 	int hospitalX;
 	int hospitalY;
+	int townX;
+	int	townY;
 
 	int GetGoreL1() { return goreL1;}
 	int GetGoreL2() { return goreL2;}
