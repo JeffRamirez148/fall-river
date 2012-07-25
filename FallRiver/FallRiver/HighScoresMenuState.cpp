@@ -5,11 +5,12 @@
 #include "CGame.h"
 #include "CreditsMenuState.h"
 #include "XMLManager.h"
+#include "MainMenuState.h"
 
 HighScoresMenuState::HighScoresMenuState()
 {
 	fontID = -1;
-	m_bNameEntered = false;
+	m_bNameEntered = true;
 	keytimer = 0;
 	m_cName['\0'];
 	m_nSpace = 0;
@@ -61,7 +62,7 @@ void HighScoresMenuState::Enter()
 //	audio->setMusicLooping(musicID2, true);
 //	audio->playMusic(musicID2);
 
-	if(CGame::GetInstance()->scoreCatch > 0)
+	if(CGame::GetInstance()->scoreCatch > 0 )
 		m_bNameEntered = false;
 	keytimer = 0;
 	m_nScore = CGame::GetInstance()->scoreCatch;
@@ -124,7 +125,7 @@ bool HighScoresMenuState::Input()
 				m_cName[0] = '\0';
 			}
 		}
-		else if(((m_pDI->CheckKeys() <= 'z' && m_pDI->CheckKeys() >= 'a') || (m_pDI->CheckKeys() <= 'Z' && m_pDI->CheckKeys() >= 'A')) && keytimer == 0)
+		else if(((m_pDI->CheckKeys() <= 'z' && m_pDI->CheckKeys() >= 'a') || (m_pDI->CheckKeys() <= 'Z' && m_pDI->CheckKeys() >= 'A') || m_pDI->KeyPressed(DIK_SPACE)) && keytimer == 0)
 		{
 			m_cName[m_nSpace] = m_pDI->CheckKeys();
 

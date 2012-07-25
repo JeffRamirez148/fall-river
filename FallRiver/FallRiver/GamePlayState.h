@@ -117,6 +117,8 @@ public:
 	int hospitalX;
 	int hospitalY;
 
+	int loadedLevel;
+
 	int GetGoreL1() { return goreL1;}
 	int GetGoreL2() { return goreL2;}
 	int GetGoreL3() { return goreL3;}
