@@ -135,7 +135,7 @@ void ChasingAI::Update(float fElapsedTime)
 		if( m_pTarget->GetLightType() == 2 )
 			m_nState = ESTATE_CHASING;
 	}
-	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() && m_nState != ESTATE_DEAD && m_nState != GONE )
+	else if( ((distance >= 200) || m_pTarget->CheckHidden() ) && !m_pTarget->IsOn() && m_nState != ESTATE_DEAD && m_nState != GONE && m_nState != ESTATE_CHASING )
 	{
 		m_nState = ESTATE_IDLE;
 		notified = true;

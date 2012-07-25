@@ -49,6 +49,7 @@ GamePlayState::GamePlayState()
 	m_pPM = nullptr;
 	m_cPlayer = nullptr;
 	m_cBoss1 = nullptr;
+	m_cBoss2 = nullptr;
 	m_cWeapon = nullptr;
 
 //	backGroundID = -1;
@@ -83,6 +84,10 @@ GamePlayState::GamePlayState()
 	goreL6 = -1;
 	goreL7 = -1;
 	goreL8 = -1;
+	townX = 0;
+	townY = 0;
+	hospitalX = 0;
+	hospitalY = 0;
 
 
 	loadedLevel = -1;
@@ -683,18 +688,52 @@ void GamePlayState::Exit()
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
+		m_cEnemies[i]->Release();
 		m_cEnemies[i] = nullptr;
 	}
 	m_cEnemies.clear();
 
 	for(unsigned int i = 0; i < m_cNpcs.size(); i++)
 	{
+		m_cNpcs[i]->Release();
 		m_cNpcs[i] = nullptr;
 	}
+	m_cNpcs.clear();
+
+	for(unsigned int i = 0; i < m_cSpawn.size(); i++)
+	{
+		m_cSpawn[i]->Release();
+		m_cSpawn[i] = nullptr;
+	}
+	m_cSpawn.clear();
+
+	for(unsigned int i = 0; i < m_cBushes.size(); i++)
+	{
+		m_cBushes[i]->Release();
+		m_cBushes[i] = nullptr;
+	}
+	m_cBushes.clear();
+
+	if( m_cBoss2 != nullptr )
+		m_cBoss2->Release();
+	m_cBoss1 = nullptr;
+	m_cBoss2 = nullptr;
+
+	if( m_cBuddy != nullptr )
+		m_cBuddy->Release();
+	m_cBuddy = nullptr;
+	if( m_cPlayer != nullptr )
+		m_cPlayer->Release();
+	if( m_cWeapon != nullptr )
+		m_cWeapon->Release();
+
+	if(m_clevel != nullptr)
+		m_clevel->Release();
+
+	m_clevel = nullptr;
 
 	fireA.clear();
 	streetLights.clear();
-	m_cNpcs.clear();
 
 	m_pVM = nullptr;
 	m_pDI = nullptr;
@@ -774,6 +813,12 @@ void GamePlayState::Update(float fElapsedTime)
 	}
 
 
+	if( GetPlayer()->m_vpActiveQuests.size() > 0 && GetPlayer()->m_bHasMedicine == true && m_clevel->whichlevel == HOSPITAL)
+	{
+		m_pHUD->SetTarget((float)townX, (float)townY);
+	}
+
+
 	for( unsigned int i = 0; i < m_cSpawn.size(); i++)
 	{
 		m_cSpawn[i]->Update(fElapsedTime);
@@ -843,117 +888,12 @@ void GamePlayState::Render()
 
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
 	{
-
-
-		//if(m_cBushes[i]->GetShadow() && m_cPlayer->IsOn())
-		//{
-		//	if(m_cPlayer->GetDirection() < 4)
-		//		m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, (m_cPlayer->GetDirection() - 1) * 1.57079f,D3DCOLOR_ARGB(200,0,0,0));
-		//	else
-		//	{
-		//		switch(m_cPlayer->GetDirection())
-		//		{
-		//		case 4:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -0.78539f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		case 5:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 0.78539f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		case 6:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, -2.35619f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		case 7:
-		//			m_pVM->DrawStaticTexture(z,x-GetCamera().x,y-GetCamera().y-15,1.0f,1.25f,&tmp,32,64, 2.35619f,D3DCOLOR_ARGB(200,0,0,0));
-		//			break;
-		//		default:
-		//			break;
-		//		}
-		//	}
-		//}
-		//else
-		//if( m_cPlayer->IsOn() && (m_cPlayer->GetLightType() > 1 || m_cBushes[i]->GetShadow()))
-		//{
-		//	//float angle = 0;
-		//	//if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-		//	//	angle = 0.78539f;
-		//	//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-		//	//	angle = -0.78539f;
-		//	//else if( m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-		//	//	angle = -2.35619f;
-		//	//else if( m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-		//	//	angle = 2.35619f;
-		//	//else if(m_cBushes[i]->GetPosY() < m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-		//	//	angle = 0.0f;
-		//	//else if(m_cBushes[i]->GetPosY() > m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() == m_cPlayer->GetPosX())
-		//	//	angle = 3.14159f;
-		//	//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() < m_cPlayer->GetPosX())
-		//	//	angle = -1.57079f;
-		//	//else if(m_cBushes[i]->GetPosY() == m_cPlayer->GetPosY() && m_cBushes[i]->GetPosX() > m_cPlayer->GetPosX())
-		//	//	angle = 1.57079f;
-		//
-		//	RECT tmp = {0,0,64,64};
-		//
-		//	float angle = 0;
-		//	float x2 = m_cPlayer->GetPosX() - m_cBushes[i]->GetPosX();
-		//	float x = x2;
-		//	float y2 = m_cPlayer->GetPosY() - m_cBushes[i]->GetPosY();
-		//	float y = y2;
-		//	x2 *= x2;
-		//	y2 *= y2;
-		//	float distance = sqrt(x2 + y2);
-		//
-		//	angle = acos(x/distance);
-		//	if( y < 0)
-		//		angle *=  -1;
-		//
-		//	angle -= 1.57079f;
-		//
-		//	float xP, yP;
-		//	int z;
-		//	xP = m_cBushes[i]->GetPosX();
-		//	yP = m_cBushes[i]->GetPosY();
-		//	z = m_cBushes[i]->GetImageID();
-		//
-		//	m_pVM->DrawStaticTexture(z,xP-GetCamera().x,yP-GetCamera().y - 15,1.0f,1.25f,&tmp,32,64, angle,D3DCOLOR_ARGB(200,0,0,0));
-		//
-		//}
 		m_cBushes[i]->Render();
 	}
 	m_pPM->Render();
 
-	m_cPlayer->Render();
-	m_pPM->GetActiveEmitter(rainA)->Render();
-
-
-	//m_pVM->DrawFont(GetPlayer()->m_nFontID,"Quest Log",610.0f,100.0f,0.5f,0.5f);
-
-
-	//char szName[100] = {};
-	//
-	//TCHAR buffer[ 100 ];
-	////int playerScore = 15;
-	//_stprintf_s( buffer, 100, _T("Health = %i"), m_pHUD->m_fHealth );
-
-	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-	//m_pVM->DrawTextW("hello",GamePlayState::GetInstance()->GetCamera().x,GamePlayState::GetInstance()->GetCamera().y,255,255,255);
-
-	////m_pVM->DrawText(szName,0,0,255,255,255);
-	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,0);
-
-	////char szName1[100] = {};
-	////
-	////TCHAR buffer1[ 100 ];
-	////int playerScore = 15;
-	//_stprintf_s( buffer, 100, _T("Lives = %i"), m_pHUD->m_nLives );
-
-	//wcstombs_s( nullptr, szName, 100, buffer, _TRUNCATE );
-
-	//m_pVM->DrawFont(this->m_cNpcs[0]->temp_font_id,szName,0,20);
-
-
-
-
-
+	//m_cPlayer->Render();
+	//m_pPM->GetActiveEmitter(rainA)->Render();
 
 }
 
@@ -1503,45 +1443,6 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
-	}
-	
-	if(aPEvent->GetEventID() == "HouseToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	{
-		for( unsigned int i = 0; i < this->fireA.size(); i++)
-		{
-			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
-		}
-	}
-
-	
-	if(aPEvent->GetEventID() == "HospitalToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	{
-		for( unsigned int i = 0; i < this->fireA.size(); i++)
-		{
-			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
-		}
-	}
-	
-	if(aPEvent->GetEventID() == "GoToHospital")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	{
-		for( unsigned int i = 0; i < this->fireA.size(); i++)
-		{
-			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
-		}
-	}
-
-	
-	if(aPEvent->GetEventID() == "GoToHouse")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	{
-		for( unsigned int i = 0; i < this->fireA.size(); i++)
-		{
-			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
-		}
-	}
-
-
-	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	{
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
@@ -1596,7 +1497,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(SHOTGUN_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1627,7 +1528,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(RIFLE_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1641,7 +1542,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(PISTOL_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1655,7 +1556,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
 				pPickUp->SetPickUpType(MEDICINE);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1669,7 +1570,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/health.png"));
 				pPickUp->SetPickUpType(HEALTH);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1683,7 +1584,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/battery.png"));
 				pPickUp->SetPickUpType(BATTERY);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1852,6 +1753,10 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "HospitalToTown")//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
@@ -1923,7 +1828,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(SHOTGUN_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1954,7 +1859,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(RIFLE_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1968,7 +1873,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(PISTOL_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1982,7 +1887,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
 				pPickUp->SetPickUpType(MEDICINE);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -1996,7 +1901,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/health.png"));
 				pPickUp->SetPickUpType(HEALTH);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2010,7 +1915,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/battery.png"));
 				pPickUp->SetPickUpType(BATTERY);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2198,6 +2103,10 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "HouseToTown")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		//m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
@@ -2269,7 +2178,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(SHOTGUN_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2300,7 +2209,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(RIFLE_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2314,7 +2223,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(PISTOL_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2328,7 +2237,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
 				pPickUp->SetPickUpType(MEDICINE);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2342,7 +2251,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/health.png"));
 				pPickUp->SetPickUpType(HEALTH);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2356,7 +2265,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/battery.png"));
 				pPickUp->SetPickUpType(BATTERY);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2546,7 +2455,11 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "GoToHouse")
 	{
-	
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
+
 		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
@@ -2615,7 +2528,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(SHOTGUN_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2646,7 +2559,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(RIFLE_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2660,7 +2573,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(PISTOL_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2676,7 +2589,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					pPickUp->SetPosY((float)nth->y);
 					pPickUp->SetWidth(nth->width);
 					pPickUp->SetHeight(nth->height);
-					pPickUp->SetImageID(-1);
+					pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
 					pPickUp->SetPickUpType(MEDICINE);
 					m_pOM->AddObject(pPickUp);
 					pPickUp = nullptr;
@@ -2691,7 +2604,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/health.png"));
 				pPickUp->SetPickUpType(HEALTH);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2705,7 +2618,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/battery.png"));
 				pPickUp->SetPickUpType(BATTERY);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2872,6 +2785,10 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "GoToHospital")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		for( unsigned int i = 0; i < this->fireA.size(); i++)
+		{
+			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
@@ -2942,7 +2859,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(SHOTGUN_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2973,7 +2890,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(RIFLE_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2987,7 +2904,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/ammo.png"));
 				pPickUp->SetPickUpType(PISTOL_AMMO);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -2996,15 +2913,18 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Medicine") == 0)
 			{
-				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
-				pPickUp->SetPosX((float)nth->x);
-				pPickUp->SetPosY((float)nth->y);
-				pPickUp->SetWidth(nth->width);
-				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
-				pPickUp->SetPickUpType(MEDICINE);
-				m_pOM->AddObject(pPickUp);
-				pPickUp = nullptr;
+				if( GetPlayer()->m_vpActiveQuests.size() > 0 && GetPlayer()->m_bHasMedicine == false )
+				{
+					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+					pPickUp->SetPosX((float)nth->x);
+					pPickUp->SetPosY((float)nth->y);
+					pPickUp->SetWidth(nth->width);
+					pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
+					pPickUp->SetHeight(nth->height);
+					pPickUp->SetPickUpType(MEDICINE);
+					m_pOM->AddObject(pPickUp);
+					pPickUp = nullptr;
+				}
 				tmp.erase(nth);
 				i--;
 			}
@@ -3015,7 +2935,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/health.png"));
 				pPickUp->SetPickUpType(HEALTH);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -3029,7 +2949,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pPickUp->SetPosY((float)nth->y);
 				pPickUp->SetWidth(nth->width);
 				pPickUp->SetHeight(nth->height);
-				pPickUp->SetImageID(-1);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/battery.png"));
 				pPickUp->SetPickUpType(BATTERY);
 				m_pOM->AddObject(pPickUp);
 				pPickUp = nullptr;
@@ -3086,6 +3006,12 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
 				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				townX = nth->x;
+				townY = nth->y;
+				if( GetPlayer()->m_vpActiveQuests.size() == 0 && GetPlayer()->m_bHasMedicine == false )
+				{
+					m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				}
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{

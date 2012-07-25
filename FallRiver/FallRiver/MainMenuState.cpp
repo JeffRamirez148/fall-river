@@ -50,6 +50,11 @@ void MainMenuState::Enter()
 	m_pDI = DirectInput::GetInstance();
 	m_pVM = ViewManager::GetInstance();
 
+	m_pVM->SetLightPos(0, 0, -1.0f);
+	m_pVM->SetSpotLightPos(0, 0, -.85f);
+	m_pVM->SetInnerCone(.95f);
+	m_pVM->SetOuterCone(.9f);
+
 	m_pVM->SetAmbientLight( .1f, .1f, .0f);
 
 	loading->Update();

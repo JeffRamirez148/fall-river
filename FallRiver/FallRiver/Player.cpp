@@ -147,7 +147,7 @@ void Player::Update(float fElapsedTime)
 		lose = true;
 		AudioManager::GetInstance()->GetSoundChannel(walkingID)->stop();
 		AudioManager::GetInstance()->GetSoundChannel(hitID)->stop();
-			AudioManager::GetInstance()->GetSoundChannel(flashLightID)->stop();
+		AudioManager::GetInstance()->GetSoundChannel(flashLightID)->stop();
 		AudioManager::GetInstance()->GetSoundChannel(weaponChangeID)->stop();
 		AudioManager::GetInstance()->GetSoundChannel(sheathID)->stop();
 
@@ -207,10 +207,10 @@ void Player::Update(float fElapsedTime)
 	}
 
 	/*if( pDI->KeyDown(DIK_I) )
-		if(ViewManager::GetInstance()->GetAmbientLightR() != 1.0f)
-			ViewManager::GetInstance()->SetAmbientLight(1.0f, 1.0f, 1.0f);
-		else
-			ViewManager::GetInstance()->SetAmbientLight(0.0f, 0.0f, 0.0f);*/
+	if(ViewManager::GetInstance()->GetAmbientLightR() != 1.0f)
+	ViewManager::GetInstance()->SetAmbientLight(1.0f, 1.0f, 1.0f);
+	else
+	ViewManager::GetInstance()->SetAmbientLight(0.0f, 0.0f, 0.0f);*/
 
 	if( !m_bLocked && ((pDI->KeyDown(DIK_SPACE) && m_dwGunCount  < GetTickCount()) || (pDI->JoystickGetRTriggerAmount(0) > 1 && m_dwGunCount  < GetTickCount()) ) && m_nState != PSTATE_DEAD )
 	{
@@ -250,7 +250,7 @@ void Player::Update(float fElapsedTime)
 
 	if( m_nState == PSTATE_RELOAD  )
 	{
-		if( m_currWeapon->GetClip() < m_currWeapon->GetMaxClip() )
+		if( m_currWeapon->GetClip() < m_currWeapon->GetMaxClip() && m_currWeapon->GetAmmo() > 0 )
 			m_currWeapon->Reload();
 		else if( m_dwReloadTime <= GetTickCount() )
 		{
@@ -949,7 +949,19 @@ void Player::Render()
 	//	Particle_Manager::GetInstance()->GetActiveEmitter(smokeA)
 	//}
 	/*for( unsigned int i = 0; i < GamePlayState::GetInstance()->GetFireA().size(); ++i)
-		Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();*/
+	Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetFireA()[i])->Render();*/
+
+	/*if( m_nState == PSTATE_SWING )
+	{
+		Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
+		Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
+
+		float x = GamePlayState::GetInstance()->GetCamera().x;
+		float y = GamePlayState::GetInstance()->GetCamera().y;
+		RECT collRect = {long(thisFrame.activeRect.left+GetPosX()+10)-x, long(thisFrame.activeRect.top+GetPosY()+30)-y, thisFrame.activeRect.right+(long)GetPosX()+10-x, thisFrame.activeRect.bottom+(long)GetPosY()+30-y};
+
+		pVM->DrawRect(collRect, 0, 0, 0);
+	}*/
 }
 
 bool Player::CheckCollision(IObjects* pBase) 
@@ -957,16 +969,22 @@ bool Player::CheckCollision(IObjects* pBase)
 	Animation* thisAnim = ViewManager::GetInstance()->GetAnimation(m_playerAnim.curAnimID);
 	Frame thisFrame = thisAnim->frames[m_playerAnim.curAnimation][m_playerAnim.curFrame];
 
+	BaseObject* pBox = (BaseObject*)pBase;
+
+	if((pBox->GetPosX() - GamePlayState::GetInstance()->GetCamera().x > CGame::GetInstance()->GetScreenWidth() || pBox->GetPosY() - GamePlayState::GetInstance()->GetCamera().y > CGame::GetInstance()->GetScreenHeight() ||
+			pBox->GetPosX() - GamePlayState::GetInstance()->GetCamera().x + pBox->GetWidth() < 0 || pBox->GetPosY() - GamePlayState::GetInstance()->GetCamera().y + pBox->GetHeight() < 0) && pBox->GetObjectType() != OBJ_LEVEL)
+			return false;
+
 	if( m_nState == PSTATE_SWING && pBase->GetObjectType() == OBJ_CHARACTER )
 	{
 		BaseCharacter* tmp = (BaseCharacter*)pBase;
 
-		if( tmp->GetCharacterType() == CHA_ENEMY || tmp->GetCharacterType() == CHA_BOSS2 )
+		if( tmp->GetCharacterType() == CHA_CHASING || tmp->GetCharacterType() == CHA_BOSS2 )
 		{
 			RECT cRect;
 			RECT collRect = {long(thisFrame.activeRect.left+GetPosX()+10), long(thisFrame.activeRect.top+GetPosY()+30), thisFrame.activeRect.right+(long)GetPosX()+10, thisFrame.activeRect.bottom+(long)GetPosY()+30};
 			RECT temp = tmp->GetRect();
-			if( IntersectRect(&cRect, &collRect, &temp) == TRUE && m_playerAnim.curFrame == 1 )
+			if( IntersectRect(&cRect, &collRect, &tmp->GetRect()) )
 			{
 				tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
 				EventSystem::GetInstance()->SendUniqueEvent( "target_hit", pBase );

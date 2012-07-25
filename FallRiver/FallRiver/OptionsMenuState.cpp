@@ -289,7 +289,7 @@ void OptionsMenuState::Render()
 	{
 		m_pVM->DrawFont(m_nFontID,"Resolution",346.5f,185.8f,0.7f,0.7f,0,0,0,D3DCOLOR_ARGB(255,255,0,0));
 
-		if(m_bIsWindowed)
+		if(!m_bIsWindowed)
 			m_pVM->DrawFont(m_nFontID, "FullScreen Off", 346.5f, 215.8f,0.5f,0.5f);
 		else
 			m_pVM->DrawFont(m_nFontID, "FullScreen On", 346.5f, 215.8f,0.5f,0.5f);

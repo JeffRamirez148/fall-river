@@ -121,14 +121,14 @@ void Weapon::Render()
 
 void Weapon::FireWeapon()
 {
-	if( m_nClip == 0 || m_bReloading && m_nWeaponType != WPN_MACHETE )
+	if( ( m_nClip == 0 && m_nAmmo > 0 ) || m_bReloading && m_nWeaponType != WPN_MACHETE )
 	{
 		if(!Reload())
 			return;
 		else 
 			m_bReloading = false;
 	}
-	if( m_nWeaponType != WPN_MACHETE && m_nAmmo > 0 )
+	if( m_nWeaponType != WPN_MACHETE && m_nClip > 0 )
 	{
 		CreateBullet* pMsg = new CreateBullet( this );
 		MessageSystem::GetInstance()->SendMsg( pMsg );

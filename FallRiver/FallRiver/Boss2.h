@@ -18,6 +18,7 @@ class Boss2: public Enemy
 
 public: 
 	Boss2();
+	~Boss2();
 	virtual void Update(float aTime);
 
 	virtual void Render();

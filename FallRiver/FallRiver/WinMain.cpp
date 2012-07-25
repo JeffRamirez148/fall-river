@@ -282,11 +282,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//////////////////////////////////////////
 	//	Initialize Game here
 	//////////////////////////////////////////
-	g_bIS_WINDOWED = !g_bIS_WINDOWED;
+	//g_bIS_WINDOWED = !g_bIS_WINDOWED;
 	CGame* pGame = CGame::GetInstance();
 	pGame->Initialize( hWnd, hInstance,
 					   g_nWINDOW_WIDTH, g_nWINDOW_HEIGHT,
-					   g_bIS_WINDOWED);
+					   !g_bIS_WINDOWED);
 
 
 	//////////////////////////////////////////

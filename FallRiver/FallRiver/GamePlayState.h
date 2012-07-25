@@ -116,6 +116,8 @@ private:
 public:
 	int hospitalX;
 	int hospitalY;
+	int townX;
+	int	townY;
 
 	int loadedLevel;
 

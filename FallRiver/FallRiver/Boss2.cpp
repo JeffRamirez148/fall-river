@@ -57,6 +57,13 @@ Boss2::Boss2()
 
 }
 
+Boss2::~Boss2()
+{
+	EventSystem::GetInstance()->UnregisterClient( "bossWall_hit", this );
+	EventSystem::GetInstance()->UnregisterClient( "target_hit", this );
+	SetWeapon(nullptr);
+}
+
 void Boss2::Update(float Time) 
 {
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
