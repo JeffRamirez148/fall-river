@@ -669,6 +669,9 @@ void GamePlayState::Exit()
 		m_pES = nullptr;
 	}
 
+	m_pPM->Shutdown();
+
+
 	if( m_pMS != nullptr )
 	{
 		m_pMS->ClearMessages();
@@ -737,6 +740,7 @@ void GamePlayState::Exit()
 
 
 	m_pVM = nullptr;
+	m_pPM = nullptr;
 	m_pDI = nullptr;
 	m_pAM = nullptr;
 	m_pOF = nullptr;
@@ -1440,6 +1444,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 {
 	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -1754,6 +1759,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "HospitalToTown")//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -2104,6 +2110,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "HouseToTown")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -2456,6 +2463,8 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "GoToHouse")
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(false);
+		m_clevel->SetInside(true);
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -2473,7 +2482,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		Bush* pBush = nullptr;
 		SpawnPoint* pSpawn = nullptr;
 		PickUp* pPickUp = nullptr;
-
+		pLevel->SetInside(true);
 		if( pLevel == nullptr )
 		{
 			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
@@ -2786,6 +2795,8 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "GoToHospital")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(false);
+
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -2816,7 +2827,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		loading->Update();
 		loading->Render();
 
-
+		pLevel->SetInside(true);
 		vector<leveldata> tmp = pLevel->GetCollision();
 		for(unsigned int i = 0; i < tmp.size(); i++) 
 		{

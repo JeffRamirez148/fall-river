@@ -274,6 +274,21 @@ Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxPa
 	soundID = -1;
 }
 
+Emitter::~Emitter()
+{
+
+}
+
+void Emitter::Shutdown()
+{
+	for(unsigned int i =0; i <_m_vparticles.size(); i++)
+	{
+		delete _m_vparticles[i];
+		_m_vparticles[i] = nullptr;
+	}
+	_m_vparticles.clear();
+}
+
 Emitter::Emitter()
 {
 	spawnRate = 0;

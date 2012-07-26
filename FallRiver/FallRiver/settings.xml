@@ -2,5 +2,5 @@
 <Setting>
     <setting_info Music:="35" />
     <setting_info SFX:="100" />
-    <setting_info Resolution:="0" />
+    <setting_info Resolution:="1" />
 </Setting>

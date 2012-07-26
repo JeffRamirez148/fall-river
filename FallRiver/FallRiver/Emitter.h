@@ -41,6 +41,8 @@ class Emitter
 			 float newEndScaleX, float newEndScaleY, int newBlendModeS, int newBlendModeD, int newImageID, float newParticleLifeSpan,
 			 float newEmitterLifeTime, int newStartColor, int newEndColor,  float newStartRot, float newEndRot);
 	Emitter();
+	~Emitter();
+	void Shutdown();
 	Emitter& operator=(const Emitter& emitter);
 	Emitter(const Emitter& emitter);
 	void Update(float fElapsedTime);

@@ -22,6 +22,7 @@ public:
 	void Render();
 	void Update(float fElapsedTime);
 	static Particle_Manager* GetInstance(void);
+	void Shutdown();
 };
 
 #endif

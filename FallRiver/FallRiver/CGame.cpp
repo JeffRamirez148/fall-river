@@ -205,6 +205,9 @@ void CGame::ShutDown()
 		m_pDI = nullptr;
 	}
 
+	AudioManager::GetInstance()->Shutdown();
+	
+
 	if( m_pVM != nullptr )
 	{
 		m_pVM->ShutdownDirect3D();
