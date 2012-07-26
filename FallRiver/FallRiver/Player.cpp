@@ -979,11 +979,10 @@ bool Player::CheckCollision(IObjects* pBase)
 	{
 		BaseCharacter* tmp = (BaseCharacter*)pBase;
 
-		if( tmp->GetCharacterType() == CHA_CHASING || tmp->GetCharacterType() == CHA_BOSS2 )
+		if( tmp->GetCharacterType() == CHA_CHASING || tmp->GetCharacterType() == CHA_BOSS2 || tmp->GetCharacterType() == CHA_SHOOTING )
 		{
 			RECT cRect;
 			RECT collRect = {long(thisFrame.activeRect.left+GetPosX()+10), long(thisFrame.activeRect.top+GetPosY()+30), thisFrame.activeRect.right+(long)GetPosX()+10, thisFrame.activeRect.bottom+(long)GetPosY()+30};
-			RECT temp = tmp->GetRect();
 			if( IntersectRect(&cRect, &collRect, &tmp->GetRect()) )
 			{
 				tmp->SetHealth(tmp->GetHealth()-m_currWeapon->GetDamage());
