@@ -713,22 +713,9 @@ void GamePlayState::Exit()
 	}
 	m_cBushes.clear();
 
-	//if( m_cBoss2 != nullptr )
-	//	m_cBoss2->Release();
 	m_cBoss1 = nullptr;
 	m_cBoss2 = nullptr;
-
-	if( m_cBuddy != nullptr )
-		m_cBuddy->Release();
 	m_cBuddy = nullptr;
-	if( m_cPlayer != nullptr )
-		m_cPlayer->Release();
-	if( m_cWeapon != nullptr )
-		m_cWeapon->Release();
-
-	if(m_clevel != nullptr)
-		m_clevel->Release();
-
 	m_clevel = nullptr;
 
 	if( m_pOM != nullptr )
@@ -3148,32 +3135,27 @@ void GamePlayState::ChangeLevel()
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
-		m_cEnemies[i]->Release();
 		m_cEnemies[i] = nullptr;
 	}
 	m_cEnemies.clear();
 
 	for(unsigned int i = 0; i < m_cNpcs.size(); i++)
 	{
-		m_cNpcs[i]->Release();
 		m_cNpcs[i] = nullptr;
 	}
 	m_cNpcs.clear();
 	
 	for(unsigned int i = 0; i < m_cSpawn.size(); i++)
 	{
-		m_cSpawn[i]->Release();
 		m_cSpawn[i] = nullptr;
 	}
 	m_cSpawn.clear();
 
 	for(unsigned int i = 0; i < m_cBushes.size(); i++)
 	{
-		m_cBushes[i]->Release();
 		m_cBushes[i] = nullptr;
 	}
 	m_cBushes.clear();
-	
 
 	fireA.clear();
 	streetLights.clear();
