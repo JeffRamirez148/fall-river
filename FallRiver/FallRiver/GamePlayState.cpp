@@ -1443,6 +1443,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
 		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
+		m_pPM->GetActiveEmitter(rainA)->age = 0;
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -1758,6 +1759,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	if(aPEvent->GetEventID() == "HospitalToTown")//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
 		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
+		m_pPM->GetActiveEmitter(rainA)->age = 0;
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -2109,6 +2111,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	if(aPEvent->GetEventID() == "HouseToTown")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
 		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
+		m_pPM->GetActiveEmitter(rainA)->age = 0;
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
