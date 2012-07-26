@@ -51,17 +51,24 @@ AudioManager::AudioManager(void)
 
 AudioManager::~AudioManager(void)
 {
+	
+	_result = _sys->release();
+}
+
+void AudioManager::Shutdown()
+{
 	for( unsigned int i = 0; i < _sfxSound.size(); ++i)
 	{
 		_sfxSound[i]->noise->release();
 		delete _sfxSound[i];
 	}
+	_sfxSound.clear();
 	for( unsigned int i = 0; i < _musicSound.size(); ++i)
 	{
 		_musicSound[i]->noise->release();
 		delete _musicSound[i];
 	}
-	_result = _sys->release();
+	_musicSound.clear();
 }
 
 // Sound

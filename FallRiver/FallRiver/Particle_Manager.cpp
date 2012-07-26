@@ -8,6 +8,26 @@ Particle_Manager* Particle_Manager::GetInstance(void)
 	return &s_Instance;
 }
 
+void Particle_Manager::Shutdown()
+{
+	for( unsigned int i = 0; i < loaded.size(); i++)
+	{
+		loaded[i]->Shutdown();
+		delete loaded[i];
+		loaded[i] = nullptr;
+	}
+	loaded.clear();
+
+	for( unsigned int i = 0; i < active.size(); i++)
+	{
+		active[i]->Shutdown();
+		delete active[i];
+		active[i] = nullptr;
+	}
+	active.clear();
+}
+
+
 int Particle_Manager::LoadEmitter(char * filepath)
 {
 	XMLManager* xml = XMLManager::GetInstance();

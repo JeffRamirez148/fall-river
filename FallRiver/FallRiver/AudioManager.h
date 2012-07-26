@@ -51,6 +51,7 @@ public:
 	// Sound
 	void playSound(int aSoundID);
 	int RegisterSound(char* filePath);
+	void Shutdown();
 	void TogleMuteSound() {_sfxMute = !_sfxMute;  Update(0.0f);}
 	void setSoundVolume(float volume) {_sfxVolume = volume; }
 	void setSoundLooping(int soundID, bool loop)

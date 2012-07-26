@@ -709,6 +709,9 @@ void GamePlayState::Exit()
 		m_pES = nullptr;
 	}
 
+	m_pPM->Shutdown();
+
+
 	if( m_pMS != nullptr )
 	{
 		m_pMS->ClearMessages();
@@ -779,6 +782,7 @@ void GamePlayState::Exit()
 	streetLights.clear();
 
 	m_pVM = nullptr;
+	m_pPM = nullptr;
 	m_pDI = nullptr;
 	m_pAM = nullptr;
 	m_pOF = nullptr;

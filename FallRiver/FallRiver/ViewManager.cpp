@@ -846,11 +846,12 @@ void ViewManager::ShutdownDirect3D(void)
 	SAFE_RELEASE(m_lpLine);
 	SAFE_RELEASE(m_lpSprite);
 	SAFE_RELEASE(m_lpDirect3DDevice);
-	SAFE_RELEASE(cubedecl);
+	SAFE_RELEASE(cubedecl); 
 	SAFE_RELEASE(wallbuff);
 	SAFE_RELEASE(renderTarget);
 	SAFE_RELEASE(postEffect);
 
+	
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		textures[i].ref = 0;
@@ -963,7 +964,13 @@ void ViewManager::ChangeDisplayParam(int nWidth, int nHeight, bool bWindowed)
 
 void ViewManager::CreateOtherLights(void)
 {
+	for(unsigned int i = 0; i < lightsToRender.size(); i++ )
+	{
+		delete lightsToRender[i];
+		lightsToRender[i] = nullptr;
+	}
 	lightsToRender.clear();
+
 	RECT cRect;
 	RECT camRect = { (long)GamePlayState::GetInstance()->GetCamera().x - CGame::GetInstance()->GetScreenWidth(), (long)GamePlayState::GetInstance()->GetCamera().y - CGame::GetInstance()->GetScreenHeight(), long(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth() * 2), long(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight() * 2)};
 	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
