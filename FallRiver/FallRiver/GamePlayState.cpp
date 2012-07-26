@@ -2950,18 +2950,15 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Medicine") == 0)
 			{
-				if( GetPlayer()->m_vpActiveQuests.size() > 0 && GetPlayer()->m_bHasMedicine == false )
-				{
-					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
-					pPickUp->SetPosX((float)nth->x);
-					pPickUp->SetPosY((float)nth->y);
-					pPickUp->SetWidth(nth->width);
-					pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
-					pPickUp->SetHeight(nth->height);
-					pPickUp->SetPickUpType(MEDICINE);
-					m_pOM->AddObject(pPickUp);
-					pPickUp = nullptr;
-				}
+				pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
+				pPickUp->SetPosX((float)nth->x);
+				pPickUp->SetPosY((float)nth->y);
+				pPickUp->SetWidth(nth->width);
+				pPickUp->SetHeight(nth->height);
+				pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/health.png"));
+				pPickUp->SetPickUpType(MEDICINE);
+				m_pOM->AddObject(pPickUp);
+				pPickUp = nullptr;
 				tmp.erase(nth);
 				i--;
 			}
