@@ -2480,7 +2480,6 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		Bush* pBush = nullptr;
 		SpawnPoint* pSpawn = nullptr;
 		PickUp* pPickUp = nullptr;
-		pLevel->SetInside(true);
 		if( pLevel == nullptr )
 		{
 			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
@@ -2488,6 +2487,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			pLevel->LoadLevel("house.xml");
 			pLevel->whichlevel = HOUSE;
 			m_pOM->AddObject(pLevel);
+			pLevel->SetInside(true);
 		}
 		loading->Update();
 		loading->Render();
@@ -2821,6 +2821,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			pLevel->LoadLevel("hospital.xml");
 			pLevel->whichlevel = HOSPITAL;
 			m_pOM->AddObject(pLevel);
+			pLevel->SetInside(true);
 		}
 		loading->Update();
 		loading->Render();
