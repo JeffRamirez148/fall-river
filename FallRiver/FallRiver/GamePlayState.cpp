@@ -659,6 +659,11 @@ void GamePlayState::Exit()
 {
 	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
+	for( unsigned int i = 0; i < this->fireA.size(); i++)
+	{
+		Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
+	}
+
 	fireA.clear();
 	streetLights.clear();
 
