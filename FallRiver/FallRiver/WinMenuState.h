@@ -23,12 +23,12 @@ private:
 	DirectInput*	pDI;
 	AudioManager*	audio;
 	int				WMS_ID;
-	int				tempWinID;
 	int				curPos;
 	float			fTime;
 	int soundID;
 	int soundID2;
 	int victoryID;
+	DWORD	m_dwReset;
 	//int musicID;
 	//int musicID2;
 

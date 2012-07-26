@@ -476,22 +476,22 @@ void GamePlayState::Enter()
 			pSpawn = nullptr;
 			tmp.erase(nth);
 			i--;
-			//for( int i = 0; i < 1; i++)
-			//{
-			//	m_cEnemies.push_back(nullptr);
-			//	m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
-			//	ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-			//	pEnemy->SetHeight(64);
-			//	pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
-			//	pEnemy->SetImageID(-1);
-			//	pEnemy->SetTarget(GetPlayer());
-			//	pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
-			//	pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-			//	pEnemy->SetHealth(50);
-			//	pEnemy->SetAnimation(SpawnEnemyAniID);
-			//	GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
-			//	m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
-			//}
+			for( int i = 0; i < 1; i++)
+			{
+				m_cEnemies.push_back(nullptr);
+				m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
+				ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
+				pEnemy->SetHeight(64);
+				pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
+				pEnemy->SetImageID(-1);
+				pEnemy->SetTarget(GetPlayer());
+				pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
+				pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
+				pEnemy->SetHealth(50);
+				pEnemy->SetAnimation(SpawnEnemyAniID);
+				GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
+				m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
+			}
 		} 
 		else if ( _stricmp(nth->m_cType,"Boss1") == 0 )
 		{
@@ -755,7 +755,7 @@ void GamePlayState::Exit()
 		m_cBushes[i]->Release();
 		m_cBushes[i] = nullptr;
 	}
-	m_cSpawn.clear();
+	m_cBushes.clear();
 
 	if( m_cBoss2 != nullptr )
 		m_cBoss2->Release();
@@ -1797,7 +1797,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
@@ -2499,7 +2499,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
 
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
@@ -2828,7 +2828,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();

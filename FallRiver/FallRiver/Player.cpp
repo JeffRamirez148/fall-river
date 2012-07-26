@@ -447,13 +447,13 @@ void Player::Update(float fElapsedTime)
 		}
 
 
-		if( m_bmove && pDI->KeyDown(DIK_D) || (pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
+		if( m_bmove && pDI->KeyDown(DIK_D) || (m_bmove && pDI->JoystickGetLStickDirDown(DIR_RIGHT,0) && pDI->JoystickGetLStickXAmount(0) > 100))
 		{
 			SetVelX(100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
 		}
-		else if( m_bmove &&  pDI->KeyDown(DIK_A) || (pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
+		else if( m_bmove &&  pDI->KeyDown(DIK_A) || (m_bmove && pDI->JoystickGetLStickDirDown(DIR_LEFT,0) && pDI->JoystickGetLStickXAmount(0) < -800))
 		{
 			//int temptemp = pDI->JoystickGetLStickXAmount(0);
 			SetVelX(-100);
@@ -465,13 +465,13 @@ void Player::Update(float fElapsedTime)
 			SetVelX(0);
 		}
 
-		if( m_bmove && pDI->KeyDown(DIK_W) || (pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
+		if( m_bmove && pDI->KeyDown(DIK_W) || (m_bmove && pDI->JoystickGetLStickDirDown(DIR_UP,0) && pDI->JoystickGetLStickYAmount(0) < -400))
 		{
 			SetVelY(-100);
 			if(!AudioManager::GetInstance()->isSoundPlaying(walkingID))
 				AudioManager::GetInstance()->playSound(walkingID);
 		}
-		else if( m_bmove && pDI->KeyDown(DIK_S) || (pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
+		else if( m_bmove && pDI->KeyDown(DIK_S) || (m_bmove && pDI->JoystickGetLStickDirDown(DIR_DOWN,0) && pDI->JoystickGetLStickYAmount(0) > 10))
 		{
 			SetVelY(100);
 			Particle_Manager::GetInstance()->GetActiveEmitter(GamePlayState::GetInstance()->GetRainID())->Update(fElapsedTime * .0065f);

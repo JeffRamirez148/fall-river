@@ -17,8 +17,8 @@ void WinMenuState::Enter()
 	pDI = DirectInput::GetInstance();
 
 	WMS_ID =	pVM->RegisterTexture("resource/graphics/youWin.png");
-	tempWinID = pVM->RegisterTexture("resource/graphics/sprites_pauseMenu.png");
 	curPos = 400;
+	m_dwReset = 0;
 
 	audio = AudioManager::GetInstance();
 
@@ -72,7 +72,6 @@ void WinMenuState::Exit()
 	pDI = nullptr;
 	audio = nullptr;
 	WMS_ID = -1;
-	tempWinID = -1;
 }
 
 bool WinMenuState::Input() 
@@ -128,19 +127,6 @@ void WinMenuState::Render()
 	RECT backRect = { 12, 12, backRect.left+1200, backRect.top+700};
 	pVM->DrawStaticTexture(WMS_ID, 0, 0,  0.8f, 0.9f, &backRect);
 
-	RECT resumeRect = {1219, 13, resumeRect.left+287, resumeRect.top+44};
-	RECT ExitRect = {1219, 223, ExitRect.left+287, ExitRect.top+44};
-	RECT BloodRect = { 343, 789, BloodRect.left+526, BloodRect.top+144};
-
-	if(curPos == 400)
-	{resumeRect.left = 1535; resumeRect.right = resumeRect.left+287;}
-	else if(curPos == 500)
-	{ExitRect.left = 1535; ExitRect.right = ExitRect.left+287;}
-
-	pVM->DrawStaticTexture(tempWinID, (float)170, (float)curPos-50.0f, 1.0f, 1.0f, &BloodRect);
-
-	pVM->DrawStaticTexture(tempWinID, (float)350, (float)400,  0.5f, 0.9f, &resumeRect);
-	pVM->DrawStaticTexture(tempWinID, (float)370, (float)500,  0.5f, 0.9f, &ExitRect);
 
 }
 
