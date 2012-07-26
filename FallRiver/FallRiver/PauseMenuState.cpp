@@ -115,6 +115,7 @@ bool PauseMenuState::Input()
 		{
 			CGame::GetInstance()->RemoveState(2);
 			CGame::GetInstance()->ChangeState(MainMenuState::GetInstance());
+			//CGame::GetInstance()->scoreCatch = 0;
 		}
 
 		return true;

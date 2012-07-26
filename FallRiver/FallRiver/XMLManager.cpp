@@ -160,7 +160,7 @@ void XMLManager::SaveProgress( const char* szFilename, Player &player)
 	pPlayer->SetAttribute( "health", player.GetHealth() );
 	pPlayer->SetAttribute( "battery", player.GetBattery() );
 	pPlayer->SetDoubleAttribute( "time", player.GetTimePlayed() );
-	//pPlayer->SetAttribute( "current_quest", player.Quest
+	pPlayer->SetAttribute( "level", GamePlayState::GetInstance()->GetLevel()->whichlevel);
 
 	// Write this node to the root "player"
 	pRoot->LinkEndChild( pPlayer );
@@ -224,7 +224,7 @@ Player* XMLManager::LoadProgress(const char* szFilename)
 
 	Player* m_cPlayer = new Player();
 
-	int nScore, nLives, nHealth, nBattery;
+	int nScore, nLives, nHealth, nBattery, nLevel;
 	double posX, posY, fTime;
 	pPlayer->Attribute("score", &nScore);
 	pPlayer->Attribute( "lives", &nLives );
@@ -233,6 +233,7 @@ Player* XMLManager::LoadProgress(const char* szFilename)
 	pPlayer->Attribute( "health", &nHealth );
 	pPlayer->Attribute( "battery", &nBattery );
 	pPlayer->Attribute( "time", &fTime);
+	pPlayer->Attribute( "level", &nLevel);
 	m_cPlayer->SetScore(nScore);
 	m_cPlayer->SetLives(nLives);
 	m_cPlayer->SetPosX((float)posX);
@@ -241,6 +242,7 @@ Player* XMLManager::LoadProgress(const char* szFilename)
 	m_cPlayer->SetBattery(nBattery);
 	m_cPlayer->SetScore(nScore);
 	m_cPlayer->SetTimePlayed((float)fTime);
+	GamePlayState::GetInstance()->loadedLevel = nLevel;
 
 	// Iterate through the nodes to load weapon data
 	TiXmlElement* pWeapon = pPlayer->NextSiblingElement( "player_weapons" );

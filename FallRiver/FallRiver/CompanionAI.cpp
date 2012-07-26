@@ -67,14 +67,14 @@ void CompanionAI::Update(float fElapsedTime)
 			break;
 		}
 		if(m_nStages == 2 )
-			m_cEnemies[i]->MoveTo(GetPosX() + 200, GetPosY(), 80);
+			m_cEnemies[i]->MoveTo(GetPosX() + 200, GetPosY()-25, 80);
 		else
 			m_cEnemies[i]->MoveTo(GetPosX(), GetPosY()-100, 80);
 		m_cEnemies[i]->Update(fElapsedTime);
 		m_cEnemies[i]->Enemy::Update(fElapsedTime);
 	}
 
-	if( talking && DirectInput::GetInstance()->KeyPressed(DIK_SPACE) )
+	if( talking && DirectInput::GetInstance()->KeyPressed(DIK_SPACE) || DirectInput::GetInstance()->JoystickButtonPressed(0, 0) )
 		m_nStep++;
 
 	switch(m_nStages)
@@ -421,12 +421,12 @@ void CompanionAI::SpawnRight()
 		m_cEnemies.push_back(nullptr);
 		m_cEnemies.back() = (ChasingAI*)m_pOF->CreateObject( _T("ChasingAI") );
 		ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies.back());
-		pEnemy->SetHeight(GetHeight());
+		pEnemy->SetHeight(64);
 		pEnemy->SetWidth(GetWidth());
 		pEnemy->SetImageID(-1);
 		pEnemy->SetTarget(TutorialState::GetInstance()->GetPlayer());
 		pEnemy->SetPosX(GetPosX()+400);
-		pEnemy->SetPosY(GetPosY());
+		pEnemy->SetPosY(GetPosY()-50);
 		pEnemy->SetHealth(100);
 		pEnemy->SetAnimation(ViewManager::GetInstance()->RegisterAnimation("resource/graphics/Zombies.xml"));
 		pEnemy->SetLocked(true);

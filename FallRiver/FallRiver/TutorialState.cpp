@@ -495,6 +495,7 @@ bool TutorialState::Input()
 void TutorialState::Update(float fElapsedTime) 
 {
 	m_cPlayer->SetBattery(100);
+	m_cPlayer->GetWeapons().back()->SetAmmo(100);
 	GamePlayState::GetInstance()->SetPlayer(m_cPlayer);
 	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 	GamePlayState::GetInstance()->SetCamera( float(m_cPlayer->GetPosX() - (CGame::GetInstance()->GetScreenWidth()*0.5)), float(m_cPlayer->GetPosY() - (CGame::GetInstance()->GetScreenHeight()*0.5)));
@@ -587,7 +588,7 @@ void TutorialState::MessageProc(IMessage* pMsg)
 	TutorialState* self = TutorialState::GetInstance();
 	switch( pMsg->GetMessageID() )
 	{
-	case MSG_CREATE_BULLET:
+		case MSG_CREATE_BULLET:
 		{
 			// Create bullet
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
