@@ -676,10 +676,9 @@ bool Level::CheckCollision(IObjects* pBase)
 						EventSystem::GetInstance()->SendUniqueEvent( "GoToHouse", pBase );
 
 					}
-					else if(  _stricmp(m_vCollisions[i].m_cType,"Hospital") == 0 )
+					else if(  _stricmp(m_vCollisions[i].m_cType,"Hospital") == 0 && GamePlayState::GetInstance()->GetPlayer()->m_vpActiveQuests.size() > 0)
 					{
 						EventSystem::GetInstance()->SendUniqueEvent( "GoToHospital", pBase );
-
 					}
 					if(pCh->GetCharacterType() == CHA_BOSS2)
 					{
