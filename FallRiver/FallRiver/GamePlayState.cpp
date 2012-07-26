@@ -3127,11 +3127,6 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 void GamePlayState::ChangeLevel()
 {
-	
-	if( m_pOM != nullptr )
-	{
-		m_pOM->RemoveAllObjects();
-	}
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
@@ -3156,6 +3151,25 @@ void GamePlayState::ChangeLevel()
 		m_cBushes[i] = nullptr;
 	}
 	m_cBushes.clear();
+
+		
+	if( m_pOM != nullptr )
+	{
+		m_pOM->RemoveAllObjects();
+	}
+
+	m_cBoss1 = nullptr;
+	m_cBoss2 = nullptr;
+	if( m_cBuddy != nullptr )
+	{
+		m_cBuddy->Release();
+	}
+	m_cBuddy = nullptr;
+	if( m_clevel != nullptr )
+	{
+		m_clevel->Release();
+	}
+	m_clevel = nullptr;
 
 	fireA.clear();
 	streetLights.clear();
