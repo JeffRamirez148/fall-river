@@ -13,7 +13,8 @@ HighScoresMenuState::HighScoresMenuState()
 	fontID = -1;
 	m_bNameEntered = true;
 	keytimer = 0;
-	m_cName['\0'];
+	for(int i = 0; i < 9; ++i)
+		m_cName[i] = '\0';
 	m_nSpace = 0;
 }
 
@@ -65,6 +66,9 @@ void HighScoresMenuState::Enter()
 
 	if(CGame::GetInstance()->scoreCatch > 0 )
 		m_bNameEntered = false;
+	if(!m_pDI->JoystickIsUnplugged(0))
+		m_cName[0] = 'A';
+
 	keytimer = 0;
 	m_nScore = CGame::GetInstance()->scoreCatch;
 
@@ -114,17 +118,33 @@ bool HighScoresMenuState::Input()
 
 	if(m_bNameEntered == false)
 	{
-		if(m_pDI->KeyPressed(DIK_BACKSPACE))
+		if(m_pDI->KeyPressed(DIK_BACKSPACE) || m_pDI->JoystickGetLStickDirPressed(DIR_LEFT,0))
 		{
-			if(m_nSpace > 0)
+			if(m_pDI->JoystickIsUnplugged(0))
 			{
-				m_nSpace--;
-				m_cName[m_nSpace] = '\0';
+				if(m_nSpace > 0)
+				{
+					m_nSpace--;
+					m_cName[m_nSpace] = '\0';
+				}
+				else
+				{
+					m_cName[0] = '\0';
+				}
 			}
 			else
 			{
-				m_cName[0] = '\0';
+				if(m_nSpace > 0)
+				{
+					m_cName[m_nSpace] = '\0';
+					m_nSpace--;
+				}
+				else
+				{
+					m_cName[0] = 'A';
+				}
 			}
+
 		}
 		else if(((m_pDI->CheckKeys() <= 'z' && m_pDI->CheckKeys() >= 'a') || (m_pDI->CheckKeys() <= 'Z' && m_pDI->CheckKeys() >= 'A') || m_pDI->KeyPressed(DIK_SPACE)) && keytimer == 0)
 		{
@@ -135,7 +155,24 @@ bool HighScoresMenuState::Input()
 
 			keytimer += .15f;
 		}
-		if(m_pDI->KeyPressed(DIK_RETURN) && (m_cName[0] != ' ' || m_cName != '\0'))
+		else if(m_pDI->JoystickGetLStickDirPressed(DIR_UP,0))
+		{
+			if(m_cName[m_nSpace] < 'Z')
+				m_cName[m_nSpace]++;
+		}
+		else if(m_pDI->JoystickGetLStickDirPressed(DIR_DOWN,0))
+		{
+			if(m_cName[m_nSpace] > 'A')
+				m_cName[m_nSpace]--;
+		}
+		else if(m_pDI->JoystickGetLStickDirPressed(DIR_RIGHT,0))
+		{
+			if(m_nSpace < 9)
+				m_nSpace++;
+
+			m_cName[m_nSpace] = 'A';
+		}
+		if((m_pDI->KeyPressed(DIK_RETURN) || m_pDI->JoystickButtonPressed(0, 0)) && (m_cName[0] != ' ' || m_cName != '\0'))
 		{
 			tHighscore player;
 			player.nScore = m_nScore;
