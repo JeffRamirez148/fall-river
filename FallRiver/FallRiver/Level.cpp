@@ -240,8 +240,8 @@ void Level::Render()
 	}
 	else
 	{
-		int i = 1;
-		int j = 1;
+		//int i = 1;
+		//int j = 1;
 	}
 	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{

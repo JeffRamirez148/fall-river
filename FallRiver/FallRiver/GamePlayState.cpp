@@ -2115,8 +2115,8 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		//m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
+
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
@@ -2327,8 +2327,8 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					pNpc->SetLabel(9);
 				}
 				pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
-
-				if( pPlayer->m_bHasMedicine == true  && pPlayer->m_vpActiveQuests.size() > 0 )
+				int x = pPlayer->m_vpActiveQuests.size();
+				if( pPlayer->m_bHasMedicine == true  && x > 0 )
 				{
 					m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
 				}
@@ -2375,13 +2375,13 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					m_cEnemies.push_back(nullptr);
 					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-					pEnemy->SetHeight(64);
+					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
 					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
 					pEnemy->SetImageID(-1);
 					pEnemy->SetTarget(GetPlayer());
 					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-					pEnemy->SetHealth(100);
+					pEnemy->SetHealth(50);
 					pEnemy->SetAnimation(SpawnEnemyAniID);
 					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
@@ -2450,9 +2450,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 		pPlayer->SetPosX(651);
 		pPlayer->SetPosY(1704);
-		if( pPlayer->m_bHasMedicine == false )
-		{
-		}
+		
 		m_pOM->AddObject(pPlayer);
 
 		loading->Reset();
@@ -2462,12 +2460,13 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	if(aPEvent->GetEventID() == "GoToHouse")
 	{
 		m_pPM->GetActiveEmitter(rainA)->SetLoopin(false);
-		m_clevel->SetInside(true);
+
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
-
+		//Player* tmpPlayer = this->GetPlayer();
+		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
@@ -2480,19 +2479,20 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		Bush* pBush = nullptr;
 		SpawnPoint* pSpawn = nullptr;
 		PickUp* pPickUp = nullptr;
+
 		if( pLevel == nullptr )
 		{
 			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
 			pLevel = m_clevel;
 			pLevel->LoadLevel("house.xml");
-			pLevel->whichlevel = HOUSE;
+			pLevel->whichlevel = HOSPITAL;
 			m_pOM->AddObject(pLevel);
 			pLevel->SetInside(true);
 		}
 		loading->Update();
 		loading->Render();
 
-
+		pLevel->SetInside(true);
 		vector<leveldata> tmp = pLevel->GetCollision();
 		for(unsigned int i = 0; i < tmp.size(); i++) 
 		{
@@ -2590,20 +2590,20 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Medicine") == 0)
 			{
-				if( pPlayer->m_vpActiveQuests.size() > 0 && pPlayer->m_bHasMedicine == false )
+				if( GetPlayer()->m_vpActiveQuests.size() > 0 && GetPlayer()->m_bHasMedicine == false )
 				{
 					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
 					pPickUp->SetPosX((float)nth->x);
 					pPickUp->SetPosY((float)nth->y);
 					pPickUp->SetWidth(nth->width);
-					pPickUp->SetHeight(nth->height);
 					pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
+					pPickUp->SetHeight(nth->height);
 					pPickUp->SetPickUpType(MEDICINE);
 					m_pOM->AddObject(pPickUp);
 					pPickUp = nullptr;
-					tmp.erase(nth);
-					i--;
 				}
+				tmp.erase(nth);
+				i--;
 			}
 			else if( _stricmp(nth->m_cType,"Health") == 0)
 			{
@@ -2683,6 +2683,12 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
 				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				townX = nth->x;
+				townY = nth->y;
+				if( GetPlayer()->m_vpActiveQuests.size() == 0 && GetPlayer()->m_bHasMedicine == false )
+				{
+					m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				}
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
@@ -2780,11 +2786,13 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 		}
 		pLevel->SetCollision(tmp);
+
 		if(loadedLevel == -1)
 		{
 			pPlayer->SetPosX(500);
 			pPlayer->SetPosY(300);
 		}
+
 		m_pOM->AddObject(pPlayer);
 
 		loading->Reset();
