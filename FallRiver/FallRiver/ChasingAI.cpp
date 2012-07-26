@@ -190,71 +190,31 @@ void ChasingAI::Update(float fElapsedTime)
 
 		if( m_pTarget->GetDirection() == DIRE_UPRIGHT )
 		{
-			if( distX < distY )
-			{
-				if( distY - distX <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX + 300, targetPosY, 70);
-			}
+			if(distX - distY <= 10 && distX - distY >= -10)
+				m_nState = ESTATE_CHASING;
 			else
-			{
-				if( distY - distX <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX, targetPosY - 300, 70);
-			}
+				MoveTo(targetPosX, targetPosY - 300, 70);
 		}
 		else if( m_pTarget->GetDirection() == DIRE_DOWNRIGHT )
 		{
-			if( distX < distY )
-			{
-				if( distY  <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX + 300, targetPosY, 70);
-			}
+			if(distX - distY <= 10 && distX - distY >= -10)
+				m_nState = ESTATE_CHASING;
 			else
-			{
-				if( distY  <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX, targetPosY + 300, 70);
-			}
+				MoveTo(targetPosX, targetPosY - 300, 70);
 		}
 		if( m_pTarget->GetDirection() == DIRE_UPLEFT )
 		{
-			if( distX < distY )
-			{
-				if( distY  <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX - 300, targetPosY, 70);
-			}
+			if(distX - distY <= 10 && distX - distY >= -10)
+				m_nState = ESTATE_CHASING;
 			else
-			{
-				if( distY <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX, targetPosY - 300, 70);
-			}
+				MoveTo(targetPosX, targetPosY - 300, 70);
 		}
 		else if( m_pTarget->GetDirection() == DIRE_DOWNLEFT )
 		{
-			if( distX < distY )
-			{
-				if( distY  <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX - 300, targetPosY, 70);
-			}
+			if(distX - distY <= 10 && distX - distY >= -10)
+				m_nState = ESTATE_CHASING;
 			else
-			{
-				if( distY <= 10 )
-					m_nState = ESTATE_CHASING;
-				else
-					MoveTo(targetPosX, targetPosY + 300, 70);
-			}
+				MoveTo(targetPosX, targetPosY - 300, 70);
 		}
 		else if( m_pTarget->GetDirection() == DIRE_RIGHT  )
 		{
@@ -322,27 +282,6 @@ void ChasingAI::Update(float fElapsedTime)
 		collDist = sqrt(pow(collX - myX,2) + pow(collY - myY,2));
 
 		bool LeaveAlone = false;
-
-		/*while( collDist > 200 )
-		{
-		colltest.MoveTo(m_pTarget->GetPosX(), m_pTarget->GetPosY(), 100);
-		colltest.SetPosX(colltest.GetPosX()+colltest.GetVelX());
-		colltest.SetPosY(colltest.GetPosY()+colltest.GetVelY());
-
-		if(GamePlayState::GetInstance()->GetLevel()->CheckCollision(&colltest) )
-		{
-		LeaveAlone = true;
-		m_nState = ESTATE_IDLE;
-		break;
-		}
-
-		collX = (m_pTarget->GetPosX());
-		myX = colltest.GetPosX();
-		collY = m_pTarget->GetPosY();
-		myY = colltest.GetPosY();
-
-		collDist = sqrt(pow(collX - myX,2) + pow(collY - myY,2));
-		}*/
 
 		if( !LeaveAlone )
 		{

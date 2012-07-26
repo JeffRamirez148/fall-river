@@ -1759,7 +1759,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
@@ -2460,7 +2460,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
 
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
@@ -2791,7 +2791,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
+		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
