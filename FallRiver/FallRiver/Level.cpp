@@ -222,6 +222,7 @@ void Level::Render()
 
 	// Render Fog
 	if(!inside)
+	{
 		for( int i = 0; i < 4; ++i)
 		{
 			if(i < 2)
@@ -236,7 +237,12 @@ void Level::Render()
 			D3DCOLOR tmpColor = 0x3FFFFFFF;
 			pView->DrawStaticTexture(fogID[i], cam.x - fog[i].x - cam.x, cam.y - fog[i].y - cam.y, 4, 4, nullptr, 0, 0, 0, tmpColor);
 		}
-
+	}
+	else
+	{
+		//int i = 1;
+		//int j = 1;
+	}
 	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
 	{
 		RECT tmp;
@@ -670,10 +676,9 @@ bool Level::CheckCollision(IObjects* pBase)
 						EventSystem::GetInstance()->SendUniqueEvent( "GoToHouse", pBase );
 
 					}
-					else if(  _stricmp(m_vCollisions[i].m_cType,"Hospital") == 0 )
+					else if(  _stricmp(m_vCollisions[i].m_cType,"Hospital") == 0 && GamePlayState::GetInstance()->GetPlayer()->m_vpActiveQuests.size() > 0)
 					{
 						EventSystem::GetInstance()->SendUniqueEvent( "GoToHospital", pBase );
-
 					}
 					if(pCh->GetCharacterType() == CHA_BOSS2)
 					{

@@ -659,12 +659,18 @@ void GamePlayState::Exit()
 {
 	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
+	fireA.clear();
+	streetLights.clear();
+
 	if( m_pES != nullptr )
 	{
 		m_pES->ClearEvents();
 		m_pES->Shutdown();
 		m_pES = nullptr;
 	}
+
+	m_pPM->Shutdown();
+
 
 	if( m_pMS != nullptr )
 	{
@@ -677,13 +683,6 @@ void GamePlayState::Exit()
 	{
 		m_pOF->ShutdownObjectFactory();
 		m_pOF = nullptr;
-	}
-
-	if( m_pOM != nullptr )
-	{
-		m_pOM->RemoveAllObjects();
-		ObjectManager::DeleteInstance();
-		m_pOM = nullptr;
 	}
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
@@ -714,28 +713,32 @@ void GamePlayState::Exit()
 	}
 	m_cBushes.clear();
 
-	if( m_cBoss2 != nullptr )
-		m_cBoss2->Release();
 	m_cBoss1 = nullptr;
 	m_cBoss2 = nullptr;
 
 	if( m_cBuddy != nullptr )
+	{
 		m_cBuddy->Release();
+	}
 	m_cBuddy = nullptr;
-	if( m_cPlayer != nullptr )
-		m_cPlayer->Release();
-	if( m_cWeapon != nullptr )
-		m_cWeapon->Release();
-
-	if(m_clevel != nullptr)
+	if( m_clevel != nullptr )
+	{
 		m_clevel->Release();
+	}
 
+	m_cBuddy = nullptr;
 	m_clevel = nullptr;
 
-	fireA.clear();
-	streetLights.clear();
+	if( m_pOM != nullptr )
+	{
+		m_pOM->RemoveAllObjects();
+		ObjectManager::DeleteInstance();
+		m_pOM = nullptr;
+	}
+
 
 	m_pVM = nullptr;
+	m_pPM = nullptr;
 	m_pDI = nullptr;
 	m_pAM = nullptr;
 	m_pOF = nullptr;
@@ -1439,6 +1442,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 {
 	if(aPEvent->GetEventID() == "ForestToTown")///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -1753,6 +1757,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "HospitalToTown")//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -2103,14 +2108,15 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "HouseToTown")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(true);
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
-		//m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
+
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
 		ChangeLevel();
@@ -2321,8 +2327,8 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					pNpc->SetLabel(9);
 				}
 				pNpc->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Npc.xml"));
-
-				if( pPlayer->m_bHasMedicine == true  && pPlayer->m_vpActiveQuests.size() > 0 )
+				int x = pPlayer->m_vpActiveQuests.size();
+				if( pPlayer->m_bHasMedicine == true  && x > 0 )
 				{
 					m_pHUD->SetTarget(pNpc->GetPosX(), pNpc->GetPosY());
 				}
@@ -2369,13 +2375,13 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 					m_cEnemies.push_back(nullptr);
 					m_cEnemies[m_cEnemies.size()-1] = (ChasingAI*)GamePlayState::GetInstance()->m_pOF->CreateObject( _T("ChasingAI") );
 					ChasingAI* pEnemy = (ChasingAI*)(m_cEnemies[m_cEnemies.size()-1]);
-					pEnemy->SetHeight(64);
+					pEnemy->SetHeight(m_cSpawn[m_cSpawn.size()-1]->GetHeight());
 					pEnemy->SetWidth(m_cSpawn[m_cSpawn.size()-1]->GetWidth());
 					pEnemy->SetImageID(-1);
 					pEnemy->SetTarget(GetPlayer());
 					pEnemy->SetPosX((float)m_cSpawn[m_cSpawn.size()-1]->GetPosX()/*+(rand()%20-10)*/);
 					pEnemy->SetPosY((float)m_cSpawn[m_cSpawn.size()-1]->GetPosY()/*+(rand()%20-10)*/);
-					pEnemy->SetHealth(100);
+					pEnemy->SetHealth(50);
 					pEnemy->SetAnimation(SpawnEnemyAniID);
 					GamePlayState::GetInstance()->m_pOM->AddObject(pEnemy);
 					m_cSpawn[m_cSpawn.size()-1]->SetSpawn( false );
@@ -2444,9 +2450,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 		pPlayer->SetPosX(651);
 		pPlayer->SetPosY(1704);
-		if( pPlayer->m_bHasMedicine == false )
-		{
-		}
+		
 		m_pOM->AddObject(pPlayer);
 
 		loading->Reset();
@@ -2455,11 +2459,14 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "GoToHouse")
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(false);
+
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
-
+		//Player* tmpPlayer = this->GetPlayer();
+		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 		LoadingScreen* loading = LoadingScreen::GetInstance();
 		loading->Render();
@@ -2478,13 +2485,14 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			m_clevel = (Level*)m_pOF->CreateObject( _T("Level"));
 			pLevel = m_clevel;
 			pLevel->LoadLevel("house.xml");
-			pLevel->whichlevel = HOUSE;
+			pLevel->whichlevel = HOSPITAL;
 			m_pOM->AddObject(pLevel);
+			pLevel->SetInside(true);
 		}
 		loading->Update();
 		loading->Render();
 
-
+		pLevel->SetInside(true);
 		vector<leveldata> tmp = pLevel->GetCollision();
 		for(unsigned int i = 0; i < tmp.size(); i++) 
 		{
@@ -2582,20 +2590,20 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			}
 			else if( _stricmp(nth->m_cType,"Medicine") == 0)
 			{
-				if( pPlayer->m_vpActiveQuests.size() > 0 && pPlayer->m_bHasMedicine == false )
+				if( GetPlayer()->m_vpActiveQuests.size() > 0 && GetPlayer()->m_bHasMedicine == false )
 				{
 					pPickUp = (PickUp*)m_pOF->CreateObject( _T("PickUp"));
 					pPickUp->SetPosX((float)nth->x);
 					pPickUp->SetPosY((float)nth->y);
 					pPickUp->SetWidth(nth->width);
-					pPickUp->SetHeight(nth->height);
 					pPickUp->SetImageID(m_pVM->RegisterTexture("resource/graphics/pills.png"));
+					pPickUp->SetHeight(nth->height);
 					pPickUp->SetPickUpType(MEDICINE);
 					m_pOM->AddObject(pPickUp);
 					pPickUp = nullptr;
-					tmp.erase(nth);
-					i--;
 				}
+				tmp.erase(nth);
+				i--;
 			}
 			else if( _stricmp(nth->m_cType,"Health") == 0)
 			{
@@ -2675,6 +2683,12 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			else if( _stricmp(nth->m_cType,"Town") == 0)
 			{
 				m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				townX = nth->x;
+				townY = nth->y;
+				if( GetPlayer()->m_vpActiveQuests.size() == 0 && GetPlayer()->m_bHasMedicine == false )
+				{
+					m_pHUD->SetTarget((float)nth->x, (float)nth->y);
+				}
 			}
 			else if( _stricmp(nth->m_cType,"Hospital") == 0 )
 			{
@@ -2772,11 +2786,13 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 		}
 		pLevel->SetCollision(tmp);
+
 		if(loadedLevel == -1)
 		{
 			pPlayer->SetPosX(500);
 			pPlayer->SetPosY(300);
 		}
+
 		m_pOM->AddObject(pPlayer);
 
 		loading->Reset();
@@ -2785,6 +2801,8 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 	}
 	if(aPEvent->GetEventID() == "GoToHospital")////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	{
+		m_pPM->GetActiveEmitter(rainA)->SetLoopin(false);
+
 		for( unsigned int i = 0; i < this->fireA.size(); i++)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
@@ -2811,11 +2829,12 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 			pLevel->LoadLevel("hospital.xml");
 			pLevel->whichlevel = HOSPITAL;
 			m_pOM->AddObject(pLevel);
+			pLevel->SetInside(true);
 		}
 		loading->Update();
 		loading->Render();
 
-
+		pLevel->SetInside(true);
 		vector<leveldata> tmp = pLevel->GetCollision();
 		for(unsigned int i = 0; i < tmp.size(); i++) 
 		{
@@ -3128,36 +3147,53 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 void GamePlayState::ChangeLevel()
 {
-	
-	if( m_pOM != nullptr )
-	{
-		m_pOM->RemoveAllObjects();
-	}
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
+		//m_cEnemies[i]->Release();
 		m_cEnemies[i] = nullptr;
 	}
 	m_cEnemies.clear();
 
 	for(unsigned int i = 0; i < m_cNpcs.size(); i++)
 	{
+		m_cNpcs[i]->Release();
 		m_cNpcs[i] = nullptr;
 	}
 	m_cNpcs.clear();
 	
 	for(unsigned int i = 0; i < m_cSpawn.size(); i++)
 	{
+		m_cSpawn[i]->Release();
 		m_cSpawn[i] = nullptr;
 	}
 	m_cSpawn.clear();
 
 	for(unsigned int i = 0; i < m_cBushes.size(); i++)
 	{
+		m_cBushes[i]->Release();
 		m_cBushes[i] = nullptr;
 	}
 	m_cBushes.clear();
-	
+
+		
+	if( m_pOM != nullptr )
+	{
+		m_pOM->RemoveAllObjects();
+	}
+
+	m_cBoss1 = nullptr;
+	m_cBoss2 = nullptr;
+	if( m_cBuddy != nullptr )
+	{
+		m_cBuddy->Release();
+	}
+	m_cBuddy = nullptr;
+	if( m_clevel != nullptr )
+	{
+		m_clevel->Release();
+	}
+	m_clevel = nullptr;
 
 	fireA.clear();
 	streetLights.clear();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Setting>
     <setting_info Music:="35" />
-    <setting_info SFX:="100" />
-    <setting_info Resolution:="1" />
+    <setting_info SFX:="35" />
+    <setting_info Resolution:="0" />
 </Setting>

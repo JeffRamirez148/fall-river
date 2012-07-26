@@ -456,7 +456,9 @@ void TutorialState::Exit()
 		ObjectManager::DeleteInstance();
 		m_pOM = nullptr;
 	}
-
+	m_pPM->Shutdown();
+	m_pPM = nullptr;
+	m_pAM = nullptr;
 	if( m_pOF != nullptr )
 	{
 		m_pOF->ShutdownObjectFactory();
