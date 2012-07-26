@@ -598,7 +598,7 @@ void GamePlayState::Enter()
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
 				pBoss->SetPosY( (float)nth->y );
-				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Zombies.xml"));
 				pBoss->SetTarget(pPlayer);
 				m_pOM->AddObject(pBoss);
 				m_cEnemies.push_back(pBoss);
@@ -1714,7 +1714,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
 				pBoss->SetPosY( (float)nth->y );
-				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Zombies.xml"));
 				pBoss->SetTarget(pPlayer);
 				m_pOM->AddObject(pBoss);
 				m_cEnemies.push_back(pBoss);
@@ -2067,7 +2067,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
 				pBoss->SetPosY( (float)nth->y );
-				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Zombies.xml"));
 				pBoss->SetTarget(pPlayer);
 				m_pOM->AddObject(pBoss);
 				m_cEnemies.push_back(pBoss);
@@ -2417,7 +2417,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
 				pBoss->SetPosY( (float)nth->y );
-				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Zombies.xml"));
 				pBoss->SetTarget(pPlayer);
 				m_pOM->AddObject(pBoss);
 				m_cEnemies.push_back(pBoss);
@@ -2748,7 +2748,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
 				pBoss->SetPosY( (float)nth->y );
-				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Zombies.xml"));
 				pBoss->SetTarget(pPlayer);
 				m_pOM->AddObject(pBoss);
 				m_cEnemies.push_back(pBoss);
@@ -3085,7 +3085,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 				pBoss->SetWidth(nth->width);
 				pBoss->SetPosX( (float)nth->x );
 				pBoss->SetPosY( (float)nth->y );
-				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/BanditAnimations.xml"));
+				pBoss->SetAnimation(m_pVM->RegisterAnimation("resource/graphics/Zombies.xml"));
 				pBoss->SetTarget(pPlayer);
 				m_pOM->AddObject(pBoss);
 				m_cEnemies.push_back(pBoss);

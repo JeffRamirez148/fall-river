@@ -305,81 +305,62 @@ void Boss2::Update(float Time)
 	else if(m_pTarget->GetPosY() < GetPosY())
 		SetDirection(DIRE_UP);
 
-	if(m_nState == PSTATE_SHOOT)
+	if( m_nState == ESTATE_DEAD )
 	{
-		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 8)
-		{
-			m_playerAnim.curAnimation = 8;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 9)
-		{
-			m_playerAnim.curAnimation = 9;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 11)
-		{
-			m_playerAnim.curAnimation = 11;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 10)
-		{
-			m_playerAnim.curAnimation = 10;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-
-	}
-	else
-	{
-		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() == 0)
-		{
-			m_playerAnim.curAnimation = 0;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 4 && GetVelY() < 0)
+		if( m_playerAnim.curAnimation != 4 )
 		{
 			m_playerAnim.curAnimation = 4;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 1 && GetVelY() == 0)
-		{
-			m_playerAnim.curAnimation = 1;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 5 && GetVelY() > 0)
-		{
-			m_playerAnim.curAnimation = 5;
-			m_playerAnim.curFrame = 0;
-			m_playerAnim.fTime = 0;
-		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 3 && GetVelX() == 0)
+	}
+	else
+	{
+		if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && GetVelY() == 0)
 		{
 			m_playerAnim.curAnimation = 3;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 7 && GetVelX() > 0)
+		else if((GetDirection() == DIRE_UP || GetDirection() == DIRE_UPLEFT || GetDirection() == DIRE_UPRIGHT) && m_playerAnim.curAnimation != 3 && GetVelY() < 0)
 		{
-			m_playerAnim.curAnimation = 7;
+			m_playerAnim.curAnimation = 3;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 2 && GetVelX() == 0)
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && GetVelY() == 0)
+		{
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if((GetDirection() == DIRE_DOWN || GetDirection() == DIRE_DOWNLEFT || GetDirection() == DIRE_DOWNRIGHT) && m_playerAnim.curAnimation != 0 && GetVelY() > 0)
+		{
+			m_playerAnim.curAnimation = 0;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && GetVelX() == 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_RIGHT && m_playerAnim.curAnimation != 1 && GetVelX() > 0)
+		{
+			m_playerAnim.curAnimation = 1;
+			m_playerAnim.curFrame = 0;
+			m_playerAnim.fTime = 0;
+		}
+		else if(GetDirection() == DIRE_LEFT && GetVelX() == 0)
 		{
 			m_playerAnim.curAnimation = 2;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}
-		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 6 && GetVelX() < 0)
+		else if(GetDirection() == DIRE_LEFT  && m_playerAnim.curAnimation != 2 && GetVelX() < 0)
 		{
-			m_playerAnim.curAnimation = 6;
+			m_playerAnim.curAnimation = 2;
 			m_playerAnim.curFrame = 0;
 			m_playerAnim.fTime = 0;
 		}

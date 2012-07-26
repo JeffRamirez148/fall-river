@@ -298,6 +298,8 @@ void CGame::RemoveState(int state)
 
 	for(int i = 0; i < state; i++)
 	{
+		if( m_vStates.size() == 1)
+			break;
 		m_vStates.back()->Exit();
 		m_vStates.pop_back();
 	}

@@ -433,6 +433,9 @@ void TutorialState::Enter()
 
 void TutorialState::Exit() 
 {
+	m_cPlayer->SetPosX(600);
+	m_cPlayer->SetPosY(500);
+	GamePlayState::GetInstance()->SetPlayer(m_cPlayer);
 	if( m_pES != nullptr )
 	{
 		m_pES->ClearEvents();

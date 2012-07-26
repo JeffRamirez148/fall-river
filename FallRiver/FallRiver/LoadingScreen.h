@@ -9,6 +9,7 @@ private:
 
 	int m_nProgress;
 	int m_nBackLoad;
+	int Logo;
 	int m_nFontID;
 	DWORD m_dwFlashlight;
 
