@@ -52,7 +52,7 @@ GamePlayState::GamePlayState()
 	m_cBoss2 = nullptr;
 	m_cWeapon = nullptr;
 
-//	backGroundID = -1;
+	//	backGroundID = -1;
 	swingHitID = -1;
 	SpawnEnemyAniID = -1;
 	logID = -1;
@@ -91,7 +91,7 @@ GamePlayState::GamePlayState()
 
 
 	loadedLevel = -1;
-//	pianoID = -1;
+	//	pianoID = -1;
 
 }
 
@@ -213,7 +213,7 @@ void GamePlayState::Enter()
 		pWeapon->SetWidth(10);
 		pWeapon->SetImageID(-1);
 		pWeapon->SetOwner(pPlayer);
-		pWeapon->Init(WPN_PISTOL, 100, 0);
+		pWeapon->Init(WPN_PISTOL, 50, 0);
 		pWeapon->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon->SetPosY(pPlayer->GetPosY());
 
@@ -222,7 +222,7 @@ void GamePlayState::Enter()
 		pWeapon2->SetWidth(10);
 		pWeapon2->SetImageID(-1);
 		pWeapon2->SetOwner(pPlayer);
-		pWeapon2->Init(WPN_SHOTGUN, 100, 0);
+		pWeapon2->Init(WPN_SHOTGUN, 30, 0);
 		pWeapon2->SetPosX(pPlayer->GetPosX()+pPlayer->GetWidth()/2);
 		pWeapon2->SetPosY(pPlayer->GetPosY());
 
@@ -281,19 +281,19 @@ void GamePlayState::Enter()
 
 	m_pMS->InitMessageSystem( &MessageProc );
 
-//	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
-//	pianoID = m_pAM->registerMusic("resource/Sounds/piano.mp3");
+	//	backGroundID = m_pAM->registerMusic("resource/Sounds/background.mp3");
+	//	pianoID = m_pAM->registerMusic("resource/Sounds/piano.mp3");
 	swingHitID = m_pAM->RegisterSound("resource/Sounds/swingHit.mp3");
 	FMOD_VECTOR sound1 = { 0, 0, 0 };
 
-//	m_pAM->setMusicPos(backGroundID, sound1);
-//	m_pAM->setMusicVel(backGroundID, sound1);
-//	m_pAM->setMusicLooping(backGroundID, true);
-//	m_pAM->playMusic(backGroundID);
-//	m_pAM->setMusicPos(pianoID, sound1);
-//	m_pAM->setMusicVel(pianoID, sound1);
-//	m_pAM->setMusicLooping(pianoID, true);
-//	m_pAM->playMusic(pianoID);
+	//	m_pAM->setMusicPos(backGroundID, sound1);
+	//	m_pAM->setMusicVel(backGroundID, sound1);
+	//	m_pAM->setMusicLooping(backGroundID, true);
+	//	m_pAM->playMusic(backGroundID);
+	//	m_pAM->setMusicPos(pianoID, sound1);
+	//	m_pAM->setMusicVel(pianoID, sound1);
+	//	m_pAM->setMusicLooping(pianoID, true);
+	//	m_pAM->playMusic(pianoID);
 
 	soundID2 = m_pAM->RegisterSound("resource/Sounds/thunder.wav");
 	m_pAM->setSoundPos(soundID2, sound1);
@@ -301,12 +301,12 @@ void GamePlayState::Enter()
 	m_pAM->setSoundVel(soundID2, sound1);
 	m_pAM->setSoundLooping(soundID2, false);
 
-//	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
-//	m_pAM->setMusicPos(musicID, sound1);
+	//	musicID = m_pAM->registerMusic("resource/Sounds/rainroof.wav");
+	//	m_pAM->setMusicPos(musicID, sound1);
 
-//	m_pAM->setMusicVel(musicID, sound1);
-//	m_pAM->setMusicLooping(musicID, true);
-//	m_pAM->playMusic(musicID);
+	//	m_pAM->setMusicVel(musicID, sound1);
+	//	m_pAM->setMusicLooping(musicID, true);
+	//	m_pAM->playMusic(musicID);
 	winLose = true;
 
 	loading->Update();
@@ -641,7 +641,7 @@ void GamePlayState::Enter()
 		m_pES->ProcessEvents();
 		loadedLevel  = -1;
 	}
-	
+
 	m_pVM->SetAmbientLight( .0f, .0f, .0f);
 
 	loading->Reset();
@@ -650,9 +650,9 @@ void GamePlayState::Enter()
 
 void GamePlayState::ReEnter()
 {
-//	m_pAM->playMusic(backGroundID);
-//	m_pAM->playMusic(pianoID);
-//	m_pAM->playMusic(musicID);
+	//	m_pAM->playMusic(backGroundID);
+	//	m_pAM->playMusic(pianoID);
+	//	m_pAM->playMusic(musicID);
 }
 
 void GamePlayState::Exit() 
@@ -886,7 +886,7 @@ void GamePlayState::Render()
 
 
 	m_pOM->RenderAllObjects();
-	
+
 
 
 	for( unsigned int i = 0; i < m_cBushes.size(); i++)
@@ -912,7 +912,10 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 			Bullet* bullet = (Bullet*)( self->m_pOF->CreateObject( _T("Bullet") ) );
 			Weapon* pOwner = dynamic_cast< CreateBullet* > (pMsg)->GetWeapon();
 			//Set up data members
-			bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
+			if(pOwner->GetOwner()->GetCharacterType() == CHA_BOSS2)
+				bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/Cinder_Block.png"));
+			else
+				bullet->SetImageID( self->m_pVM->RegisterTexture("resource/graphics/bullet.png"));
 			bullet->SetHeight(16);
 			bullet->SetWidth(16);
 			bullet->SetOwner(pOwner);
@@ -1002,7 +1005,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 						bullet2->SetPosY(bullet->GetPosY());
 						bullet3->SetPosX(bullet->GetPosX());
 						bullet3->SetPosY(bullet->GetPosY());
-						
+
 						temp.left = (long)bullet->GetPosX();
 						temp.right = (long)16.0f + temp.left;
 
@@ -1199,7 +1202,7 @@ void GamePlayState::MessageProc(IMessage* pMsg)
 							bullet->SetPosY(pOwner->GetPosY()-35);
 							bullet->SetPosX(pOwner->GetPosX());
 						}
-						
+
 						bullet->SetSpeedX(500);
 						bullet->SetSpeedY(-500);
 						bullet->SetRotation(-D3DX_PI/4);
@@ -1447,6 +1450,10 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
+		m_pVM->SetLightPos(0, 0, -1.0f);
+		m_pVM->SetSpotLightPos(0, 0, -.85f);
+		m_pVM->SetInnerCone(.95f);
+		m_pVM->SetOuterCone(.9f);
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
@@ -1764,6 +1771,10 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		}
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
+		m_pVM->SetLightPos(0, 0, -1.0f);
+		m_pVM->SetSpotLightPos(0, 0, -.85f);
+		m_pVM->SetInnerCone(.95f);
+		m_pVM->SetOuterCone(.9f);
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
 
 		LoadingScreen* loading = LoadingScreen::GetInstance();
@@ -2099,7 +2110,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 		pPlayer->SetPosX(739);
 		pPlayer->SetPosY(4166);
-		
+
 		m_pOM->AddObject(pPlayer);
 
 		loading->Reset();
@@ -2113,6 +2124,10 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 		{
 			Particle_Manager::GetInstance()->GetActiveEmitter(fireA[i])->SetLoopin(false);
 		}
+		m_pVM->SetLightPos(0, 0, -1.0f);
+		m_pVM->SetSpotLightPos(0, 0, -.85f);
+		m_pVM->SetInnerCone(.95f);
+		m_pVM->SetOuterCone(.9f);
 		//Player* tmpPlayer = this->GetPlayer();
 		//HUD* tmpHud = this->m_pHUD;
 		m_pVM->SetAmbientLight( .1f, .1f, .0f);
@@ -2450,7 +2465,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 		pPlayer->SetPosX(651);
 		pPlayer->SetPosY(1704);
-		
+
 		m_pOM->AddObject(pPlayer);
 
 		loading->Reset();
@@ -3147,7 +3162,7 @@ void GamePlayState::HandleEvent(Event* aPEvent)
 
 void GamePlayState::ChangeLevel()
 {
-
+	m_pVM->SetAmbientLight( .1f, .1f, .0f);
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
 		//m_cEnemies[i]->Release();
@@ -3161,7 +3176,7 @@ void GamePlayState::ChangeLevel()
 		m_cNpcs[i] = nullptr;
 	}
 	m_cNpcs.clear();
-	
+
 	for(unsigned int i = 0; i < m_cSpawn.size(); i++)
 	{
 		m_cSpawn[i]->Release();
@@ -3176,7 +3191,7 @@ void GamePlayState::ChangeLevel()
 	}
 	m_cBushes.clear();
 
-		
+
 	if( m_pOM != nullptr )
 	{
 		m_pOM->RemoveAllObjects();

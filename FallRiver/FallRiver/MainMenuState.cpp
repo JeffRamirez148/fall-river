@@ -55,7 +55,7 @@ void MainMenuState::Enter()
 	m_pVM->SetInnerCone(.95f);
 	m_pVM->SetOuterCone(.9f);
 
-	m_pVM->SetAmbientLight( .1f, .1f, .0f);
+	m_pVM->SetAmbientLight( .15f, .1f, .0f);
 
 	loading->Update();
 	loading->Render();
