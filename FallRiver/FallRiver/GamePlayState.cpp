@@ -659,6 +659,9 @@ void GamePlayState::Exit()
 {
 	m_pVM->SetAmbientLight( 1.0f, 1.0f, 1.0f);
 
+	fireA.clear();
+	streetLights.clear();
+
 	if( m_pES != nullptr )
 	{
 		m_pES->ClearEvents();
@@ -677,13 +680,6 @@ void GamePlayState::Exit()
 	{
 		m_pOF->ShutdownObjectFactory();
 		m_pOF = nullptr;
-	}
-
-	if( m_pOM != nullptr )
-	{
-		m_pOM->RemoveAllObjects();
-		ObjectManager::DeleteInstance();
-		m_pOM = nullptr;
 	}
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
@@ -714,8 +710,8 @@ void GamePlayState::Exit()
 	}
 	m_cBushes.clear();
 
-	if( m_cBoss2 != nullptr )
-		m_cBoss2->Release();
+	//if( m_cBoss2 != nullptr )
+	//	m_cBoss2->Release();
 	m_cBoss1 = nullptr;
 	m_cBoss2 = nullptr;
 
@@ -732,8 +728,13 @@ void GamePlayState::Exit()
 
 	m_clevel = nullptr;
 
-	fireA.clear();
-	streetLights.clear();
+	if( m_pOM != nullptr )
+	{
+		m_pOM->RemoveAllObjects();
+		ObjectManager::DeleteInstance();
+		m_pOM = nullptr;
+	}
+
 
 	m_pVM = nullptr;
 	m_pDI = nullptr;
@@ -3136,24 +3137,28 @@ void GamePlayState::ChangeLevel()
 
 	for(unsigned int i = 0; i < m_cEnemies.size(); i++)
 	{
+		m_cEnemies[i]->Release();
 		m_cEnemies[i] = nullptr;
 	}
 	m_cEnemies.clear();
 
 	for(unsigned int i = 0; i < m_cNpcs.size(); i++)
 	{
+		m_cNpcs[i]->Release();
 		m_cNpcs[i] = nullptr;
 	}
 	m_cNpcs.clear();
 	
 	for(unsigned int i = 0; i < m_cSpawn.size(); i++)
 	{
+		m_cSpawn[i]->Release();
 		m_cSpawn[i] = nullptr;
 	}
 	m_cSpawn.clear();
 
 	for(unsigned int i = 0; i < m_cBushes.size(); i++)
 	{
+		m_cBushes[i]->Release();
 		m_cBushes[i] = nullptr;
 	}
 	m_cBushes.clear();
