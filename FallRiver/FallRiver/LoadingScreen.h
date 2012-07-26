@@ -12,6 +12,7 @@ private:
 	int Logo;
 	int m_nFontID;
 	DWORD m_dwFlashlight;
+	bool first;
 
 	LoadingScreen(void);
 	~LoadingScreen(void);

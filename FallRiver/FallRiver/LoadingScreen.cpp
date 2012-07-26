@@ -18,6 +18,7 @@ LoadingScreen::LoadingScreen(void)
 	Logo		= m_pVM->RegisterTexture("resource/graphics/logo_team_800.png");
 	m_nProgress = 0;
 	m_dwFlashlight = 0;
+	first = true;
 }
 
 LoadingScreen::~LoadingScreen()
@@ -28,6 +29,7 @@ LoadingScreen::~LoadingScreen()
 void LoadingScreen::Reset()
 {
 	m_nProgress = 0;
+	first = false;
 }
 
 void LoadingScreen::Update()
@@ -45,7 +47,7 @@ void LoadingScreen::Render()
 	m_pVM->SpriteBegin();
 
 	m_pVM->GetSprite()->Flush();
-	if( CGame::GetInstance()->GetState() == MainMenuState::GetInstance() )
+	if( CGame::GetInstance()->GetState() == MainMenuState::GetInstance() && first )
 		m_pVM->DrawStaticTexture(Logo, 0, 0, 0.7f, 0.6f);
 	else
 		m_pVM->DrawStaticTexture(m_nBackLoad, 0, 0, 0.7f, 0.5f);
