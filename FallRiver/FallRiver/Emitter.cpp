@@ -3,6 +3,7 @@
 #include "Particle.h"
 #include "ViewManager.h"
 #include "GamePlayState.h"
+#include "CGame.h"
 void Emitter::Update(float fElapsedTime) 
 {
 	if(soundID > 0)
@@ -236,10 +237,18 @@ void Emitter::Render()
 {
 	//ViewManager* view = ViewManager::GetInstance();
 	//view->DrawUnfilledRect( this->rect, 255, 255, 255 );
-	for( unsigned int i = 0; i < _m_vparticles.size(); ++i)
+	RECT cRect;
+	POINTFLOAT tmp = GamePlayState::GetInstance()->GetCamera();
+	RECT camRect = {tmp.x, tmp.y, tmp.x + CGame::GetInstance()->GetScreenWidth(), tmp.y + CGame::GetInstance()->GetScreenHeight()};
+	int size = _m_vparticles.size();
+	for( unsigned int i = 0; i < size; ++i)
 	{
-		_m_vparticles[i]->Render();
+		D3DXVECTOR3 tmp = _m_vparticles[i]->GetPos();
+		RECT particleRect = { tmp.x, tmp.y, tmp.x + 8, tmp.y + 8};
+		if(IntersectRect(&cRect, &particleRect, &camRect ))
+			_m_vparticles[i]->Render();
 	}
+	
 }
 
 Emitter::Emitter( float newSpawnRate, bool newLooping, RECT newRect,int newMaxParticles, 

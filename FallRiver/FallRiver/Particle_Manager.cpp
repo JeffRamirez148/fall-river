@@ -1,6 +1,9 @@
 #include "Particle_Manager.h"
 #include "Emitter.h"
 #include "XMLManager.h"
+#include "GamePlayState.h"
+#include "CGame.h"
+
 
 Particle_Manager* Particle_Manager::GetInstance(void)
 {
@@ -66,10 +69,25 @@ int Particle_Manager::ActivateEmitter(int id)
 	return active.size() - 1;
 }
 
+
+bool Particle_Manager::CheckCollision(RECT emitterRect)
+{
+	RECT cRect;
+	POINTFLOAT tmp = GamePlayState::GetInstance()->GetCamera();
+	RECT camRect = {tmp.x, tmp.y, tmp.x + CGame::GetInstance()->GetScreenWidth(), tmp.y + CGame::GetInstance()->GetScreenHeight()};
+	if( IntersectRect(&cRect, &emitterRect, &camRect ) == false )
+		return false;
+	return true;
+}
 void Particle_Manager::Render()
 {
-	for( unsigned int i = 0; i < active.size(); ++i)
-		active[i]->Render();
+	RECT cRect;
+	POINTFLOAT tmp = GamePlayState::GetInstance()->GetCamera();
+	RECT camRect = {tmp.x, tmp.y, tmp.x + CGame::GetInstance()->GetScreenWidth(), tmp.y + CGame::GetInstance()->GetScreenHeight()};
+	int size = active.size();
+	for( unsigned int i = 0; i < size; ++i)
+		if(IntersectRect(&cRect, &active[i]->GetRect(), &camRect ))
+			active[i]->Render();
 }
 
 void Particle_Manager::Update(float fElapsedTime)

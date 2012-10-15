@@ -25,17 +25,19 @@ void Particle::Render()
 	ViewManager* view = ViewManager::GetInstance();
 	DWORD tmpD;
 	DWORD tmpS;
+	// Save Render States
 	view->GetDirect3DDevice()->GetRenderState( D3DRS_DESTBLEND, &tmpD);
 	view->GetDirect3DDevice()->GetRenderState( D3DRS_SRCBLEND, &tmpS);
+	// Set Render States
 	DWORD tmp = DWORD(modeD);
 	view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmp);
 	tmp = DWORD(modeS);
 	view->GetDirect3DDevice()->SetRenderState(D3DRS_SRCBLEND, tmp);
-
+	// Flush Sprites
 	view->GetSprite()->Flush();
-	if(imageID != -1)
+	if(imageID != -1) // an image
 		view->DrawStaticTexture(imageID, pos.x - GamePlayState::GetInstance()->GetCamera().x, pos.y - GamePlayState::GetInstance()->GetCamera().y, scaleX, scaleY, nullptr,0.0f, 0.0f, rot, color);
-	else
+	else // if no image
 	{
 		RECT tmpRect = {long(pos.x - scaleX * .5f), long(pos.y - scaleY * .5f), long(pos.x + scaleX * .5f), long(pos.y + scaleY * .5f)};
 		tmpRect.left -= (long)GamePlayState::GetInstance()->GetCamera().x;
@@ -45,6 +47,7 @@ void Particle::Render()
 		view->DrawRect( tmpRect, (color << 8) >> 24, (color << 16) >> 24, (color << 24) >> 24, color >> 24);
 
 	}
+	// Flush Sprites
 	view->GetSprite()->Flush();
 	/*view->GetDirect3DDevice()->SetRenderState(D3DRS_DESTBLEND, tmpD);
 	view->GetDirect3DDevice()->SetRenderState(D3DRS_SRCBLEND, tmpS);*/

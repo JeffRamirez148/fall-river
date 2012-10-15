@@ -1,6 +1,8 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <Windows.h>
+
 using namespace std;
 
 #ifndef __Particle_Manager_h__
@@ -23,6 +25,7 @@ public:
 	void Update(float fElapsedTime);
 	static Particle_Manager* GetInstance(void);
 	void Shutdown();
+	bool CheckCollision(RECT emitterRect);
 };
 
 #endif
