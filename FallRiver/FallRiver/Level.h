@@ -22,13 +22,12 @@ struct leveldata
 	char m_cType[ 32 ];
 	bool m_bPrevColliding;
 	int test;
-
-
 };
 
 struct mapTiles
 {
 	RECT m_rImageRect;
+	RECT m_TileRect;
 	float m_nWorldPosX,m_nWorldPosY;
 	float height, width;
 	int m_Layer;
@@ -54,7 +53,7 @@ private:
 	float m_nPosY;
 	TCHAR buffer[100];
 	bool m_bNoClip;
-		int fogID[4];
+	int fogID[4];
 public:
 	int whichlevel;
 
@@ -82,6 +81,7 @@ public:
 	void CheckTriangleCollisions();
 	bool GetInside(void) {return inside;}
 	void SetInside(bool in) {inside = in;}
+	bool CheckIntersect( RECT* rect1, RECT* rect2); 
 	//void SetCollision(vector<mapTiles> x) { m_vTiles = x; };
 
 };
