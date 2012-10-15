@@ -58,6 +58,19 @@ void Level::Update(float fElapsedTime)
 		CheckTriangleCollisions();
 	}
 }
+bool Level::CheckIntersect( RECT* rect1, RECT* rect2)
+{
+	if(rect1->right <= rect2->left)
+		return false;
+	if(rect1->left >= rect2->right)
+		return false;
+	if(rect1->bottom <= rect2->top) 
+		return false;
+	if(rect1->top    >= rect2->bottom)
+		return false;
+	return true;
+
+}
 
 void Level::Render() 
 {
@@ -74,20 +87,16 @@ void Level::Render()
 	cull.right = (long)cam.x+pGame->GetScreenWidth();
 	cull.bottom = (long)cam.y+pGame->GetScreenHeight(); 
 
-	RECT intersect;
+	//RECT intersect;
 
 	vector<POINTFLOAT> lightsToRender;
-	RECT cRect;
+	//RECT cRect;
 	RECT camRect = { (LONG)GamePlayState::GetInstance()->GetCamera().x - CGame::GetInstance()->GetScreenWidth(), (LONG)GamePlayState::GetInstance()->GetCamera().y - CGame::GetInstance()->GetScreenHeight(), LONG(GamePlayState::GetInstance()->GetCamera().x + CGame::GetInstance()->GetScreenWidth() * 2), LONG(GamePlayState::GetInstance()->GetCamera().y + CGame::GetInstance()->GetScreenHeight() * 2)};
 	vector<int> fireEffects = GamePlayState::GetInstance()->GetFireA();
 	for( unsigned int i = 0; lightsToRender.size() < 6 && i < fireEffects.size(); i += 3)
 	{
 		RECT fire = Particle_Manager::GetInstance()->GetActiveEmitter(fireEffects[i])->GetRect();
-		if(
-			IntersectRect( &cRect, &camRect, &fire ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
-			//float cY 
-			)
-	
+		if( CheckIntersect( &camRect, &fire ) == true && CGame::GetInstance()->GetState() == GamePlayState::GetInstance())
 		{
 			//if(!GamePlayState::GetInstance()->GetPlayer())
 			//	break;
@@ -102,10 +111,7 @@ void Level::Render()
 	vector<RECT> streetLights = GamePlayState::GetInstance()->GetStreelights();
 	for( unsigned int i = 0; lightsToRender.size() < 6 && i < streetLights.size(); ++i)
 	{
-		if(
-			IntersectRect( &cRect, &camRect, &streetLights[i] ) == TRUE && CGame::GetInstance()->GetState() == GamePlayState::GetInstance()
-			//float cY 
-			)
+		if(	CheckIntersect(&camRect, &streetLights[i] ) == true && CGame::GetInstance()->GetState() == GamePlayState::GetInstance())
 		{
 			//if(!GamePlayState::GetInstance()->GetPlayer())
 			//	break;
@@ -117,44 +123,16 @@ void Level::Render()
 		}
 	}
 
-	for(unsigned int i = 0; i < m_vTiles.size(); i++)
+	unsigned int size = m_vTiles.size();
+	
+	for(unsigned int i = 0; i < size; i++)
 	{
-		RECT tmp = { (long)m_vTiles[i].m_nWorldPosX,(long)m_vTiles[i].m_nWorldPosY,long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width),long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height)};
-
-
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
+		if( CheckIntersect(&m_vTiles[i].m_TileRect, &cull) == true )
 		{
 			if( m_vTiles[i].m_Layer == 2)
 			{
+				Player*	tmp = GamePlayState::GetInstance()->GetPlayer();
 
-				Player*	tmp = GamePlayState::GetInstance()->GetPlayer();;
-
-				//if( m_vTiles[i].shadow && tmp->IsOn())
-				//{
-					//if(tmp->GetDirection() < 4)
-					//	pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, (tmp->GetDirection() - 1) * 1.57079f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-					//else
-					//{
-					//	switch(tmp->GetDirection())
-					//	{
-					//	case 4:
-					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-					//		break;
-					//	case 5:
-					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 0.78539f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-					//		break;
-					//	case 6:
-					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, -2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-					//		break;
-					//	case 7:
-					//		pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.25f, &m_vTiles[i].m_rImageRect, 32, 50, 2.35619f, D3DCOLOR_ARGB( 200, 0, 0, 0));
-					//		break;
-					//	default:
-					//		break;
-					//	}
-					//}
-
-				//}
 				if( tmp->IsOn() &&((tmp->GetLightType() > 1 ) || m_vTiles[i].shadow))
 				{
 					float angle = 0;
@@ -171,31 +149,10 @@ void Level::Render()
 						angle *=  -1;
 
 					angle -= 1.57079f;
-
-					//angle -= 3.14159f;
-					//angle = abs(angle);
-					//if(steer > 0)
-					//	angle *=  -1;
-					//if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
-					//	angle = 0.78539f;
-					//else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
-					//	angle = -0.78539f;
-					//else if( m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
-					//	angle = -2.35619f;
-					//else if( m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
-					//	angle = 2.35619f;
-					//else if(m_vTiles[i].m_nWorldPosY < tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
-					//	angle = 0.0f;
-					//else if(m_vTiles[i].m_nWorldPosY > tmp->GetPosY() && m_vTiles[i].m_nWorldPosX == tmp->GetPosX())
-					//	angle = 3.14159f;xx
-					//else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX < tmp->GetPosX())
-					//	angle = -1.57079f;
-					//else if(m_vTiles[i].m_nWorldPosY == tmp->GetPosY() && m_vTiles[i].m_nWorldPosX > tmp->GetPosX())
-					//	angle = 1.57079f;
-
 					pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y, 1.0f, 1.02f, &m_vTiles[i].m_rImageRect, 32, 50, angle, D3DCOLOR_ARGB( 200, 0, 0, 0));
 				}
-				for(unsigned int i = 0; i < lightsToRender.size();++i)
+				unsigned int lightsize = lightsToRender.size();
+				for(unsigned int i = 0; i < lightsize;++i)
 				{
 					float angle = 0;
 					float x2 = lightsToRender[i].x - m_vTiles[i].m_nWorldPosX;
@@ -238,97 +195,9 @@ void Level::Render()
 			pView->DrawStaticTexture(fogID[i], cam.x - fog[i].x - cam.x, cam.y - fog[i].y - cam.y, 4, 4, nullptr, 0, 0, 0, tmpColor);
 		}
 	}
-	else
-	{
-		//int i = 1;
-		//int j = 1;
-	}
-	/*for(unsigned int i = 0; i < m_vTiles.size(); i++)
-	{
-		RECT tmp;
-		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
-		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
-
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
-		{
-			if( m_vTiles[i].m_Layer == 2)
-			{
-
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
-			}
-		}
-	}
-
-	for(unsigned int i = 0; i < m_vTiles.size(); i++)
-	{
-		RECT tmp;
-		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
-		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
-
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
-		{
-			if( m_vTiles[i].m_Layer == 3)
-			{
-
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
-			}
-		}
-	}
-
-	for(unsigned int i = 0; i < m_vTiles.size(); i++)
-	{
-		RECT tmp;
-		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
-		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
-
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
-		{
-			if( m_vTiles[i].m_Layer == 4)
-			{
-
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
-			}
-		}
-	}
-
-	for(unsigned int i = 0; i < m_vTiles.size(); i++)
-	{
-		RECT tmp;
-		tmp.left = (long)m_vTiles[i].m_nWorldPosX;
-		tmp.top = (long)m_vTiles[i].m_nWorldPosY;
-		tmp.right = long(m_vTiles[i].m_nWorldPosX+m_vTiles[i].width);
-		tmp.bottom = long(m_vTiles[i].m_nWorldPosY+m_vTiles[i].height);
-
-		if( IntersectRect(&intersect,&tmp, &cull) == TRUE )
-		{
-			if( m_vTiles[i].m_Layer == 5)
-			{
-
-				pView->DrawStaticTexture(m_vTiles[i].m_nTileID, (int)m_vTiles[i].m_nWorldPosX-cam.x, (int)m_vTiles[i].m_nWorldPosY-cam.y,1.0f,1.0f, &m_vTiles[i].m_rImageRect );
-			}
-		}
-	}
-*/
+	
 	pView->GetSprite()->Flush();
 
-
-	/*for( unsigned int i = 0; i < m_vCollisions.size(); i++ )
-	{
-		RECT test = { (long)(m_vCollisions[i].m_rCollision.left-GamePlayState::GetInstance()->GetCamera().x),
-			(long)(m_vCollisions[i].m_rCollision.top-GamePlayState::GetInstance()->GetCamera().y),
-			(long)(m_vCollisions[i].m_rCollision.right-GamePlayState::GetInstance()->GetCamera().x),
-			(long)(m_vCollisions[i].m_rCollision.bottom-GamePlayState::GetInstance()->GetCamera().y),
-		};
-
-						
-		pView->DrawUnfilledRect(test,0,255,255);
-	}*/
 
 }
 
@@ -466,6 +335,8 @@ bool Level::LoadLevel( const char* szFilename )
 			}
 			info.m_nTileID = tmpID;
 
+			RECT tmp = { (long)tmpX2,(long)tmpY2,long(tmpX2+tmpW),long(tmpY2+tmpH)};
+			info.m_TileRect = tmp;
 
 			m_vTiles.push_back(info);
 
